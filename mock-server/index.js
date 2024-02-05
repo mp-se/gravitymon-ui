@@ -126,14 +126,14 @@ statusData = {
   temp_format: "C",
   sleep_mode: false,
   rssi: -56,
-  app_ver: "0.0.0",
+  app_ver: "2.0.0",
   app_build: "gitrev",
   mdns: "gravmon",
   platform: "esp32",
   hardware: "ispindel",
   wifi_ssid: "wifi",
   runtime_average: 3.12,
-  ispindel_config: true,
+  ispindel_config: false,
   total_heap: 1000,
   free_heap: 500,
   ip: "192.0.0.1",
@@ -145,7 +145,7 @@ statusData = {
     battery_level: true,
     push_targets: true
   },
-  wifi_setup: true,
+  wifi_setup: false,
 }
 
 app.get('/api/auth', (req, res) => {
@@ -556,10 +556,10 @@ app.post('/api/filesystem', (req, res) => {
   if(req.body.command == "dir") {
     var data = { 
       files: [
-        "/file1",
-        "/file2",
-        "/file3",
-        "/file4",
+        "/log",
+        "/log2",
+        "/config.json",
+        "/gravitymon.json",
       ]
     }
     res.type('application/json')
