@@ -19,7 +19,11 @@ const chartDataForm = ref([]);
 const chartDataCalc = ref([]);
 const chart = ref(null);
 
-Chart.register(...registerables);
+/*try {
+  Chart.register(...registerables);
+} catch( e ) {
+  global.messageError = "Unable to initiate chart.js"
+}*/
 
 const dataSetChart = ref({
   datasets: [{
@@ -106,8 +110,8 @@ onMounted(() => {
     console.log(err)
   }
 })
+// @import "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
 </script>
 
 <style>
-@import "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
 </style>
