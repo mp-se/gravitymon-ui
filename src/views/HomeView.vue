@@ -24,11 +24,11 @@
         </div>
 
         <div class="col-md-4" v-if="!status.self_check.gravity_formula">
-          <BsCard header="Measurement" title="Error">
+          <BsCard header="Measurement" title="Error" icon="bi-x-circle">
             <p class="text-center">
               Missing <router-link
                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                to="/gravity/formula">gravity formula</router-link>, no value available
+                to="/gravity/formula">formula</router-link>, unable to calculate gravity
             </p>
           </BsCard>
         </div>
@@ -49,7 +49,7 @@
           </BsCard>
         </div>
         <div class="col-md-4" v-if="!status.self_check.gyro_calibration">
-          <BsCard header="Measurement" title="Error">
+          <BsCard header="Measurement" title="Error" icon="bi-x-circle">
             <p class="text-center">
               Gyro has not been <a href="/device/hardware">calibrated</a> at 90 degrees
             </p>
@@ -63,8 +63,9 @@
             </p>
           </BsCard>
         </div>
-        <div class="col-md-4" v-if="!status.self_check.gyro_calibration">
-          <BsCard header="Measurement" title="Error">
+
+        <div class="col-md-4" v-if="!status.self_check.temp_connected">
+          <BsCard header="Measurement" title="Error" icon="bi-x-circle">
             <p class="text-center">
               No temperature sensor detected
             </p>
@@ -79,7 +80,7 @@
           </BsCard>
         </div>
         <div class="col-md-4" v-if="!status.self_check.battery_level">
-          <BsCard header="Measurement" title="Error">
+          <BsCard header="Measurement" title="Error" icon="bi-x-circle">
             <p class="text-center">
               Battery level not valid
             </p>

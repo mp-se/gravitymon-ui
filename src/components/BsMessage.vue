@@ -1,6 +1,9 @@
 <template>
   <div :class="classNames()" role="alert">
-    &nbsp;{{ message }}
+    <BsIcon v-if="alert === 'danger'" icon="bi-x-circle" height="24" width="24"></BsIcon>
+    <BsIcon v-if="alert === 'warning'" icon="bi-exclamation-triangle" height="24" width="24"></BsIcon>
+    <BsIcon v-if="alert === 'info'" icon="bi-info-circle" height="24" width="24"></BsIcon>
+    <BsIcon v-if="alert === 'success'" icon="bi-check-circle" height="24" width="24"></BsIcon> &nbsp;{{ message }}
     <!-- @slot mesage can be provided using a slot or message attribute -->
     <slot />
     <button v-if="dismissable" @click="close(alert)" type="button" class="btn-close" aria-label="Close"></button>
@@ -23,7 +26,7 @@ const message = defineModel('message')
  */
 const dismissable = defineModel('dismissable')
 /**
- * The type of the alert (see bootstrap documentation for types) (required).
+ * The type of the alert (Danger|Success|Warning|Info) (required).
  */
 const alert = defineModel('alert')
 /**

@@ -386,7 +386,7 @@ export const useConfigStore = defineStore('config', {
                         if (!success) {
                             global.messageError = "Failed to store format to device"
                         } else {
-                            global.messageSuccess = "Changed configuration has been saved"
+                            global.messageSuccess = "Configuration has been saved to device"
                             saveConfigState()
                         }
                     })
