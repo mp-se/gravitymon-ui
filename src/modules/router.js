@@ -19,7 +19,7 @@ import PushBluetoothView from '@/views/PushBluetoothView.vue'
 import AboutView from '@/views/AboutView.vue'
 import BackupView from '@/views/BackupView.vue'
 import FirmwareView from '@/views/FirmwareView.vue'
-import ReportView from '@/views/ReportView.vue'
+import SupportView from '@/views/SupportView.vue'
 import SerialView from '@/views/SerialView.vue'
 import ToolsView from '@/views/ToolsView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
@@ -106,9 +106,9 @@ const routes = [
     component: PushBluetoothView
   },
   {
-    path: '/other/links',
-    name: 'links',
-    component: ReportView
+    path: '/other/support',
+    name: 'support',
+    component: SupportView
   },
   {
     path: '/other/tools',
@@ -261,8 +261,8 @@ const items = ref([
         path: '/other/firmware',
       },
       {
-        label: 'Links and Logs',
-        path: '/other/links',
+        label: 'Support',
+        path: '/other/support',
       },
       {
         label: 'Tools',
