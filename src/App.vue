@@ -31,13 +31,13 @@
     <BsMessage v-if="global.isInfo" :close="close" :dismissable="true" :message="global.messageInfo" alert="info" />
 
     <BsMessage v-if="status.wifi_setup" :dismissable="false" alert="info">
-      Running in WIFI setup mode. Go to the <router-link class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/device/wifi">wifi settings</router-link> meny and select wifi. Restart device
+      Running in WIFI setup mode. Go to the <router-link class="alert-link" to="/device/wifi">wifi settings</router-link> meny and select wifi. Restart device
       after settings are selected.
     </BsMessage>
 
     <BsMessage v-if="status.ispindel_config" :dismissable="true" alert="info">
-      iSpindel configuration found, <router-link class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/device/hardware">import</router-link> formula/gyro or <router-link
-      class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/other/links">delete</router-link> the configuration.
+      iSpindel configuration found, <router-link class="alert-link" to="/device/hardware">import</router-link> formula/gyro or <router-link
+      class="alert-link" to="/other/links">delete</router-link> the configuration.
     </BsMessage>
   </div>
 
