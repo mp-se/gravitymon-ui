@@ -32,14 +32,49 @@
         </button>
       </div>
     </div>
+
+    <div class="row gy-4">
+      <p></p>
+      <hr>
+    </div>  
+
+    <h5>Explore the file system</h5>
+    <div class="row gy-4">
+
+      <div class="col-md-3">
+        <button @click="listFiles" type="button" class="btn btn-secondary" :disabled="global.disabled">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+            :hidden="!global.disabled"></span>
+          &nbsp;List files
+        </button>
+      </div>
+
+      <div class="col-md-6">
+        <div class="button-group">
+          <template v-for="f in files">
+          <button type="button" @click.prevent="fetchFile(f)" class="btn btn-outline-primary" href="#" :disabled="global.disabled">{{ f }}</button>&nbsp;
+        </template>
+        </div>
+      </div>
+
+      <div v-if="fileData !== null" class="col-md-12">
+        <h6>File contents</h6>
+        <pre class="border p-2">{{ fileData }}</pre>
+      </div>
+
+    </div>
+
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { global, config, status, saveConfigState } from "@/modules/pinia"
+import { isValidJson, isValidFormData, isValidMqttData } from "@/modules/utils"
 
 const measuredVoltage = ref(0)
+const files = ref([])
+const fileData = ref(null)
 
 const calculateFactor = () => {
   global.disabled = true
@@ -66,8 +101,53 @@ const calculateFactor = () => {
     })
   })
 }
+const fetchFile = (f) => {
+  global.disabled = true
+  global.clearMessages()
 
-// TODO: Show files in the file system
+  fileData.value = null
+
+  var data = {
+    command: "get",
+    file: f
+  }
+
+  config.sendFilesystemRequest(data, (success, text) => {
+    if (success) {
+
+      if(isValidJson(text))
+        fileData.value = JSON.stringify(JSON.parse(text), null, 2)
+      else if(isValidFormData(text))
+        fileData.value = text.replaceAll('&', '&\n\r')
+      else if(isValidMqttData(text))
+        fileData.value =  text.replaceAll('|', '|\n\r')
+      else 
+        fileData.value = text
+    }
+
+    global.disabled = false
+  })
+}
+
+const listFiles = () => {
+  global.disabled = true
+  global.clearMessages()
+
+  files.value = []
+
+  var data = {
+    command: "dir"
+  }
+
+  config.sendFilesystemRequest(data, (success, text) => {
+    if (success) {
+      var json = JSON.parse(text)
+      files.value = json.files
+    }
+
+    global.disabled = false
+  })
+}
 
 // TODO: Hardware testing ?
 
