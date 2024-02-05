@@ -51,7 +51,9 @@
         <div class="col-md-4" v-if="!status.self_check.gyro_calibration">
           <BsCard header="Measurement" title="Error" icon="bi-x-circle">
             <p class="text-center">
-              Gyro has not been <a href="/device/hardware">calibrated</a> at 90 degrees
+              Gyro has not been <router-link
+                class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                to="/device/hardware">calibrated</router-link> at 90 degrees
             </p>
           </BsCard>
         </div>
@@ -199,7 +201,7 @@ onMounted(() => {
           newVersion.value.new = true
           newVersion.value.ver = json.version
           console.log("Newer version found")
-        } 
+        }
 
         console.log("Fetching latest gravtmon version completed")
       })
