@@ -129,8 +129,8 @@ function removeLogs() {
     global.disabled = true
     logData.value = ""
 
-    removeLog("/log2", (success) => {
-        removeLog("/log", (success) => {
+    removeLog("/error2.log", (success) => {
+        removeLog("/error.log", (success) => {
             global.messageSuccess = "Requested logs to be deleted"
             global.disabled = false
         })
