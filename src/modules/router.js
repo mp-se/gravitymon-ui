@@ -141,6 +141,9 @@ router.beforeEach((to, from) => {
   if (global.disabled)
     return false
 
+  if (!validateCurrentForm()) 
+    return false;
+
   global.clearMessages()
   return true
 })
