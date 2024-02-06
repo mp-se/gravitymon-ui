@@ -24,7 +24,7 @@
         </div>
 
         <div class="col-md-4" v-if="!status.self_check.gravity_formula">
-          <BsCard header="Measurement" title="Error" icon="bi-x-circle">
+          <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
             <p class="text-center">
               Missing <router-link
                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
@@ -33,14 +33,14 @@
           </BsCard>
         </div>
 
-        <div class="col-md-4" v-if="status.self_check.gyro_calibration">
+        <div class="col-md-4" v-if="status.self_check.gyro_calibration && status.self_check.gyro_connected">
           <BsCard header="Measurement" title="Angle">
             <p class="text-center">
-              {{ status.angle }}
+              {{ status.angle }} 
             </p>
           </BsCard>
         </div>
-        <div class="col-md-4" v-if="status.self_check.gyro_calibration">
+        <div class="col-md-4" v-if="status.self_check.gyro_calibration && status.self_check.gyro_connected">
           <BsCard header="Measurement" title="Average Angle">
             <p class="text-center">
               {{ angle.average }} ({{ angle.count }}) <button @click="clearAverage" type="button"
@@ -49,7 +49,7 @@
           </BsCard>
         </div>
         <div class="col-md-4" v-if="!status.self_check.gyro_calibration">
-          <BsCard header="Measurement" title="Error" icon="bi-x-circle">
+          <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
             <p class="text-center">
               Gyro has not been <router-link
                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
@@ -67,7 +67,7 @@
         </div>
 
         <div class="col-md-4" v-if="!status.self_check.temp_connected">
-          <BsCard header="Measurement" title="Error" icon="bi-x-circle">
+          <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
             <p class="text-center">
               No temperature sensor detected
             </p>
@@ -82,7 +82,7 @@
           </BsCard>
         </div>
         <div class="col-md-4" v-if="!status.self_check.battery_level">
-          <BsCard header="Measurement" title="Error" icon="bi-x-circle">
+          <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
             <p class="text-center">
               Battery level not valid
             </p>
