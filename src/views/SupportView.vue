@@ -78,6 +78,8 @@
 import { ref } from 'vue'
 import { status, config, global } from "@/modules/pinia"
 
+// TODO: Add help about error codes to simplify log interpretation
+
 const logData = ref("")
 
 function fetchLog(file, callback) {
