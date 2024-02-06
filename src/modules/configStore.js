@@ -48,6 +48,8 @@ export const useConfigStore = defineStore('config', {
             http_format2: "",
             // Push - Http Get
             http_push3: "",
+            http_push3_h1: "",
+            http_push3_h2: "",
             http_int3: 0,
             http_format3: "",
             // Push - Influx
@@ -131,6 +133,8 @@ export const useConfigStore = defineStore('config', {
                         this.http_format2 = json.http_format2,
                         // Push - Http Get
                         this.http_push3 = json.http_push3,
+                        this.http_push3_h1 = json.http_push3_h1,
+                        this.http_push3_h2 = json.http_push3_h2,
                         this.http_int3 = json.http_int3,
                         this.http_format3 = json.http_format3,
                         // Push - Influx

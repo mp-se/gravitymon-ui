@@ -15,6 +15,26 @@
                     <BsDropdown label="Predefined URLs" button="URL" :options="httpGetUrlOptions"
                         :callback="httpUrlCallback" :disabled="global.disabled" />
                 </div>
+                <div class="col-md-9">
+                    <BsInputText v-model="config.http_push3_h1" maxlength="120" pattern="(.+): (.+)"
+                        label="Http Post Header #1"
+                        help=""
+                        :disabled="global.disabled" />
+                </div>
+                <div class="col-md-3">
+                    <BsDropdown label="Predefined headers" button="Header" :options="httpHeaderOptions"
+                        :callback="httpHeaderH1Callback" :disabled="global.disabled" />
+                </div>
+                <div class="col-md-9">
+                    <BsInputText v-model="config.http_push3_h2" maxlength="120" pattern="(.+): (.+)"
+                        label="Http Post Header #2"
+                        help="Set a http headers, empty string is skipped, example: Content-Type: application/json"
+                        :disabled="global.disabled" />
+                </div>
+                <div class="col-md-3">
+                    <BsDropdown label="Predefined headers" button="Header" :options="httpHeaderOptions"
+                        :callback="httpHeaderH2Callback" :disabled="global.disabled" />
+                </div>
                 <div class="col-md-6">
                     <BsInputNumber v-model="config.http_int3" label="Skip interval" min="0" max="5" width="4"
                         help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
@@ -57,7 +77,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { validateCurrentForm, httpGetUrlOptions, httpGetFormatOptions, applyTemplate } from "@/modules/utils"
+import { validateCurrentForm, httpHeaderOptions, httpGetUrlOptions, httpGetFormatOptions, applyTemplate } from "@/modules/utils"
 import { global, status, config } from "@/modules/pinia"
 
 const render = ref("")
@@ -78,13 +98,21 @@ const httpUrlCallback = (opt) => {
     config.http_push3 = opt
 }
 
+const httpHeaderH1Callback = (opt) => {
+    config.http_push3_h1 = opt
+}
+
+const httpHeaderH2Callback = (opt) => {
+    config.http_push3_h2 = opt
+}
+
 const httpFormatCallback = (opt) => {
     config.http_format3 = decodeURIComponent(opt)
 }
 
 const renderFormat = () => {
     var s = applyTemplate(status, config, config.http_format3)
-    render = s.replaceAll('&', '&')
+    render.value = s.replaceAll('&', '&')
 }
 
 const save = () => {

@@ -22,7 +22,7 @@
                         :disabled="global.disabled" />
                 </div>
                 <div class="col-md-3">
-                    <BsDropdown label="Predefined headers" button="Header" :options="httpPostHeaderOptions"
+                    <BsDropdown label="Predefined headers" button="Header" :options="httpHeaderOptions"
                         :callback="httpHeaderH1Callback" :disabled="global.disabled" />
                 </div>
                 <div class="col-md-9">
@@ -32,7 +32,7 @@
                         :disabled="global.disabled" />
                 </div>
                 <div class="col-md-3">
-                    <BsDropdown label="Predefined headers" button="Header" :options="httpPostHeaderOptions"
+                    <BsDropdown label="Predefined headers" button="Header" :options="httpHeaderOptions"
                         :callback="httpHeaderH2Callback" :disabled="global.disabled" />
                 </div>
                 <div class="col-md-6">
@@ -77,7 +77,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { validateCurrentForm, httpPostHeaderOptions, httpPostUrlOptions, httpPostFormatOptions, applyTemplate } from "@/modules/utils"
+import { validateCurrentForm, httpHeaderOptions, httpPostUrlOptions, httpPostFormatOptions, applyTemplate } from "@/modules/utils"
 import { global, status, config } from "@/modules/pinia"
 
 const render = ref("")

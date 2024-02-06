@@ -60,6 +60,8 @@ configData = {
   http_int2: 1,
   // Push - Http Get
   http_push3: "http://192.168.1.10/ispindel",
+  http_push3_h1: "Header: Fourth",
+  http_push3_h2: "Header: Fifth",
   http_int3: 1,
   // Push - Influx
   influxdb2_push: "http://192.168.1.10:8086",

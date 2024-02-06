@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { config } from "@/modules/pinia"
 
-export const httpPostHeaderOptions = ref([
+export const httpHeaderOptions = ref([
   { label: '-blank-', value: '' },
   { label: 'JSON data', value: 'Content-Type: application/json' },
   { label: 'Form data', value: 'Content-Type: x-www-form-urlencoded' },
