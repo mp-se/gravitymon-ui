@@ -115,8 +115,8 @@ function viewLogs() {
     global.disabled = true
     logData.value = ""
 
-    fetchLog("/log2", (success) => {
-        fetchLog("/log", (success) => {
+    fetchLog("/error2.log", (success) => {
+        fetchLog("/error.log", (success) => {
             global.disabled = false
         })
     })
