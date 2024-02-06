@@ -4,7 +4,7 @@
         <p class="h3">Push - Bluetooth</p>
         <hr>
 
-        <form @submit.prevent="save" class="needs-validation" novalidate>
+        <form v-if="status.platform!=='esp8266' && status.platform!=='esp32s2'" @submit.prevent="save" class="needs-validation" novalidate>
             <div class="row">
                 <div class="col-md-12">
                     <BsInputRadio v-model="config.ble_tilt_color" :options="bleTiltColorOptions" label="Tilt color"
@@ -28,13 +28,20 @@
                 </div>
             </div>
         </form>
+
+        <div class="row">
+            <div class="col-md-12">
+                <p>Bluetooth is not available on this platform</p>
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { validateCurrentForm } from "@/modules/utils"
-import { global, config } from "@/modules/pinia"
+import { global, config, status } from "@/modules/pinia"
 
 const bleTiltColorOptions = ref([
     { label: 'red', value: 'red' },

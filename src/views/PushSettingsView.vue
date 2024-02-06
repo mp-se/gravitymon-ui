@@ -42,7 +42,7 @@
                         help="The number of seconds that the device will wait until a remote service accepts the connection"
                         :disabled="global.disabled" />
                 </div>
-                <div class="col-md-6">
+                <div v-if="status.platform==='esp8266'" class="col-md-6">
                     <BsInputSwitch v-model="config.skip_ssl_on_test" label="Skip SSL post in config mode"
                         help="Don't do SSL when running in configuration mode, on ESP8266 this can cause the device to crash due to low memory, only applies to ESP8266"
                         :disabled="global.disabled" />
