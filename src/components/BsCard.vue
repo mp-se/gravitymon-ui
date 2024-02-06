@@ -37,7 +37,6 @@ const icon = defineModel('icon')
 const iserr = defineModel('iserr')
 
 function headerStyle() {
-  console.log(title.value, iserr.value)
   if(iserr.value!==undefined && iserr.value) 
     return 'card-header bg-danger-subtle' 
    
