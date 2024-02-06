@@ -45,18 +45,17 @@
                     </template>
                 </ul>
             </div>
-            <div>
+            <div class="">
                 <span v-if="global.configChanged" class="badge bg-danger fs-6">Save needed &nbsp;</span>
             </div>
-            <div>
-                &nbsp;
+            <div class="p-2">
                 <div class="spinner-border gx-4" role="status" style="color:white" :hidden="!disabled">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
-            <div>
+            <div class="p-2">
                 <div class="form-check form-switch">
-                    <input v-model="config.dark_mode" class="form-check-input" type="checkbox" role="switch" style="border-color:white">
+                    &nbsp;<input v-model="config.dark_mode" class="form-check-input" type="checkbox" role="switch" style="border-color:white">
                 </div>
             </div>
         </div>
