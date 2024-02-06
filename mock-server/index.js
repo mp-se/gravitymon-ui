@@ -306,23 +306,6 @@ app.get('/api/test/push/status', (req, res) => {
   res.send(data)
 })
 
-app.get('/api/migrate', (req, res) => {
-  console.log('GET: /api/migrate')
-  /* 
-   * Description:    Perform migration from iSpindle config (i.e. rename the config file). Configuration updates are handled via the UI app and config post.
-   * Authentication: Required
-   * Limitation:     - 
-   * Note:           -
-   * Return:         200 OK, 401 Access Denied
-   */
-  var data = { 
-    success: true, 
-    message: "iSpindel config file is renamed." 
-  }
-  res.type('application/json')
-  res.send(data)
-})
-
 app.get('/api/factory', (req, res) => {
   console.log('GET: /api/factory')
   /* 
@@ -336,25 +319,6 @@ app.get('/api/factory', (req, res) => {
     var data = {
       success: true,
       message: "Factory settings restored"
-    }
-    res.type('application/json')
-    res.send(data)
-  }, 2000)
-})
-
-app.get('/api/log/clear', (req, res) => {
-  console.log('GET: /api/log/clear')
-  /* 
-   * Description:    Clear log files
-   * Authentication: Required
-   * Limitation:     - 
-   * Note:           -
-   * Return:         200 OK, 401 Access Denied
-   */
-  setTimeout(() => {
-    var data = {
-      success: true,
-      message: "Logs deleted"
     }
     res.type('application/json')
     res.send(data)
