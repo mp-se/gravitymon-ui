@@ -7,7 +7,7 @@
         <form @submit.prevent="save" class="needs-validation" novalidate>
             <div class="row">
                 <div class="col-md-9">
-                    <BsInputText v-model="config.mqtt_push" maxlength="120" label="Server"
+                    <BsInputText v-model="config.mqtt_target" maxlength="120" label="Server"
                         help="Name of server to connect to, use format servername.com" :disabled="global.disabled" />
                 </div>
                 <div class="col-md-3">
@@ -71,7 +71,7 @@ const render = ref("")
 
 const runTest = () => {
     const data = {
-        format: "http_format"
+        format: "mqtt_format"
     }
 
     global.clearMessages()

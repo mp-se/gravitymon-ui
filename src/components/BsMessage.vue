@@ -6,7 +6,8 @@
     <BsIcon v-if="alert === 'success'" icon="bi-check-circle" height="20" width="20"></BsIcon> &nbsp;{{ message }}
     <!-- @slot mesage can be provided using a slot or message attribute -->
     <slot />
-    <button v-if="dismissable" @click="close(alert)" type="button" class="btn-close" aria-label="Close"></button>
+    <button v-if="dismissable && close!==undefined" @click="close(alert)" type="button" class="btn-close" aria-label="Close"></button>
+    <button v-if="dismissable && close===undefined" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 </template>
 

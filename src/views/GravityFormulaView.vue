@@ -98,14 +98,16 @@ const calcFormula = () => {
     global.clearMessages()
     config.sendConfig((success) => {
         if (success) {
+            console.log("Requesting formula calculation");
             fetch(global.baseURL + 'api/formula', { headers: { "Authorization": global.token } })
                 .then(res => res.json())
                 .then(json => {
+                    console.log(json)
                     if (json.success == true) {
                         config.gravity_formula = json.gravity_formula
                         global.messageSuccess = json.message
                     } else {
-                        global.messageFailed = json.message
+                        global.messageError = json.message
                     }
                     global.disabled = false
                 })

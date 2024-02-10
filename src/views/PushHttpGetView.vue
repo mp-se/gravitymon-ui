@@ -7,7 +7,7 @@
         <form @submit.prevent="save" class="needs-validation" novalidate>
             <div class="row">
                 <div class="col-md-9">
-                    <BsInputText v-model="config.http_push3" type="url" maxlength="120" label="Http Get URL"
+                    <BsInputText v-model="config.http_get_target" type="url" maxlength="120" label="Http Get URL"
                         help="URL to push target, use format http://servername.com/resource (Supports http and https)"
                         :disabled="global.disabled" />
                 </div>
@@ -16,7 +16,7 @@
                         :callback="httpUrlCallback" :disabled="global.disabled" />
                 </div>
                 <div class="col-md-9">
-                    <BsInputText v-model="config.http_push3_h1" maxlength="120" pattern="(.+): (.+)"
+                    <BsInputText v-model="config.http_get_header1" maxlength="120" pattern="(.+): (.+)"
                         label="Http Post Header #1"
                         help=""
                         :disabled="global.disabled" />
@@ -26,7 +26,7 @@
                         :callback="httpHeaderH1Callback" :disabled="global.disabled" />
                 </div>
                 <div class="col-md-9">
-                    <BsInputText v-model="config.http_push3_h2" maxlength="120" pattern="(.+): (.+)"
+                    <BsInputText v-model="config.http_get_header2" maxlength="120" pattern="(.+): (.+)"
                         label="Http Post Header #2"
                         help="Set a http headers, empty string is skipped, example: Content-Type: application/json"
                         :disabled="global.disabled" />
@@ -36,12 +36,12 @@
                         :callback="httpHeaderH2Callback" :disabled="global.disabled" />
                 </div>
                 <div class="col-md-6">
-                    <BsInputNumber v-model="config.http_int3" label="Skip interval" min="0" max="5" width="4"
+                    <BsInputNumber v-model="config.http_get_int" label="Skip interval" min="0" max="5" width="4"
                         help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
                         :disabled="global.disabled" />
                 </div>
                 <div class="col-md-9">
-                    <BsInputTextArea v-model="config.http_format3" rows="6" label="Push data format"
+                    <BsInputTextArea v-model="config.http_get_format" rows="6" label="Push data format"
                         help="Format template used to create the data sent to the remote service"
                         :disabled="global.disabled" />
                 </div>
@@ -86,7 +86,7 @@ const render = ref("")
 
 const runTest = () => {
     const data = {
-        format: "http_format3"
+        format: "http_get_format"
     }
 
     global.clearMessages()
@@ -95,23 +95,23 @@ const runTest = () => {
 }
 
 const httpUrlCallback = (opt) => {
-    config.http_push3 = opt
+    config.http_get_target = opt
 }
 
 const httpHeaderH1Callback = (opt) => {
-    config.http_push3_h1 = opt
+    config.http_get_header1 = opt
 }
 
 const httpHeaderH2Callback = (opt) => {
-    config.http_push3_h2 = opt
+    config.http_get_header2 = opt
 }
 
 const httpFormatCallback = (opt) => {
-    config.http_format3 = decodeURIComponent(opt)
+    config.http_get_format = decodeURIComponent(opt)
 }
 
 const renderFormat = () => {
-    var s = applyTemplate(status, config, config.http_format3)
+    var s = applyTemplate(status, config, config.http_get_format)
     render.value = s.replaceAll('&', '&')
 }
 

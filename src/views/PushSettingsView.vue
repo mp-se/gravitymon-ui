@@ -106,7 +106,7 @@ const calculateBatteryLife = () => {
     var batt = 2200; // mA
     var rt = status.runtime_average
     var ble = config.ble_format === 0 ? false : true;
-    var wifi = (config.http_push.length + config.http_push2.length + config.http_push3.length + config.influxdb2_push.length + config.mqtt_push.length) > 0 ? true : false;
+    var wifi = (config.http_post_target.length + config.http_post2_target.length + config.http_get_target.length + config.influxdb2_target.length + config.mqtt_target.length) > 0 ? true : false;
 
     if (!wifi && !ble) {
         console.log("No push targets defined, cannot estimate battery life")

@@ -20,7 +20,17 @@ const saveConfigState = () => {
     configCompare.value = {}
     for (var key in config) {
         if( typeof(config[key]) !== "function" && key !== "$id") {
-            configCompare.value[key] = config[key]
+            if(key === "gyro_calibration_data") {
+                // Skip this, read only on UI                
+            } else if(key === "formula_calculation_data") {
+                configCompare.value[key] = []
+                for(var i in config[key]) {
+                    var o = { a: config[key][i].a, g: config[key][i].g }
+                    configCompare.value[key].push(o)
+                }
+            } else {
+                configCompare.value[key] = config[key]
+            }
         }
     }
 
@@ -38,17 +48,12 @@ const getConfigChanges = () => {
 
     for (var key in configCompare.value) {
         if(key === "gyro_calibration_data") {
-            for (var key2 in configCompare.value[key]) {
-                if (configCompare.value[key][key2] != config[key][key2]) {
-                    changes.gyro_calibration_data = config.gyro_calibration_data
-                }        
-            }
+            // Skip this, read only on UI                
         } else if(key === "formula_calculation_data") {
             for(var i in configCompare.value[key]) {
                 if (configCompare.value[key][i].a != config[key][i].a) {
                     changes.formula_calculation_data = config.formula_calculation_data
                 }        
-
                 if (configCompare.value[key][i].g != config[key][i].g) {
                     changes.formula_calculation_data = config.formula_calculation_data
                 }        

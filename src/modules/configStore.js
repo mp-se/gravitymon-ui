@@ -35,32 +35,33 @@ export const useConfigStore = defineStore('config', {
             push_timeout: 0,
             skip_ssl_on_test: false,
             // Push - Http Post 1
-            http_push: "",
-            http_push_h1: "",
-            http_push_h2: "",
-            http_int: 0,
-            http_format: "",
+            http_post_target: "",
+            http_post_header1: "",
+            http_post_header2: "",
+            http_post_int: 0,
+            http_post_format: "",
             // Push - Http Post 2
-            http_push2: "",
-            http_push2_h1: "",
-            http_push2_h2: "",
-            http_int2: "",
-            http_format2: "",
+            http_post2_target: "",
+            http_post2_header1: "",
+            http_post2_header2: "",
+            http_post2_int: 0,
+            http_post2_format: "",
             // Push - Http Get
-            http_push3: "",
-            http_push3_h1: "",
-            http_push3_h2: "",
-            http_int3: 0,
-            http_format3: "",
+            http_get_target: "",
+            http_get_header1: "",
+            http_get_header2: "",
+            http_get_int: 0,
+            http_get_format: "",
             // Push - Influx
-            influxdb2_push: "",
+            influxdb2_target: "",
             influxdb2_org: "",
             influxdb2_bucket: "",
             influxdb2_auth: "",
             influxdb2_int: 0,
             influxdb2_format: "",
             // Push - MQTT
-            mqtt_push: "",
+            mqtt_target: "",
+            //mqtt_push: "",
             mqtt_port: "",
             mqtt_user: "",
             mqtt_pass: "",
@@ -85,12 +86,14 @@ export const useConfigStore = defineStore('config', {
     actions: {
         load(callback) {
             global.disabled = true
+            console.log("Fetching /api/config")
             fetch(global.baseURL + 'api/config', {
                 method: "GET",
                 headers: { "Authorization": global.token }
             })
                 .then(res => res.json())
                 .then(json => {
+                    // console.log(json)
                     global.disabled = false
                     this.id = json.id,
                         // Device
@@ -120,32 +123,32 @@ export const useConfigStore = defineStore('config', {
                         this.push_timeout = json.push_timeout,
                         this.skip_ssl_on_test = json.skip_ssl_on_test,
                         // Push - Http Post 1
-                        this.http_push = json.http_push,
-                        this.http_push_h1 = json.http_push_h1,
-                        this.http_push_h2 = json.http_push_h2,
-                        this.http_int = json.http_int,
-                        this.http_format = json.http_format,
+                        this.http_post_target = json.http_post_target
+                        this.http_post_header1 = json.http_post_header1
+                        this.http_post_header2 = json.http_post_header2
+                        this.http_post_int = json.http_post_int,
+                        this.http_post_format = json.http_post_format,
                         // Push - Http Post 2
-                        this.http_push2 = json.http_push2,
-                        this.http_push2_h1 = json.http_push2_h1,
-                        this.http_push2_h2 = json.http_push2_h2,
-                        this.http_int2 = json.http_int2,
-                        this.http_format2 = json.http_format2,
+                        this.http_post2_target = json.http_post2_target
+                        this.http_post2_header1 = json.http_post2_header1
+                        this.http_post2_header2 = json.http_post2_header2
+                        this.http_post2_int = json.http_post2_int,
+                        this.http_post2_format = json.http_post2_format,
                         // Push - Http Get
-                        this.http_push3 = json.http_push3,
-                        this.http_push3_h1 = json.http_push3_h1,
-                        this.http_push3_h2 = json.http_push3_h2,
-                        this.http_int3 = json.http_int3,
-                        this.http_format3 = json.http_format3,
+                        this.http_get_target = json.http_get_target
+                        this.http_get_header1 = json.http_get_header1
+                        this.http_get_header2 = json.http_get_header2
+                        this.http_get_int = json.http_get_int,
+                        this.http_get_format = json.http_get_format,
                         // Push - Influx
-                        this.influxdb2_push = json.influxdb2_push,
+                        this.influxdb2_target = json.influxdb2_target,
                         this.influxdb2_org = json.influxdb2_org,
                         this.influxdb2_bucket = json.influxdb2_bucket,
                         this.influxdb2_auth = json.influxdb2_auth,
                         this.influxdb2_int = json.influxdb2_int,
                         this.influxdb2_format = json.influxdb2_format,
                         // Push - MQTT
-                        this.mqtt_push = json.mqtt_push,
+                        this.mqtt_target = json.mqtt_target,
                         this.mqtt_port = json.mqtt_port,
                         this.mqtt_user = json.mqtt_user,
                         this.mqtt_pass = json.mqtt_pass,
@@ -175,25 +178,26 @@ export const useConfigStore = defineStore('config', {
         },
         loadFormat(callback) {
             global.disabled = true
-            console.log("Fetching /api/config/format")
-            fetch(global.baseURL + 'api/config/format', {
+            console.log("Fetching /api/format")
+            fetch(global.baseURL + 'api/format', {
                 method: "GET",
                 headers: { "Authorization": global.token }
             })
                 .then(res => res.json())
                 .then(json => {
+                    console.log(json)
                     global.disabled = false
-                    this.http_format = decodeURIComponent(json.http_format)
-                    this.http_format2 = decodeURIComponent(json.http_format2)
-                    this.http_format3 = decodeURIComponent(json.http_format3)
+                    this.http_post_format = decodeURIComponent(json.http_post_format)
+                    this.http_post2_format = decodeURIComponent(json.http_post2_format)
+                    this.http_get_format = decodeURIComponent(json.http_get_format)
                     this.influxdb2_format = decodeURIComponent(json.influxdb2_format)
                     this.mqtt_format = decodeURIComponent(json.mqtt_format)
-                    console.log("Fetching /api/config/format completed")
+                    console.log("Fetching /api/format completed")
                     callback(true)
                 })
                 .catch(err => {
                     global.disabled = false
-                    console.log("Fetching /api/config/format failed")
+                    console.log("Fetching /api/format failed")
                     console.log(err)
                     callback(false)
                 })
@@ -203,9 +207,9 @@ export const useConfigStore = defineStore('config', {
             console.log("Sending /api/config")
 
             var data = getConfigChanges()
-            delete data.http_format
-            delete data.http_format2
-            delete data.http_format3
+            delete data.http_post_format
+            delete data.http_post2_format
+            delete data.http_get_format
             delete data.influxdb2_format
             delete data.mqtt_format
             console.log(data)
@@ -241,7 +245,7 @@ export const useConfigStore = defineStore('config', {
         },
         sendFormat(callback) {
             global.disabled = true
-            console.log("Sending /api/config/format")
+            console.log("Sending /api/format")
 
             var data2 = getConfigChanges()
             var data = {}
@@ -249,13 +253,13 @@ export const useConfigStore = defineStore('config', {
 
             console.log(data)
 
-            data = data2.http_format !== undefined ? { http_format: encodeURIComponent(data2.http_format) } : {}
+            data = data2.http_post_format !== undefined ? { http_post_format: encodeURIComponent(data2.http_post_format) } : {}
             this.sendOneFormat(data, (success) => {
                 if(success) cnt += 1
-                data = data2.http_format2 !== undefined ? { http_format2: encodeURIComponent(data2.http_format2) } : {}
+                data = data2.http_post2_format !== undefined ? { http_post2_format: encodeURIComponent(data2.http_post2_format) } : {}
                 this.sendOneFormat(data, (success) => {
                     if(success) cnt += 1
-                    data = data2.http_format3 !== undefined ? { http_format3: encodeURIComponent(data2.http_format3) } : {}
+                    data = data2.http_get_format !== undefined ? { http_get_format: encodeURIComponent(data2.http_get_format) } : {}
                     this.sendOneFormat(data, (success) => {
                         if(success) cnt += 1
                         data = data2.influxdb2_format !== undefined ? { influxdb2_format: encodeURIComponent(data2.influxdb2_format) } : {}
@@ -276,7 +280,7 @@ export const useConfigStore = defineStore('config', {
             })
         },
         sendOneFormat(data, callback) {
-            console.log("Sending /api/config/format")
+            console.log("Sending /api/format")
 
             if (JSON.stringify(data).length == 2) {
                 console.log("No format data to store, skipping step")
@@ -284,7 +288,7 @@ export const useConfigStore = defineStore('config', {
                 return
             }
 
-            fetch(global.baseURL + 'api/config/format', {
+            fetch(global.baseURL + 'api/format', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
                 body: JSON.stringify(data),
@@ -292,89 +296,89 @@ export const useConfigStore = defineStore('config', {
                 .then(res => {
                     global.disabled = false
                     if (res.status != 200) {
-                        console.log("Sending /api/config/format failed")
+                        console.log("Sending /api/format failed")
                         callback(false)
                     } else {
-                        console.log("Sending /api/config/format completed")
+                        console.log("Sending /api/format completed")
                         callback(true)
                     }
                 })
                 .catch(err => {
-                    console.log("Sending /api/config/format failed")
+                    console.log("Sending /api/format failed")
                     console.log(err)
                     callback(false)
                 })
         },
         sendPushTest(data, callback) {
             global.disabled = true
-            console.log("Sending /api/test/push")
-            fetch(global.baseURL + 'api/test/push', {
+            console.log("Sending /api/push")
+            fetch(global.baseURL + 'api/push', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
                 body: JSON.stringify(data),
             })
                 .then(res => {
                     if (res.status != 200) {
-                        console.log("Sending /api/test/push failed")
+                        console.log("Sending /api/push failed")
                         callback(false)
                     } else {
-                        console.log("Sending /api/test/push completed")
+                        console.log("Sending /api/push completed")
                         callback(true)
                     }
                 })
                 .catch(err => {
-                    console.log("Sending /api/test/push failed")
+                    console.log("Sending /api/push failed")
                     console.log(err)
                     callback(false)
                 })
         },
         getPushTestStatus(callback) {
-            console.log("Fetching /api/test/push/status")
-            fetch(global.baseURL + 'api/test/push/status')
+            console.log("Fetching /api/push/status")
+            fetch(global.baseURL + 'api/push/status')
                 .then(res => res.json())
                 .then(json => {
                     console.log(json)
-                    console.log("Fetching /api/test/push/status completed")
+                    console.log("Fetching /api/push/status completed")
                     callback(true, json)
                 })
                 .catch(err => {
-                    console.log("Fetching /api/test/push/status failed")
+                    console.log("Fetching /api/push/status failed")
                     console.log(err)
                     callback(false, null)
                 })
         },
         sendWifiScan(callback) {
             global.disabled = true
-            console.log("Sending /api/wifi/scan")
-            fetch(global.baseURL + 'api/wifi/scan', {
+            console.log("Sending /api/wifi")
+            fetch(global.baseURL + 'api/wifi', {
                 headers: { "Authorization": global.token }
             })
                 .then(res => {
                     if (res.status != 200) {
-                        console.log("Sending /api/wifi/scan failed")
+                        console.log("Sending /api/wifi failed")
                         callback(false)
                     } else {
-                        console.log("Sending /api/wifi/scan completed")
+                        console.log("Sending /api/wifi completed")
                         callback(true)
                     }
                 })
                 .catch(err => {
-                    console.log("Sending /api/wifi/scan failed")
+                    console.log("Sending /api/wifi failed")
                     console.log(err)
                     callback(false)
                 })
         },
         getWifiScanStatus(callback) {
-            console.log("Fetching /api/wifi/scan/status")
-            fetch(global.baseURL + 'api/wifi/scan/status', { method: "GET", headers: { "Authorization": global.token } })
+            console.log("Fetching /api/wifi/status")
+            fetch(global.baseURL + 'api/wifi/status', { method: "GET", headers: { "Authorization": global.token } })
                 .then(res => res.json())
                 .then(json => {
                     console.log(json)
-                    console.log("Fetching /api/wifi/scan/status completed")
+                    console.log("Fetching /api/wifi/status completed")
                     callback(true, json)
                 })
                 .catch(err => {
-                    console.log("Fetching /api/wifi/scan/status failed")
+                    console.log("Fetching /api/wifi/status failed")
                     console.log(err)
                     callback(false, null)
                 })

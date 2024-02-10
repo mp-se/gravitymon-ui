@@ -44,8 +44,7 @@ export const useStatusStore = defineStore('status', {
             fetch(global.baseURL + 'api/status')
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json)
-
+                    // console.log(json)
                     this.id = json.id,
                     this.angle = json.angle,
                     this.temp_format = json.temp_format,

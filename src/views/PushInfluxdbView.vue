@@ -7,7 +7,7 @@
         <form @submit.prevent="save" class="needs-validation" novalidate>
             <div class="row">
                 <div class="col-md-12">
-                    <BsInputText v-model="config.influxdb2_push" type="url" maxlength="120" label="Server"
+                    <BsInputText v-model="config.influxdb2_target" type="url" maxlength="120" label="Server"
                         help="URL to push target, use format http://servername.com/resource (Supports http and https)"
                         :disabled="global.disabled" />
                 </div>
@@ -29,7 +29,7 @@
                         :disabled="global.disabled" />
                 </div>
                 <div class="col-md-9">
-                    <BsInputTextArea v-model="config.http_format3" rows="6" label="Push data format"
+                    <BsInputTextArea v-model="config.influxdb2_format" rows="6" label="Push data format"
                         help="Format template used to create the data sent to the remote service"
                         :disabled="global.disabled" />
                 </div>
@@ -79,7 +79,7 @@ const runTest = () => {
 }
 
 const renderFormat = () => {
-    render.value = applyTemplate(status, config, config.http_format3)
+    render.value = applyTemplate(status, config, config.influxdb2_format)
 }
 
 const save = () => {

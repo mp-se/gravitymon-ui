@@ -62,9 +62,9 @@ function backup() {
 
   console.log(backup)
 
-  backup.config.http_format = encodeURIComponent(backup.config.http_format)
-  backup.config.http_format2 = encodeURIComponent(backup.config.http_format2)
-  backup.config.http_format3 = encodeURIComponent(backup.config.http_format3)
+  backup.config.http_post_format = encodeURIComponent(backup.config.http_post_format)
+  backup.config.http_post2_format = encodeURIComponent(backup.config.http_post2_format)
+  backup.config.http_get_format = encodeURIComponent(backup.config.http_get_format)
   backup.config.influxdb2_format = encodeURIComponent(backup.config.influxdb2_format)
   backup.config.mqtt_format = encodeURIComponent(backup.config.mqtt_format)
 
@@ -123,9 +123,9 @@ function doRestore1(json) {
   for( var k in json.advanced) {
     var newK = k.replaceAll('-', '_')
 
-    if(newK === 'int_http1') newK = 'http_int'
-    if(newK === 'int_http2') newK = 'http_int2'
-    if(newK === 'int_http3') newK = 'http_int3'
+    if(newK === 'int_http1') newK = 'http_post_int'
+    if(newK === 'int_http2') newK = 'http_post2_int'
+    if(newK === 'int_http3') newK = 'http_get_int'
     if(newK === 'int_influx') newK = 'influxdb2_int'
     if(newK === 'int_mqtt') newK = 'mqtt_int'
 
@@ -151,8 +151,20 @@ function doRestore1(json) {
   for( var k in json.config) {
     var newK = k.replaceAll('-', '_')
 
-    if(newK === 'ble')
-      newK = 'ble_tilt_color'
+    if(newK === 'ble') newK = 'ble_tilt_color'
+
+    if(newK === 'http_push') newK = 'http_post_target'
+    if(newK === 'http_push_h1') newK = 'http_post_header1'
+    if(newK === 'http_push_h2') newK = 'http_post_header2'
+
+    if(newK === 'http_push2') newK = 'http_post2_target'
+    if(newK === 'http_push2_h1') newK = 'http_post2_header1'
+    if(newK === 'http_push2_h2') newK = 'http_post2_header2'
+
+    if(newK === 'http_push3') newK = 'http_get_target'
+
+    if(newK === 'influxdb2_push') newK = 'influxdb2_target'
+    if(newK === 'mqtt_push') newK = 'mqtt_target'
 
     if(newK === 'formula_calculation_data') {
       config.formula_calculation_data = [
@@ -176,9 +188,9 @@ function doRestore1(json) {
   /**
    * Convert the format part
    */
-  config.http_format = decodeURIComponent(json.format["http-1"])
-  config.http_format2 =decodeURIComponent(json.format["http-2"])
-  config.http_format3 =decodeURIComponent(json.format["http-3"])
+  config.http_post_format = decodeURIComponent(json.format["http-1"])
+  config.http_post2_format =decodeURIComponent(json.format["http-2"])
+  config.http_get_format =decodeURIComponent(json.format["http-3"])
   config.influxdb2_format =decodeURIComponent(json.format["influxdb"])
   config.mqtt_format =decodeURIComponent(json.format["mqtt"])
 

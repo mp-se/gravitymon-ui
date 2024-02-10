@@ -76,11 +76,11 @@ export function pushBadge() {
 
 function pushTargetCount() {
   var cnt = 0
-  cnt += config.http_push === '' ? 0 : 1
-  cnt += config.http_push2 === '' ? 0 : 1
-  cnt += config.http_push3 === '' ? 0 : 1
-  cnt += config.influxdb2_push === '' ? 0 : 1
-  cnt += config.mqtt_push === '' ? 0 : 1
+  cnt += config.http_post_target === '' ? 0 : 1
+  cnt += config.http_post2_target === '' ? 0 : 1
+  cnt += config.http_get_target === '' ? 0 : 1
+  cnt += config.influxdb2_target === '' ? 0 : 1
+  cnt += config.mqtt_target === '' ? 0 : 1
   cnt += config.ble_format === 0 ? 0 : 1
   return cnt
 }

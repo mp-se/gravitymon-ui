@@ -4,7 +4,7 @@
         <p class="h3">Device - Hardware</p>
         <hr>
 
-        <BsMessage v-if="isGyroCalibrated" dismissable="true" message="" alert="warning">
+        <BsMessage v-if="!isGyroCalibrated()" dismissable="true" message="" alert="warning">
             You need to calibrate the gyro at 90 degrees
         </BsMessage>
 
