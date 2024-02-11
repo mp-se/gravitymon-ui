@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineAsyncComponent } from 'vue'
+import { ref, onMounted } from 'vue'
 import { global, config } from "@/modules/pinia"
 
 const chartDataForm = ref([]);
@@ -71,17 +71,16 @@ const convertToPlato = (sg) => {
 }
 
 onMounted(() => {
-  let formula = config.gravity_formula
 
   for (let a = 25.0; a < 80.0; a += 5.0) {
-    let angle = a.toString()
+    let angle = a.toFixed(3)
+    let formula = config.gravity_formula
     formula = formula.replaceAll("tilt^3", angle + "*" + angle + "*" + angle)
     formula = formula.replaceAll("tilt^2", angle + "*" + angle)
     formula = formula.replaceAll("tilt", angle)
-
+    
     try {
       let g = eval(formula)
-
       if (config.gravity_format === 'P') {
         g = convertToPlato(g)
       }
@@ -94,7 +93,8 @@ onMounted(() => {
   }
 
   for (let i = 0; i < config.formula_calculation_data.length; i++) {
-    chartDataForm.value.push({ x: config.formula_calculation_data[i].a, y: config.formula_calculation_data[i].g })
+    if( config.formula_calculation_data[i].a > 0)
+      chartDataForm.value.push({ x: config.formula_calculation_data[i].a, y: config.formula_calculation_data[i].g })
   }
 
   try {
