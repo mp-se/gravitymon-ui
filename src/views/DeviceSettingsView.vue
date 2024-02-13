@@ -119,7 +119,10 @@ const otaCallback = (opt) => {
 const restart = () => {
     global.clearMessages()
     global.disabled = true
-    fetch(global.baseURL + 'api/restart', { headers: { "Authorization": global.token } })
+    fetch(global.baseURL + 'api/restart', { 
+        headers: { "Authorization": global.token }, 
+        signal: AbortSignal.timeout(global.fetchTimout),
+    })
         .then(res => res.json())
         .then(json => {
             console.log(json)
@@ -141,7 +144,10 @@ const restart = () => {
 const factory = () => {
     global.clearMessages()
     global.disabled = true
-    fetch(global.baseURL + 'api/factory', { headers: { "Authorization": global.token } })
+    fetch(global.baseURL + 'api/factory', { 
+        headers: { "Authorization": global.token }, 
+        signal: AbortSignal.timeout(global.fetchTimout),
+    })
         .then(res => res.json())
         .then(json => {
             if (json.success == true) {

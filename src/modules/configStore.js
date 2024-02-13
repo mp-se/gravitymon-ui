@@ -87,7 +87,8 @@ export const useConfigStore = defineStore('config', {
             global.disabled = true
             fetch(global.baseURL + 'api/config', {
                 method: "GET",
-                headers: { "Authorization": global.token }
+                headers: { "Authorization": global.token },
+                signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => res.json())
                 .then(json => {
@@ -178,7 +179,8 @@ export const useConfigStore = defineStore('config', {
             console.log("Fetching /api/config/format")
             fetch(global.baseURL + 'api/config/format', {
                 method: "GET",
-                headers: { "Authorization": global.token }
+                headers: { "Authorization": global.token },
+                signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => res.json())
                 .then(json => {
@@ -220,6 +222,7 @@ export const useConfigStore = defineStore('config', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
                 body: JSON.stringify(data),
+                signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => {
                     global.disabled = false
@@ -288,6 +291,7 @@ export const useConfigStore = defineStore('config', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
                 body: JSON.stringify(data),
+                signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => {
                     global.disabled = false
@@ -312,6 +316,7 @@ export const useConfigStore = defineStore('config', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
                 body: JSON.stringify(data),
+                signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => {
                     if (res.status != 200) {
@@ -330,7 +335,9 @@ export const useConfigStore = defineStore('config', {
         },
         getPushTestStatus(callback) {
             console.log("Fetching /api/test/push/status")
-            fetch(global.baseURL + 'api/test/push/status')
+            fetch(global.baseURL + 'api/test/push/status', {
+                signal: AbortSignal.timeout(global.fetchTimout),
+            })
                 .then(res => res.json())
                 .then(json => {
                     console.log(json)
@@ -347,7 +354,8 @@ export const useConfigStore = defineStore('config', {
             global.disabled = true
             console.log("Sending /api/wifi/scan")
             fetch(global.baseURL + 'api/wifi/scan', {
-                headers: { "Authorization": global.token }
+                headers: { "Authorization": global.token },
+                signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => {
                     if (res.status != 200) {
@@ -366,7 +374,11 @@ export const useConfigStore = defineStore('config', {
         },
         getWifiScanStatus(callback) {
             console.log("Fetching /api/wifi/scan/status")
-            fetch(global.baseURL + 'api/wifi/scan/status', { method: "GET", headers: { "Authorization": global.token } })
+            fetch(global.baseURL + 'api/wifi/scan/status', { 
+                method: "GET", 
+                headers: { "Authorization": global.token },
+                signal: AbortSignal.timeout(global.fetchTimout),
+            })
                 .then(res => res.json())
                 .then(json => {
                     console.log(json)
@@ -406,6 +418,7 @@ export const useConfigStore = defineStore('config', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
                 body: JSON.stringify(data),
+                signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => res.text())
                 .then(text => {
@@ -415,7 +428,7 @@ export const useConfigStore = defineStore('config', {
                 .catch(err => {
                     console.log("Sending /api/filesystem failed")
                     console.log(err)
-                    callback(false)
+                    callback(false, "")
                 })
         },
         runPushTest(data, callback) {

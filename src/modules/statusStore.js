@@ -41,7 +41,9 @@ export const useStatusStore = defineStore('status', {
     actions: {
         load(callback) {
             console.log("Fetching /api/status")
-            fetch(global.baseURL + 'api/status')
+            fetch(global.baseURL + 'api/status', {
+                signal: AbortSignal.timeout(global.fetchTimout),
+            })
                 .then(res => res.json())
                 .then(json => {
                     console.log(json)
@@ -103,7 +105,8 @@ export const useStatusStore = defineStore('status', {
 
             fetch(global.baseURL + 'api/auth', {
                 method: "GET",
-                headers: { "Authorization": "Basic " + base }
+                headers: { "Authorization": "Basic " + base },
+                signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => res.json())
                 .then(json => {
@@ -121,7 +124,8 @@ export const useStatusStore = defineStore('status', {
             fetch(global.baseURL + 'api/config/sleepmode', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
-                body: JSON.stringify({ sleep_mode: val })
+                body: JSON.stringify({ sleep_mode: val }),
+                signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => res.json())
                 .then(json => {
