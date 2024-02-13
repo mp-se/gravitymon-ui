@@ -540,11 +540,11 @@ app.post('/api/filesystem', (req, res) => {
     return
   } else if(req.body.command == "get") {
     console.log(req.body.file)
-    if(req.body.file == "/log") {
+    if(req.body.file == "/error.log") {
       setTimeout(() => {
         res.send("Log entry 5\nLog entry 4\nLog entry 3\nLog entry 2\nLog entry 1\n")
       }, 1000)
-    } else if(req.body.file == "/log2") {
+    } else if(req.body.file == "/error2.log") {
       setTimeout(() => {
         res.send("Log entry 9\nLog entry 8\nLog entry 7\nLog entry 6\n")
       }, 1000)
