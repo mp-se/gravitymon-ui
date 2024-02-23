@@ -252,8 +252,8 @@ app.get('/api/calibrate/status', (req, res) => {
 
 var testRunning = false
 
-app.post('/api/test/push', (req, res) => {
-  console.log('GET: /api/test/push')
+app.post('/api/push', (req, res) => {
+  console.log('GET: /api/push')
   /* 
    * Description:    Initiate the push test for a defined target
    * Authentication: Required
@@ -279,8 +279,8 @@ app.post('/api/test/push', (req, res) => {
   res.send(data)
 })
 
-app.get('/api/test/push/status', (req, res) => {
-  console.log('GET: /api/test/push/status')
+app.get('/api/push/status', (req, res) => {
+  console.log('GET: /api/push/status')
   /* 
    * Description:    Return status of the current gyro calibration process. 
    * Authentication: Required
@@ -340,14 +340,14 @@ app.get('/api/formula', (req, res) => {
     var data = {
       success: true,
       message: "Hello world",
-      gravity_formula: "tilt*2+tilt+0.45"
+      gravity_formula: "0.0*tilt^3+0.0*tilt^2+0.0017978*tilt+0.9436"
     }
     res.type('application/json')
     res.send(data)
   }, 2000)
 })
 
-app.get('/api/config/format', (req, res) => {
+app.get('/api/format', (req, res) => {
   console.log('GET: /api/format')
   /* 
    * Description:    Return format data as json document. 
@@ -394,8 +394,8 @@ app.post('/api/config', (req, res) => {
   res.send(data)
 })
 
-app.post('/api/config/format', (req, res) => {
-  console.log('POST: /api/config/format')
+app.post('/api/format', (req, res) => {
+  console.log('POST: /api/format')
   /* 
    * Description:    Update the format data that is in body
    * Authentication: Required
@@ -415,8 +415,8 @@ app.post('/api/config/format', (req, res) => {
   res.send(data)
 })
 
-app.post('/api/config/sleepmode', (req, res) => {
-  console.log('POST: /api/config/sleepmode')
+app.post('/api/sleepmode', (req, res) => {
+  console.log('POST: /api/sleepmode')
   /* 
    * Description:    Toggle the sleep mode (from index page)
    * Authentication: Required
@@ -438,8 +438,8 @@ app.post('/api/config/sleepmode', (req, res) => {
 
 var wifiScanRunning = false
 
-app.get('/api/wifi/scan', (req, res) => {
-  console.log('GET: /api/wifi/scan')
+app.get('/api/wifi', (req, res) => {
+  console.log('GET: /api/wifi')
   /* 
    * Description:    Do a wifi scan for avaialble networks
    * Authentication: Required
@@ -457,8 +457,8 @@ app.get('/api/wifi/scan', (req, res) => {
   res.send(data)
 })
 
-app.get('/api/wifi/scan/status', (req, res) => {
-  console.log('GET: /api/wifi/scan/status')
+app.get('/api/wifi/status', (req, res) => {
+  console.log('GET: /api/wifi/status')
   /* 
    * Description:    Return status of the current wifi scan process. 
    * Authentication: Required
@@ -522,8 +522,8 @@ app.post('/api/filesystem', (req, res) => {
   if(req.body.command == "dir") {
     var data = { 
       files: [
-        "/log",
-        "/log2",
+        "/error.log",
+        "/error2.log",
         "/config.json",
         "/gravitymon.json",
       ]
@@ -540,11 +540,11 @@ app.post('/api/filesystem', (req, res) => {
     return
   } else if(req.body.command == "get") {
     console.log(req.body.file)
-    if(req.body.file == "/log") {
+    if(req.body.file == "/error.log") {
       setTimeout(() => {
         res.send("Log entry 5\nLog entry 4\nLog entry 3\nLog entry 2\nLog entry 1\n")
       }, 1000)
-    } else if(req.body.file == "/log2") {
+    } else if(req.body.file == "/error2.log") {
       setTimeout(() => {
         res.send("Log entry 9\nLog entry 8\nLog entry 7\nLog entry 6\n")
       }, 1000)
