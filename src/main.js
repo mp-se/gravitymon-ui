@@ -20,6 +20,7 @@ import BsInputText from '@/components/BsInputText'
 import BsInputReadonly from '@/components/BsInputReadonly'
 import BsSelect from '@/components/BsSelect'
 import BsInputTextArea from '@/components/BsInputTextArea'
+import BsInputTextAreaFormat from '@/components/BsInputTextAreaFormat'
 import BsInputNumber from '@/components/BsInputNumber'
 import BsInputSwitch from '@/components/BsInputSwitch'
 import BsInputRadio from '@/components/BsInputRadio'
@@ -37,6 +38,7 @@ app.component('BsInputText', BsInputText)
 app.component('BsInputReadonly', BsInputReadonly)
 app.component('BsSelect', BsSelect)
 app.component('BsInputTextArea', BsInputTextArea)
+app.component('BsInputTextAreaFormat', BsInputTextAreaFormat)
 app.component('BsInputNumber', BsInputNumber)
 app.component('BsInputRadio', BsInputRadio)
 app.component('BsInputSwitch', BsInputSwitch)
