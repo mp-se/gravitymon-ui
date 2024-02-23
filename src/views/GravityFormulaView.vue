@@ -98,8 +98,10 @@ const calcFormula = () => {
     global.clearMessages()
     config.sendConfig((success) => {
         if (success) {
-            console.log("Requesting formula calculation");
-            fetch(global.baseURL + 'api/formula', { headers: { "Authorization": global.token } })
+            fetch(global.baseURL + 'api/formula', { 
+                headers: { "Authorization": global.token },
+                signal: AbortSignal.timeout(global.fetchTimout),
+            })
                 .then(res => res.json())
                 .then(json => {
                     console.log(json)

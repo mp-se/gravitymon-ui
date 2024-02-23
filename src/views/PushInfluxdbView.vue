@@ -29,7 +29,7 @@
                         :disabled="global.disabled" />
                 </div>
                 <div class="col-md-9">
-                    <BsInputTextArea v-model="config.influxdb2_format" rows="6" label="Push data format"
+                    <BsInputTextAreaFormat v-model="config.http_format3" rows="6" label="Push data format"
                         help="Format template used to create the data sent to the remote service"
                         :disabled="global.disabled" />
                 </div>

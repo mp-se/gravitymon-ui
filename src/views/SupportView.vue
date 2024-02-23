@@ -97,6 +97,8 @@ function fetchLog(file, callback) {
                     logData.value = item + "\n" + logData.value;
             })
             callback(true)
+        } else {
+            callback(false)
         }
     })
 }

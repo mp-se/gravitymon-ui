@@ -146,6 +146,7 @@ const calibrate = () => {
     console.log("Sending /api/calibrate")
     fetch(global.baseURL + 'api/calibrate', {
         headers: { "Authorization": global.token },
+        signal: AbortSignal.timeout(global.fetchTimout),
     })
         .then(res => {
             if (res.status != 200) {
@@ -154,6 +155,7 @@ const calibrate = () => {
                 setTimeout(() => {
                     fetch(global.baseURL + 'api/calibrate/status', {
                         headers: { "Authorization": global.token },
+                        signal: AbortSignal.timeout(global.fetchTimout),
                     })
                         .then(res => {
                             console.log(res)

@@ -13,6 +13,8 @@ export const useGlobalStore = defineStore('global', {
       messageWarning: "",
       messageSuccess: "",
       messageInfo: "",
+
+      fetchTimout: 8000,
     }
   },
   getters: {
