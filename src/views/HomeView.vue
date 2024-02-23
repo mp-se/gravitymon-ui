@@ -194,7 +194,7 @@ onMounted(() => {
   setTimeout(() => {
     console.log("Checking for new sw")
     fetch('https://www.gravitymon.com/firmware/version.json', {
-      signal: AbortSignal.timeout(global.fetchTimout),
+      signal: AbortSignal.timeout(10000),
     })
       .then(res => res.json())
       .then(json => {
