@@ -13,6 +13,7 @@ import BsIcon from '@/components/BsIcon'
 import BsMessage from '@/components/BsMessage'
 import BsCard from '@/components/BsCard'
 import BsModal from '@/components/BsModal'
+import BsModalConfirm from '@/components/BsModalConfirm'
 import BsFileUpload from '@/components/BsFileUpload'
 import BsProgress from '@/components/BsProgress'
 import BsInputBase from '@/components/BsInputBase'
@@ -31,6 +32,7 @@ app.component('BsMessage', BsMessage)
 app.component('BsDropdown', BsDropdown)
 app.component('BsCard', BsCard)
 app.component('BsModal', BsModal)
+app.component('BsModalConfirm', BsModalConfirm)
 app.component('BsFileUpload', BsFileUpload)
 app.component('BsProgress', BsProgress)
 app.component('BsInputBase', BsInputBase)

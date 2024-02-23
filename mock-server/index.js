@@ -10,7 +10,7 @@ const port = 3000
 app.use(cors())
 app.use(express.json())
 
-app.post('/api/upload', upload.single('file'), function(req, res) {
+app.post('/api/firmware', upload.single('file'), function(req, res) {
   const title = req.body.title;
   const file = req.file;
 

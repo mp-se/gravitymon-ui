@@ -36,34 +36,85 @@
     <div class="row gy-4">
       <p></p>
       <hr>
-    </div>  
+    </div>
 
     <h5>Explore the file system</h5>
     <div class="row gy-4">
-
       <div class="col-md-3">
-        <button @click="listFiles" type="button" class="btn btn-secondary" :disabled="global.disabled">
+        <button @click="listFilesView" type="button" class="btn btn-secondary" :disabled="global.disabled">
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
             :hidden="!global.disabled"></span>
           &nbsp;List files
         </button>
       </div>
-
       <div class="col-md-6">
         <div class="button-group">
-          <template v-for="f in files">
-          <button type="button" @click.prevent="fetchFile(f)" class="btn btn-outline-primary" href="#" :disabled="global.disabled">{{ f }}</button>&nbsp;
-        </template>
+          <template v-for="f in filesView">
+            <button type="button" @click.prevent="viewFile(f)" class="btn btn-outline-primary" href="#"
+              :disabled="global.disabled">{{ f }}</button>&nbsp;
+          </template>
         </div>
       </div>
-
       <div v-if="fileData !== null" class="col-md-12">
         <h6>File contents</h6>
         <pre class="border p-2">{{ fileData }}</pre>
       </div>
-
     </div>
 
+    <div class="row gy-4">
+      <p></p>
+      <hr>
+    </div>
+
+    <h5>Upload files to file system</h5>
+    <div class="row gy-4">
+      <form @submit.prevent="upload">
+        <div class="col-md-12">
+          <BsFileUpload name="upload" id="upload" label="Select firmware file" accept=""
+            help="Choose a file to upload to the file system" :disabled="global.disabled">
+          </BsFileUpload>
+        </div>
+        <div class="col-md-3">
+          <p></p>
+          <button type="submit" class="btn btn-secondary" id="upload-btn" value="upload" data-bs-toggle="tooltip"
+            title="Update the device with the selected firmware" :disabled="global.disabled">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+              :hidden="!global.disabled"></span>
+            &nbsp;Upload file
+          </button>
+        </div>
+        <div v-if="progress > 0" class="col-md-12">
+          <p></p>
+          <BsProgress :progress="progress"></BsProgress>
+        </div>
+      </form>
+    </div>
+
+    <div class="row gy-4">
+      <p></p>
+      <hr>
+    </div>
+
+    <h5>Delete files from file system</h5>
+    <div class="row gy-4">
+      <div class="col-md-3">
+        <button @click="listFilesDelete" type="button" class="btn btn-secondary" :disabled="global.disabled">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+            :hidden="!global.disabled"></span>
+          &nbsp;List files
+        </button>
+      </div>
+      <div class="col-md-6">
+        <div class="button-group">
+          <template v-for="f in filesDelete">
+            <button type="button" @click.prevent="deleteFile(f)" class="btn btn-outline-primary" href="#"
+              :disabled="global.disabled">{{ f }}</button>&nbsp;
+          </template>
+        </div>
+      </div>
+
+      <BsModalConfirm :callback="confirmDeleteCallback" :message="confirmDeleteMessage" id="deleteFile" title="Delete file" :disabled="global.disabled" />    
+    </div>
   </div>
 </template>
 
@@ -71,10 +122,36 @@
 import { ref } from 'vue'
 import { global, config, status, saveConfigState } from "@/modules/pinia"
 import { isValidJson, isValidFormData, isValidMqttData } from "@/modules/utils"
+import { Modal } from "bootstrap"
 
 const measuredVoltage = ref(0)
-const files = ref([])
+const filesView = ref([])
 const fileData = ref(null)
+const filesDelete = ref([])
+
+const confirmDeleteMessage = ref(null)
+const confirmDeleteFile = ref(null)
+
+const confirmDeleteCallback = (result) => {
+  if( result ) {
+    global.disabled = true
+    global.clearMessages()
+
+    fileData.value = null
+
+    var data = {
+      command: "del",
+      file: confirmDeleteFile.value
+    }
+
+    config.sendFilesystemRequest(data, (success, text) => {
+      filesView.value = []
+      filesDelete.value = []
+      
+      global.disabled = false
+    })
+  }
+}
 
 const calculateFactor = () => {
   global.disabled = true
@@ -101,7 +178,8 @@ const calculateFactor = () => {
     })
   })
 }
-const fetchFile = (f) => {
+
+const viewFile = (f) => {
   global.disabled = true
   global.clearMessages()
 
@@ -115,13 +193,13 @@ const fetchFile = (f) => {
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
 
-      if(isValidJson(text))
+      if (isValidJson(text))
         fileData.value = JSON.stringify(JSON.parse(text), null, 2)
-      else if(isValidFormData(text))
+      else if (isValidFormData(text))
         fileData.value = text.replaceAll('&', '&\n\r')
-      else if(isValidMqttData(text))
-        fileData.value =  text.replaceAll('|', '|\n\r')
-      else 
+      else if (isValidMqttData(text))
+        fileData.value = text.replaceAll('|', '|\n\r')
+      else
         fileData.value = text
     }
 
@@ -129,11 +207,18 @@ const fetchFile = (f) => {
   })
 }
 
-const listFiles = () => {
+const deleteFile = (f) => {
+  confirmDeleteMessage.value = "Really delete file " + f
+  confirmDeleteFile.value = f
+  const modal = new Modal(document.getElementById('deleteFile'), {})
+  modal.show()
+}
+
+const listFilesView = () => {
   global.disabled = true
   global.clearMessages()
-
-  files.value = []
+ 
+  filesView.value = []
 
   var data = {
     command: "dir"
@@ -142,13 +227,90 @@ const listFiles = () => {
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
       var json = JSON.parse(text)
-      files.value = json.files
+      filesView.value = json.files
     }
 
     global.disabled = false
   })
 }
 
-// TODO: Hardware testing ?
+const listFilesDelete = () => {
+  global.disabled = true
+  global.clearMessages()
 
+  filesDelete.value = []
+
+  var data = {
+    command: "dir"
+  }
+
+  config.sendFilesystemRequest(data, (success, text) => {
+    if (success) {
+      var json = JSON.parse(text)
+      filesDelete.value = json.files
+    }
+
+    global.disabled = false
+  })
+}
+
+const progress = ref(0)
+
+function upload() {
+  const fileElement = document.getElementById('upload');
+
+  if (fileElement.files.length === 0) {
+    global.messageFailed = "You need to select one file with firmware to upload"
+  } else {
+    global.disabled = true
+    console.log("Selected file: " + fileElement.files[0].name)
+
+    const xhr = new XMLHttpRequest();
+    xhr.timeout = 40000; // 40 s
+    progress.value = 0
+
+    function errorAction(e) {
+      console.log("error: " + e.type)
+      global.messageFailed = "File upload failed!"
+      global.disabled = false
+    }
+
+    xhr.onabort = function (e) { errorAction(e) }
+    xhr.onerror = function (e) { errorAction(e) }
+    xhr.ontimeout = function (e) { errorAction(e) }
+
+    xhr.onloadstart = function (e) {
+    }
+
+    xhr.onloadend = function (e) {
+      progress.value = 100
+      if (xhr.status == 200) {
+        global.messageSuccess = "File upload completed!"
+        global.messageFailed = ""
+      }
+
+      global.disabled = false
+      filesView.value = []
+      filesDelete.value = []
+    }
+
+    // The update only seams to work when loaded from the device (i.e. when CORS is not used)
+    xhr.upload.addEventListener('progress', (e) => {
+      progress.value = (e.loaded / e.total) * 100
+    }, false)
+
+    const fileData = new FormData();
+    fileData.onprogress = function (e) {
+      console.log("progress2: " + e.loaded + "," + e.total + "," + xhr.status)
+    }
+
+    fileData.append("file", fileElement.files[0])
+
+    xhr.open("POST", global.baseURL + "api/filesystem/upload")
+    xhr.setRequestHeader("Authorization", global.token)
+    xhr.send(fileData)
+  }
+}
+
+// TODO: Hardware testing ?
 </script>

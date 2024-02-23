@@ -93,7 +93,7 @@ function upload() {
 
         fileData.append("file", fileElement.files[0])
 
-        xhr.open("POST", global.baseURL + "api/upload")
+        xhr.open("POST", global.baseURL + "api/firmware")
         xhr.setRequestHeader("Authorization", global.token)
         xhr.send(fileData)
     }
