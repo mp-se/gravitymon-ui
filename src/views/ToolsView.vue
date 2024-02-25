@@ -47,6 +47,7 @@
           &nbsp;List files
         </button>
       </div>
+
       <div class="col-md-6">
         <div class="button-group">
           <template v-for="f in filesView">
@@ -55,19 +56,26 @@
           </template>
         </div>
       </div>
-      <div v-if="fileData !== null" class="col-md-12">
-        <h6>File contents</h6>
-        <pre class="border p-2">{{ fileData }}</pre>
-      </div>
     </div>
 
-    <div class="row gy-4">
+    <div v-if="filesystemUsage > 0" class="col-md-12">
+      <h6>File system usage</h6>
+      <BsProgress :progress="filesystemUsage"></BsProgress>
+      <p>{{ filesystemUsageText }}</p>
+    </div>
+
+    <div v-if="fileData !== null" class="col-md-12">
+      <h6>File contents</h6>
+      <pre class="border p-2">{{ fileData }}</pre>
+    </div>
+
+    <div v-if="!hideAdvanced" class="row gy-4">
       <p></p>
       <hr>
     </div>
 
-    <h5>Upload files to file system</h5>
-    <div class="row gy-4">
+    <h5 v-if="!hideAdvanced">Upload files to file system</h5>
+    <div v-if="!hideAdvanced" class="row gy-4">
       <form @submit.prevent="upload">
         <div class="col-md-12">
           <BsFileUpload name="upload" id="upload" label="Select firmware file" accept=""
@@ -90,13 +98,13 @@
       </form>
     </div>
 
-    <div class="row gy-4">
+    <div v-if="!hideAdvanced" class="row gy-4">
       <p></p>
       <hr>
     </div>
 
-    <h5>Delete files from file system</h5>
-    <div class="row gy-4">
+    <h5 v-if="!hideAdvanced">Delete files from file system</h5>
+    <div v-if="!hideAdvanced" class="row gy-4">
       <div class="col-md-3">
         <button @click="listFilesDelete" type="button" class="btn btn-secondary" :disabled="global.disabled">
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
@@ -119,12 +127,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { router } from '@/modules/router'
 import { global, config, status, saveConfigState } from "@/modules/pinia"
 import { isValidJson, isValidFormData, isValidMqttData } from "@/modules/utils"
-import { Modal } from "bootstrap"
 
 const measuredVoltage = ref(0)
+const filesystemUsage = ref(null)
+const filesystemUsageText = ref(null)
 const filesView = ref([])
 const fileData = ref(null)
 const filesDelete = ref([])
@@ -132,7 +142,17 @@ const filesDelete = ref([])
 const confirmDeleteMessage = ref(null)
 const confirmDeleteFile = ref(null)
 
+const hideAdvanced = computed(() => {
+  console.log(router.currentRoute.value.query)
+  if("admin" in router.currentRoute.value.query)
+    return false
+  
+  return true
+})
+
 const confirmDeleteCallback = (result) => {
+  console.log(result)
+
   if( result ) {
     global.disabled = true
     global.clearMessages()
@@ -147,6 +167,7 @@ const confirmDeleteCallback = (result) => {
     config.sendFilesystemRequest(data, (success, text) => {
       filesView.value = []
       filesDelete.value = []
+      filesystemUsage.value = null
       
       global.disabled = false
     })
@@ -208,10 +229,9 @@ const viewFile = (f) => {
 }
 
 const deleteFile = (f) => {
-  confirmDeleteMessage.value = "Really delete file " + f
+  confirmDeleteMessage.value = "Do you really want to delete file " + f
   confirmDeleteFile.value = f
-  const modal = new Modal(document.getElementById('deleteFile'), {})
-  modal.show()
+  document.getElementById('deleteFile').click()
 }
 
 const listFilesView = () => {
@@ -227,7 +247,12 @@ const listFilesView = () => {
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
       var json = JSON.parse(text)
-      filesView.value = json.files
+      filesystemUsage.value = (json.used / json.total) * 100
+      filesystemUsageText.value = "Total space " + json.total/1024 + "kb, Free space " + json.free/1024 + "kb, Used space " + json.used/1024 + "kb"
+
+      for(var f in json.files) {
+        filesView.value.push(json.files[f].file)
+      }
     }
 
     global.disabled = false
@@ -247,7 +272,9 @@ const listFilesDelete = () => {
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
       var json = JSON.parse(text)
-      filesDelete.value = json.files
+      for(var f in json.files) {
+        filesDelete.value.push(json.files[f].file)
+      }
     }
 
     global.disabled = false
@@ -292,6 +319,7 @@ function upload() {
       global.disabled = false
       filesView.value = []
       filesDelete.value = []
+      filesystemUsage.value = null
     }
 
     // The update only seams to work when loaded from the device (i.e. when CORS is not used)

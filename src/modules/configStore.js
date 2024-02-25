@@ -395,6 +395,47 @@ export const useConfigStore = defineStore('config', {
                     callback(false, null)
                 })
         },
+        sendHardwareScan(callback) {
+            global.disabled = true
+            console.log("Sending /api/hardware")
+            fetch(global.baseURL + 'api/hardware', {
+                headers: { "Authorization": global.token },
+                signal: AbortSignal.timeout(global.fetchTimout),
+            })
+                .then(res => {
+                    if (res.status != 200) {
+                        console.log("Sending /api/hardware failed")
+                        callback(false)
+                    } else {
+                        console.log("Sending /api/hardware completed")
+                        callback(true)
+                    }
+                })
+                .catch(err => {
+                    console.log("Sending /api/hardware failed")
+                    console.log(err)
+                    callback(false)
+                })
+        },
+        getHardwareScanStatus(callback) {
+            console.log("Fetching /api/hardware/status")
+            fetch(global.baseURL + 'api/hardware/status', { 
+                method: "GET", 
+                headers: { "Authorization": global.token },
+                signal: AbortSignal.timeout(global.fetchTimout),
+            })
+                .then(res => res.json())
+                .then(json => {
+                    console.log(json)
+                    console.log("Fetching /api/hardware/status completed")
+                    callback(true, json)
+                })
+                .catch(err => {
+                    console.log("Fetching /apihardware/status failed")
+                    console.log(err)
+                    callback(false, null)
+                })
+        },
         saveAll() {
             global.clearMessages()
             global.disabled = true
@@ -496,7 +537,36 @@ export const useConfigStore = defineStore('config', {
                     }, 2000)
                 } else {
                     global.disabled = false
-                    global.messageError = "Failed to start push test"
+                    global.messageError = "Failed to start wifi scan"
+                    callback(false)
+                }
+            })
+        },
+        runHardwareScan(callback) {
+            global.disabled = true
+            this.sendHardwareScan((success) => {
+                if (success) {
+                    var check = setInterval(() => {
+                        this.getHardwareScanStatus((success, data) => {
+                            if (success) {
+                                if (data.status) {
+                                    // test is still running, just wait for next check
+                                } else {
+                                    global.disabled = false
+                                    callback(data.success, data)
+                                    clearInterval(check)
+                                }
+                            } else {
+                                global.disabled = false
+                                global.messageError = "Failed to get hardware scan status"
+                                callback(false)
+                                clearInterval(check)
+                            }
+                        })
+                    }, 2000)
+                } else {
+                    global.disabled = false
+                    global.messageError = "Failed to start hardware scan"
                     callback(false)
                 }
             })

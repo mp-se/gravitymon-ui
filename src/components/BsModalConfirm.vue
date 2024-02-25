@@ -1,10 +1,10 @@
 <template>
-<div class="modal fade modal-lg" :id="id" tabindex="-1" aria-hidden="true">
+<button :id="id" type="button" class="btn btn-secondary" hidden data-bs-toggle="modal" :data-bs-target="'#modal'+$.uid">Testing</button>
+<div class="modal fade modal-lg" :id="'modal'+$.uid" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content p-4">
       <div class="modal-header">
         <h1 class="modal-title fs-5">{{ title }}</h1>
-        <button @click="callback(false)" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         {{  message }}

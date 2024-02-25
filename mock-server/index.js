@@ -521,11 +521,14 @@ app.post('/api/filesystem', (req, res) => {
   
   if(req.body.command == "dir") {
     var data = { 
+      total: 1000,
+      used: 900,
+      free: 100,
       files: [
-        "/error.log",
-        "/error2.log",
-        "/config.json",
-        "/gravitymon.json",
+        { file: "/error.log", size: 10 },
+        { file: "/error2.log", size: 10 },
+        { file: "/config.json", size: 10 },
+        { file: "/gravitymon.json", size: 10 },
       ]
     }
     res.type('application/json')

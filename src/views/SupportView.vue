@@ -39,19 +39,25 @@
         <hr>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <button @click="viewLogs" type="button" class="btn btn-primary" :disabled="global.disabled">
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>
                         &nbsp;View device logs</button>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <button @click="removeLogs" type="button" class="btn btn-secondary" :disabled="global.disabled">
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>
                         &nbsp;Erase device logs</button>
             </div>
-            <div v-if="status.ispindel_config" class="col-md-4">
+            <div class="col-md-3">
+                <button @click="hardwareScan" type="button" class="btn btn-secondary" :disabled="global.disabled">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                            :hidden="!global.disabled"></span>
+                        &nbsp;Hardware scan</button>
+            </div>
+            <div v-if="status.ispindel_config" class="col-md-3">
                 <button @click="removeLegacy" type="button" class="btn btn-secondary" :disabled="global.disabled">
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>
@@ -70,7 +76,6 @@
             </div>
             <div class="form-text">Starts with the latest log entry first.</div>
         </div>
-
     </div>
 </template>
 
@@ -149,6 +154,18 @@ function removeLegacy() {
             global.messageSuccess = "Requested old configuration files to be deleted"
             global.disabled = false
         })
+    })
+}
+
+function hardwareScan() {
+    global.clearMessages()
+    global.disabled = true
+    logData.value = ""
+
+    config.runHardwareScan((success, data) => {
+        if (success) {
+            logData.value = data
+        }
     })
 }
 </script>
