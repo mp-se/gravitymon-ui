@@ -55,7 +55,7 @@
                 <div class="col-md-6">
                     <BsInputSwitch v-model="config.gyro_temp" label="Gyro temperature"
                         help="Use the temperature sensor in the gyro instead of DS18B20, require a minimum 300s update interval to be accurate or the heat from the chip will affect reading"
-                        :disabled="global.disabled"></BsInputSwitch>
+                        :disabled="global.disabled || config.gyro_disabled"></BsInputSwitch>
                 </div>
                 <div class="col-md-12">
                     <hr>
