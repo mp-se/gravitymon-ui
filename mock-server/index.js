@@ -86,6 +86,7 @@ configData = {
   formula_max_deviation: 3,
   formula_calibration_temp: 20,
   ignore_low_angles: false,
+  gyro_disabled: false,
   formula_calculation_data: [
     { a: 25, g: 1.000 },
     { a: 30, g: 1.010 },

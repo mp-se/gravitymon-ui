@@ -8,6 +8,10 @@
             You need to calibrate the gyro at 90 degrees
         </BsMessage>
 
+        <BsMessage v-if="config.gyro_disabled" dismissable="true" message="" alert="warning">
+            Gyro is disbled so the device will only be able to measure temperature
+        </BsMessage>
+        
         <form @submit.prevent="save" class="needs-validation" novalidate>
             <div class="row">
                 <div class="col-md-6">
@@ -56,8 +60,15 @@
                 <div class="col-md-12">
                     <hr>
                 </div>
-                <div class="col">
-                    Gyro calibration: {{ config.gyro_calibration_data }}
+                <div class="col-md-6">
+                    <BsInputSwitch v-model="config.gyro_disabled" label="Disable gyro"
+                        help="If active then the device works as a temperature sensor and ALL gyro functions are disabled"
+                        :disabled="global.disabled"></BsInputSwitch>
+                </div>
+                <div class="col-md-6">
+                    <BsInputReadonly v-model="calibrationValues" label="Gyro calibration"
+                        help="Shows the current gyro calibraton values"
+                        :disabled="global.disabled"></BsInputReadonly>
                 </div>
             </div>
             <div class="row gy-2">
@@ -113,6 +124,10 @@ const disableDs18b20 = computed(() => {
 
 const voltage = computed(() => {
     return status.battery + " V"
+})
+
+const calibrationValues = computed(() => {
+    return JSON.stringify(config.gyro_calibration_data)
 })
 
 const ispindel = () => {

@@ -80,7 +80,8 @@ export const useConfigStore = defineStore('config', {
             formula_calibration_temp: 0,
             ignore_low_angles: false,
             gyro_calibration_data: [],
-            dark_mode: false
+            dark_mode: false,
+            gyro_disabled: false,
         }
     },
     actions: {
@@ -94,7 +95,7 @@ export const useConfigStore = defineStore('config', {
             })
                 .then(res => res.json())
                 .then(json => {
-                    // console.log(json)
+                    console.log(json)
                     global.disabled = false
                     this.id = json.id,
                         // Device
@@ -110,6 +111,7 @@ export const useConfigStore = defineStore('config', {
                         this.battery_saving = json.battery_saving,
                         this.tempsensor_resolution = json.tempsensor_resolution,
                         this.temp_adjustment_value = json.temp_adjustment_value,
+                        this.gyro_disabled = json.gyro_disabled,
                         // Wifi
                         this.wifi_portal_timeout = json.wifi_portal_timeout,
                         this.wifi_connect_timeout = json.wifi_connect_timeout,
