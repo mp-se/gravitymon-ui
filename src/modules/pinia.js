@@ -78,6 +78,8 @@ config.$subscribe((mutation, state) => {
     if(JSON.stringify(changes).length > 2) {
         global.configChanged = true        
         console.log("Changed properties:", changes)
+    } else {
+        global.configChanged = false
     }
 })
 
