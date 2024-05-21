@@ -17,15 +17,16 @@ jobs:
         with:
           cache: 'npm'
 
-      - uses: devops-actions/action-get-tag@v1.0.2
-        id: tag
-        with:
-          strip_v: false 
+      - uses: rmeneely/git-last-tag@v1
+        #with:
+          #tag_pattern: v[0-9]*.[0-9]*.[0-9]*
+          #tag_pattern: 'rc[0-9]*'
+          #ignore_tag_pattern: 'v1.2.3'
         
       - run: |
           REV=`git rev-parse HEAD | rev | cut -c 1-6 | rev`
           echo "VUE_APP_BUILD=..$REV" >> .env
-          echo "VUE_APP_VERSION=${{steps.tag.outputs.tag}}" >> .env
+          echo "VUE_APP_VERSION=${{env.LAST_TAG}}" >> .env
           cat .env
 
       - run: npm install
