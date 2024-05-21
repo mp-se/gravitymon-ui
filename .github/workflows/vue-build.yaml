@@ -16,17 +16,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           cache: 'npm'
-
-      - uses: rmeneely/git-last-tag@v1
-        #with:
-          #tag_pattern: v[0-9]*.[0-9]*.[0-9]*
-          #tag_pattern: 'rc[0-9]*'
-          #ignore_tag_pattern: 'v1.2.3'
-        
+      
       - run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --tags
           REV=`git rev-parse HEAD | rev | cut -c 1-6 | rev`
+          TAG=`git tag --sort=creatordate | head -1`
           echo "VUE_APP_BUILD=..$REV" >> .env
-          echo "VUE_APP_VERSION=$LAST_TAG" >> .env
+          echo "VUE_APP_VERSION=$TAG" >> .env
           cat .env
 
       - run: npm install
