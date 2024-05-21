@@ -19,6 +19,7 @@ jobs:
 
       - run: |
           REV=`git rev-parse HEAD | rev | cut -c 1-6 | rev`
+          echo `git tag` 
           VER=`git tag | tail -n1`
           echo "VUE_APP_BUILD=..$REV" >> .env
           echo "VUE_APP_VERSION=$VER" >> .env
