@@ -26,7 +26,7 @@ jobs:
       - run: |
           REV=`git rev-parse HEAD | rev | cut -c 1-6 | rev`
           echo "VUE_APP_BUILD=..$REV" >> .env
-          echo "VUE_APP_VERSION=${{env.LAST_TAG}}" >> .env
+          echo "VUE_APP_VERSION=$LAST_TAG" >> .env
           cat .env
 
       - run: npm install
