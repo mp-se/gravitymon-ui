@@ -15,7 +15,7 @@
         <form @submit.prevent="save" class="needs-validation" novalidate>
             <div class="row">
                 <div class="col-md-6">
-                    <BsInputText v-model="config.token" maxlength="50" label="Token"
+                    <BsInputText v-model="config.token" maxlength="50" label="Token 1"
                         help="Token can be used in the format template as a variable, some services use this for authentication"
                         :disabled="global.disabled" />
                 </div>

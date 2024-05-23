@@ -28,7 +28,7 @@
                         :disabled="global.disabled" />
                 </div>
                 <div class="col-md-9">
-                    <BsInputTextAreaFormat v-model="config.mqtt_format" rows="6" label="Push data format"
+                    <BsInputTextAreaFormat v-model="config.mqtt_format" rows="6" label="Data format"
                         help="Format template used to create the data sent to the remote service"
                         :disabled="global.disabled" />
                 </div>
