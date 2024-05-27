@@ -21,6 +21,7 @@ export const useConfigStore = defineStore('config', {
             battery_saving: false,
             tempsensor_resolution: 0,
             temp_adjustment_value: 0,
+            voltage_pin: 0,
             // Wifi
             wifi_portal_timeout: 0,
             wifi_connect_timeout: 0,
@@ -112,6 +113,7 @@ export const useConfigStore = defineStore('config', {
                         this.tempsensor_resolution = json.tempsensor_resolution,
                         this.temp_adjustment_value = json.temp_adjustment_value,
                         this.gyro_disabled = json.gyro_disabled,
+                        this.voltage_pin = json.voltage_pin,
                         // Wifi
                         this.wifi_portal_timeout = json.wifi_portal_timeout,
                         this.wifi_connect_timeout = json.wifi_connect_timeout,

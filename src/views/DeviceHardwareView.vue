@@ -11,7 +11,7 @@
         <BsMessage v-if="config.gyro_disabled" dismissable="true" message="" alert="warning">
             Gyro is disbled so the device will only be able to measure temperature
         </BsMessage>
-        
+
         <form @submit.prevent="save" class="needs-validation" novalidate>
             <div class="row">
                 <div class="col-md-6">
@@ -37,6 +37,16 @@
                         help="When active, the sleep interval will be changed to 1 hour when battery drops below 20% (3.73V)"
                         :disabled="global.disabled"></BsInputSwitch>
                 </div>
+                <template v-if="status.hardware == 'floaty'">
+                    <div class="col-md-12">
+                        <hr>
+                    </div>
+                    <div class="col-md-6">
+                        <BsInputRadio v-model="config.voltage_pin" :options="voltagePinFloatyOptions"
+                            label="Floaty Voltage PIN" help="Pin to be used for measuring voltage on floaty hardware"
+                            :disabled="global.disabled"></BsInputRadio>
+                    </div>
+                </template>
                 <div class="col-md-12">
                     <hr>
                 </div>
@@ -67,8 +77,7 @@
                 </div>
                 <div class="col-md-6">
                     <BsInputReadonly v-model="calibrationValues" label="Gyro calibration"
-                        help="Shows the current gyro calibraton values"
-                        :disabled="global.disabled"></BsInputReadonly>
+                        help="Shows the current gyro calibraton values" :disabled="global.disabled"></BsInputReadonly>
                 </div>
             </div>
             <div class="row gy-2">
@@ -76,7 +85,8 @@
                     <hr>
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary w-2" :disabled="global.disabled || !global.configChanged">
+                    <button type="submit" class="btn btn-primary w-2"
+                        :disabled="global.disabled || !global.configChanged">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>
                         &nbsp;Save
@@ -116,7 +126,12 @@ const tempsensorResolutionOptions = ref([
     { label: '0.25°C (187 ms)', value: 10 },
     { label: '0.125°C (375 ms)', value: 11 },
     { label: '0.0625°C (850 ms)', value: 12 },
-]);
+])
+
+const voltagePinFloatyOptions = ref([
+    { label: 'PIN 32', value: 32 },
+    { label: 'PIN 35', value: 35 },
+])
 
 const disableDs18b20 = computed(() => {
     return config.gyro_temp || global.disabled

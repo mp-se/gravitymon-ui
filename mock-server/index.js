@@ -87,6 +87,7 @@ configData = {
   formula_calibration_temp: 20,
   ignore_low_angles: false,
   gyro_disabled: false,
+  voltage_pin: 35,
   formula_calculation_data: [
     { a: 25, g: 1.000 },
     { a: 30, g: 1.010 },
