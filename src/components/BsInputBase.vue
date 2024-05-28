@@ -12,6 +12,10 @@
 
 <script setup>
 /**
+ * 2024-05-28 Bootstrap VueJS wrapper, Magnus Persson
+ */
+
+/**
  * Purpose: Basic layout of a form component with label on top and help text below. 
  * 
  * Note! Should not be used directly, this is a base class for form components.
