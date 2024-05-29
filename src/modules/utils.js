@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { config } from "@/modules/pinia"
+import { config, global } from "@/modules/pinia"
 
 export const httpHeaderOptions = ref([
   { label: '-blank-', value: '' },
@@ -172,4 +172,29 @@ export function isGyroCalibrated() {
   if ((g.ax + g.ay + g.az + g.gx + g.gy + g.gz) == 0)
       return false
   return true
+}
+
+export function restart() {
+  global.clearMessages()
+  global.disabled = true
+  fetch(global.baseURL + 'api/restart', { 
+      headers: { "Authorization": global.token }, 
+      signal: AbortSignal.timeout(global.fetchTimout),
+  })
+      .then(res => res.json())
+      .then(json => {
+          console.log(json)
+          if (json.status == true) {
+              global.messageSuccess = json.message + " Redirecting to http://" + config.mdns + ".local in 8 seconds."
+              setTimeout(() => { location.href = "http://" + config.mdns + ".local" }, 8000)
+          } else {
+              global.messageError = json.message
+              global.disabled = false
+          }
+      })
+      .catch(err => {
+          console.log(err)
+          global.messageError = "Failed to do restart"
+          global.disabled = false
+      })
 }
