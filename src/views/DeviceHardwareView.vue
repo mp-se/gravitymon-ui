@@ -83,6 +83,13 @@
                     </button>
                 </div>
                 <div class="col-md-3">
+                    <button @click="restart()" type="button" class="btn btn-secondary" :disabled="global.disabled">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                            :hidden="!global.disabled"></span>
+                        &nbsp;Restart device
+                    </button>
+                </div>
+                <div class="col-md-3">
                     <button @click="calibrate" type="button" class="btn btn-secondary" :disabled="global.disabled">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>

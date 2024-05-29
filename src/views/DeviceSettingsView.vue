@@ -68,7 +68,7 @@
                     </button>
                 </div>
                 <div class="col-md-3">
-                    <button @click="restart" type="button" class="btn btn-secondary" :disabled="global.disabled">
+                    <button @click="restart()" type="button" class="btn btn-secondary" :disabled="global.disabled">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>
                         &nbsp;Restart device
@@ -88,7 +88,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { validateCurrentForm } from "@/modules/utils"
+import { validateCurrentForm, restart } from "@/modules/utils"
 import { global, config } from "@/modules/pinia"
 import * as badge from '@/modules/badge'
 
@@ -114,31 +114,6 @@ const uiOptions = ref([
 
 const otaCallback = (opt) => {
     config.ota_url = opt
-}
-
-const restart = () => {
-    global.clearMessages()
-    global.disabled = true
-    fetch(global.baseURL + 'api/restart', { 
-        headers: { "Authorization": global.token }, 
-        signal: AbortSignal.timeout(global.fetchTimout),
-    })
-        .then(res => res.json())
-        .then(json => {
-            console.log(json)
-            if (json.success == true) {
-                global.messageSuccess = json.message
-                setTimeout(() => { location.reload(true) }, 2000)
-            } else {
-                global.messageFailed = json.message
-                global.disabled = false
-            }
-        })
-        .catch(err => {
-            console.log(err)
-            global.messageError = "Failed to do restart"
-            global.disabled = false
-        })
 }
 
 const factory = () => {
