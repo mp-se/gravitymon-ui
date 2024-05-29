@@ -7,7 +7,7 @@
         <form @submit.prevent="save" class="needs-validation" novalidate>
             <div class="row">
                 <div class="col-md-9">
-                    <BsInputText v-model="config.http_post_target" type="url" maxlength="120" label="Http Post URL"
+                    <BsInputText v-model="config.http_post_target" type="url" maxlength="120" label="HTTP URL"
                         help="URL to push target, use format http://servername.com/resource (Supports http and https)"
                         :disabled="global.disabled" />
                 </div>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-9">
                     <BsInputText v-model="config.http_post_header1" maxlength="120" pattern="(.+): (.+)"
-                        label="Http Post Header #1"
+                        label="HTTP Header #1"
                         help=""
                         :disabled="global.disabled" />
                 </div>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-md-9">
                     <BsInputText v-model="config.http_post_header2" maxlength="120" pattern="(.+): (.+)"
-                        label="Http Post Header #2"
+                        label="HTTP Header #2"
                         help="Set a http headers, empty string is skipped, example: Content-Type: application/json"
                         :disabled="global.disabled" />
                 </div>
@@ -41,7 +41,7 @@
                         :disabled="global.disabled" />
                 </div>
                 <div class="col-md-9">
-                    <BsInputTextAreaFormat v-model="config.http_post_format" rows="6" label="Push data format"
+                    <BsInputTextAreaFormat v-model="config.http_post_format" rows="6" label="Data format"
                         help="Format template used to create the data sent to the remote service"
                         :disabled="global.disabled" />
                 </div>
