@@ -70,6 +70,7 @@ import { onMounted, ref, watch } from "vue";
 import { validateCurrentForm } from "@/modules/utils"
 import { global, config, status } from "@/modules/pinia"
 import { storeToRefs } from 'pinia'
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const { sleep_interval } = storeToRefs(config)
 const batteryLife = ref("")
@@ -109,7 +110,7 @@ const calculateBatteryLife = () => {
     var wifi = (config.http_post_target.length + config.http_post2_target.length + config.http_get_target.length + config.influxdb2_target.length + config.mqtt_target.length) > 0 ? true : false;
 
     if (!wifi && !ble) {
-        console.log("No push targets defined, cannot estimate battery life")
+        logError("PushSettingsView.calculateBatteryLife()", "No push targets defined, cannot estimate battery life")
         return
     }
 
@@ -134,7 +135,7 @@ const calculateBatteryLife = () => {
                 pwrActive = 330; // mA per hour (260-379 mA)
                 break
             default:
-                console.log('Unknown platform', status.platform)
+                logError("PushSettingsView.calculateBatteryLife()", 'Unknown platform', status.platform)
                 break
         }
     } else {
@@ -150,7 +151,7 @@ const calculateBatteryLife = () => {
                 pwrActive = 180;
                 break
             default:
-                console.log('Unknown platform', status.platform)
+                logError("PushSettingsView.calculateBatteryLife()", 'Unknown platform', status.platform)
                 break
         }
     }
@@ -161,8 +162,8 @@ const calculateBatteryLife = () => {
     var powerPerDay = (24 * 3600) / (config.sleep_interval + rt) * (rt / 3600) * pwrActive + pwrSleep;
     var days = batt / powerPerDay;
 
-    // console.log("Estimated power per hour = " + pwrActive.toString() + "mA on platform = " + status.platform);
-    // console.log("Estimated number of days = " + days)
+    logDebug("PushSettingsView.calculateBatteryLife()", "Estimated power per hour = " + pwrActive.toString() + "mA on platform = " + status.platform);
+    logDebug("PushSettingsView.calculateBatteryLife()", "Estimated number of days = " + days)
 
     batteryLife.value = Math.floor(days/7) + " weeks " + Math.floor(days%7) + " days"
 }

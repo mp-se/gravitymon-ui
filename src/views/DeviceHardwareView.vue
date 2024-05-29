@@ -122,9 +122,10 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { isGyroCalibrated, validateCurrentForm } from "@/modules/utils"
+import { isGyroCalibrated, validateCurrentForm, restart } from "@/modules/utils"
 import { global, config, status } from "@/modules/pinia"
 import * as badge from '@/modules/badge'
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 // TODO: Show badge if problems with battery level
 
@@ -161,7 +162,7 @@ const ispindel = () => {
     config.sendFilesystemRequest(data, (success, text) => {
         if (success) {
             var json = JSON.parse(text)
-            console.log(json)
+            logDebug("DeviceHardwareView.ispindel()", json)
 
             config.gyro_calibration_data.ax = json.Offset[0]
             config.gyro_calibration_data.ay = json.Offset[1]
@@ -180,7 +181,7 @@ const ispindel = () => {
 
 const calibrate = () => {
     global.disabled = true
-    console.log("Sending /api/calibrate")
+    logInfo("DeviceHardwareView.calibrate()", "Sending /api/calibrate")
     fetch(global.baseURL + 'api/calibrate', {
         headers: { "Authorization": global.token },
         signal: AbortSignal.timeout(global.fetchTimout),
@@ -195,7 +196,7 @@ const calibrate = () => {
                         signal: AbortSignal.timeout(global.fetchTimout),
                     })
                         .then(res => {
-                            console.log(res)
+                            logDebug("DeviceHardwareView.calibrate()", res)
                             if (res.status != 200 || res.success == true) {
                                 global.messageError = "Failed to get calibrate status"
                             } else {
@@ -210,17 +211,15 @@ const calibrate = () => {
                             }
                         })
                         .catch(err => {
-                            console.log("Sending /api/calibrate/status failed")
                             global.messageError = "Failed to get calibrate status"
-                            console.log(err)
+                            logError("DeviceHardwareView.calibrate()", err)
                         })
                 }, 4000)
             }
         })
         .catch(err => {
-            console.log("Sending /api/calibrate failed")
             global.messageError = "Failed to send calibrate request"
-            console.log(err)
+            logError("DeviceHardwareView.calibrate()", err)
         })
 }
 

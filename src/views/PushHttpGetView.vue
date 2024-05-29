@@ -79,10 +79,9 @@
 import { ref } from 'vue'
 import { validateCurrentForm, httpHeaderOptions, httpGetUrlOptions, httpGetFormatOptions, applyTemplate } from "@/modules/utils"
 import { global, status, config } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const render = ref("")
-
-// TODO: Add header options to HTTP get
 
 const runTest = () => {
     const data = {

@@ -1,5 +1,6 @@
 import { config, status } from '@/modules/pinia'
 import { isGyroCalibrated } from '@/modules/utils'
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 /**
  * Used in menybar to show the total amount of items that require user action.

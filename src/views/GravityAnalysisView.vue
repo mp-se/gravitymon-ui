@@ -13,6 +13,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { global, config } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const chartDataForm = ref([]);
 const chartDataCalc = ref([]);
@@ -87,7 +88,7 @@ onMounted(() => {
 
       chartDataCalc.value.push({ x: parseFloat(a), y: parseFloat(g) })
     } catch(err) {
-      console.log(err)
+      logError("GravityAnalysisView.onMounted()", err)
       global.messageError = "Error evaluating the formula, the formula is invalid"
     }
   }
@@ -100,7 +101,7 @@ onMounted(() => {
   try {
     chart.value = new Chart(document.getElementById('gravityChart'), configChart.value)
   } catch (err) {
-    console.log(err)
+    logError("GravityAnalysisView.onMounted()", err)
   }
 })
 </script>

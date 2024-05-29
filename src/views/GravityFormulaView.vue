@@ -95,6 +95,7 @@
 import { validateCurrentForm } from "@/modules/utils"
 import { global, config } from "@/modules/pinia"
 import * as badge from '@/modules/badge'
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const save = () => {
     if (!validateCurrentForm()) return
@@ -114,7 +115,7 @@ const calcFormula = () => {
             })
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json)
+                    logDebug("GravityFormulaView.calcFormula()", json)
                     if (json.success == true) {
                         config.gravity_formula = json.gravity_formula
                         global.messageSuccess = json.message
@@ -124,7 +125,7 @@ const calcFormula = () => {
                     global.disabled = false
                 })
                 .catch(err => {
-                    console.log(err)
+                    logError("GravityFormulaView.calcFormula()", err)
                     global.messageError = "Failed to request formula creation"
                     global.disabled = false
                 })

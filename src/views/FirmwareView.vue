@@ -43,6 +43,7 @@
 <script setup>
 import { ref } from 'vue'
 import { global, status } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const progress = ref(0)
 
@@ -53,14 +54,14 @@ function upload() {
         global.messageFailed = "You need to select one file with firmware to upload"
     } else {
         global.disabled = true
-        console.log("Selected file: " + fileElement.files[0].name)
+        logDebug("FirmwareView.upload()", "Selected file: " + fileElement.files[0].name)
 
         const xhr = new XMLHttpRequest();
         xhr.timeout = 40000; // 40 s
         progress.value = 0
 
         function errorAction(e) {
-            console.log("error: " + e.type)
+            logError("FirmwareView.upload()", e.type)
             global.messageFailed = "File upload failed!"
             global.disabled = false
         }
@@ -88,7 +89,7 @@ function upload() {
 
         const fileData = new FormData();
         fileData.onprogress = function (e) {
-            console.log("progress2: " + e.loaded + "," + e.total + "," + xhr.status)
+            logDebug("FirmwareView.upload()", "progress2: " + e.loaded + "," + e.total + "," + xhr.status)
         }
 
         fileData.append("file", fileElement.files[0])

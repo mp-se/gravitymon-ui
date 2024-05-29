@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { config, global } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 export const httpHeaderOptions = ref([
   { label: '-blank-', value: '' },
@@ -126,7 +127,7 @@ export function applyTemplate(status, config, template) {
   try {
     return JSON.stringify(JSON.parse(s), null, 2)
   } catch (e) {
-    console.log("Not a valid json document, returning string")
+    logError("utils.applyTemplate()", "Not a valid json document, returning string")
   }
 
   return s
@@ -183,9 +184,10 @@ export function restart() {
   })
       .then(res => res.json())
       .then(json => {
-          console.log(json)
+          logDebug("utils.restart()", json)
           if (json.status == true) {
               global.messageSuccess = json.message + " Redirecting to http://" + config.mdns + ".local in 8 seconds."
+              logInfo("utils.restart()", "Scheduling refresh of UI")
               setTimeout(() => { location.href = "http://" + config.mdns + ".local" }, 8000)
           } else {
               global.messageError = json.message
@@ -193,7 +195,7 @@ export function restart() {
           }
       })
       .catch(err => {
-          console.log(err)
+          logError("utils.restart()", err)
           global.messageError = "Failed to do restart"
           global.disabled = false
       })

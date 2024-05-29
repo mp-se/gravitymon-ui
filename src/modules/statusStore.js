@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { global } from '@/modules/pinia'
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 export const useStatusStore = defineStore('status', {
     state: () => {
@@ -40,13 +41,13 @@ export const useStatusStore = defineStore('status', {
     },
     actions: {
         load(callback) {
-            console.log("Fetching /api/status")
+            logInfo("statusStore.load()", "Fetching /api/status")
             fetch(global.baseURL + 'api/status', {
                 signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => res.json())
                 .then(json => {
-                    // console.log(json)
+                    logDebug("statusStore.load()", json)
                     this.id = json.id,
                     this.angle = json.angle,
                     this.temp_format = json.temp_format,
@@ -89,17 +90,16 @@ export const useStatusStore = defineStore('status', {
                     else
                         this.gravity = (Math.round(this.gravity * 100) / 100).toFixed(2) // Plato
 
-                    console.log("Fetching /api/status completed")
+                    logInfo("statusStore.load()", "Fetching /api/status completed")
                     callback(true)
                 })
                 .catch(err => {
-                    console.log("Fetching /api/status failed")
-                    console.log(err)
+                    logError("statusStore.load()", err)
                     callback(false)
                 })
         },
         auth(callback) {
-            console.log("Fetching /api/auth")
+            logInfo("statusStore.auth()", "Fetching /api/auth")
             var base = btoa('gravitymon:password')
 
             fetch(global.baseURL + 'api/auth', {
@@ -109,17 +109,16 @@ export const useStatusStore = defineStore('status', {
             })
                 .then(res => res.json())
                 .then(json => {
-                    console.log("Fetching /api/auth completed")
+                    logInfo("statusStore.auth()", "Fetching /api/auth completed")
                     callback(true, json)
                 })
                 .catch(err => {
-                    console.log("Fetching /api/auth failed")
-                    console.log(err)
+                    logError("statusStore.auth()", err)
                     callback(false)
                 })
         },
         setSleepMode(val, callback) {
-            console.log("Fetching /api/config/sleepmode")
+            logInfo("statusStore.setSleepMode()", "Fetching /api/config/sleepmode")
             fetch(global.baseURL + 'api/config/sleepmode', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
@@ -128,12 +127,11 @@ export const useStatusStore = defineStore('status', {
             })
                 .then(res => res.json())
                 .then(json => {
-                    console.log("Fetching /api/config/sleepmode completed")
+                    logInfo("statusStore.setSleepMode()", "Fetching /api/config/sleepmode completed")
                     callback(true)
                 })
                 .catch(err => {
-                    console.log("Fetching /api/config/sleepmode failed")
-                    console.log(err)
+                    logError("statusStore.setSleepMode()", err)
                     callback(false)
                 })
         }

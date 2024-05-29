@@ -131,6 +131,7 @@ import { ref, computed } from 'vue'
 import { router } from '@/modules/router'
 import { global, config, status, saveConfigState } from "@/modules/pinia"
 import { isValidJson, isValidFormData, isValidMqttData } from "@/modules/utils"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const measuredVoltage = ref(0)
 const filesystemUsage = ref(null)
@@ -143,7 +144,7 @@ const confirmDeleteMessage = ref(null)
 const confirmDeleteFile = ref(null)
 
 const hideAdvanced = computed(() => {
-  console.log(router.currentRoute.value.query)
+  logDebug("ToolsView.computed()", router.currentRoute.value.query)
   if("admin" in router.currentRoute.value.query)
     return false
   
@@ -151,7 +152,7 @@ const hideAdvanced = computed(() => {
 })
 
 const confirmDeleteCallback = (result) => {
-  console.log(result)
+  logDebug("ToolsView.confirmDeleteCallback()", result)
 
   if( result ) {
     global.disabled = true
@@ -192,7 +193,7 @@ const calculateFactor = () => {
     global.disabled = true
     setTimeout(() => {
       status.load((success) => {
-        console.log(status.battery)
+        logDebug("ToolsView.calculateFactor()", status.battery)
         global.messageInfo = "New factor applied, check if the current battery reading is correct"
         global.disabled = false
       }, 1000)
@@ -290,14 +291,14 @@ function upload() {
     global.messageFailed = "You need to select one file with firmware to upload"
   } else {
     global.disabled = true
-    console.log("Selected file: " + fileElement.files[0].name)
+    logDebug("ToolsView.upload()", "Selected file: " + fileElement.files[0].name)
 
     const xhr = new XMLHttpRequest();
     xhr.timeout = 40000; // 40 s
     progress.value = 0
 
     function errorAction(e) {
-      console.log("error: " + e.type)
+      logError("ToolsView.upload()", e.type)
       global.messageFailed = "File upload failed!"
       global.disabled = false
     }
@@ -329,7 +330,7 @@ function upload() {
 
     const fileData = new FormData();
     fileData.onprogress = function (e) {
-      console.log("progress2: " + e.loaded + "," + e.total + "," + xhr.status)
+      logDebug("ToolsView.upload()", "progress2: " + e.loaded + "," + e.total + "," + xhr.status)
     }
 
     fileData.append("file", fileElement.files[0])
@@ -339,6 +340,4 @@ function upload() {
     xhr.send(fileData)
   }
 }
-
-// TODO: Hardware testing ?
 </script>

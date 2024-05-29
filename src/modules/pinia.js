@@ -3,6 +3,7 @@ import { createPinia } from "pinia"
 import { useGlobalStore } from "@/modules/globalStore"
 import { useStatusStore } from '@/modules/statusStore'
 import { useConfigStore } from "@/modules/configStore"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 export const piniaInstance = createPinia()
 
@@ -15,7 +16,7 @@ export { global, status, config }
 const configCompare = ref(null)
 
 const saveConfigState = () => {
-    console.log("Saving state")
+    logInfo("pinia.saveConfigState()", "Saving state")
 
     configCompare.value = {}
     for (var key in config) {
@@ -34,7 +35,7 @@ const saveConfigState = () => {
         }
     }
 
-    console.log("Saved state: ", configCompare.value)
+    logInfo("pinia.saveConfigState()", "Saved state: ", configCompare.value)
     global.configChanged = false
 }
 
@@ -42,7 +43,7 @@ const getConfigChanges = () => {
     var changes = {}
 
     if (configCompare.value === null) {
-        console.log("configState not saved")
+        logInfo("pinia.getConfigChanges()", "configState not saved")
         return changes
     }
 
@@ -73,11 +74,11 @@ config.$subscribe((mutation, state) => {
         return
 
     var changes = getConfigChanges()
-    console.log("State change on configStore", changes)
+    logInfo("pinia.subscribe()", "State change on configStore", changes)
 
     if(JSON.stringify(changes).length > 2) {
         global.configChanged = true        
-        console.log("Changed properties:", changes)
+        logInfo("pinia.subscribe()", "Changed properties:", changes)
     } else {
         global.configChanged = false
     }

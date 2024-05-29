@@ -54,13 +54,14 @@
 <script setup>
 import { ref } from 'vue'
 import { global, config, getConfigChanges } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const progress = ref(0)
 
 function backup() {
   var backup = { meta: { version: "2.0.0", software: "GravityMon" }, config: JSON.parse(JSON.stringify(config)) }
 
-  console.log(backup)
+  logDebug("BackupView.backup()", backup)
 
   backup.config.http_post_format = encodeURIComponent(backup.config.http_post_format)
   backup.config.http_post2_format = encodeURIComponent(backup.config.http_post2_format)
@@ -81,7 +82,7 @@ function restore() {
     global.messageFailed = "You need to select one file to restore configuration from"
   } else {
     global.disabled = true
-    console.log("Selected file: " + fileElement.files[0].name)
+    logDebug("BackupView.restore()", "Selected file: " + fileElement.files[0].name)
     const reader = new FileReader()
     reader.addEventListener('load', function (e) {
       let text = e.target.result
@@ -116,7 +117,7 @@ function doRestore1(json) {
   /**
    * Convert the advanced
    */
-  console.log(json)
+  logDebug("BackupView.doRestore1()", json)
 
   delete json.advanced['id']
 
@@ -180,7 +181,7 @@ function doRestore1(json) {
         { a: json.config['formula-calculation-data']['a10'], g: json.config['formula-calculation-data']['g10'] },
       ]
     } else {
-      console.log(k, '=>', newK)
+      logDebug("BackupView.doRestore1()", k, '=>', newK)
       config[newK] = json.config[k]
     }
   }
@@ -194,7 +195,7 @@ function doRestore1(json) {
   config.influxdb2_format =decodeURIComponent(json.format["influxdb"])
   config.mqtt_format =decodeURIComponent(json.format["mqtt"])
 
-  console.log(getConfigChanges())
+  getConfigChanges()
   config.saveAll()
 }
 
@@ -203,8 +204,7 @@ function doRestore2(json) {
     config[k] = json[k]
   }
 
-  console.log(getConfigChanges())
+  getConfigChanges()
   config.saveAll()
 }
 </script>
-

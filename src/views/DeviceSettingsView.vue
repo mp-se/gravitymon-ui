@@ -91,6 +91,7 @@ import { ref } from 'vue'
 import { validateCurrentForm, restart } from "@/modules/utils"
 import { global, config } from "@/modules/pinia"
 import * as badge from '@/modules/badge'
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const otaOptions = ref([
     { label: '-blank-', value: '' },
@@ -118,6 +119,7 @@ const otaCallback = (opt) => {
 
 const factory = () => {
     global.clearMessages()
+    logInfo("DeviceSettingsView.factory()", "Sending /api/calibrate")
     global.disabled = true
     fetch(global.baseURL + 'api/factory', { 
         headers: { "Authorization": global.token }, 
@@ -134,7 +136,7 @@ const factory = () => {
             }
         })
         .catch(err => {
-            console.log(err)
+            logError("DeviceSettingsView.factory()", err)
             global.messageError = "Failed to do factory restore"
             global.disabled = false
         })

@@ -58,6 +58,7 @@
 import { computed } from 'vue'
 import { validateCurrentForm } from "@/modules/utils"
 import { global, config } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const calTempAdj = computed(() => {
     return !config.gravity_temp_adjustment || global.disabled

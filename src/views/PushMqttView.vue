@@ -66,6 +66,7 @@
 import { ref } from 'vue'
 import { validateCurrentForm, applyTemplate, mqttFormatOptions } from "@/modules/utils"
 import { global, status, config } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const render = ref("")
 

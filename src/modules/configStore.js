@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { global, saveConfigState, getConfigChanges } from '@/modules/pinia'
 import { getErrorString } from '@/modules/utils'
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 // TODO: Add option to do NTP sync (will add a few seconds)
 
@@ -88,7 +89,7 @@ export const useConfigStore = defineStore('config', {
     actions: {
         load(callback) {
             global.disabled = true
-            console.log("Fetching /api/config")
+            logInfo("configStore.load()", "Fetching /api/config")
             fetch(global.baseURL + 'api/config', {
                 method: "GET",
                 headers: { "Authorization": global.token },
@@ -96,7 +97,7 @@ export const useConfigStore = defineStore('config', {
             })
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json)
+                    logDebug("configStore.load()", json)
                     global.disabled = false
                     this.id = json.id,
                         // Device
@@ -177,13 +178,13 @@ export const useConfigStore = defineStore('config', {
                 })
                 .catch(err => {
                     global.disabled = false
-                    console.log(err)
+                    logError("configStore.load()", err)
                     callback(false)
                 })
         },
         loadFormat(callback) {
             global.disabled = true
-            console.log("Fetching /api/format")
+            logInfo("configStore.loadFormat()", "Fetching /api/format")
             fetch(global.baseURL + 'api/format', {
                 method: "GET",
                 headers: { "Authorization": global.token },
@@ -191,26 +192,24 @@ export const useConfigStore = defineStore('config', {
             })
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json)
+                    logDebug("configStore.loadFormat()", json)
                     global.disabled = false
                     this.http_post_format = decodeURIComponent(json.http_post_format)
                     this.http_post2_format = decodeURIComponent(json.http_post2_format)
                     this.http_get_format = decodeURIComponent(json.http_get_format)
                     this.influxdb2_format = decodeURIComponent(json.influxdb2_format)
                     this.mqtt_format = decodeURIComponent(json.mqtt_format)
-                    console.log("Fetching /api/format completed")
                     callback(true)
                 })
                 .catch(err => {
                     global.disabled = false
-                    console.log("Fetching /api/format failed")
-                    console.log(err)
+                    logError("configStore.loadFormat()", err)
                     callback(false)
                 })
         },
         sendConfig(callback) {
             global.disabled = true
-            console.log("Sending /api/config")
+            logInfo("configStore.sendConfig()", "Sending /api/config")
 
             var data = getConfigChanges()
             delete data.http_post_format
@@ -218,10 +217,10 @@ export const useConfigStore = defineStore('config', {
             delete data.http_get_format
             delete data.influxdb2_format
             delete data.mqtt_format
-            console.log(data)
+            logDebug("configStore.sendConfig()", data)
 
             if (JSON.stringify(data).length == 2) {
-                console.log("No config data to store, skipping step")
+                logInfo("configStore.sendConfig()", "No config data to store, skipping step")
                 callback(true)
                 return
             }
@@ -235,30 +234,29 @@ export const useConfigStore = defineStore('config', {
                 .then(res => {
                     global.disabled = false
                     if (res.status != 200) {
-                        console.log("Sending /api/config failed", res.status)
+                        logError("configStore.sendConfig()", "Sending /api/config failed", res.status)
                         callback(false)
                     }
                     else {
-                        console.log("Sending /api/config completed")
+                        logInfo("configStore.sendConfig()", "Sending /api/config completed")
                         callback(true)
                     }
                 })
                 .catch(err => {
-                    console.log("Sending /api/config failed")
-                    console.log(err)
+                    logError("configStore.sendConfig()", err)
                     callback(false)
                     global.disabled = false
                 })
         },
         sendFormat(callback) {
             global.disabled = true
-            console.log("Sending /api/format")
+            logInfo("configStore.sendFormat()", "Sending /api/format")
 
             var data2 = getConfigChanges()
             var data = {}
             var cnt = 0
 
-            console.log(data)
+            logDebug("configStore.sendFormat()", data)
 
             data = data2.http_post_format !== undefined ? { http_post_format: encodeURIComponent(data2.http_post_format) } : {}
             this.sendOneFormat(data, (success) => {
@@ -287,10 +285,10 @@ export const useConfigStore = defineStore('config', {
             })
         },
         sendOneFormat(data, callback) {
-            console.log("Sending /api/format")
+            logInfo("configStore.sendOneFormat()", "Sending /api/format")
 
             if (JSON.stringify(data).length == 2) {
-                console.log("No format data to store, skipping step")
+                logInfo("configStore.sendOneFormat()", "No format data to store, skipping step")
                 callback(true)
                 return
             }
@@ -304,22 +302,21 @@ export const useConfigStore = defineStore('config', {
                 .then(res => {
                     global.disabled = false
                     if (res.status != 200) {
-                        console.log("Sending /api/format failed")
+                        logError("configStore.sendOneFormat()", "Sending /api/format failed")
                         callback(false)
                     } else {
-                        console.log("Sending /api/format completed")
+                        logInfo("configStore.sendOneFormat()", "Sending /api/format completed")
                         callback(true)
                     }
                 })
                 .catch(err => {
-                    console.log("Sending /api/format failed")
-                    console.log(err)
+                    logError("configStore.sendOneFormat()", err)
                     callback(false)
                 })
         },
         sendPushTest(data, callback) {
             global.disabled = true
-            console.log("Sending /api/push")
+            logInfo("configStore.sendPushTest()", "Sending /api/push")
             fetch(global.baseURL + 'api/push', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
@@ -328,60 +325,57 @@ export const useConfigStore = defineStore('config', {
             })
                 .then(res => {
                     if (res.status != 200) {
-                        console.log("Sending /api/push failed")
+                        logError("configStore.sendPushTest()", "Sending /api/push failed")
                         callback(false)
                     } else {
-                        console.log("Sending /api/push completed")
+                        logInfo("configStore.sendPushTest()", "Sending /api/push completed")
                         callback(true)
                     }
                 })
                 .catch(err => {
-                    console.log("Sending /api/push failed")
-                    console.log(err)
+                    logError("configStore.sendPushTest()", err)
                     callback(false)
                 })
         },
         getPushTestStatus(callback) {
-            console.log("Fetching /api/push/status")
+            logInfo("configStore.getPushTest()", "Fetching /api/push/status")
             fetch(global.baseURL + 'api/push/status', {
                 signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json)
-                    console.log("Fetching /api/push/status completed")
+                    logDebug("configStore.getPushTest()", json)
+                    logInfo("configStore.getPushTest()", "Fetching /api/push/status completed")
                     callback(true, json)
                 })
                 .catch(err => {
-                    console.log("Fetching /api/push/status failed")
-                    console.log(err)
+                    logError("configStore.getPushTest()", err)
                     callback(false, null)
                 })
         },
         sendWifiScan(callback) {
             global.disabled = true
-            console.log("Sending /api/wifi")
+            logInfo("configStore.sendWifiScan()", "Sending /api/wifi")
             fetch(global.baseURL + 'api/wifi', {
                 headers: { "Authorization": global.token },
                 signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => {
                     if (res.status != 200) {
-                        console.log("Sending /api/wifi failed")
+                        logError("configStore.sendWifiScan()", "Sending /api/wifi failed")
                         callback(false)
                     } else {
-                        console.log("Sending /api/wifi completed")
+                        logInfo("configStore.sendWifiScan()", "Sending /api/wifi completed")
                         callback(true)
                     }
                 })
                 .catch(err => {
-                    console.log("Sending /api/wifi failed")
-                    console.log(err)
+                    logError("configStore.sendWifiScan()", err)
                     callback(false)
                 })
         },
         getWifiScanStatus(callback) {
-            console.log("Fetching /api/wifi/status")
+            logInfo("configStore.getWifiScanStatus()", "Fetching /api/wifi/status")
             fetch(global.baseURL + 'api/wifi/status', { 
                 method: "GET", 
                 headers: { "Authorization": global.token },
@@ -389,40 +383,38 @@ export const useConfigStore = defineStore('config', {
             })
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json)
-                    console.log("Fetching /api/wifi/status completed")
+                    logDebug("configStore.getWifiScanStatus()", json)
+                    logInfo("configStore.getWifiScanStatus()", "Fetching /api/wifi/status completed")
                     callback(true, json)
                 })
                 .catch(err => {
-                    console.log("Fetching /api/wifi/status failed")
-                    console.log(err)
+                    logError("configStore.getWifiScanStatus()", err)
                     callback(false, null)
                 })
         },
         sendHardwareScan(callback) {
             global.disabled = true
-            console.log("Sending /api/hardware")
+            logInfo("configStore.sendHardwareScan()", "Sending /api/hardware")
             fetch(global.baseURL + 'api/hardware', {
                 headers: { "Authorization": global.token },
                 signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => {
                     if (res.status != 200) {
-                        console.log("Sending /api/hardware failed")
+                        logError("configStore.sendHardwareScan()", "Sending /api/hardware failed")
                         callback(false)
                     } else {
-                        console.log("Sending /api/hardware completed")
+                        logInfo("configStore.sendHardwareScan()", "Sending /api/hardware completed")
                         callback(true)
                     }
                 })
                 .catch(err => {
-                    console.log("Sending /api/hardware failed")
-                    console.log(err)
+                    logError("configStore.sendHardwareScan()", err)
                     callback(false)
                 })
         },
         getHardwareScanStatus(callback) {
-            console.log("Fetching /api/hardware/status")
+            logInfo("configStore.getHardwareScanStatus()", "Fetching /api/hardware/status")
             fetch(global.baseURL + 'api/hardware/status', { 
                 method: "GET", 
                 headers: { "Authorization": global.token },
@@ -430,13 +422,12 @@ export const useConfigStore = defineStore('config', {
             })
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json)
-                    console.log("Fetching /api/hardware/status completed")
+                    logDebug("configStore.getHardwareScanStatus()", json)
+                    logInfo("configStore.getHardwareScanStatus()", "Fetching /api/hardware/status completed")
                     callback(true, json)
                 })
                 .catch(err => {
-                    console.log("Fetching /apihardware/status failed")
-                    console.log(err)
+                    logError("configStore.getHardwareScanStatus()", err)
                     callback(false, null)
                 })
         },
@@ -462,7 +453,7 @@ export const useConfigStore = defineStore('config', {
         },
         sendFilesystemRequest(data, callback) {
             global.disabled = true
-            console.log("Sending /api/filesystem")
+            logInfo("configStore.sendFilesystemRequest()", "Sending /api/filesystem")
             fetch(global.baseURL + 'api/filesystem', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
@@ -471,12 +462,11 @@ export const useConfigStore = defineStore('config', {
             })
                 .then(res => res.text())
                 .then(text => {
-                    console.log(text)
+                    logDebug("configStore.sendFilesystemRequest()", text)
                     callback(true, text)
                 })
                 .catch(err => {
-                    console.log("Sending /api/filesystem failed")
-                    console.log(err)
+                    logError("configStore.sendFilesystemRequest()", err)
                     callback(false, "")
                 })
         },

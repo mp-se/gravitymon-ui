@@ -25,6 +25,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { global } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const socket = ref(null)
 const serial = ref("")

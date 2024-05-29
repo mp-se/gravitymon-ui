@@ -36,7 +36,7 @@
         <div class="col-md-4" v-if="status.self_check.gyro_calibration && status.self_check.gyro_connected">
           <BsCard header="Measurement" title="Angle">
             <p class="text-center">
-              {{ status.angle }} 
+              {{ status.angle }}
             </p>
           </BsCard>
         </div>
@@ -164,6 +164,7 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
 import { status } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const polling = ref(null)
 const flag = ref(false)
@@ -192,24 +193,23 @@ function refresh() {
 
 onMounted(() => {
   setTimeout(() => {
-    console.log("Checking for new sw")
+    logInfo("HomeView.onMounted()", "Checking for new sw")
     fetch('https://www.gravitymon.com/firmware/version.json', {
       signal: AbortSignal.timeout(10000),
     })
       .then(res => res.json())
       .then(json => {
-        console.log(json)
+        logDebug("HomeView.onMounted()", json)
         if (checkForNewGravMonVersion(json)) {
           newVersion.value.new = true
           newVersion.value.ver = json.version
-          console.log("Newer version found")
+          logInfo("HomeView.onMounted()", "Newer version found")
         }
 
-        console.log("Fetching latest gravtmon version completed")
+        logInfo("HomeView.onMounted()", "Fetching latest gravtmon version completed")
       })
       .catch(err => {
-        console.log("Fetching latest gravtmon version failed")
-        console.log(err)
+        logError("HomeView.onMounted()", err)
       })
   }, 500)
 })

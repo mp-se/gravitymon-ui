@@ -195,6 +195,7 @@ app.get('/api/restart', (req, res) => {
    */
   setTimeout(() => {
     var data = {
+      status: true,
       success: true,
       message: "Device is restarting..."
     }

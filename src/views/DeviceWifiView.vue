@@ -76,6 +76,7 @@ import { validateCurrentForm, restart } from "@/modules/utils"
 import { global, config } from "@/modules/pinia"
 import * as badge from '@/modules/badge'
 import { onMounted, ref } from "vue";
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const scanning = ref(false)
 const networks = ref([])
@@ -107,7 +108,7 @@ onMounted(() => {
                 var f = networks.value.filter(obj => {
                     return obj.value === d.wifi_ssid
                 })
-                console.log("result:", f, d.wifi_ssid)
+                logDebug("DeviceWifiView.onMounted()", "result:", f, d.wifi_ssid)
                 if (f.length === 0)
                     networks.value.push(o)
             }

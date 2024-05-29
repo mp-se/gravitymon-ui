@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { validateCurrentForm } from "@/modules/utils"
 import * as badge from '@/modules/badge'
 import { global } from '@/modules/pinia'
+import { logDebug, logError, logInfo } from '@/modules/logger'
+
 import HomeView from '@/views/HomeView.vue'
 import DeviceSettingsView from '@/views/DeviceSettingsView.vue'
 import DeviceHardwareView from '@/views/DeviceHardwareView.vue'

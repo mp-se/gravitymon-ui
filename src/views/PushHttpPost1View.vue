@@ -79,6 +79,7 @@
 import { ref } from 'vue'
 import { validateCurrentForm, httpHeaderOptions, httpPostUrlOptions, httpPostFormatOptions, applyTemplate } from "@/modules/utils"
 import { global, status, config } from "@/modules/pinia"
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const render = ref("")
 

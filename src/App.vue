@@ -14,7 +14,7 @@
   </dialog>
 
   <div v-if="!global.initialized" class="container text-center">
-    <BsMessage message="Initalizing Gravitymon Web interface" class="h2" :dismissable="false" alert="info"></BsMessage>
+    <BsMessage message="Initalizing GravityMon Web interface" class="h2" :dismissable="false" alert="info"></BsMessage>
   </div>
 
   <Menubar v-if="global.initialized" :disabled="global.disabled" />
@@ -51,6 +51,7 @@ import Footer from "@/components/Footer.vue"
 import { onMounted, watch } from 'vue'
 import { global, status, config, saveConfigState } from "@/modules/pinia"
 import { storeToRefs } from 'pinia'
+import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const props = defineProps(['App'])
 const { disabled } = storeToRefs(global)
