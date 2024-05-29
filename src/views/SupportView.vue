@@ -95,7 +95,7 @@
             <div class="col-md-12">
                 <p>
                     Common HTTP error codes:
-                    <li>400 - Bad request. Probably an issue with the post format. Check format in the format editor.
+                    <li>400 - Bad request. Probably an issue with the post format. Do a preview of the format to identify the issue.
                     </li>
                     <li>401 - Unauthorized. The service needs an token or other means to authenticate the device.</li>
                     <li>403 - Forbidden. Could be an issue with token or URL.</li>
@@ -128,7 +128,7 @@
                     WIFI error codes
                     <li>1 - No SSID found.</li>
                     <li>4 - Connection failed.</li>
-                    <li>5 - Connection lot.</li>
+                    <li>5 - Connection lost.</li>
                     <li>6 - Wrong password.</li>
                     <li>7 - Disconnected by AP.</li>
                 </p>
