@@ -199,6 +199,9 @@ export const useConfigStore = defineStore('config', {
                     this.http_get_format = decodeURIComponent(json.http_get_format)
                     this.influxdb2_format = decodeURIComponent(json.influxdb2_format)
                     this.mqtt_format = decodeURIComponent(json.mqtt_format)
+
+                    // Add linebreaks so the editor shows the data correctly
+                    this.mqtt_format = this.mqtt_format.replaceAll("|", "|\n")
                     callback(true)
                 })
                 .catch(err => {
@@ -270,6 +273,8 @@ export const useConfigStore = defineStore('config', {
                         data = data2.influxdb2_format !== undefined ? { influxdb2_format: encodeURIComponent(data2.influxdb2_format) } : {}
                         this.sendOneFormat(data, (success) => {
                             if(success) cnt += 1
+                            data2.mqtt_format = data2.mqtt_format.replaceAll("\n", "")
+                            data2.mqtt_format = data2.mqtt_format.replaceAll("\r", "")
                             data = data2.mqtt_format !== undefined ? { mqtt_formatqtt_format: encodeURIComponent(data2.mqtt_format) } : {}
                             this.sendOneFormat(data, (success) => {
                                 if(success) cnt += 1
