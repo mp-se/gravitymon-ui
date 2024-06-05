@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { validateCurrentForm, applyTemplate, mqttFormatOptions } from "@/modules/utils"
 import { global, status, config } from "@/modules/pinia"
 import { logDebug, logError, logInfo } from '@/modules/logger'
@@ -72,7 +72,7 @@ const render = ref("")
 
 const runTest = () => {
     const data = {
-        format: "mqtt_format"
+        push_format: "mqtt_format"
     }
 
     global.clearMessages()
@@ -82,6 +82,7 @@ const runTest = () => {
 
 const mqttFormatCallback = (opt) => {
     config.mqtt_format = decodeURIComponent(opt)
+    config.mqtt_format = config.mqtt_format.replaceAll("|", "|\n")
 }
 
 const renderFormat = () => {

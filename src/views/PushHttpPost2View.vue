@@ -87,7 +87,7 @@ const render = ref("")
 
 const runTest = () => {
     const data = {
-        format: "http_post2_format"
+        push_format: "http_post2_format"
     }
 
     global.clearMessages()

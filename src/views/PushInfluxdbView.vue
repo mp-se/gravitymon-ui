@@ -71,7 +71,7 @@ const render = ref("")
 
 const runTest = () => {
     const data = {
-        format: "influxdb2_format"
+        push_format: "influxdb2_format"
     }
 
     global.clearMessages()
