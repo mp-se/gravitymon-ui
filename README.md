@@ -20,3 +20,16 @@ npm run mock
 npm run serve
 ```
 
+## Git commands
+
+
+Add a new tag
+```
+git tag -a [tag_name] HEAD -m "Tag message"
+```
+
+Show the latest tag
+
+```
+git tag --sort=committerdate | tail -1
+```
