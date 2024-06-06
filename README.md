@@ -26,6 +26,7 @@ npm run serve
 Add a new tag
 ```
 git tag -a [tag_name] HEAD -m "Tag message"
+git push origin tag [tag_name]
 ```
 
 Show the latest tag
