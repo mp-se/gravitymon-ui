@@ -23,6 +23,9 @@
     <div>
       <p></p>
     </div>
+    <BsMessage v-if="!status.connected" message="No response from device, has it gone into sleep model? No need to refresh the page, just turn on the device again" class="h2"
+      :dismissable="false" alert="danger"></BsMessage>
+
     <BsMessage v-if="global.isError" :close="close" :dismissable="true" :message="global.messageError" alert="danger" />
     <BsMessage v-if="global.isWarning" :close="close" :dismissable="true" :message="global.messageWarning"
       alert="warning" />
@@ -50,12 +53,14 @@
 <script setup>
 import Menubar from "@/components/Menubar.vue"
 import Footer from "@/components/Footer.vue"
-import { onMounted, watch } from 'vue'
+import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import { global, status, config, saveConfigState } from "@/modules/pinia"
 import { storeToRefs } from 'pinia'
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const props = defineProps(['App'])
+const polling = ref(null)
+
 const { disabled } = storeToRefs(global)
 
 const close = (alert) => {
@@ -74,6 +79,18 @@ watch(disabled, () => {
     document.body.style.cursor = 'wait';
   else
     document.body.style.cursor = 'default';
+})
+
+function ping() {
+  status.ping()
+}
+
+onBeforeMount(() => {
+  polling.value = setInterval(ping, 3000)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(polling.value)
 })
 
 onMounted(() => {

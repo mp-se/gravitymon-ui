@@ -35,6 +35,7 @@ export const useStatusStore = defineStore('status', {
                 push_targets: true,
             },
             wifi_setup: false,          
+            connected: true,
         }
     },
     getters: {
@@ -115,6 +116,22 @@ export const useStatusStore = defineStore('status', {
                 .catch(err => {
                     logError("statusStore.auth()", err)
                     callback(false)
+                })
+        },
+        ping() {
+            logInfo("statusStore.ping()", "Fetching /api/ping")
+            fetch(global.baseURL + 'api/ping', {
+                method: "GET",
+                signal: AbortSignal.timeout(global.fetchTimout),
+            })
+                .then(res => res.json())
+                .then(json => {
+                    logInfo("statusStore.ping()", "Fetching /api/auth completed")
+                    this.connected = true
+                })
+                .catch(err => {
+                    logError("statusStore.ping()", err)
+                    this.connected = false
                 })
         },
         setSleepMode(val, callback) {
