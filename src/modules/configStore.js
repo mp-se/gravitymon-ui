@@ -486,7 +486,7 @@ export const useConfigStore = defineStore('config', {
                                     // test is still running, just wait for next check
                                 } else {
                                     global.disabled = false
-                                    if (!data.enabled) {
+                                    if (!data.push_enabled) {
                                         global.messageWarning = "No endpoint is defined for this target. Cannot run test."
                                     } else if (!data.success) {
                                         global.messageError = "Test failed with error code " + getErrorString(data.last_error)
