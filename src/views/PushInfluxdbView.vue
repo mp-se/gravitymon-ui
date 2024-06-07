@@ -34,6 +34,8 @@
                         :disabled="global.disabled" />
                 </div>
                 <div class="col-md-3 gy-2">
+                    <BsDropdown label="Predefined formats" button="Formats" :options="influxdb2FormatOptions"
+                        :callback="influxdb2FormatCallback" :disabled="global.disabled" />
                     <BsModal @click="renderFormat" v-model="render" :code="true" title="Format preview"
                         button="Preview format" :disabled="global.disabled" />
                 </div>
@@ -63,7 +65,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { validateCurrentForm, applyTemplate } from "@/modules/utils"
+import { validateCurrentForm, applyTemplate, influxdb2FormatOptions } from "@/modules/utils"
 import { global, status, config } from "@/modules/pinia"
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
@@ -77,6 +79,10 @@ const runTest = () => {
     global.clearMessages()
     config.runPushTest(data, (success) => {
     })
+}
+
+const influxdb2FormatCallback = (opt) => {
+    config.influxdb2_format = decodeURIComponent(opt)
 }
 
 const renderFormat = () => {
