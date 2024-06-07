@@ -57,9 +57,6 @@ const format = (s) => {
   if(isValidFormData(model.value))
     return s.replaceAll('&', '&\n\r')
 
-    if(isValidMqttData(model.value))
-      return s.replaceAll('|', '|\n\r')
-
   return s
 }
 
