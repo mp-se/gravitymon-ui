@@ -45,6 +45,11 @@
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
             :hidden="!global.disabled"></span>
           &nbsp;List files
+        </button>&nbsp;
+        <button @click="toggleAdvanced()" type="button" class="btn btn-secondary" :disabled="global.disabled">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+            :hidden="!global.disabled"></span>
+          &nbsp;Enable Advanced
         </button>
       </div>
 
@@ -142,14 +147,11 @@ const filesDelete = ref([])
 
 const confirmDeleteMessage = ref(null)
 const confirmDeleteFile = ref(null)
+const hideAdvanced = ref(true)
 
-const hideAdvanced = computed(() => {
-  logDebug("ToolsView.computed()", router.currentRoute.value.query)
-  if("admin" in router.currentRoute.value.query)
-    return false
-  
-  return true
-})
+function toggleAdvanced() {
+  hideAdvanced.value = !hideAdvanced.value
+}
 
 const confirmDeleteCallback = (result) => {
   logDebug("ToolsView.confirmDeleteCallback()", result)
