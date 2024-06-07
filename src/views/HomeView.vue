@@ -134,7 +134,7 @@
         <div class="col-md-4">
           <BsCard header="Device" title="Software version">
             <p class="text-center">
-              {{ status.app_ver }} ({{ status.app_build }})
+              Firmware: {{ status.app_ver }} ({{ status.app_build }}) UI: {{ global.uiVersion }} ({{ global.uiBuild }})
             </p>
           </BsCard>
         </div>
@@ -163,7 +163,7 @@
 
 <script setup>
 import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
-import { status } from "@/modules/pinia"
+import { status, global } from "@/modules/pinia"
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const polling = ref(null)

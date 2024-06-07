@@ -47,7 +47,7 @@
 
   <router-view v-if="global.initialized" />
   <Footer v-if="global.initialized"
-    :text="'(c) 2021-2024 Magnus Persson, ui version ' + global.uiVersion + ' (' + global.uiBuild + ')'" />
+    text="(c) 2021-2024 Magnus Persson" />
 </template>
 
 <script setup>
