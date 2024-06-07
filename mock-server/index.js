@@ -67,7 +67,7 @@ configData = {
   influxdb2_target: "http://192.168.1.10:8086",
   influxdb2_org: "hello",
   influxdb2_bucket: "spann",
-  influxdb2_auth: "OijkU((jhfkh",
+  influxdb2_token: "OijkU((jhfkh",
   influxdb2_int: 1,
   // Push - MQTT
   mqtt_target: "192.168.1.10",
