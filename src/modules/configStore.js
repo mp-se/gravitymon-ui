@@ -58,7 +58,7 @@ export const useConfigStore = defineStore('config', {
             influxdb2_target: "",
             influxdb2_org: "",
             influxdb2_bucket: "",
-            influxdb2_auth: "",
+            influxdb2_token: "",
             influxdb2_int: 0,
             influxdb2_format: "",
             // Push - MQTT
@@ -87,6 +87,33 @@ export const useConfigStore = defineStore('config', {
         }
     },
     actions: {
+        toJson() {
+            logInfo("configStore.toJSON()")
+            var dest = {}
+
+            for (var key in this.$state) {
+                if( !key.startsWith("$")) {
+                    if(key === "gyro_calibration_data") {
+                        dest[key] = []
+                        for(var i in this.$state[key]) {                         
+                            dest[key][i] = this.$state[key][i]
+                        }
+                    } else if(key === "formula_calculation_data") {
+                        dest[key] = []
+                        for(var i in this.$state[key]) {          
+                            dest[key][i] = {}
+                            dest[key][i].a = this.$state[key][i].a
+                            dest[key][i].g = this.$state[key][i].g
+                        }
+                    } else {
+                        dest[key] = this[key]
+                    }
+                }
+            }
+
+            logInfo("configStore.toJSON()", dest)
+            return JSON.stringify(dest, null, 2)
+        },
         load(callback) {
             global.disabled = true
             logInfo("configStore.load()", "Fetching /api/config")
@@ -150,7 +177,7 @@ export const useConfigStore = defineStore('config', {
                         this.influxdb2_target = json.influxdb2_target,
                         this.influxdb2_org = json.influxdb2_org,
                         this.influxdb2_bucket = json.influxdb2_bucket,
-                        this.influxdb2_auth = json.influxdb2_auth,
+                        this.influxdb2_token = json.influxdb2_token,
                         this.influxdb2_int = json.influxdb2_int,
                         this.influxdb2_format = json.influxdb2_format,
                         // Push - MQTT
@@ -273,9 +300,13 @@ export const useConfigStore = defineStore('config', {
                         data = data2.influxdb2_format !== undefined ? { influxdb2_format: encodeURIComponent(data2.influxdb2_format) } : {}
                         this.sendOneFormat(data, (success) => {
                             if(success) cnt += 1
-                            data2.mqtt_format = data2.mqtt_format.replaceAll("\n", "")
-                            data2.mqtt_format = data2.mqtt_format.replaceAll("\r", "")
-                            data = data2.mqtt_format !== undefined ? { mqtt_formatqtt_format: encodeURIComponent(data2.mqtt_format) } : {}
+
+                            if(data2.mqtt_format !== undefined) {
+                                data2.mqtt_format = data2.mqtt_format.replaceAll("\n", "")
+                                data2.mqtt_format = data2.mqtt_format.replaceAll("\r", "")
+                            }
+
+                            data = data2.mqtt_format !== undefined ? { mqtt_format: encodeURIComponent(data2.mqtt_format) } : {}   
                             this.sendOneFormat(data, (success) => {
                                 if(success) cnt += 1
 
