@@ -119,14 +119,14 @@ export const useStatusStore = defineStore('status', {
                 })
         },
         ping() {
-            logInfo("statusStore.ping()", "Fetching /api/ping")
+            // logInfo("statusStore.ping()", "Fetching /api/ping")
             fetch(global.baseURL + 'api/ping', {
                 method: "GET",
                 signal: AbortSignal.timeout(global.fetchTimout),
             })
                 .then(res => res.json())
                 .then(json => {
-                    logInfo("statusStore.ping()", "Fetching /api/auth completed")
+                    // logInfo("statusStore.ping()", "Fetching /api/auth completed")
                     this.connected = true
                 })
                 .catch(err => {
