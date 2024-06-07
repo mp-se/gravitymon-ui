@@ -59,7 +59,7 @@ import { logDebug, logError, logInfo } from '@/modules/logger'
 const progress = ref(0)
 
 function backup() {
-  var backup = { meta: { version: "2.0.0", software: "GravityMon" }, config: JSON.parse(JSON.stringify(config)) }
+  var backup = { meta: { version: "2.0.0", software: "GravityMon" }, config: JSON.parse(config.toJson()) }
 
   logDebug("BackupView.backup()", backup)
 
