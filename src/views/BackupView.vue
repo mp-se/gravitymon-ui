@@ -190,10 +190,10 @@ function doRestore1(json) {
    * Convert the format part
    */
   config.http_post_format = decodeURIComponent(json.format["http-1"])
-  config.http_post2_format =decodeURIComponent(json.format["http-2"])
-  config.http_get_format =decodeURIComponent(json.format["http-3"])
-  config.influxdb2_format =decodeURIComponent(json.format["influxdb"])
-  config.mqtt_format =decodeURIComponent(json.format["mqtt"])
+  config.http_post2_format = decodeURIComponent(json.format["http-2"])
+  config.http_get_format = decodeURIComponent(json.format["http-3"])
+  config.influxdb2_format = decodeURIComponent(json.format["influxdb"])
+  config.mqtt_format = decodeURIComponent(json.format["mqtt"])
 
   getConfigChanges()
   config.saveAll()
@@ -201,7 +201,12 @@ function doRestore1(json) {
 
 function doRestore2(json) {
   for( var k in json) {
-    config[k] = json[k]
+
+    if( k.endsWith("_format") ) {
+      config[k] = decodeURIComponent(json[k])
+    } else {
+      config[k] = json[k]
+    }
   }
 
   getConfigChanges()
