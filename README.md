@@ -32,5 +32,5 @@ git push origin tag [tag_name]
 Show the latest tag
 
 ```
-git tag --sort=committerdate | tail -1
+git tag --sort=creatordate | tail -1
 ```
