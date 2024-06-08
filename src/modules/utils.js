@@ -162,6 +162,7 @@ export function getErrorString(code) {
     case 200: return "Success (200)"
     case 401: return "Access denied (401)"
     case 404: return "Endpoint not found (404)"
+    case 422: return "Paylod cannot be parsed, check format and http headers"
   }
 
   return "Unknown code, check documentation (" + code + ")"
