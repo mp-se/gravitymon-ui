@@ -86,7 +86,7 @@ function ping() {
 }
 
 onBeforeMount(() => {
-  polling.value = setInterval(ping, 3000)
+  polling.value = setInterval(ping, 7000)
 })
 
 onBeforeUnmount(() => {
