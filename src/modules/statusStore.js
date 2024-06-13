@@ -34,7 +34,7 @@ export const useStatusStore = defineStore('status', {
                 battery_level: true,
                 push_targets: true,
             },
-            wifi_setup: false,          
+            wifi_setup: false,
             connected: true,
         }
     },
@@ -49,33 +49,33 @@ export const useStatusStore = defineStore('status', {
                 .then(res => res.json())
                 .then(json => {
                     logDebug("statusStore.load()", json)
-                    this.id = json.id,
-                    this.angle = json.angle,
-                    this.temp_format = json.temp_format,
-                    this.gravity = json.gravity,
-                    this.gravity_format = json.gravity_format,
-                    this.temp = json.temp,
-                    this.temp_format = json.temp_format,
-                    this.sleep_mode = json.sleep_mode,
-                    this.battery = json.battery,
-                    this.rssi = json.rssi,
-                    this.app_ver = json.app_ver,
-                    this.app_build = json.app_build,
-                    this.mdns = json.mdns,
-                    this.platform = json.platform,
-                    this.hardware = json.hardware,
-                    this.wifi_ssid = json.wifi_ssid,
-                    this.ip = json.ip,
-                    this.runtime_average = json.runtime_average,
-                    this.ispindel_config = json.ispindel_config,
-                    this.self_check.gyro_connected = json.self_check.gyro_connected,
-                    this.self_check.gyro_calibration = json.self_check.gyro_calibration,
-                    this.self_check.temp_connected = json.self_check.temp_connected,
-                    this.self_check.gravity_formula = json.self_check.gravity_formula,
-                    this.self_check.battery_level = json.self_check.battery_level,
-                    this.self_check.push_targets = json.self_check.push_targets,
-                    this.total_heap = json.total_heap,
-                    this.free_heap = json.free_heap,
+                    this.id = json.id
+                    this.angle = json.angle
+                    this.temp_format = json.temp_format
+                    this.gravity = json.gravity
+                    this.gravity_format = json.gravity_format
+                    this.temp = json.temp
+                    this.temp_format = json.temp_format
+                    this.sleep_mode = json.sleep_mode
+                    this.battery = json.battery
+                    this.rssi = json.rssi
+                    this.app_ver = json.app_ver
+                    this.app_build = json.app_build
+                    this.mdns = json.mdns
+                    this.platform = json.platform
+                    this.hardware = json.hardware
+                    this.wifi_ssid = json.wifi_ssid
+                    this.ip = json.ip
+                    this.runtime_average = json.runtime_average
+                    this.ispindel_config = json.ispindel_config
+                    this.self_check.gyro_connected = json.self_check.gyro_connected
+                    this.self_check.gyro_calibration = json.self_check.gyro_calibration
+                    this.self_check.temp_connected = json.self_check.temp_connected
+                    this.self_check.gravity_formula = json.self_check.gravity_formula
+                    this.self_check.battery_level = json.self_check.battery_level
+                    this.self_check.push_targets = json.self_check.push_targets
+                    this.total_heap = json.total_heap
+                    this.free_heap = json.free_heap
                     this.wifi_setup = json.wifi_setup
 
                     this.total_heap = (Math.round(this.total_heap / 1024)).toFixed(0)
