@@ -241,9 +241,7 @@ function checkForNewGravMonVersion(json) {
     return true;
 
   return false;
-};
-
-
+}
 </script>
 
 <style></style>

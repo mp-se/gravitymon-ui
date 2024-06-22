@@ -96,22 +96,22 @@ import { logDebug, logError, logInfo } from '@/modules/logger'
 const otaOptions = ref([
     { label: '-blank-', value: '' },
     { label: 'Gravitymon.com', value: 'https://www.gravitymon.com/firmware/' },
-]);
+])
 
 const tempOptions = ref([
     { label: 'Celsius °C', value: 'C' },
     { label: 'Fahrenheit °F', value: 'F' },
-]);
+])
 
 const gravityOptions = ref([
     { label: 'Specific Gravity', value: 'G' },
     { label: 'Plato', value: 'P' },
-]);
+])
 
 const uiOptions = ref([
     { label: 'Day mode', value: false },
     { label: 'Dark mode', value: true },
-]);
+])
 
 const otaCallback = (opt) => {
     config.ota_url = opt
@@ -119,7 +119,7 @@ const otaCallback = (opt) => {
 
 const factory = () => {
     global.clearMessages()
-    logInfo("DeviceSettingsView.factory()", "Sending /api/calibrate")
+    logInfo("DeviceSettingsView.factory()", "Sending /api/factory")
     global.disabled = true
     fetch(global.baseURL + 'api/factory', { 
         headers: { "Authorization": global.token }, 

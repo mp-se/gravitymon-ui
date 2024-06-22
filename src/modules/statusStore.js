@@ -55,7 +55,6 @@ export const useStatusStore = defineStore('status', {
                     this.gravity = json.gravity
                     this.gravity_format = json.gravity_format
                     this.temp = json.temp
-                    this.temp_format = json.temp_format
                     this.sleep_mode = json.sleep_mode
                     this.battery = json.battery
                     this.rssi = json.rssi
