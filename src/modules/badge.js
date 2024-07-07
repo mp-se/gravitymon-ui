@@ -83,6 +83,7 @@ function pushTargetCount() {
   cnt += config.influxdb2_target === '' ? 0 : 1
   cnt += config.mqtt_target === '' ? 0 : 1
   cnt += config.ble_format === 0 ? 0 : 1
+  cnt += config.use_wifi_direct ? 1 : 0
   return cnt
 }
 

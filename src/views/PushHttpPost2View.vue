@@ -4,54 +4,54 @@
         <p class="h3">Push - HTTP Post #2</p>
         <hr>
 
-        <form @submit.prevent="save" class="needs-validation" novalidate>
+        <form @submit.prevent="save" class="needs-validation" novalidate :disabled="config.use_wifi_direct">
             <div class="row">
                 <div class="col-md-9">
                     <BsInputText v-model="config.http_post2_target" type="url" maxlength="120" label="HTTP URL"
                         help="URL to push target, use format http://servername.com/resource (Supports http and https)"
-                        :disabled="global.disabled" />
+                        :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-3">
                     <BsDropdown label="Predefined URLs" button="URL" :options="httpPostUrlOptions"
-                        :callback="httpUrlCallback" :disabled="global.disabled" />
+                        :callback="httpUrlCallback" :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-9">
                     <BsInputText v-model="config.http_post2_header1" maxlength="120" pattern="(.+): (.+)"
                         label="HTTP Header #1"
                         help=""
-                        :disabled="global.disabled" />
+                        :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-3">
                     <BsDropdown label="Predefined headers" button="Header" :options="httpHeaderOptions"
-                        :callback="httpHeaderH1Callback" :disabled="global.disabled" />
+                        :callback="httpHeaderH1Callback" :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-9">
                     <BsInputText v-model="config.http_post2_header2" maxlength="120" pattern="(.+): (.+)"
                         label="HTTP Header #2"
                         help="Set a http headers, empty string is skipped, example: Content-Type: application/json"
-                        :disabled="global.disabled" />
+                        :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-3">
                     <BsDropdown label="Predefined headers" button="Header" :options="httpHeaderOptions"
-                        :callback="httpHeaderH2Callback" :disabled="global.disabled" />
+                        :callback="httpHeaderH2Callback" :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-6">
                     <BsInputNumber v-model="config.http_post2_int" label="Skip interval" min="0" max="5" width="4"
                         help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
-                        :disabled="global.disabled" />
+                        :disabled="pushDisabled" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-9">
                     <BsInputTextAreaFormat v-model="config.http_post2_format" rows="6" label="Data format"
                         help="Format template used to create the data sent to the remote service"
-                        :disabled="global.disabled" />
+                        :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-3">
                     <BsDropdown label="Predefined formats" button="Formats" :options="httpPostFormatOptions"
-                        :callback="httpFormatCallback" :disabled="global.disabled" />
+                        :callback="httpFormatCallback" :disabled="pushDisabled" />
                     <BsModal @click="renderFormat" v-model="render" :code="true" title="Format preview"
-                        button="Preview format" :disabled="global.disabled" />
+                        button="Preview format" :disabled="pushDisabled" />
                 </div>
             </div>
             <div class="row gy-2">
@@ -66,7 +66,7 @@
                     </button>
                 </div>
                 <div class="col-md-3">
-                    <button @click="runTest" type="button" class="btn btn-secondary" :disabled="global.disabled">
+                    <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>
                         &nbsp;Run push test
@@ -78,12 +78,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { validateCurrentForm, httpHeaderOptions, httpPostUrlOptions, httpPostFormatOptions, applyTemplate } from "@/modules/utils"
 import { global, status, config } from "@/modules/pinia"
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const render = ref("")
+
+const pushDisabled = computed(() => {
+    return global.disabled || config.use_wifi_direct
+})
 
 const runTest = () => {
     const data = {

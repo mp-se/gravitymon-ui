@@ -4,39 +4,39 @@
         <p class="h3">Push - MQTT</p>
         <hr>
 
-        <form @submit.prevent="save" class="needs-validation" novalidate>
+        <form @submit.prevent="save" class="needs-validation" novalidate :disabled="config.use_wifi_direct">
             <div class="row">
                 <div class="col-md-9">
                     <BsInputText v-model="config.mqtt_target" maxlength="120" label="Server"
-                        help="Name of server to connect to, use format servername.com" :disabled="global.disabled" />
+                        help="Name of server to connect to, use format servername.com" :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-3">
                     <BsInputNumber v-model="config.mqtt_port" label="Port" min="0" max="65535"
-                        help="Port number, 1883 is standard. Ports above 8000 means SSL" :disabled="global.disabled" />
+                        help="Port number, 1883 is standard. Ports above 8000 means SSL" :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-6">
                     <BsInputText v-model="config.mqtt_user" maxlength="20" label="User name"
-                        help="Username to use. Leave blank if authentication is disabled" :disabled="global.disabled" />
+                        help="Username to use. Leave blank if authentication is disabled" :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-6">
                     <BsInputText v-model="config.mqtt_pass" type="password" maxlength="20" label="Password"
-                        help="Password to use. Leave blank if authentication is disabled" :disabled="global.disabled" />
+                        help="Password to use. Leave blank if authentication is disabled" :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-6">
                     <BsInputNumber v-model="config.mqtt_int" label="Skip interval" min="0" max="5" width="4"
                         help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
-                        :disabled="global.disabled" />
+                        :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-9">
                     <BsInputTextAreaFormat v-model="config.mqtt_format" rows="6" label="Data format"
                         help="Format template used to create the data sent to the remote service"
-                        :disabled="global.disabled" />
+                        :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-3">
                     <BsDropdown label="Predefined formats" button="Formats" :options="mqttFormatOptions"
-                        :callback="mqttFormatCallback" :disabled="global.disabled" />
+                        :callback="mqttFormatCallback" :disabled="pushDisabled" />
                     <BsModal @click="renderFormat" v-model="render" :code="true" title="Format preview"
-                        button="Preview format" :disabled="global.disabled" />
+                        button="Preview format" :disabled="pushDisabled" />
                 </div>
             </div>
             <div class="row gy-2">
@@ -51,7 +51,7 @@
                     </button>
                 </div>
                 <div class="col-md-3">
-                    <button @click="runTest" type="button" class="btn btn-secondary" :disabled="global.disabled">
+                    <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>
                         &nbsp;Run push test
@@ -63,12 +63,16 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref, computed } from 'vue'
 import { validateCurrentForm, applyTemplate, mqttFormatOptions } from "@/modules/utils"
 import { global, status, config } from "@/modules/pinia"
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const render = ref("")
+
+const pushDisabled = computed(() => {
+    return global.disabled || config.use_wifi_direct
+})
 
 const runTest = () => {
     const data = {

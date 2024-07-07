@@ -25,28 +25,55 @@
                         :disabled="global.disabled" />
                 </div>
                 <div class="col-md-6">
-                    <BsInputNumber v-model="config.sleep_interval" :label="'Sleep interval' + sleepLabel" unit="s" min="10" max="3600"
-                        step="1" width="5"
+                    <BsInputNumber v-model="config.sleep_interval" :label="'Sleep interval' + sleepLabel" unit="s"
+                        min="10" max="3600" step="1" width="5"
                         help="The number of seconds that the device will sleep between gravity readings. Recommended value is 300s"
                         :disabled="global.disabled" />
                 </div>
 
                 <div class="col-md-6">
-                    <BsInputReadonly v-model="batteryLife" label="Estimated battery life" 
-                        help="Based on current settings and platform, this is the estimated battery life" :disabled="global.disabled"></BsInputReadonly>
+                    <BsInputReadonly v-model="batteryLife" label="Estimated battery life"
+                        help="Based on current settings and platform, this is the estimated battery life"
+                        :disabled="global.disabled"></BsInputReadonly>
                 </div>
 
                 <div class="col-md-6">
-                    <BsInputNumber v-model="config.push_timeout" label="Push timeout" unit="s" min="10" max="60" step="1"
-                        width="5"
+                    <BsInputNumber v-model="config.push_timeout" label="Push timeout" unit="s" min="10" max="60"
+                        step="1" width="5"
                         help="The number of seconds that the device will wait until a remote service accepts the connection"
                         :disabled="global.disabled" />
                 </div>
-                <div v-if="status.platform==='esp8266'" class="col-md-6">
+                <div v-if="status.platform === 'esp8266'" class="col-md-6">
                     <BsInputSwitch v-model="config.skip_ssl_on_test" label="Skip SSL post in config mode"
                         help="Don't do SSL when running in configuration mode, on ESP8266 this can cause the device to crash due to low memory, only applies to ESP8266"
                         :disabled="global.disabled" />
                 </div>
+
+                <div class="col-md-12">
+                    <hr>
+                </div>
+
+                <div class="col-md-12">
+                    <p>Using the WIFI direct feature means that the device will connect to the  AP and send data
+                        using HTTP post to the Gravitymon Gateway.</p>
+                </div>
+
+                <div class="col-md-6">
+                    <BsInputText v-model="config.wifi_direct_ssid" label="Direct SSID"
+                        help="Enter the SSID for the wifi direct functionallity" :disabled="global.disabled" />
+                </div>
+                <div class="col-md-6">
+                    <BsInputText v-model="config.wifi_direct_pass" type="password" maxlength="50"
+                        label="Direct Password" help="Enter password for the wifi direct network"
+                        :disabled="global.disabled"></BsInputText>
+                </div>
+
+                <div class="col-md-6">
+                    <BsInputSwitch v-model="config.use_wifi_direct" label="Use wifi direct in gravity mode"
+                        help="In gravity mode the wifi direct SSID/Password will be used for connection"
+                        :disabled="global.disabled"></BsInputSwitch>
+                </div>
+
             </div>
 
             <div class="row gy-2">
@@ -54,7 +81,8 @@
                     <hr>
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary w-2" :disabled="global.disabled || !global.configChanged">
+                    <button type="submit" class="btn btn-primary w-2"
+                        :disabled="global.disabled || !global.configChanged">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>
                         &nbsp;Save
@@ -93,7 +121,7 @@ onMounted(() => {
 })
 
 const createSleepLabel = () => {
-    var s = Math.floor(sleep_interval.value/60) + " min " + (sleep_interval.value%60) + " sec";
+    var s = Math.floor(sleep_interval.value / 60) + " min " + (sleep_interval.value % 60) + " sec";
     sleepLabel.value = "(" + s + ")"
 }
 
@@ -165,6 +193,6 @@ const calculateBatteryLife = () => {
     logDebug("PushSettingsView.calculateBatteryLife()", "Estimated power per hour = " + pwrActive.toString() + "mA on platform = " + status.platform);
     logDebug("PushSettingsView.calculateBatteryLife()", "Estimated number of days = " + days)
 
-    batteryLife.value = Math.floor(days/7) + " weeks " + Math.floor(days%7) + " days"
+    batteryLife.value = Math.floor(days / 7) + " weeks " + Math.floor(days % 7) + " days"
 }
 </script>

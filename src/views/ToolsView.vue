@@ -138,6 +138,8 @@ import { global, config, status, saveConfigState } from "@/modules/pinia"
 import { isValidJson, isValidFormData, isValidMqttData } from "@/modules/utils"
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
+// TODO: Hide upload button when no file is selected
+
 const measuredVoltage = ref(0)
 const filesystemUsage = ref(null)
 const filesystemUsageText = ref(null)
