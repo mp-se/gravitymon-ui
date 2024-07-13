@@ -90,7 +90,7 @@ function wifiName(label, rssi, encr) {
     else if (rssi > -60)
         l += " (Good)"
     else if (rssi > -67)
-        l += " (Minium)"
+        l += " (Minimum)"
     else
         l += " (Poor)"
     return l
