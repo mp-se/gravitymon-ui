@@ -192,6 +192,8 @@ function refresh() {
 }
 
 onMounted(() => {
+  flag.value = status.sleep_mode
+
   setTimeout(() => {
     logInfo("HomeView.onMounted()", "Checking for new sw")
     fetch('https://www.gravitymon.com/firmware/version.json', {
