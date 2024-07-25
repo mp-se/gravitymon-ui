@@ -226,6 +226,17 @@ app.get('/api/calibrate', (req, res) => {
   res.send(data)
 })
 
+app.get('/api/ping', (req, res) => {
+  console.log('GET: /api/ping')
+  /* 
+   * Description:    Check for response from device. 
+   * Authentication: Required
+   * Limitation:     - 
+   * Return:         200 OK
+   */
+  res.send(200)
+})
+
 app.get('/api/calibrate/status', (req, res) => {
   console.log('GET: /api/calibrate/status')
   /* 
@@ -418,8 +429,8 @@ app.post('/api/format', (req, res) => {
   res.send(data)
 })
 
-app.post('/api/sleepmode', (req, res) => {
-  console.log('POST: /api/sleepmode')
+app.post('/api/config/sleepmode', (req, res) => {
+  console.log('POST: /api/config/sleepmode')
   /* 
    * Description:    Toggle the sleep mode (from index page)
    * Authentication: Required
