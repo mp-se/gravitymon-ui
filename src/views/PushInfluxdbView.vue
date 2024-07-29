@@ -20,7 +20,7 @@
                         help="Identifier for the data bucket to use" :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-6">
-                    <BsInputText v-model="config.influxdb2_token" type="password" maxlength="50" label="Authentication token"
+                    <BsInputText v-model="config.influxdb2_token" type="password" maxlength="100" label="Authentication token"
                         help="Authentication token for accessing data bucket" :disabled="pushDisabled" />
                 </div>
                 <div class="col-md-6">
