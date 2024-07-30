@@ -57,7 +57,7 @@ function upload() {
         logDebug("FirmwareView.upload()", "Selected file: " + fileElement.files[0].name)
 
         const xhr = new XMLHttpRequest();
-        xhr.timeout = 40000; // 40 s
+        xhr.timeout = 1000 *180; // 180 s
         progress.value = 0
 
         function errorAction(e) {
