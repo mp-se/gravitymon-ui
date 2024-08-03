@@ -24,7 +24,7 @@
                             <router-link
                                 :class="['nav-link', $router.currentRoute.value.path.split('/')[1] === item.path.split('/')[1] ? ' active fw-bold' : '']"
                                 :to="item.path" :disabled="disabled">
-                                <BsIcon v-if="item.icon !== undefined" :icon="item.icon" width="1rem" height="1rem"
+                                <BsIcon v-if="item.icon !== undefined" :icon="item.icon" width="20px" height="20px"
                                     style="color:white" /> {{ item.label }}
                             </router-link>
                         </li>
@@ -33,7 +33,7 @@
                                 :class="['nav-link', 'dropdown-toggle', $router.currentRoute.value.path.split('/')[1] === item.path.split('/')[1] ? ' active fw-bold' : '']"
                                 :id="'navbarDropdown' + item.label" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false" data-bs-auto-close="true" :disabled="disabled">
-                                <BsIcon v-if="item.icon !== undefined" :icon="item.icon" width="1rem" height="1rem"
+                                <BsIcon v-if="item.icon !== undefined" :icon="item.icon" width="20px" height="20px"
                                     style="color:white" /> {{ item.label }} <span
                                     v-if="item.badge !== undefined && item.badge() > 0"
                                     class="badge text-bg-danger rounded-circle">{{
