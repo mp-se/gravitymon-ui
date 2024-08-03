@@ -234,7 +234,11 @@ app.get('/api/ping', (req, res) => {
    * Limitation:     - 
    * Return:         200 OK
    */
-  res.send(200)
+  var data = {
+    status: true,
+  }
+  res.type('application/json')
+  res.send(data)
 })
 
 app.get('/api/calibrate/status', (req, res) => {
