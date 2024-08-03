@@ -17,7 +17,7 @@
     <BsMessage message="Initalizing GravityMon Web interface" class="h2" :dismissable="false" alert="info"></BsMessage>
   </div>
 
-  <Menubar v-if="global.initialized" :disabled="global.disabled" />
+  <Menubar v-if="global.initialized" :disabled="global.disabled" brand="GravityMon" />
 
   <div class="container">
     <div>
