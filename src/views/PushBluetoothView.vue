@@ -68,7 +68,7 @@ const bleFormatOptions = ref([
     { label: 'Tilt iBeacon', value: 1 },
     { label: 'Tilt PRO iBeacon', value: 2 },
     { label: 'Gravitymon iBeacon', value: 5 },
-    { label: 'Gravitymon Service', value: 3 },
+    // { label: 'Gravitymon Service', value: 3 },
     { label: 'Gravitymon Eddystone', value: 4 },
 ]);
 
