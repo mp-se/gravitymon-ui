@@ -72,7 +72,7 @@ export function gravityFormulaBadge() {
  * @returns number of items that needs attention
  */
 export function pushBadge() {
-  return pushSettingBadge() + pushHttpPost1Badge() + pushHttpPost2Badge() + pushHttpGetBadge() + pushHttpInfluxdb2Badge() + pushHttpMqttBadge() + pushHttpBluetoothBadge()
+  return pushSettingBadge() + pushHttpPost1Badge() + pushHttpPost2Badge() + pushHttpGetBadge() + pushHttpInfluxdb2Badge() + pushHttpMqttBadge() + pushBluetoothBadge()
 }
 
 function pushTargetCount() {
@@ -111,6 +111,6 @@ export function pushHttpMqttBadge() {
   return pushTargetCount() === 0 ? 1 : 0
 }
 
-export function pushHttpBluetoothBadge() {
+export function pushBluetoothBadge() {
   return pushTargetCount() === 0 ? 1 : 0
 }
