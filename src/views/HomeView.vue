@@ -106,7 +106,7 @@
         </div>
 
         <div class="col-md-4">
-          <BsCard header="Device" title="IP Adress">
+          <BsCard header="Device" title="IP Address">
             <p class="text-center">
               {{ status.ip }}
             </p>
