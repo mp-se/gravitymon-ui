@@ -46,6 +46,12 @@
                         :disabled="global.disabled">
                     </BsInputNumber>
                 </div>
+                <div class="col-md-6">
+                    <BsInputSwitch v-model="config.wifi_scan_ap" label="Scan for strongest AP"
+                        help="Will do a scan and connect to the strongest AP found (longer connection time)"
+                        :disabled="global.disabled">
+                    </BsInputSwitch>
+                </div>
             </div>
 
             <div class="row gy-2">

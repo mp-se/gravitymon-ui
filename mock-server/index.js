@@ -36,6 +36,7 @@ configData = {
   tempsensor_resolution: 9,
   temp_adjustment_value: 0,
   // Wifi
+  wifi_scan_ap: true,
   wifi_portal_timeout: 120,
   wifi_connect_timeout: 20,
   wifi_ssid: "network A",

@@ -33,6 +33,7 @@ export const useConfigStore = defineStore('config', {
             wifi_direct_ssid: "",
             wifi_direct_pass: "",
             use_wifi_direct: false,
+            wifi_scan_ap: false,
             // Push - Generic
             token: "",
             token2: "",
@@ -66,7 +67,6 @@ export const useConfigStore = defineStore('config', {
             influxdb2_format: "",
             // Push - MQTT
             mqtt_target: "",
-            //mqtt_push: "",
             mqtt_port: "",
             mqtt_user: "",
             mqtt_pass: "",
@@ -155,6 +155,7 @@ export const useConfigStore = defineStore('config', {
                     this.wifi_direct_ssid = json.wifi_direct_ssid
                     this.wifi_direct_pass = json.wifi_direct_pass
                     this.use_wifi_direct = json.use_wifi_direct
+                    this.wifi_scan_ap = json.wifi_scan_ap
                     // Push - Generic
                     this.token = json.token
                     this.token2 = json.token2
