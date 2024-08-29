@@ -234,17 +234,17 @@ const items = ref([
       },
       {
         label: 'Influxdb v2',
-        badge: badge.pushHttpInfluxdb2Badge,
+        badge: badge.pushInfluxdb2Badge,
         path: '/push/influxdb',
       },
       {
         label: 'MQTT',
-        badge: badge.pushHttpMqttBadge,
+        badge: badge.pushMqttBadge,
         path: '/push/mqtt',
       },
       {
         label: 'Bluetooth',
-        badge: badge.pushHttpBluetoothBadge,
+        badge: badge.pushBluetoothBadge,
         path: '/push/bluetooth',
       },
     ]
