@@ -135,7 +135,7 @@ export const useStatusStore = defineStore('status', {
         },
         setSleepMode(val, callback) {
             logInfo("statusStore.setSleepMode()", "Fetching /api/config/sleepmode")
-            fetch(global.baseURL + 'api/config/sleepmode', {
+            fetch(global.baseURL + 'api/sleepmode', {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": global.token },
                 body: JSON.stringify({ sleep_mode: val }),
@@ -143,7 +143,7 @@ export const useStatusStore = defineStore('status', {
             })
                 .then(res => res.json())
                 .then(json => {
-                    logInfo("statusStore.setSleepMode()", "Fetching /api/config/sleepmode completed")
+                    logInfo("statusStore.setSleepMode()", "Fetching /api/sleepmode completed")
                     callback(true)
                 })
                 .catch(err => {
