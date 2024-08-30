@@ -2,7 +2,7 @@
   <div class="container">
     <p></p>
     <p class="h2">Gravity - Analysis</p>
-    <hr>
+    <hr />
     <BsMessage v-if="!chart" dismissable="false" message="" alert="danger">
       Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection
     </BsMessage>
@@ -12,25 +12,28 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { global, config } from "@/modules/pinia"
-import { logDebug, logError, logInfo } from '@/modules/logger'
+import { global, config } from '@/modules/pinia'
+import { logError } from '@/modules/logger'
 
-const chartDataForm = ref([]);
-const chartDataCalc = ref([]);
-const chart = ref(null);
+const chartDataForm = ref([])
+const chartDataCalc = ref([])
+const chart = ref(null)
 
 const dataSetChart = ref({
-  datasets: [{
-    label: 'Raw data',
-    borderColor: 'blue',
-    backgroundColor: 'blue',
-    data: chartDataForm.value
-  }, {
-    label: 'Calculated',
-    borderColor: 'green',
-    backgroundColor: 'green',
-    data: chartDataCalc.value
-  }]
+  datasets: [
+    {
+      label: 'Raw data',
+      borderColor: 'blue',
+      backgroundColor: 'blue',
+      data: chartDataForm.value
+    },
+    {
+      label: 'Calculated',
+      borderColor: 'green',
+      backgroundColor: 'green',
+      data: chartDataCalc.value
+    }
+  ]
 })
 
 const configChart = ref({
@@ -39,7 +42,7 @@ const configChart = ref({
   options: {
     responsive: true,
     interaction: {
-      intersect: false,
+      intersect: false
     },
     scales: {
       x: {
@@ -61,25 +64,24 @@ const configChart = ref({
           display: true,
           text: 'Gravity'
         },
-        suggestedMin: 1.000
+        suggestedMin: 1.0
       }
     }
   }
 })
 
 const convertToPlato = (sg) => {
-  return 259 - (259 / sg)
+  return 259 - 259 / sg
 }
 
 onMounted(() => {
-
   for (let a = 25.0; a < 80.0; a += 5.0) {
     let angle = a.toFixed(3)
     let formula = config.gravity_formula
-    formula = formula.replaceAll("tilt^3", angle + "*" + angle + "*" + angle)
-    formula = formula.replaceAll("tilt^2", angle + "*" + angle)
-    formula = formula.replaceAll("tilt", angle)
-    
+    formula = formula.replaceAll('tilt^3', angle + '*' + angle + '*' + angle)
+    formula = formula.replaceAll('tilt^2', angle + '*' + angle)
+    formula = formula.replaceAll('tilt', angle)
+
     try {
       let g = eval(formula)
       if (config.gravity_format === 'P') {
@@ -87,24 +89,26 @@ onMounted(() => {
       }
 
       chartDataCalc.value.push({ x: parseFloat(a), y: parseFloat(g) })
-    } catch(err) {
-      logError("GravityAnalysisView.onMounted()", err)
-      global.messageError = "Error evaluating the formula, the formula is invalid"
+    } catch (err) {
+      logError('GravityAnalysisView.onMounted()', err)
+      global.messageError = 'Error evaluating the formula, the formula is invalid'
     }
   }
 
   for (let i = 0; i < config.formula_calculation_data.length; i++) {
-    if( config.formula_calculation_data[i].a > 0)
-      chartDataForm.value.push({ x: config.formula_calculation_data[i].a, y: config.formula_calculation_data[i].g })
+    if (config.formula_calculation_data[i].a > 0)
+      chartDataForm.value.push({
+        x: config.formula_calculation_data[i].a,
+        y: config.formula_calculation_data[i].g
+      })
   }
 
   try {
     chart.value = new Chart(document.getElementById('gravityChart'), configChart.value)
   } catch (err) {
-    logError("GravityAnalysisView.onMounted()", err)
+    logError('GravityAnalysisView.onMounted()', err)
   }
 })
 </script>
 
-<style>
-</style>
+<style></style>

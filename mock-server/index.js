@@ -1,3 +1,6 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 const express = require('express')
 var cors = require('cors')
 
@@ -20,7 +23,7 @@ app.post('/api/firmware', upload.single('file'), function(req, res) {
   res.sendStatus(200);
 });
 
-configData = {
+var configData = {
   // Device configuration
   id: "7376ef",
   mdns: "gravmon3",
@@ -112,7 +115,7 @@ configData = {
   dark_mode: true, 
 }
 
-formatData = {
+var formatData = {
   http_post_format: "%7B%22name%22%20%3A%20%22gravmon%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%20%3A%20%22gravmon%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temp%2Dunits%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22gravity%22%3A%20%24%7Bgravity%7D%2C%20%22angle%22%3A%20%24%7Bangle%7D%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22corr%2Dgravity%22%3A%20%24%7Bcorr%2Dgravity%7D%2C%20%22gravity%2Dunit%22%3A%20%22%24%7Bgravity%2Dunit%7D%22%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D",
   http_post2_format: "%7B%22name%22%20%3A%20%22gravmon%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%20%3A%20%22gravmon%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temp%2Dunits%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22gravity%22%3A%20%24%7Bgravity%7D%2C%20%22angle%22%3A%20%24%7Bangle%7D%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22corr%2Dgravity%22%3A%20%24%7Bcorr%2Dgravity%7D%2C%20%22gravity%2Dunit%22%3A%20%22%24%7Bgravity%2Dunit%7D%22%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D",
   http_get_format: "%7B%22name%22%20%3A%20%22gravmon%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%20%3A%20%22gravmon%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temp%2Dunits%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22gravity%22%3A%20%24%7Bgravity%7D%2C%20%22angle%22%3A%20%24%7Bangle%7D%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22corr%2Dgravity%22%3A%20%24%7Bcorr%2Dgravity%7D%2C%20%22gravity%2Dunit%22%3A%20%22%24%7Bgravity%2Dunit%7D%22%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D",
@@ -120,7 +123,7 @@ formatData = {
   mqtt_format: "ispindel%2F%24%7Bmdns%7D%2Ftilt%3A%24%7Bangle%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemperature%3A%24%7Btemp%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemp%5Funits%3A%24%7Btemp%2Dunit%7D%7Cispindel%2F%24%7Bmdns%7D%2Fbattery%3A%24%7Bbattery%7D%7Cispindel%2F%24%7Bmdns%7D%2Fgravity%3A%24%7Bgravity%7D%7Cispindel%2F%24%7Bmdns%7D%2Finterval%3A%24%7Bsleep%2Dinterval%7D%7Cispindel%2F%24%7Bmdns%7D%2FRSSI%3A%24%7Brssi%7D%7C"
 }
 
-statusData = {
+var statusData = {
   id: "7376ef",
   angle: 22.4,
   gravity: 1.044,
@@ -165,7 +168,7 @@ app.get('/api/auth', (req, res) => {
        push_format: "http_format|http_format2|http_format3|influxdb2_format|mqtt_format"
      }
    */
-  data = { token: statusData.id }
+  var data = { token: statusData.id }
 
   console.log(req.headers['authorization'])
   res.send(data)
@@ -434,8 +437,8 @@ app.post('/api/format', (req, res) => {
   res.send(data)
 })
 
-app.post('/api/config/sleepmode', (req, res) => {
-  console.log('POST: /api/config/sleepmode')
+app.post('/api/sleepmode', (req, res) => {
+  console.log('POST: /api/sleepmode')
   /* 
    * Description:    Toggle the sleep mode (from index page)
    * Authentication: Required
@@ -507,21 +510,6 @@ app.get('/api/wifi/status', (req, res) => {
   res.type('application/json')
   res.send(data)
 })
-
-/*app.get('/log', (req, res) => {
-  console.log('GET: /log')
-
-  setTimeout(() => {
-    res.send("Log entry 5\nLog entry 4\nLog entry 3\nLog entry 2\nLog entry 1\n")
-  }, 1000)
-})
-
-app.get('/log2', (req, res) => {
-  console.log('GET: /log2')
-  setTimeout(() => {
-    res.send("Log entry 9\nLog entry 8\nLog entry 7\nLog entry 6\n")
-  }, 1000)
-})*/
 
 app.post('/api/filesystem', (req, res) => {
   console.log('POST: /api/filesystem')

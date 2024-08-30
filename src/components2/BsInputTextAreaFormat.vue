@@ -1,11 +1,20 @@
 <template>
   <BsInputBase :width="width" :label="label" :help="help" :badge="badge">
-    <textarea @click.right.prevent="openContextMenu" id="textArea" v-model="model" class="form-control" type="text"
-      v-bind="$attrs" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" :data-bs-title="help"></textarea>
+    <textarea
+      @click.right.prevent="openContextMenu"
+      id="textArea"
+      v-model="model"
+      class="form-control"
+      type="text"
+      v-bind="$attrs"
+      data-bs-toggle="tooltip"
+      data-bs-custom-class="custom-tooltip"
+      :data-bs-title="help"
+    ></textarea>
   </BsInputBase>
 
   <div @click="closeContextMenu" id="contextMenu" class="dropdown-menu">
-    <template v-for="o in contextMenuOptions">
+    <template v-for="o in contextMenuOptions" :key="o.value">
       <a class="dropdown-item" @click="insertText(o.value)">{{ o.label }}</a>
     </template>
   </div>
@@ -55,22 +64,31 @@ const contextMenuOptions = ref([
   { label: 'Gravity unit, ${gravity-unit}', value: '${gravity-unit}' },
 
   { label: 'Corrected gravity, ${corr-gravity}', value: '${corr-gravity}' },
-  { label: 'Corrected Gravity (SG), ${corr-gravity-sg}', value: '${corr-gravity-sg}' },
-  { label: 'Corrected Gravity (Plato), ${corr-gravity-plato}', value: '${corr-gravity-plato}' },
+  {
+    label: 'Corrected Gravity (SG), ${corr-gravity-sg}',
+    value: '${corr-gravity-sg}'
+  },
+  {
+    label: 'Corrected Gravity (Plato), ${corr-gravity-plato}',
+    value: '${corr-gravity-plato}'
+  }
 ])
 
 function insertText(value) {
-  if( value.length > 0) {
-    var obj = document.getElementById("textArea")
-    model.value = obj.value.substring(0, obj.selectionStart) + value + obj.value.substring(obj.selectionEnd, obj.value.length)
+  if (value.length > 0) {
+    var obj = document.getElementById('textArea')
+    model.value =
+      obj.value.substring(0, obj.selectionStart) +
+      value +
+      obj.value.substring(obj.selectionEnd, obj.value.length)
   }
 
-  var menu = document.getElementById("contextMenu")
+  var menu = document.getElementById('contextMenu')
   menu.style.display = 'none'
 }
 
 const openContextMenu = (event) => {
-  var menu = document.getElementById("contextMenu")
+  var menu = document.getElementById('contextMenu')
   menu.style.display = 'block'
   menu.style.left = event.pageX + 'px'
   menu.style.top = event.pageY + 'px'
@@ -97,5 +115,3 @@ const width = defineModel('width')
  */
 const badge = defineModel('badge')
 </script>
-
-

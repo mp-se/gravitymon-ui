@@ -1,10 +1,9 @@
 import { config, status } from '@/modules/pinia'
 import { isGyroCalibrated } from '@/modules/utils'
-import { logDebug, logError, logInfo } from '@/modules/logger'
 
 /**
  * Used in menybar to show the total amount of items that require user action.
- * 
+ *
  * @returns number of items that needs attention
  */
 export function deviceBadge() {
@@ -16,7 +15,7 @@ export function deviceSettingBadge() {
 }
 
 export function deviceMdnsBadge() {
-  return config.mdns === "" ? 1 : 0
+  return config.mdns === '' ? 1 : 0
 }
 
 export function deviceHardwareBadge() {
@@ -36,20 +35,18 @@ export function deviceWifiBadge() {
 }
 
 export function deviceWifi1Badge() {
-  if (config.wifi_ssid === '')
-      return 1
+  if (config.wifi_ssid === '') return 1
   return 0
 }
 
 export function deviceWifi2Badge() {
-  if (config.wifi_ssid2 === '' && config.wifi_ssid === '')
-      return 1
+  if (config.wifi_ssid2 === '' && config.wifi_ssid === '') return 1
   return 0
 }
 
 /**
  * Used in menybar to show the total amount of items that require user action.
- * 
+ *
  * @returns number of items that needs attention
  */
 export function gravityBadge() {
@@ -61,18 +58,25 @@ export function gravitySettingBadge() {
 }
 
 export function gravityFormulaBadge() {
-  if (config.gravity_formula === '')
-      return 1
+  if (config.gravity_formula === '') return 1
   return 0
 }
 
 /**
  * Used in menybar to show the total amount of items that require user action.
- * 
+ *
  * @returns number of items that needs attention
  */
 export function pushBadge() {
-  return pushSettingBadge() + pushHttpPost1Badge() + pushHttpPost2Badge() + pushHttpGetBadge() + pushInfluxdb2Badge() + pushMqttBadge() + pushBluetoothBadge()
+  return (
+    pushSettingBadge() +
+    pushHttpPost1Badge() +
+    pushHttpPost2Badge() +
+    pushHttpGetBadge() +
+    pushInfluxdb2Badge() +
+    pushMqttBadge() +
+    pushBluetoothBadge()
+  )
 }
 
 function pushTargetCount() {

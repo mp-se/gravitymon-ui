@@ -1,10 +1,12 @@
 <template>
   <BsInputBase :width="width" :label="label" :help="help" :badge="badge">
     <select v-model="model" class="form-select" :disabled="disabled">
-      <template v-for="o in options">
-        <option v-if="o.value === model" selected :value="o.value"><BsIcon icon="bi-wifi"/>{{ o.label }}</option>
+      <template v-for="o in options" :key="o.value">
+        <option v-if="o.value === model" selected :value="o.value">
+          <BsIcon icon="bi-wifi" />{{ o.label }}
+        </option>
         <option v-else :value="o.value">{{ o.label }}</option>
-      </template> 
+      </template>
     </select>
   </BsInputBase>
 </template>

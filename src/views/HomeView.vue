@@ -3,105 +3,123 @@
     <p></p>
 
     <template v-if="status">
-      <BsMessage v-if="!status.self_check.push_targets" dismissable="true" message="" alert="danger">
+      <BsMessage
+        v-if="!status.self_check.push_targets"
+        dismissable="true"
+        message=""
+        alert="danger"
+      >
         No remote services are active. Check your push settings and enable at least one service.
       </BsMessage>
 
-      <BsMessage v-if="!status.self_check.gyro_connected" dismissable="true" message="" alert="danger">
+      <BsMessage
+        v-if="!status.self_check.gyro_connected"
+        dismissable="true"
+        message=""
+        alert="danger"
+      >
         No gyro is detected. Try to reboot / power-off. If this persists, check for hardware issues.
       </BsMessage>
     </template>
 
     <div v-if="status" class="container overflow-hidden text-center">
-
       <div class="row gy-4">
         <div class="col-md-4" v-if="status.self_check.gravity_formula">
           <BsCard header="Measurement" color="info" title="Gravity">
             <p class="text-center">
-              {{ status.gravity }} {{ status.gravity_format === 'G' ? ' SG' : ' P' }}
+              {{ status.gravity }}
+              {{ status.gravity_format === 'G' ? ' SG' : ' P' }}
             </p>
           </BsCard>
         </div>
 
         <div class="col-md-4" v-if="!status.self_check.gravity_formula">
-          <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle" >
+          <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
             <p class="text-center">
-              Missing <router-link
+              Missing
+              <router-link
                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                to="/gravity/formula">formula</router-link>, unable to calculate gravity
+                to="/gravity/formula"
+                >formula</router-link
+              >, unable to calculate gravity
             </p>
           </BsCard>
         </div>
 
-        <div class="col-md-4" v-if="status.self_check.gyro_calibration && status.self_check.gyro_connected">
+        <div
+          class="col-md-4"
+          v-if="status.self_check.gyro_calibration && status.self_check.gyro_connected"
+        >
           <BsCard header="Measurement" color="info" title="Angle">
             <p class="text-center">
               {{ status.angle }}
             </p>
           </BsCard>
         </div>
-        <div class="col-md-4" v-if="status.self_check.gyro_calibration && status.self_check.gyro_connected">
+        <div
+          class="col-md-4"
+          v-if="status.self_check.gyro_calibration && status.self_check.gyro_connected"
+        >
           <BsCard header="Measurement" color="info" title="Average Angle">
             <p class="text-center">
-              {{ angle.average }} ({{ angle.count }}) <button @click="clearAverage" type="button"
-                class="btn btn-outline-info btn-sm" style="font-size: 0.7rem;">Clear</button>
+              {{ angle.average }} ({{ angle.count }})
+              <button
+                @click="clearAverage"
+                type="button"
+                class="btn btn-outline-info btn-sm"
+                style="font-size: 0.7rem"
+              >
+                Clear
+              </button>
             </p>
           </BsCard>
         </div>
         <div class="col-md-4" v-if="!status.self_check.gyro_calibration">
           <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
             <p class="text-center">
-              Gyro has not been <router-link
+              Gyro has not been
+              <router-link
                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                to="/device/hardware">calibrated</router-link> at 90 degrees
+                to="/device/hardware"
+                >calibrated</router-link
+              >
+              at 90 degrees
             </p>
           </BsCard>
         </div>
 
         <div class="col-md-4" v-if="status.self_check.temp_connected">
           <BsCard header="Measurement" color="info" title="Temperature">
-            <p class="text-center">
-              {{ status.temp }} °{{ status.temp_format }}
-            </p>
+            <p class="text-center">{{ status.temp }} °{{ status.temp_format }}</p>
           </BsCard>
         </div>
 
         <div class="col-md-4" v-if="!status.self_check.temp_connected">
           <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
-            <p class="text-center">
-              No temperature sensor detected
-            </p>
+            <p class="text-center">No temperature sensor detected</p>
           </BsCard>
         </div>
 
         <div class="col-md-4" v-if="status.self_check.battery_level">
           <BsCard header="Measurement" color="info" title="Battery">
-            <p class="text-center">
-              {{ status.battery }} V
-            </p>
+            <p class="text-center">{{ status.battery }} V</p>
           </BsCard>
         </div>
         <div class="col-md-4" v-if="!status.self_check.battery_level">
           <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
-            <p class="text-center">
-              Battery level not valid
-            </p>
+            <p class="text-center">Battery level not valid</p>
           </BsCard>
         </div>
 
         <div class="col-md-4">
           <BsCard header="Measurement" color="info" title="Average runtime">
-            <p class="text-center">
-              {{ status.runtime_average }} s
-            </p>
+            <p class="text-center">{{ status.runtime_average }} s</p>
           </BsCard>
         </div>
 
         <div class="col-md-4">
           <BsCard header="Device" title="WIFI">
-            <p class="text-center">
-              {{ status.rssi }} dBm - {{ status.wifi_ssid }}
-            </p>
+            <p class="text-center">{{ status.rssi }} dBm - {{ status.wifi_ssid }}</p>
           </BsCard>
         </div>
 
@@ -124,9 +142,13 @@
         <div class="col-md-4" v-if="newVersion.new">
           <BsCard header="Device" title="Upgrade available">
             <p class="text-center">
-              {{ newVersion.ver }} available on <a
+              {{ newVersion.ver }} available on
+              <a
                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                href="https://github.com/mp-se/gravitymon/releases" target="_blank">github.com</a>
+                href="https://github.com/mp-se/gravitymon/releases"
+                target="_blank"
+                >github.com</a
+              >
             </p>
           </BsCard>
         </div>
@@ -134,7 +156,9 @@
         <div class="col-md-4">
           <BsCard header="Device" title="Software version">
             <p class="text-center">
-              Firmware: {{ status.app_ver }} ({{ status.app_build }}) UI: {{ global.uiVersion }} ({{ global.uiBuild }})
+              Firmware: {{ status.app_ver }} ({{ status.app_build }}) UI: {{ global.uiVersion }} ({{
+                global.uiBuild
+              }})
             </p>
           </BsCard>
         </div>
@@ -149,11 +173,11 @@
 
         <div class="col-md-4">
           <BsCard header="Device" title="Force gravity mode">
-            <p class="d-flex justify-content-center">
-            <div class="form-check form-switch" style="height: 0.7rem;">
-              <input v-model="flag" class="form-check-input" type="checkbox" role="switch">
+            <div class="d-flex justify-content-center">
+              <div class="form-check form-switch" style="height: 0.7rem">
+                <input v-model="flag" class="form-check-input" type="checkbox" role="switch" />
+              </div>
             </div>
-            </p>
           </BsCard>
         </div>
       </div>
@@ -163,16 +187,16 @@
 
 <script setup>
 import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
-import { status, global } from "@/modules/pinia"
+import { status, global } from '@/modules/pinia'
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const polling = ref(null)
 const flag = ref(false)
 const angle = ref({ average: 0, sum: 0, count: 0 })
-const newVersion = ref({ new: false, ver: "" })
+const newVersion = ref({ new: false, ver: '' })
 
-watch(flag, async (to, from) => {
-  status.setSleepMode(flag.value, (success) => { })
+watch(flag, async () => {
+  status.setSleepMode(flag.value, () => {})
 })
 
 function clearAverage() {
@@ -186,7 +210,9 @@ function refresh() {
     if (success) {
       angle.value.sum += parseFloat(status.angle)
       angle.value.count++
-      angle.value.average = (Math.round(angle.value.sum / angle.value.count * 100) / 100).toFixed(2);
+      angle.value.average = (Math.round((angle.value.sum / angle.value.count) * 100) / 100).toFixed(
+        2
+      )
     }
   })
 }
@@ -195,29 +221,29 @@ onMounted(() => {
   flag.value = status.sleep_mode
 
   setTimeout(() => {
-    logInfo("HomeView.onMounted()", "Checking for new sw")
+    logInfo('HomeView.onMounted()', 'Checking for new sw')
     fetch('https://www.gravitymon.com/firmware/version.json', {
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(10000)
     })
-      .then(res => res.json())
-      .then(json => {
-        logDebug("HomeView.onMounted()", json)
+      .then((res) => res.json())
+      .then((json) => {
+        logDebug('HomeView.onMounted()', json)
         if (checkForNewGravMonVersion(json)) {
           newVersion.value.new = true
           newVersion.value.ver = json.version
-          logInfo("HomeView.onMounted()", "Newer version found")
+          logInfo('HomeView.onMounted()', 'Newer version found')
         }
 
-        logInfo("HomeView.onMounted()", "Fetching latest gravtmon version completed")
+        logInfo('HomeView.onMounted()', 'Fetching latest gravtmon version completed')
       })
-      .catch(err => {
-        logError("HomeView.onMounted()", err)
+      .catch((err) => {
+        logError('HomeView.onMounted()', err)
       })
   }, 500)
 })
 
 onBeforeMount(() => {
-  refresh();
+  refresh()
   polling.value = setInterval(refresh, 4000)
 })
 
@@ -229,20 +255,16 @@ function checkForNewGravMonVersion(json) {
   var current = status.app_ver
   var latest = json.version
 
-  const newVer = latest.split('.');
-  const curVer = current.split('.');
+  const newVer = latest.split('.')
+  const curVer = current.split('.')
 
-  if (newVer.length != 3 && curVer.length != 3)
-    return false;
+  if (newVer.length != 3 && curVer.length != 3) return false
 
-  if (newVer[0] > curVer[0])
-    return true;
-  else if (newVer[0] == curVer[0] && newVer[1] > curVer[1])
-    return true;
-  else if (newVer[0] == curVer[0] && newVer[1] == curVer[1] && newVer[2] > curVer[2])
-    return true;
+  if (newVer[0] > curVer[0]) return true
+  else if (newVer[0] == curVer[0] && newVer[1] > curVer[1]) return true
+  else if (newVer[0] == curVer[0] && newVer[1] == curVer[1] && newVer[2] > curVer[2]) return true
 
-  return false;
+  return false
 }
 </script>
 

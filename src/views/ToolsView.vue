@@ -2,32 +2,60 @@
   <div class="container">
     <p></p>
     <p class="h3">Tools</p>
-    <hr>
+    <hr />
 
     <h5>Calculate a new voltage factor</h5>
     <div class="row">
       <div class="col-md-4">
-        <BsInputNumber v-model="measuredVoltage" label="Measured voltage" min="0" max="6" step=".01" width="4" unit="V"
-          :unit="voltage" help="Enter the measured voltage on the device" :disabled="global.disabled">
+        <BsInputNumber
+          v-model="measuredVoltage"
+          label="Measured voltage"
+          min="0"
+          max="6"
+          step=".01"
+          width="4"
+          unit="V"
+          help="Enter the measured voltage on the device"
+          :disabled="global.disabled"
+        >
         </BsInputNumber>
       </div>
       <div class="col-md-4">
-        <BsInputReadonly v-model="status.battery" unit="V" label="Last voltage reading" width="4"
-          help="Last measured battery voltage" :disabled="global.disabled"></BsInputReadonly>
+        <BsInputReadonly
+          v-model="status.battery"
+          unit="V"
+          label="Last voltage reading"
+          width="4"
+          help="Last measured battery voltage"
+          :disabled="global.disabled"
+        ></BsInputReadonly>
       </div>
       <div class="col-md-4">
-        <BsInputReadonly v-model="config.voltage_factor" label="Current voltage factor" width="4"
-          help="Current voltage factor" :disabled="global.disabled"></BsInputReadonly>
+        <BsInputReadonly
+          v-model="config.voltage_factor"
+          label="Current voltage factor"
+          width="4"
+          help="Current voltage factor"
+          :disabled="global.disabled"
+        ></BsInputReadonly>
       </div>
     </div>
 
     <div class="row gy-4">
-      <div class="col-md-12">
-      </div>
+      <div class="col-md-12"></div>
       <div class="col-md-3">
-        <button @click="calculateFactor" type="button" class="btn btn-secondary" :disabled="global.disabled">
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-            :hidden="!global.disabled"></span>
+        <button
+          @click="calculateFactor"
+          type="button"
+          class="btn btn-secondary"
+          :disabled="global.disabled"
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+            :hidden="!global.disabled"
+          ></span>
           &nbsp;Calculate factor
         </button>
       </div>
@@ -35,29 +63,54 @@
 
     <div class="row gy-4">
       <p></p>
-      <hr>
+      <hr />
     </div>
 
     <h5>Explore the file system</h5>
     <div class="row gy-4">
       <div class="col-md-3">
-        <button @click="listFilesView" type="button" class="btn btn-secondary" :disabled="global.disabled">
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-            :hidden="!global.disabled"></span>
-          &nbsp;List files
-        </button>&nbsp;
-        <button @click="toggleAdvanced()" type="button" class="btn btn-secondary" :disabled="global.disabled">
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-            :hidden="!global.disabled"></span>
+        <button
+          @click="listFilesView"
+          type="button"
+          class="btn btn-secondary"
+          :disabled="global.disabled"
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+            :hidden="!global.disabled"
+          ></span>
+          &nbsp;List files</button
+        >&nbsp;
+        <button
+          @click="toggleAdvanced()"
+          type="button"
+          class="btn btn-secondary"
+          :disabled="global.disabled"
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+            :hidden="!global.disabled"
+          ></span>
           &nbsp;Enable Advanced
         </button>
       </div>
 
       <div class="col-md-6">
         <div class="button-group">
-          <template v-for="f in filesView">
-            <button type="button" @click.prevent="viewFile(f)" class="btn btn-outline-primary" href="#"
-              :disabled="global.disabled">{{ f }}</button>&nbsp;
+          <template v-for="(f, index) in filesView" :key="index">
+            <button
+              type="button"
+              @click.prevent="viewFile(f)"
+              class="btn btn-outline-primary"
+              href="#"
+              :disabled="global.disabled"
+            >
+              {{ f }}</button
+            >&nbsp;
           </template>
         </div>
       </div>
@@ -76,23 +129,40 @@
 
     <div v-if="!hideAdvanced" class="row gy-4">
       <p></p>
-      <hr>
+      <hr />
     </div>
 
     <h5 v-if="!hideAdvanced">Upload files to file system</h5>
     <div v-if="!hideAdvanced" class="row gy-4">
       <form @submit.prevent="upload">
         <div class="col-md-12">
-          <BsFileUpload name="upload" id="upload" label="Select firmware file" accept=""
-            help="Choose a file to upload to the file system" :disabled="global.disabled">
+          <BsFileUpload
+            name="upload"
+            id="upload"
+            label="Select firmware file"
+            accept=""
+            help="Choose a file to upload to the file system"
+            :disabled="global.disabled"
+          >
           </BsFileUpload>
         </div>
         <div class="col-md-3">
           <p></p>
-          <button type="submit" class="btn btn-secondary" id="upload-btn" value="upload" data-bs-toggle="tooltip"
-            title="Update the device with the selected firmware" :disabled="global.disabled">
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-              :hidden="!global.disabled"></span>
+          <button
+            type="submit"
+            class="btn btn-secondary"
+            id="upload-btn"
+            value="upload"
+            data-bs-toggle="tooltip"
+            title="Update the device with the selected firmware"
+            :disabled="global.disabled"
+          >
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+              :hidden="!global.disabled"
+            ></span>
             &nbsp;Upload file
           </button>
         </div>
@@ -105,38 +175,59 @@
 
     <div v-if="!hideAdvanced" class="row gy-4">
       <p></p>
-      <hr>
+      <hr />
     </div>
 
     <h5 v-if="!hideAdvanced">Delete files from file system</h5>
     <div v-if="!hideAdvanced" class="row gy-4">
       <div class="col-md-3">
-        <button @click="listFilesDelete" type="button" class="btn btn-secondary" :disabled="global.disabled">
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-            :hidden="!global.disabled"></span>
+        <button
+          @click="listFilesDelete"
+          type="button"
+          class="btn btn-secondary"
+          :disabled="global.disabled"
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+            :hidden="!global.disabled"
+          ></span>
           &nbsp;List files
         </button>
       </div>
       <div class="col-md-6">
         <div class="button-group">
-          <template v-for="f in filesDelete">
-            <button type="button" @click.prevent="deleteFile(f)" class="btn btn-outline-primary" href="#"
-              :disabled="global.disabled">{{ f }}</button>&nbsp;
+          <template v-for="(f, index) in filesDelete" :key="index">
+            <button
+              type="button"
+              @click.prevent="deleteFile(f)"
+              class="btn btn-outline-primary"
+              href="#"
+              :disabled="global.disabled"
+            >
+              {{ f }}</button
+            >&nbsp;
           </template>
         </div>
       </div>
 
-      <BsModalConfirm :callback="confirmDeleteCallback" :message="confirmDeleteMessage" id="deleteFile" title="Delete file" :disabled="global.disabled" />    
+      <BsModalConfirm
+        :callback="confirmDeleteCallback"
+        :message="confirmDeleteMessage"
+        id="deleteFile"
+        title="Delete file"
+        :disabled="global.disabled"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { router } from '@/modules/router'
-import { global, config, status, saveConfigState } from "@/modules/pinia"
-import { isValidJson, isValidFormData, isValidMqttData } from "@/modules/utils"
-import { logDebug, logError, logInfo } from '@/modules/logger'
+import { ref } from 'vue'
+import { global, config, status, saveConfigState } from '@/modules/pinia'
+import { isValidJson, isValidFormData, isValidMqttData } from '@/modules/utils'
+import { logDebug, logError } from '@/modules/logger'
 
 // TODO: Hide upload button when no file is selected
 
@@ -156,24 +247,25 @@ function toggleAdvanced() {
 }
 
 const confirmDeleteCallback = (result) => {
-  logDebug("ToolsView.confirmDeleteCallback()", result)
+  logDebug('ToolsView.confirmDeleteCallback()', result)
 
-  if( result ) {
+  if (result) {
     global.disabled = true
     global.clearMessages()
 
     fileData.value = null
 
     var data = {
-      command: "del",
+      command: 'del',
       file: confirmDeleteFile.value
     }
 
     config.sendFilesystemRequest(data, (success, text) => {
+      logDebug('ToolsView.confirmDeleteCallback()', success), text
       filesView.value = []
       filesDelete.value = []
       filesystemUsage.value = null
-      
+
       global.disabled = false
     })
   }
@@ -186,19 +278,20 @@ const calculateFactor = () => {
   var mv = parseFloat(measuredVoltage.value)
 
   if (isNaN(mv)) {
-    global.messageError = "Not a valid measurement"
+    global.messageError = 'Not a valid measurement'
     return
   }
 
-  config.voltage_factor = parseFloat(mv / (status.battery / config.voltage_factor)).toFixed(2);
+  config.voltage_factor = parseFloat(mv / (status.battery / config.voltage_factor)).toFixed(2)
 
   config.sendConfig((success) => {
+    logDebug('ToolsView.calculateFactor()', success)
     saveConfigState()
     global.disabled = true
     setTimeout(() => {
       status.load((success) => {
-        logDebug("ToolsView.calculateFactor()", status.battery)
-        global.messageInfo = "New factor applied, check if the current battery reading is correct"
+        logDebug('ToolsView.calculateFactor()', success, status.battery)
+        global.messageInfo = 'New factor applied, check if the current battery reading is correct'
         global.disabled = false
       }, 1000)
     })
@@ -212,21 +305,16 @@ const viewFile = (f) => {
   fileData.value = null
 
   var data = {
-    command: "get",
+    command: 'get',
     file: f
   }
 
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
-
-      if (isValidJson(text))
-        fileData.value = JSON.stringify(JSON.parse(text), null, 2)
-      else if (isValidFormData(text))
-        fileData.value = text.replaceAll('&', '&\n\r')
-      else if (isValidMqttData(text))
-        fileData.value = text.replaceAll('|', '|\n\r')
-      else
-        fileData.value = text
+      if (isValidJson(text)) fileData.value = JSON.stringify(JSON.parse(text), null, 2)
+      else if (isValidFormData(text)) fileData.value = text.replaceAll('&', '&\n\r')
+      else if (isValidMqttData(text)) fileData.value = text.replaceAll('|', '|\n\r')
+      else fileData.value = text
     }
 
     global.disabled = false
@@ -234,7 +322,7 @@ const viewFile = (f) => {
 }
 
 const deleteFile = (f) => {
-  confirmDeleteMessage.value = "Do you really want to delete file " + f
+  confirmDeleteMessage.value = 'Do you really want to delete file ' + f
   confirmDeleteFile.value = f
   document.getElementById('deleteFile').click()
 }
@@ -242,20 +330,27 @@ const deleteFile = (f) => {
 const listFilesView = () => {
   global.disabled = true
   global.clearMessages()
- 
+
   filesView.value = []
 
   var data = {
-    command: "dir"
+    command: 'dir'
   }
 
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
       var json = JSON.parse(text)
       filesystemUsage.value = (json.used / json.total) * 100
-      filesystemUsageText.value = "Total space " + json.total/1024 + "kb, Free space " + json.free/1024 + "kb, Used space " + json.used/1024 + "kb"
+      filesystemUsageText.value =
+        'Total space ' +
+        json.total / 1024 +
+        'kb, Free space ' +
+        json.free / 1024 +
+        'kb, Used space ' +
+        json.used / 1024 +
+        'kb'
 
-      for(var f in json.files) {
+      for (var f in json.files) {
         filesView.value.push(json.files[f].file)
       }
     }
@@ -271,13 +366,13 @@ const listFilesDelete = () => {
   filesDelete.value = []
 
   var data = {
-    command: "dir"
+    command: 'dir'
   }
 
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
       var json = JSON.parse(text)
-      for(var f in json.files) {
+      for (var f in json.files) {
         filesDelete.value.push(json.files[f].file)
       }
     }
@@ -289,36 +384,41 @@ const listFilesDelete = () => {
 const progress = ref(0)
 
 function upload() {
-  const fileElement = document.getElementById('upload');
+  const fileElement = document.getElementById('upload')
+
+  function errorAction(e) {
+    logError('ToolsView.upload()', e.type)
+    global.messageFailed = 'File upload failed!'
+    global.disabled = false
+  }
 
   if (fileElement.files.length === 0) {
-    global.messageFailed = "You need to select one file with firmware to upload"
+    global.messageFailed = 'You need to select one file with firmware to upload'
   } else {
     global.disabled = true
-    logDebug("ToolsView.upload()", "Selected file: " + fileElement.files[0].name)
+    logDebug('ToolsView.upload()', 'Selected file: ' + fileElement.files[0].name)
 
-    const xhr = new XMLHttpRequest();
-    xhr.timeout = 40000; // 40 s
+    const xhr = new XMLHttpRequest()
+    xhr.timeout = 40000 // 40 s
     progress.value = 0
 
-    function errorAction(e) {
-      logError("ToolsView.upload()", e.type)
-      global.messageFailed = "File upload failed!"
-      global.disabled = false
+    xhr.onabort = function (e) {
+      errorAction(e)
+    }
+    xhr.onerror = function (e) {
+      errorAction(e)
+    }
+    xhr.ontimeout = function (e) {
+      errorAction(e)
     }
 
-    xhr.onabort = function (e) { errorAction(e) }
-    xhr.onerror = function (e) { errorAction(e) }
-    xhr.ontimeout = function (e) { errorAction(e) }
+    xhr.onloadstart = function () {}
 
-    xhr.onloadstart = function (e) {
-    }
-
-    xhr.onloadend = function (e) {
+    xhr.onloadend = function () {
       progress.value = 100
       if (xhr.status == 200) {
-        global.messageSuccess = "File upload completed!"
-        global.messageFailed = ""
+        global.messageSuccess = 'File upload completed!'
+        global.messageFailed = ''
       }
 
       global.disabled = false
@@ -328,19 +428,23 @@ function upload() {
     }
 
     // The update only seams to work when loaded from the device (i.e. when CORS is not used)
-    xhr.upload.addEventListener('progress', (e) => {
-      progress.value = (e.loaded / e.total) * 100
-    }, false)
+    xhr.upload.addEventListener(
+      'progress',
+      (e) => {
+        progress.value = (e.loaded / e.total) * 100
+      },
+      false
+    )
 
-    const fileData = new FormData();
+    const fileData = new FormData()
     fileData.onprogress = function (e) {
-      logDebug("ToolsView.upload()", "progress2: " + e.loaded + "," + e.total + "," + xhr.status)
+      logDebug('ToolsView.upload()', 'progress2: ' + e.loaded + ',' + e.total + ',' + xhr.status)
     }
 
-    fileData.append("file", fileElement.files[0])
+    fileData.append('file', fileElement.files[0])
 
-    xhr.open("POST", global.baseURL + "api/filesystem/upload")
-    xhr.setRequestHeader("Authorization", global.token)
+    xhr.open('POST', global.baseURL + 'api/filesystem/upload')
+    xhr.setRequestHeader('Authorization', global.token)
     xhr.send(fileData)
   }
 }

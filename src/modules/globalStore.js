@@ -1,68 +1,68 @@
 import { defineStore } from 'pinia'
-import { logDebug, logError, logInfo } from '@/modules/logger'
+import { logInfo, logDebug } from '@/modules/logger'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
     return {
-      id: "",
-      platform: "",
+      id: '',
+      platform: '',
       initialized: false,
       disabled: false,
       configChanged: false,
 
-      messageError: "",
-      messageWarning: "",
-      messageSuccess: "",
-      messageInfo: "",
+      messageError: '',
+      messageWarning: '',
+      messageSuccess: '',
+      messageInfo: '',
 
-      fetchTimout: 8000,
+      fetchTimout: 8000
     }
   },
   getters: {
     isError() {
-      return this.messageError != "" ? true : false
+      return this.messageError != '' ? true : false
     },
     isWarning() {
-      return this.messageWarning != "" ? true : false
+      return this.messageWarning != '' ? true : false
     },
     isSuccess() {
-      return this.messageSuccess != "" ? true : false
+      return this.messageSuccess != '' ? true : false
     },
     isInfo() {
-      return this.messageInfo != "" ? true : false
+      return this.messageInfo != '' ? true : false
     },
     token() {
-      return "Bearer " + this.id
+      return 'Bearer ' + this.id
     },
     baseURL() {
-      if(process.env.VUE_APP_HOST === undefined)
-        return  window.location.href
+      logDebug('globalStore.baseURL()', import.meta.env.VITE_APP_HOST)
+      if (import.meta.env.VITE_APP_HOST === undefined) return window.location.href
 
-      logInfo("globalStore.baseURL()", "Using base URL from env", process.env.VUE_APP_HOST)
-      return process.env.VUE_APP_HOST
+      logInfo('globalStore.baseURL()', 'Using base URL from env', import.meta.env.VITE_APP_HOST)
+      return import.meta.env.VITE_APP_HOST
     },
     uiVersion() {
-      return process.env.VUE_APP_VERSION
+      logDebug('globalStore.uiVersion()', import.meta.env.VITE_APP_VERSION)
+      return import.meta.env.VITE_APP_VERSION
     },
     uiBuild() {
-      return process.env.VUE_APP_BUILD
+      logDebug('globalStore.uiBuild()', import.meta.env.VITE_APP_BUILD)
+      return import.meta.env.VITE_APP_BUILD
     },
     disabled32() {
-      if (this.disabled)
-        return true
+      if (this.disabled) return true
 
-      if (this.platform !== "esp8266")
-        return false
+      if (this.platform !== 'esp8266') return false
 
       return true
     }
   },
   actions: {
     clearMessages() {
-      this.messageError = ""
-      this.messageWarning = ""
-      this.messageSuccess = ""
-      this.messageInfo = ""
+      this.messageError = ''
+      this.messageWarning = ''
+      this.messageSuccess = ''
+      this.messageInfo = ''
     }
-  },
+  }
 })
