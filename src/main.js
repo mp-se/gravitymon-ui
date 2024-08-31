@@ -1,13 +1,13 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '@popperjs/core/dist/umd/popper.min.js'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import { createApp } from 'vue'
-import { piniaInstance } from './modules/pinia'
 import App from './App.vue'
-import { router } from './modules/router'
 
 const app = createApp(App)
-app.use(router).use(piniaInstance)
+
+import { router } from './modules/router'
+import { piniaInstance } from './modules/pinia'
+
+app.use(router)
+app.use(piniaInstance)
 
 import BsMessage from './components/BsMessage.vue'
 import BsCard from './components/BsCard.vue'
@@ -57,4 +57,11 @@ app.component('BsModal', BsModal)
 app.component('BsModalConfirm', BsModalConfirm)
 app.component('BsInputTextAreaFormat', BsInputTextAreaFormat)
 
+//import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.css'
+
 app.mount('#app')
+
+//import '@popperjs/core/dist/umd/popper.min.js'
+//import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+//import 'bootstrap/dist/js/bootstrap.bundle.js'

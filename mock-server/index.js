@@ -1,6 +1,6 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-
+const path = require('path');
 const express = require('express')
 var cors = require('cors')
 
@@ -12,6 +12,30 @@ const port = 3000
 
 app.use(cors())
 app.use(express.json())
+
+app.get('/index.html', function(req, res) {
+  const options = {
+    root: path.join('.')
+  }
+  res.type('html') 
+  res.sendFile('mock-server/index.html', options)
+})
+
+app.get('/index.js', function(req, res) {
+  const options = {
+    root: path.join('.')
+  }
+  res.type('js') 
+  res.sendFile('dist/assets/index.js', options)
+})
+
+app.get('/style.css', function(req, res) {
+  const options = {
+    root: path.join('.')
+  }
+  res.type('css') 
+  res.sendFile('dist/assets/style.css', options)
+})
 
 app.post('/api/firmware', upload.single('file'), function(req, res) {
   const title = req.body.title;
