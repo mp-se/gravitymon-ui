@@ -7,7 +7,7 @@ import { logInfo } from '@/modules/logger'
 
 const piniaInstance = createPinia()
 
-export default piniaInstance;
+export default piniaInstance
 
 const config = useConfigStore(piniaInstance)
 const global = useGlobalStore(piniaInstance)

@@ -49,13 +49,22 @@ app.component('IconGraphUpArrow', IconGraphUpArrow)
 app.component('IconUpArrow', IconUpArrow)
 app.component('IconCpu', IconCpu)
 
-import BsModal from './components2/BsModal.vue'
-import BsModalConfirm from './components2/BsModalConfirm.vue'
-import BsInputTextAreaFormat from './components2/BsInputTextAreaFormat.vue'
+import BsModal from './components/BsModal.vue'
+import BsModalConfirm from './components/BsModalConfirm.vue'
+import BsInputTextAreaFormat from './components/BsInputTextAreaFormat.vue'
 
 app.component('BsModal', BsModal)
 app.component('BsModalConfirm', BsModalConfirm)
 app.component('BsInputTextAreaFormat', BsInputTextAreaFormat)
+
+import VoltageFragment from './fragments/VoltageFragment.vue'
+import ListFilesFragment from './fragments/ListFilesFragment.vue'
+import AdvancedFilesFragment from './fragments/AdvancedFilesFragment.vue'
+import EnableCorsFragment from './fragments/EnableCorsFragment.vue'
+app.component('VoltageFragment', VoltageFragment)
+app.component('ListFilesFragment', ListFilesFragment)
+app.component('AdvancedFilesFragment', AdvancedFilesFragment)
+app.component('EnableCorsFragment', EnableCorsFragment)
 
 import 'bootstrap/dist/css/bootstrap.css'
 
