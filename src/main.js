@@ -40,12 +40,14 @@ app.component('BsInputSwitch', BsInputSwitch)
 import IconHome from './components/IconHome.vue'
 import IconTools from './components/IconTools.vue'
 import IconGraphUpArrow from './components/IconGraphUpArrow.vue'
+import IconCloudUpArrow from './components/IconCloudUpArrow.vue'
 import IconUpArrow from './components/IconUpArrow.vue'
 import IconCpu from './components/IconCpu.vue'
 
 app.component('IconHome', IconHome)
 app.component('IconTools', IconTools)
 app.component('IconGraphUpArrow', IconGraphUpArrow)
+app.component('IconCloudUpArrow', IconCloudUpArrow)
 app.component('IconUpArrow', IconUpArrow)
 app.component('IconCpu', IconCpu)
 

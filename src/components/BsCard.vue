@@ -4,15 +4,6 @@
     <div class="card-body">
       <h5 class="card-title">
         <component v-if="icon !== undefined" :is="icon" width="16" height="16"></component>
-
-        <!-- 
-        <BsIcon
-          v-if="icon !== undefined"
-          :icon="icon"
-          height="16"
-          width="16"
-        ></BsIcon>
-        -->
         {{ title }}
       </h5>
       <p class="card-text">
