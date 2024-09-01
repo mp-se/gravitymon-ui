@@ -13,7 +13,8 @@ const port = 3000
 app.use(cors())
 app.use(express.json())
 
-app.get('/index.html', function(req, res) {
+app.get('/', function(req, res) {
+  console.log('GET: /')
   const options = {
     root: path.join('.')
   }
@@ -22,6 +23,7 @@ app.get('/index.html', function(req, res) {
 })
 
 app.get('/index.js', function(req, res) {
+  console.log('GET: /index.js')
   const options = {
     root: path.join('.')
   }
@@ -30,6 +32,7 @@ app.get('/index.js', function(req, res) {
 })
 
 app.get('/style.css', function(req, res) {
+  console.log('GET: /style.css')
   const options = {
     root: path.join('.')
   }

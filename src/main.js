@@ -3,11 +3,11 @@ import App from './App.vue'
 
 const app = createApp(App)
 
-import { router } from './modules/router'
-import { piniaInstance } from './modules/pinia'
-
-app.use(router)
+import piniaInstance from './modules/pinia.js'
 app.use(piniaInstance)
+
+import router from './modules/router.js'
+app.use(router)
 
 import BsMessage from './components/BsMessage.vue'
 import BsCard from './components/BsCard.vue'
@@ -57,11 +57,9 @@ app.component('BsModal', BsModal)
 app.component('BsModalConfirm', BsModalConfirm)
 app.component('BsInputTextAreaFormat', BsInputTextAreaFormat)
 
-//import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/css/bootstrap.css'
 
 app.mount('#app')
 
 //import '@popperjs/core/dist/umd/popper.min.js'
-//import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-//import 'bootstrap/dist/js/bootstrap.bundle.js'
+import 'bootstrap/dist/js/bootstrap.bundle.js'

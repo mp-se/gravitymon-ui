@@ -5,7 +5,9 @@ import { useStatusStore } from '@/modules/statusStore'
 import { useConfigStore } from '@/modules/configStore'
 import { logInfo } from '@/modules/logger'
 
-export const piniaInstance = createPinia()
+const piniaInstance = createPinia()
+
+export default piniaInstance;
 
 const config = useConfigStore(piniaInstance)
 const global = useGlobalStore(piniaInstance)
