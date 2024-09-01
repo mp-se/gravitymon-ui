@@ -1,4 +1,5 @@
 <template>
+  <h5>Developer settings</h5>
   <div class="row gy-4">
     <div class="col-md-3">
       <button
