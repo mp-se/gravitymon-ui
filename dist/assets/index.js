@@ -6654,7 +6654,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.0.0-beta2";
     },
     uiBuild() {
-      return "..d1425a";
+      return "..7a605e";
     },
     disabled32() {
       if (this.disabled) return true;
