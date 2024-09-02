@@ -3,7 +3,7 @@
     <select v-model="model" class="form-select" :disabled="disabled">
       <template v-for="o in options" :key="o.value">
         <option v-if="o.value === model" selected :value="o.value">
-          <IconWifi/>{{ o.label }}
+          <IconWifi />{{ o.label }}
         </option>
         <option v-else :value="o.value">{{ o.label }}</option>
       </template>
