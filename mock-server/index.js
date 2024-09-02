@@ -217,5 +217,5 @@ app.post('/api/sleepmode', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Gravitymon API simulator port ${port}`)
+  console.log(`Gravitymon API simulator port http://localhost:${port}/`)
 })
