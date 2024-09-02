@@ -59,15 +59,6 @@ app.component('BsModal', BsModal)
 app.component('BsModalConfirm', BsModalConfirm)
 app.component('BsInputTextAreaFormat', BsInputTextAreaFormat)
 
-import VoltageFragment from './fragments/VoltageFragment.vue'
-import ListFilesFragment from './fragments/ListFilesFragment.vue'
-import AdvancedFilesFragment from './fragments/AdvancedFilesFragment.vue'
-import EnableCorsFragment from './fragments/EnableCorsFragment.vue'
-app.component('VoltageFragment', VoltageFragment)
-app.component('ListFilesFragment', ListFilesFragment)
-app.component('AdvancedFilesFragment', AdvancedFilesFragment)
-app.component('EnableCorsFragment', EnableCorsFragment)
-
 import 'bootstrap/dist/css/bootstrap.css'
 
 app.mount('#app')
