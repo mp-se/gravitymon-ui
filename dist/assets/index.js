@@ -6654,7 +6654,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.0.0-beta3";
     },
     uiBuild() {
-      return "..498dfc";
+      return "..45a1af";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -10517,7 +10517,7 @@ const _sfc_main$S = {
                 onClick: calibrate,
                 type: "button",
                 class: "btn btn-secondary",
-                disabled: unref(global$1).disabled
+                disabled: unref(global$1).disabled || !unref(status).self_check.gyro_connected
               }, [
                 createBaseVNode("span", {
                   class: "spinner-border spinner-border-sm",
