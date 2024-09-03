@@ -164,7 +164,7 @@
             @click="calibrate"
             type="button"
             class="btn btn-secondary"
-            :disabled="global.disabled"
+            :disabled="global.disabled || !status.self_check.gyro_connected"
           >
             <span
               class="spinner-border spinner-border-sm"
