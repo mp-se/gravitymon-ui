@@ -41,6 +41,11 @@ export function registerEspFwk(app) {
     res.sendFile('dist/assets/style.css', options)
   })
 
+  app.get('/api/ping', function (req, res) {
+    console.log('GET: /api/ping')
+    res.send({ status: true })
+  })
+
   app.post('/api/firmware', upload.single('file'), function (req, res) {
     const title = req.body.title
     const file = req.file
