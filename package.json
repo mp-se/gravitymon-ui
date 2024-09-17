@@ -32,7 +32,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.4",
     "prettier": "^3.2.5",
-    "vite": "^5.4.2",
+    "vite": "^5.4.6",
     "vite-plugin-compression": "^0.5.1",
     "vitest": "^1.6.0"
   }
