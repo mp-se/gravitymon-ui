@@ -1842,7 +1842,7 @@ function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false
   const instance = currentRenderingInstance || currentInstance;
   if (instance) {
     const Component = instance.type;
-    if (type === COMPONENTS) {
+    {
       const selfName = getComponentName(
         Component,
         false
@@ -6654,7 +6654,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.0.0-beta3";
     },
     uiBuild() {
-      return "..560741";
+      return "..7e2cef";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -12715,9 +12715,10 @@ const _sfc_main$F = {
     const progress = ref(0);
     function backup() {
       var backup2 = {
-        meta: { version: "2.0.0", software: "GravityMon" },
+        meta: { version: "2.0.0", software: "GravityMon", created: "" },
         config: JSON.parse(config.toJson())
       };
+      backup2.meta.created = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
       backup2.config.http_post_format = encodeURIComponent(backup2.config.http_post_format);
       backup2.config.http_post2_format = encodeURIComponent(backup2.config.http_post2_format);
       backup2.config.http_get_format = encodeURIComponent(backup2.config.http_get_format);
@@ -15198,11 +15199,11 @@ const _sfc_main$e = /* @__PURE__ */ Object.assign({
         badge: badge.value
       }, {
         default: withCtx(() => [
-          withDirectives(createBaseVNode("select", {
+          withDirectives(createBaseVNode("select", mergeProps({
             "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
             class: "form-select",
             disabled: disabled.value
-          }, [
+          }, _ctx.$attrs), [
             (openBlock(true), createElementBlock(Fragment, null, renderList(options.value, (o) => {
               return openBlock(), createElementBlock(Fragment, {
                 key: o.value
@@ -15220,7 +15221,7 @@ const _sfc_main$e = /* @__PURE__ */ Object.assign({
                 }, toDisplayString(o.label), 9, _hoisted_3$6))
               ], 64);
             }), 128))
-          ], 8, _hoisted_1$e), [
+          ], 16, _hoisted_1$e), [
             [vModelSelect, model.value]
           ])
         ]),
