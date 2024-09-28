@@ -81,9 +81,11 @@ const progress = ref(0)
 
 function backup() {
   var backup = {
-    meta: { version: '2.0.0', software: 'GravityMon' },
+    meta: { version: '2.0.0', software: 'GravityMon', created: '' },
     config: JSON.parse(config.toJson())
   }
+
+  backup.meta.created = new Date().toISOString().slice(0, 10)
 
   logDebug('BackupView.backup()', backup)
 
