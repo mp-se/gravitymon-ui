@@ -77,9 +77,9 @@ export var configData = {
     { a: 25, g: 1.000 },
     { a: 30, g: 1.010 },
     { a: 35, g: 1.020 },
-    { a: 40, g: 1.030 },
     { a: 45, g: 1.040 },
     { a: 50, g: 1.050 },
+    { a: 40, g: 1.030 },
     { a: 55, g: 1.060 },
     { a: 60, g: 1.070 },
     { a: 65, g: 1.080 },
@@ -93,7 +93,7 @@ export var configData = {
     gy: 0,
     gz: 0,
   },
-  dark_mode: true, 
+  dark_mode: false, 
 }
 
 export var formatData = {

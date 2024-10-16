@@ -1,19 +1,14 @@
 <template>
-  <div class="container">
-    <p></p>
-    <p class="h2">Gravity - Analysis</p>
-    <hr />
-    <BsMessage v-if="!chart" dismissable="false" message="" alert="danger">
-      Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection
-    </BsMessage>
-    <canvas id="gravityChart"></canvas>
-  </div>
+  <BsMessage v-if="!chart" dismissable="false" message="" alert="danger">
+    Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection
+  </BsMessage>
+  <canvas id="gravityChart"></canvas>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { global, config } from '@/modules/pinia'
-import { logError } from '@/modules/logger'
+import { logDebug, logError } from '@/modules/logger'
 
 const chartDataForm = ref([])
 const chartDataCalc = ref([])

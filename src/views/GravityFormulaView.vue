@@ -128,19 +128,35 @@
         </div>
       </div>
     </form>
-  </div>
+
+    <div class="row">
+      <p></p>
+      <GravityGraphFragment v-if="renderComponent"></GravityGraphFragment>
+    </div>
+</div>
 </template>
 
 <script setup>
+import { nextTick, ref } from 'vue';
 import { validateCurrentForm } from '@/modules/utils'
 import { global, config } from '@/modules/pinia'
-import * as badge from '@/modules/badge'
+import GravityGraphFragment from '@/fragments/GravityGraphFragment.vue'
 import { logDebug, logError } from '@/modules/logger'
+import * as badge from '@/modules/badge'
+
+const renderComponent = ref(true);
+
+const forceRerender = async () => {
+  renderComponent.value = false;
+  await nextTick();
+  renderComponent.value = true;
+}
 
 const save = () => {
   if (!validateCurrentForm()) return
 
   config.saveAll()
+  forceRerender()
 }
 
 const calcFormula = () => {

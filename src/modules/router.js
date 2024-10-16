@@ -10,7 +10,6 @@ import DeviceHardwareView from '@/views/DeviceHardwareView.vue'
 import DeviceWifiView from '@/views/DeviceWifiView.vue'
 import GravitySettingsView from '@/views/GravitySettingsView.vue'
 import GravityFormulaView from '@/views/GravityFormulaView.vue'
-import GravityAnalysisView from '@/views/GravityAnalysisView.vue'
 import PushSettingsView from '@/views/PushSettingsView.vue'
 import PushHttpPost1View from '@/views/PushHttpPost1View.vue'
 import PushHttpPost2View from '@/views/PushHttpPost2View.vue'
@@ -61,11 +60,6 @@ const routes = [
     path: '/gravity/formula',
     name: 'gravity-formula',
     component: GravityFormulaView
-  },
-  {
-    path: '/gravity/analysis',
-    name: 'gravity-analysis',
-    component: GravityAnalysisView
   },
   {
     path: '/other/firmware',
@@ -195,10 +189,6 @@ const items = ref([
         label: 'Formula',
         badge: badge.gravityFormulaBadge,
         path: '/gravity/formula'
-      },
-      {
-        label: 'Analysis',
-        path: '/gravity/analysis'
       }
     ]
   },
