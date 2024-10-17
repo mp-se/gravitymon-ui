@@ -8,7 +8,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { global, config } from '@/modules/pinia'
-import { logDebug, logError } from '@/modules/logger'
+import { logError } from '@/modules/logger'
 
 const chartDataForm = ref([])
 const chartDataCalc = ref([])
