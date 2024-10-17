@@ -6,12 +6,12 @@
 
 export var configData = {
   // Device configuration
-  id: "7376ef",
-  mdns: "gravmon3",
-  temp_format: "C",
-  gravity_format: "G",
+  id: '7376ef',
+  mdns: 'gravmon3',
+  temp_format: 'C',
+  gravity_format: 'G',
   // Hardware
-  ota_url: "https://www.gravitymon.com/firmware/",
+  ota_url: 'https://www.gravitymon.com/firmware/',
   storage_sleep: true,
   voltage_factor: 1.59,
   voltage_config: 4.15,
@@ -23,57 +23,68 @@ export var configData = {
   wifi_scan_ap: true,
   wifi_portal_timeout: 120,
   wifi_connect_timeout: 20,
-  wifi_ssid: "network A",
-  wifi_ssid2: "",
-  wifi_pass: "password",
-  wifi_pass2: "mypass",
+  wifi_ssid: 'network A',
+  wifi_ssid2: '',
+  wifi_pass: 'password',
+  wifi_pass2: 'mypass',
   // Push - Generic
-  token: "mytoken1",
-  token2: "mytoken2",
+  token: 'mytoken1',
+  token2: 'mytoken2',
   sleep_interval: 30,
   push_timeout: 10,
   skip_ssl_on_test: false,
   // Push - Http Post 1
-  http_post_target: "http://post.home.arpa:9090/api/v1/ZYfjlUNeiuyu9N/telemetry",
-  http_post_header1: "Auth: Basic T7IF9DD9fF3RDddE=",
-  http_post_header2: "",
+  http_post_target: 'http://post.home.arpa:9090/api/v1/ZYfjlUNeiuyu9N/telemetry',
+  http_post_header1: 'Auth: Basic T7IF9DD9fF3RDddE=',
+  http_post_header2: '',
   http_post_int: 1,
   // Push - Http Post 2
-  http_post2_target: "http://post2.home.arpa/ispindel",
-  http_post2_header1: "",
-  http_post2_header2: "",
+  http_post2_target: 'http://post2.home.arpa/ispindel',
+  http_post2_header1: '',
+  http_post2_header2: '',
   http_post2_int: 1,
   // Push - Http Get
-  http_get_target: "http://get.home.arpa/ispindel",
-  http_get_header1: "",
-  http_get_header2: "",
+  http_get_target: 'http://get.home.arpa/ispindel',
+  http_get_header1: '',
+  http_get_header2: '',
   http_get_int: 1,
   // Push - Influx
-  influxdb2_target: "http://influx.home.arpa:8086",
-  influxdb2_org: "myorg",
-  influxdb2_bucket: "mybucket",
-  influxdb2_token: "OijkU((jhfkh=",
+  influxdb2_target: 'http://influx.home.arpa:8086',
+  influxdb2_org: 'myorg',
+  influxdb2_bucket: 'mybucket',
+  influxdb2_token: 'OijkU((jhfkh=',
   influxdb2_int: 1,
   // Push - MQTT
-  mqtt_target: "mqtt.home.arpa",
+  mqtt_target: 'mqtt.home.arpa',
   mqtt_port: 1883,
-  mqtt_user: "user",
-  mqtt_pass: "pass",
+  mqtt_user: 'user',
+  mqtt_pass: 'pass',
   mqtt_int: 1,
   // Push BLE
-  ble_tilt_color: "pink",
+  ble_tilt_color: 'pink',
   ble_format: 1,
   // Gravity - Generic
-  gravity_formula: "0.0*tilt^3+0.0*tilt^2+0.0017978*tilt+0.9436",
+  gravity_formula: '0.0*tilt^3+0.0*tilt^2+0.0017978*tilt+0.9436',
   gravity_temp_adjustment: false,
   gyro_read_count: 50,
   gyro_moving_threashold: 500,
-  formula_max_deviation: 3,
+  formula_max_deviation: 2,
   formula_calibration_temp: 20,
   ignore_low_angles: false,
   gyro_disabled: false,
   voltage_pin: 35,
   formula_calculation_data: [
+    { a: 25.6, g: 1.008 },
+    { a: 27.4, g: 1.011 },
+    { a: 31.75, g: 1.02 },
+    { a: 37.08, g: 1.03 },
+    { a: 44.9, g: 1.041 },
+    { a: 51.45, g: 1.051 },
+    { a: 59.76, g: 1.061 },
+    { a: 65.24, g: 1.069 },
+    { a: 69.62, g: 1.079 }
+
+    /* 
     { a: 25, g: 1.000 },
     { a: 30, g: 1.010 },
     { a: 35, g: 1.020 },
@@ -84,6 +95,7 @@ export var configData = {
     { a: 60, g: 1.070 },
     { a: 65, g: 1.080 },
     { a: 70, g: 1.090 }
+*/
   ],
   gyro_calibration_data: {
     ax: 0,
@@ -91,41 +103,46 @@ export var configData = {
     az: 0,
     gx: 0,
     gy: 0,
-    gz: 0,
+    gz: 0
   },
-  dark_mode: false, 
+  dark_mode: false
 }
 
 export var formatData = {
-  http_post_format: "%7B%22name%22%20%3A%20%22gravmon%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%20%3A%20%22gravmon%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temp%2Dunits%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22gravity%22%3A%20%24%7Bgravity%7D%2C%20%22angle%22%3A%20%24%7Bangle%7D%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22corr%2Dgravity%22%3A%20%24%7Bcorr%2Dgravity%7D%2C%20%22gravity%2Dunit%22%3A%20%22%24%7Bgravity%2Dunit%7D%22%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D",
-  http_post2_format: "%7B%22name%22%20%3A%20%22gravmon%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%20%3A%20%22gravmon%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temp%2Dunits%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22gravity%22%3A%20%24%7Bgravity%7D%2C%20%22angle%22%3A%20%24%7Bangle%7D%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22corr%2Dgravity%22%3A%20%24%7Bcorr%2Dgravity%7D%2C%20%22gravity%2Dunit%22%3A%20%22%24%7Bgravity%2Dunit%7D%22%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D",
-  http_get_format: "%7B%22name%22%20%3A%20%22gravmon%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%20%3A%20%22gravmon%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temp%2Dunits%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22gravity%22%3A%20%24%7Bgravity%7D%2C%20%22angle%22%3A%20%24%7Bangle%7D%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22corr%2Dgravity%22%3A%20%24%7Bcorr%2Dgravity%7D%2C%20%22gravity%2Dunit%22%3A%20%22%24%7Bgravity%2Dunit%7D%22%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D",
-  influxdb2_format: "measurement%2Chost%3D%24%7Bmdns%7D%2Cdevice%3D%24%7Bid%7D%2Ctemp%2Dformat%3D%24%7Btemp%2Dunit%7D%2Cgravity%2Dformat%3D%24%7Bgravity%2Dunit%7D%20gravity%3D%24%7Bgravity%7D%2Ccorr%2Dgravity%3D%24%7Bcorr%2Dgravity%7D%2Cangle%3D%24%7Bangle%7D%2Ctemp%3D%24%7Btemp%7D%2Cbattery%3D%24%7Bbattery%7D%2Crssi%3D%24%7Brssi%7D%0A",
-  mqtt_format: "ispindel%2F%24%7Bmdns%7D%2Ftilt%3A%24%7Bangle%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemperature%3A%24%7Btemp%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemp%5Funits%3A%24%7Btemp%2Dunit%7D%7Cispindel%2F%24%7Bmdns%7D%2Fbattery%3A%24%7Bbattery%7D%7Cispindel%2F%24%7Bmdns%7D%2Fgravity%3A%24%7Bgravity%7D%7Cispindel%2F%24%7Bmdns%7D%2Finterval%3A%24%7Bsleep%2Dinterval%7D%7Cispindel%2F%24%7Bmdns%7D%2FRSSI%3A%24%7Brssi%7D%7C"
+  http_post_format:
+    '%7B%22name%22%20%3A%20%22gravmon%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%20%3A%20%22gravmon%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temp%2Dunits%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22gravity%22%3A%20%24%7Bgravity%7D%2C%20%22angle%22%3A%20%24%7Bangle%7D%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22corr%2Dgravity%22%3A%20%24%7Bcorr%2Dgravity%7D%2C%20%22gravity%2Dunit%22%3A%20%22%24%7Bgravity%2Dunit%7D%22%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D',
+  http_post2_format:
+    '%7B%22name%22%20%3A%20%22gravmon%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%20%3A%20%22gravmon%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temp%2Dunits%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22gravity%22%3A%20%24%7Bgravity%7D%2C%20%22angle%22%3A%20%24%7Bangle%7D%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22corr%2Dgravity%22%3A%20%24%7Bcorr%2Dgravity%7D%2C%20%22gravity%2Dunit%22%3A%20%22%24%7Bgravity%2Dunit%7D%22%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D',
+  http_get_format:
+    '%7B%22name%22%20%3A%20%22gravmon%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%20%3A%20%22gravmon%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temp%2Dunits%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22gravity%22%3A%20%24%7Bgravity%7D%2C%20%22angle%22%3A%20%24%7Bangle%7D%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22corr%2Dgravity%22%3A%20%24%7Bcorr%2Dgravity%7D%2C%20%22gravity%2Dunit%22%3A%20%22%24%7Bgravity%2Dunit%7D%22%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D',
+  influxdb2_format:
+    'measurement%2Chost%3D%24%7Bmdns%7D%2Cdevice%3D%24%7Bid%7D%2Ctemp%2Dformat%3D%24%7Btemp%2Dunit%7D%2Cgravity%2Dformat%3D%24%7Bgravity%2Dunit%7D%20gravity%3D%24%7Bgravity%7D%2Ccorr%2Dgravity%3D%24%7Bcorr%2Dgravity%7D%2Cangle%3D%24%7Bangle%7D%2Ctemp%3D%24%7Btemp%7D%2Cbattery%3D%24%7Bbattery%7D%2Crssi%3D%24%7Brssi%7D%0A',
+  mqtt_format:
+    'ispindel%2F%24%7Bmdns%7D%2Ftilt%3A%24%7Bangle%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemperature%3A%24%7Btemp%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemp%5Funits%3A%24%7Btemp%2Dunit%7D%7Cispindel%2F%24%7Bmdns%7D%2Fbattery%3A%24%7Bbattery%7D%7Cispindel%2F%24%7Bmdns%7D%2Fgravity%3A%24%7Bgravity%7D%7Cispindel%2F%24%7Bmdns%7D%2Finterval%3A%24%7Bsleep%2Dinterval%7D%7Cispindel%2F%24%7Bmdns%7D%2FRSSI%3A%24%7Brssi%7D%7C'
 }
 
 export var statusData = {
-  id: "7376ef",
+  id: '7376ef',
   angle: 22.4,
   gravity: 1.044,
-  gravity_format: "G",
+  gravity_format: 'G',
   temp: 12,
   sleep_interval: 300,
   battery: 3.81,
-  temp_format: "C",
+  temp_format: 'C',
   sleep_mode: false,
   rssi: -56,
-  app_ver: "2.0.0",
-  app_build: "gitrev",
-  mdns: "gravmon",
-  platform: "esp32",
-  hardware: "ispindel",
-  wifi_ssid: "wifi",
+  app_ver: '2.0.0',
+  app_build: 'gitrev',
+  mdns: 'gravmon',
+  platform: 'esp32',
+  hardware: 'ispindel',
+  wifi_ssid: 'wifi',
   runtime_average: 3.12,
   ispindel_config: false,
   total_heap: 1000,
   free_heap: 500,
-  ip: "192.0.0.1",
+  ip: '192.0.0.1',
   self_check: {
     gyro_connected: true,
     gyro_calibration: true,
@@ -134,7 +151,7 @@ export var statusData = {
     battery_level: true,
     push_targets: true
   },
-  wifi_setup: false,
+  wifi_setup: false
 }
 
 // EOF

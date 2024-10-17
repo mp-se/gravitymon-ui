@@ -118,6 +118,10 @@ export function validateCurrentForm() {
   return valid
 }
 
+export function convertToPlato(sg) {
+  return 259 - 259 / sg
+}
+
 export function tempToF(c) {
   return c * 1.8 + 32.0
 }

@@ -1,29 +1,45 @@
 <template>
-  <BsMessage v-if="!chart" dismissable="false" message="" alert="danger">
-    Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection
-  </BsMessage>
-  <canvas id="gravityChart"></canvas>
+  <div class="row">
+    <p></p>
+    <hr />
+  </div>
+
+  <div class="row">
+    <div class="form-text">
+      Below is a graphical representation of the current formula and data points for formula
+      creation.
+    </div>
+  </div>
+
+  <div class="row">
+    <BsMessage v-if="!chart" dismissable="false" message="" alert="danger">
+      Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection
+    </BsMessage>
+    <canvas id="gravityChart"></canvas>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { global, config } from '@/modules/pinia'
-import { logDebug, logError } from '@/modules/logger'
+import { config } from '@/modules/pinia'
+import { logError } from '@/modules/logger'
+import { evaluateFormula } from '@/modules/formula'
+
+const chart = ref(null)
 
 const chartDataForm = ref([])
 const chartDataCalc = ref([])
-const chart = ref(null)
 
 const dataSetChart = ref({
   datasets: [
     {
-      label: 'Raw data',
+      label: 'Data for gravity calculation',
       borderColor: 'blue',
       backgroundColor: 'blue',
       data: chartDataForm.value
     },
     {
-      label: 'Calculated',
+      label: 'Data based on current formula',
       borderColor: 'green',
       backgroundColor: 'green',
       data: chartDataCalc.value
@@ -65,30 +81,11 @@ const configChart = ref({
   }
 })
 
-const convertToPlato = (sg) => {
-  return 259 - 259 / sg
-}
-
 onMounted(() => {
-  for (let a = 25.0; a < 80.0; a += 5.0) {
-    let angle = a.toFixed(3)
-    let formula = config.gravity_formula
-    formula = formula.replaceAll('tilt^3', angle + '*' + angle + '*' + angle)
-    formula = formula.replaceAll('tilt^2', angle + '*' + angle)
-    formula = formula.replaceAll('tilt', angle)
-
-    try {
-      let g = eval(formula)
-      if (config.gravity_format === 'P') {
-        g = convertToPlato(g)
-      }
-
-      chartDataCalc.value.push({ x: parseFloat(a), y: parseFloat(g) })
-    } catch (err) {
-      logError('GravityAnalysisView.onMounted()', err)
-      global.messageError = 'Error evaluating the formula, the formula is invalid'
-    }
-  }
+  // TODO: ChartJS does not render if i just copy the result, figure out why...
+  evaluateFormula(config.gravity_formula).forEach((p) => {
+    chartDataCalc.value.push(p)
+  })
 
   for (let i = 0; i < config.formula_calculation_data.length; i++) {
     if (config.formula_calculation_data[i].a > 0)

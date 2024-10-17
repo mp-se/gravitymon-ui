@@ -21,7 +21,7 @@ export const useConfigStore = defineStore('config', {
       gyro_temp: false,
       battery_saving: false,
       tempsensor_resolution: 0,
-      temp_adjustment_value: 0,
+      temp_adjustment_value: 0,   // C or F
       voltage_pin: 0,
       // Wifi
       wifi_portal_timeout: 0,
@@ -78,15 +78,17 @@ export const useConfigStore = defineStore('config', {
       // Gravity formula
       gravity_formula: '',
       gravity_temp_adjustment: false,
-      formula_calculation_data: [],
+      formula_calculation_data: [],   // SG or P
       gyro_read_count: 0,
       gyro_moving_threashold: 0,
       formula_max_deviation: 0,
-      formula_calibration_temp: 0,
+      formula_calibration_temp: 0,    // C or F
       ignore_low_angles: false,
       gyro_calibration_data: [],
       dark_mode: false,
-      gyro_disabled: false
+      gyro_disabled: false,
+
+
     }
   },
   actions: {
