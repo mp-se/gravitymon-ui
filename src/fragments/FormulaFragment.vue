@@ -5,9 +5,7 @@
   </div>
 
   <div class="row">
-    <div class="form-text">
-      Below is a list of the generated formulas.
-    </div>
+    <div class="form-text">Below is a list of the generated formulas.</div>
   </div>
 
   <div class="row">

@@ -81,7 +81,6 @@
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.formula_max_deviation"
-            :unit="config.gravity_format == 'G' ? 'SG' : 'P'"
             label="Max allowed deviation"
             min="0"
             max="10"
@@ -130,32 +129,30 @@
           >
             Create formula</button
           >&nbsp;
-
         </div>
       </div>
 
       <div class="row" v-if="expressions != null">
-        <BsInputRadio 
-            v-model="formulaOutput"
-            :options="formulaOutputOptions"
-            label="Output format"
-            :disabled="global.disabled"
-          ></BsInputRadio>
+        <BsInputRadio
+          v-model="formulaOutput"
+          :options="formulaOutputOptions"
+          label="Output format"
+          :disabled="global.disabled"
+        ></BsInputRadio>
       </div>
-
     </form>
 
-    <GravityGraphFragment v-if="renderComponent && expressions == null"></GravityGraphFragment>
+    <GravityGraphFragment v-if="renderComponent && formulaOutput == 0"></GravityGraphFragment>
     <FormulaFragment
-      v-if="renderComponent && expressions != null && formulaOutput == 0"
+      v-if="renderComponent && expressions != null && formulaOutput == 1"
       :expressions="expressions"
     ></FormulaFragment>
     <FormulaTableFragment
-      v-if="renderComponent && expressions != null && formulaOutput == 1"
+      v-if="renderComponent && expressions != null && formulaOutput == 2"
       :expressions="expressions"
     ></FormulaTableFragment>
     <FormulaGraphFragment
-      v-if="renderComponent && expressions != null && formulaOutput == 2"
+      v-if="renderComponent && expressions != null && formulaOutput == 3"
       :expressions="expressions"
     ></FormulaGraphFragment>
   </div>
@@ -173,7 +170,7 @@ import FormulaGraphFragment from '@/fragments/FormulaGraphFragment.vue'
 import FormulaTableFragment from '@/fragments/FormulaTableFragment.vue'
 import { PolynomialRegression } from 'ml-regression-polynomial'
 import { validateFormula } from '@/modules/formula'
-import { gravityToPlato, gravityToSG } from '@/modules/utils'
+import { gravityToSG } from '@/modules/utils'
 
 const expressions = ref(null)
 const noDecimals = ref(8)
@@ -181,9 +178,10 @@ const formulaOptions = ref([])
 const renderComponent = ref(true)
 const formulaOutput = ref(0)
 const formulaOutputOptions = ref([
-{ label: 'Formula', value: 0 },
-{ label: 'Table', value: 1 },
-{ label: 'Graph', value: 2 },
+{ label: 'Current', value: 0 },
+{ label: 'Formula', value: 1 },
+{ label: 'Table', value: 2 },
+  { label: 'Graph', value: 3 }
 ])
 
 const formulaSelectCallback = (opt) => {
@@ -196,6 +194,7 @@ const createFormula = () => {
   logDebug('GravityFormulaView.createFormula()')
   expressions.value = null
   formulaOptions.value = []
+  formulaOutput.value = 3
 
   var x = [],
     y = [],
@@ -203,15 +202,17 @@ const createFormula = () => {
 
   for (let i = 0; i < config.formula_calculation_data.length; i++) {
     x.push(config.formula_calculation_data[i].a)
-    y.push(config.gravity_format == 'P' ? gravityToSG(config.formula_calculation_data[i].g) : config.formula_calculation_data[i].g)
+    y.push(
+      config.gravity_format == 'P'
+        ? gravityToSG(config.formula_calculation_data[i].g)
+        : config.formula_calculation_data[i].g
+    )
   }
 
   for (var i = 1; i < 5; i++) {
     const regression = new PolynomialRegression(x, y, i)
 
     var f = regression.toString(noDecimals.value)
-
-    logDebug(x, y, f)
 
     f = f.replaceAll(' ', '')
     f = f.replaceAll('f(x)=', '')

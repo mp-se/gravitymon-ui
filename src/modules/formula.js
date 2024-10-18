@@ -33,7 +33,7 @@ export function evaluateFormula(formula) {
     var g = calculate(formula, a)
     result.push({ x: parseFloat(a), y: parseFloat(g) })
   }
-
+  
   return result
 }
 
@@ -45,11 +45,10 @@ export function validateFormula(formula) {
 
     try {
       let g = eval(f)
-      if(config.gravity_format === 'P')
-        g = gravityToPlato(g)
+      if (config.gravity_format === 'P') g = gravityToPlato(g)
 
       if (Math.abs(g - d.g) > config.formula_max_deviation) {
-        logDebug('formula.validateFormula()', 'Formula rejected due to high deviation', d.g, g )
+        logDebug('formula.validateFormula()', 'Formula rejected due to high deviation', d.g, g)
         result = false
       }
     } catch {

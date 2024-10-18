@@ -87,11 +87,15 @@ onMounted(() => {
     chartDataCalc.value.push(p)
   })
 
-  for (let i = 0; i < config.formula_calculation_data.length; i++) {
-    if (config.formula_calculation_data[i].a > 0)
+
+  let data = config.formula_calculation_data
+  data.sort((a,b) => a.a == 0 ? 100 : a.a - b.a)
+
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].a > 0)
       chartDataForm.value.push({
-        x: config.formula_calculation_data[i].a,
-        y: config.formula_calculation_data[i].g
+        x: data[i].a,
+        y: data[i].g
       })
   }
 
