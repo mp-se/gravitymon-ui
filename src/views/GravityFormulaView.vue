@@ -14,20 +14,26 @@
 
     <form @submit.prevent="save" class="needs-validation" novalidate>
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-10">
           <BsInputText
             v-model="config.gravity_formula"
             maxlength="200"
             label="Gravity formula"
-            help="Formula used to convert angle to gravity"
+            help="Formula used to convert angle to gravity. If created outside Gravitymon the formula needs to be created for Specific Gravity!"
             :badge="badge.gravityFormulaBadge()"
             :disabled="global.disabled || config.gyro_disabled"
           >
           </BsInputText>
         </div>
 
-        <div class="col-md-12">
-          <hr />
+        <div class="col-md-2">
+          <BsDropdown
+            label="Formulas"
+            button="Formula"
+            :options="formulaOptions"
+            :callback="formulaSelectCallback"
+            :disabled="formulaOptions.length == 0"
+          />
         </div>
 
         <div class="col-md-12">
@@ -58,7 +64,7 @@
                 class="form-control"
                 type="number"
                 min="1"
-                max="10"
+                max="30"
                 step=".0001"
                 :disabled="global.disabled || config.gyro_disabled"
               />
@@ -72,20 +78,29 @@
           selected and also validated towards these values.
         </div>
 
-        <div class="col-md-12">
-          <hr />
-        </div>
-
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.formula_max_deviation"
             :unit="config.gravity_format == 'G' ? 'SG' : 'P'"
             label="Max allowed deviation"
+            min="0"
+            max="10"
+            step=".0001"
+            width="4"
+            help="When validating the derived formula this is the maximum accepted deviation for the supplied values, use graph below to visually check where there are deviations"
+            :disabled="global.disabled || config.gyro_disabled"
+          ></BsInputNumber>
+        </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="noDecimals"
+            label="Number of decimals in formula"
             min="1"
             max="10"
-            step=".1"
+            step="1"
             width="4"
-            help="When validating the derived formula this is the maximum accepted deviation for the supplied values, use the analysis page to visually check where there are deviations"
+            help="How many decimals to try to limit in the formula"
             :disabled="global.disabled || config.gyro_disabled"
           ></BsInputNumber>
         </div>
@@ -93,9 +108,7 @@
 
       <div class="row gy-2">
         <div class="col-md-12">
-          <hr />
-        </div>
-        <div class="col-md-3">
+          <p></p>
           <button
             type="submit"
             class="btn btn-primary w-2"
@@ -107,49 +120,119 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Save
-          </button>
-        </div>
-        <div class="col-md-3">
+            &nbsp;Save</button
+          >&nbsp;
           <button
-            @click.prevent="calcFormula"
+            @click.prevent="createFormula"
             type="button"
             class="btn btn-primary w-2"
-            :disabled="global.disabled"
+            :disabled="global.disabled || config.gyro_disabled"
           >
-            <span
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-              :hidden="!global.disabled"
-            ></span>
-            &nbsp;Calculate new Formula
-          </button>
+            Create formula</button
+          >&nbsp;
+
         </div>
       </div>
+
+      <div class="row" v-if="expressions != null">
+        <BsInputRadio 
+            v-model="formulaOutput"
+            :options="formulaOutputOptions"
+            label="Output format"
+            :disabled="global.disabled"
+          ></BsInputRadio>
+      </div>
+
     </form>
 
-    <div class="row">
-      <p></p>
-      <GravityGraphFragment v-if="renderComponent"></GravityGraphFragment>
-    </div>
-</div>
+    <GravityGraphFragment v-if="renderComponent && expressions == null"></GravityGraphFragment>
+    <FormulaFragment
+      v-if="renderComponent && expressions != null && formulaOutput == 0"
+      :expressions="expressions"
+    ></FormulaFragment>
+    <FormulaTableFragment
+      v-if="renderComponent && expressions != null && formulaOutput == 1"
+      :expressions="expressions"
+    ></FormulaTableFragment>
+    <FormulaGraphFragment
+      v-if="renderComponent && expressions != null && formulaOutput == 2"
+      :expressions="expressions"
+    ></FormulaGraphFragment>
+  </div>
 </template>
 
 <script setup>
-import { nextTick, ref } from 'vue';
+import { nextTick, ref } from 'vue'
 import { validateCurrentForm } from '@/modules/utils'
 import { global, config } from '@/modules/pinia'
 import GravityGraphFragment from '@/fragments/GravityGraphFragment.vue'
-import { logDebug, logError } from '@/modules/logger'
+import { logDebug } from '@/modules/logger'
 import * as badge from '@/modules/badge'
+import FormulaFragment from '@/fragments/FormulaFragment.vue'
+import FormulaGraphFragment from '@/fragments/FormulaGraphFragment.vue'
+import FormulaTableFragment from '@/fragments/FormulaTableFragment.vue'
+import { PolynomialRegression } from 'ml-regression-polynomial'
+import { validateFormula } from '@/modules/formula'
+import { gravityToPlato, gravityToSG } from '@/modules/utils'
 
-const renderComponent = ref(true);
+const expressions = ref(null)
+const noDecimals = ref(8)
+const formulaOptions = ref([])
+const renderComponent = ref(true)
+const formulaOutput = ref(0)
+const formulaOutputOptions = ref([
+{ label: 'Formula', value: 0 },
+{ label: 'Table', value: 1 },
+{ label: 'Graph', value: 2 },
+])
+
+const formulaSelectCallback = (opt) => {
+  config.gravity_formula = opt
+}
+
+const createFormula = () => {
+  if (!validateCurrentForm()) return
+
+  logDebug('GravityFormulaView.createFormula()')
+  expressions.value = null
+  formulaOptions.value = []
+
+  var x = [],
+    y = [],
+    res = { 1: '', 2: '', 3: '', 4: '' }
+
+  for (let i = 0; i < config.formula_calculation_data.length; i++) {
+    x.push(config.formula_calculation_data[i].a)
+    y.push(config.gravity_format == 'P' ? gravityToSG(config.formula_calculation_data[i].g) : config.formula_calculation_data[i].g)
+  }
+
+  for (var i = 1; i < 5; i++) {
+    const regression = new PolynomialRegression(x, y, i)
+
+    var f = regression.toString(noDecimals.value)
+
+    logDebug(x, y, f)
+
+    f = f.replaceAll(' ', '')
+    f = f.replaceAll('f(x)=', '')
+    f = f.replaceAll('x', 'tilt')
+
+    if (validateFormula(f)) {
+      res[i] = f
+      formulaOptions.value.push({ value: f, label: 'Formula Order ' + i })
+    } else {
+      res[i] = ''
+    }
+  }
+
+  expressions.value = res
+  forceRerender()
+}
 
 const forceRerender = async () => {
-  renderComponent.value = false;
-  await nextTick();
-  renderComponent.value = true;
+  renderComponent.value = false
+  await nextTick()
+  renderComponent.value = true
 }
 
 const save = () => {
@@ -157,38 +240,5 @@ const save = () => {
 
   config.saveAll()
   forceRerender()
-}
-
-const calcFormula = () => {
-  if (!validateCurrentForm()) return
-
-  global.clearMessages()
-  config.sendConfig((success) => {
-    if (success) {
-      fetch(global.baseURL + 'api/formula', {
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('GravityFormulaView.calcFormula()', json)
-          if (json.success == true) {
-            config.gravity_formula = json.gravity_formula
-            global.messageSuccess = json.message
-          } else {
-            global.messageError = json.message
-          }
-          global.disabled = false
-        })
-        .catch((err) => {
-          logError('GravityFormulaView.calcFormula()', err)
-          global.messageError = 'Failed to request formula creation'
-          global.disabled = false
-        })
-    } else {
-      global.messageError = 'Failed to store configuration to device'
-      global.disabled = false
-    }
-  })
 }
 </script>
