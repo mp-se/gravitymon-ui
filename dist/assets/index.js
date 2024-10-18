@@ -1,3 +1,15 @@
+var __defProp = Object.defineProperty;
+var __typeError = (msg) => {
+  throw TypeError(msg);
+};
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
+var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read from private field"), getter ? getter.call(obj) : member.get(obj));
+var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
+var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
+var _Matrix_instances, initData_fn, _a, _matrix;
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -184,51 +196,51 @@ const isSpecialBooleanAttr = /* @__PURE__ */ makeMap(specialBooleanAttrs);
 function includeBooleanAttr(value) {
   return !!value || value === "";
 }
-function looseCompareArrays(a2, b) {
-  if (a2.length !== b.length) return false;
+function looseCompareArrays(a, b) {
+  if (a.length !== b.length) return false;
   let equal = true;
-  for (let i = 0; equal && i < a2.length; i++) {
-    equal = looseEqual(a2[i], b[i]);
+  for (let i = 0; equal && i < a.length; i++) {
+    equal = looseEqual(a[i], b[i]);
   }
   return equal;
 }
-function looseEqual(a2, b) {
-  if (a2 === b) return true;
-  let aValidType = isDate(a2);
+function looseEqual(a, b) {
+  if (a === b) return true;
+  let aValidType = isDate(a);
   let bValidType = isDate(b);
   if (aValidType || bValidType) {
-    return aValidType && bValidType ? a2.getTime() === b.getTime() : false;
+    return aValidType && bValidType ? a.getTime() === b.getTime() : false;
   }
-  aValidType = isSymbol(a2);
+  aValidType = isSymbol(a);
   bValidType = isSymbol(b);
   if (aValidType || bValidType) {
-    return a2 === b;
+    return a === b;
   }
-  aValidType = isArray$1(a2);
+  aValidType = isArray$1(a);
   bValidType = isArray$1(b);
   if (aValidType || bValidType) {
-    return aValidType && bValidType ? looseCompareArrays(a2, b) : false;
+    return aValidType && bValidType ? looseCompareArrays(a, b) : false;
   }
-  aValidType = isObject(a2);
+  aValidType = isObject(a);
   bValidType = isObject(b);
   if (aValidType || bValidType) {
     if (!aValidType || !bValidType) {
       return false;
     }
-    const aKeysCount = Object.keys(a2).length;
+    const aKeysCount = Object.keys(a).length;
     const bKeysCount = Object.keys(b).length;
     if (aKeysCount !== bKeysCount) {
       return false;
     }
-    for (const key in a2) {
-      const aHasKey = a2.hasOwnProperty(key);
+    for (const key in a) {
+      const aHasKey = a.hasOwnProperty(key);
       const bHasKey = b.hasOwnProperty(key);
-      if (aHasKey && !bHasKey || !aHasKey && bHasKey || !looseEqual(a2[key], b[key])) {
+      if (aHasKey && !bHasKey || !aHasKey && bHasKey || !looseEqual(a[key], b[key])) {
         return false;
       }
     }
   }
-  return String(a2) === String(b);
+  return String(a) === String(b);
 }
 function looseIndexOf(arr, val) {
   return arr.findIndex((item) => looseEqual(item, val));
@@ -264,11 +276,11 @@ const replacer = (_key, val) => {
   return val;
 };
 const stringifySymbol = (v, i = "") => {
-  var _a;
+  var _a2;
   return (
     // Symbol.description in es2019+ so we need to cast here to pass
     // the lib: es2016 check
-    isSymbol(v) ? `Symbol(${(_a = v.description) != null ? _a : i})` : v
+    isSymbol(v) ? `Symbol(${(_a2 = v.description) != null ? _a2 : i})` : v
   );
 };
 /**
@@ -701,7 +713,7 @@ class MutableReactiveHandler extends BaseReactiveHandler {
       }
     }
     const hadKey = isArray$1(target) && isIntegerKey(key) ? Number(key) < target.length : hasOwn(target, key);
-    const result = Reflect.set(target, key, value, receiver);
+    const result2 = Reflect.set(target, key, value, receiver);
     if (target === toRaw(receiver)) {
       if (!hadKey) {
         trigger(target, "add", key, value);
@@ -709,23 +721,23 @@ class MutableReactiveHandler extends BaseReactiveHandler {
         trigger(target, "set", key, value);
       }
     }
-    return result;
+    return result2;
   }
   deleteProperty(target, key) {
     const hadKey = hasOwn(target, key);
     target[key];
-    const result = Reflect.deleteProperty(target, key);
-    if (result && hadKey) {
+    const result2 = Reflect.deleteProperty(target, key);
+    if (result2 && hadKey) {
       trigger(target, "delete", key, void 0);
     }
-    return result;
+    return result2;
   }
   has(target, key) {
-    const result = Reflect.has(target, key);
+    const result2 = Reflect.has(target, key);
     if (!isSymbol(key) || !builtInSymbols.has(key)) {
       track(target, "has", key);
     }
-    return result;
+    return result2;
   }
   ownKeys(target) {
     track(
@@ -766,11 +778,11 @@ function get(target, key, isReadonly2 = false, isShallow2 = false) {
     track(rawTarget, "get", rawKey);
   }
   const { has: has2 } = getProto(rawTarget);
-  const wrap = isShallow2 ? toShallow : isReadonly2 ? toReadonly : toReactive;
+  const wrap2 = isShallow2 ? toShallow : isReadonly2 ? toReadonly : toReactive;
   if (has2.call(rawTarget, key)) {
-    return wrap(target.get(key));
+    return wrap2(target.get(key));
   } else if (has2.call(rawTarget, rawKey)) {
-    return wrap(target.get(rawKey));
+    return wrap2(target.get(rawKey));
   } else if (target !== rawTarget) {
     target.get(key);
   }
@@ -834,30 +846,30 @@ function deleteEntry(key) {
     hadKey = has2.call(target, key);
   }
   get2 ? get2.call(target, key) : void 0;
-  const result = target.delete(key);
+  const result2 = target.delete(key);
   if (hadKey) {
     trigger(target, "delete", key, void 0);
   }
-  return result;
+  return result2;
 }
 function clear() {
   const target = toRaw(this);
   const hadItems = target.size !== 0;
-  const result = target.clear();
+  const result2 = target.clear();
   if (hadItems) {
     trigger(target, "clear", void 0, void 0);
   }
-  return result;
+  return result2;
 }
 function createForEach(isReadonly2, isShallow2) {
   return function forEach(callback, thisArg) {
     const observed = this;
     const target = observed["__v_raw"];
     const rawTarget = toRaw(target);
-    const wrap = isShallow2 ? toShallow : isReadonly2 ? toReadonly : toReactive;
+    const wrap2 = isShallow2 ? toShallow : isReadonly2 ? toReadonly : toReactive;
     !isReadonly2 && track(rawTarget, "iterate", ITERATE_KEY);
     return target.forEach((value, key) => {
-      return callback.call(thisArg, wrap(value), wrap(key), observed);
+      return callback.call(thisArg, wrap2(value), wrap2(key), observed);
     });
   };
 }
@@ -869,7 +881,7 @@ function createIterableMethod(method, isReadonly2, isShallow2) {
     const isPair = method === "entries" || method === Symbol.iterator && targetIsMap;
     const isKeyOnly = method === "keys" && targetIsMap;
     const innerIterator = target[method](...args);
-    const wrap = isShallow2 ? toShallow : isReadonly2 ? toReadonly : toReactive;
+    const wrap2 = isShallow2 ? toShallow : isReadonly2 ? toReadonly : toReactive;
     !isReadonly2 && track(
       rawTarget,
       "iterate",
@@ -880,7 +892,7 @@ function createIterableMethod(method, isReadonly2, isShallow2) {
       next() {
         const { value, done } = innerIterator.next();
         return done ? { value, done } : {
-          value: isPair ? [wrap(value[0]), wrap(value[1])] : wrap(value),
+          value: isPair ? [wrap2(value[0]), wrap2(value[1])] : wrap2(value),
           done
         };
       },
@@ -1184,12 +1196,12 @@ function computed$1(getterOrOptions, debugOptions, isSSR = false) {
   return cRef;
 }
 function trackRefValue(ref2) {
-  var _a;
+  var _a2;
   if (shouldTrack && activeEffect) {
     ref2 = toRaw(ref2);
     trackEffect(
       activeEffect,
-      (_a = ref2.dep) != null ? _a : ref2.dep = createDep(
+      (_a2 = ref2.dep) != null ? _a2 : ref2.dep = createDep(
         () => ref2.dep = void 0,
         ref2 instanceof ComputedRefImpl ? ref2 : void 0
       )
@@ -1354,9 +1366,9 @@ function warn$1(msg, ...args) {
       11,
       [
         // eslint-disable-next-line no-restricted-syntax
-        msg + args.map((a2) => {
-          var _a, _b;
-          return (_b = (_a = a2.toString) == null ? void 0 : _a.call(a2)) != null ? _b : JSON.stringify(a2);
+        msg + args.map((a) => {
+          var _a2, _b;
+          return (_b = (_a2 = a.toString) == null ? void 0 : _a2.call(a)) != null ? _b : JSON.stringify(a);
         }).join(""),
         instance && instance.proxy,
         trace.map(
@@ -1588,7 +1600,7 @@ function flushPreFlushCbs(instance, seen, i = isFlushing ? flushIndex + 1 : 0) {
 function flushPostFlushCbs(seen) {
   if (pendingPostFlushCbs.length) {
     const deduped = [...new Set(pendingPostFlushCbs)].sort(
-      (a2, b) => getId(a2) - getId(b)
+      (a, b) => getId(a) - getId(b)
     );
     pendingPostFlushCbs.length = 0;
     if (activePostFlushCbs) {
@@ -1605,11 +1617,11 @@ function flushPostFlushCbs(seen) {
   }
 }
 const getId = (job) => job.id == null ? Infinity : job.id;
-const comparator = (a2, b) => {
-  const diff = getId(a2) - getId(b);
+const comparator = (a, b) => {
+  const diff = getId(a) - getId(b);
   if (diff === 0) {
-    if (a2.pre && !b.pre) return -1;
-    if (b.pre && !a2.pre) return 1;
+    if (a.pre && !b.pre) return -1;
+    if (b.pre && !a.pre) return 1;
   }
   return diff;
 };
@@ -4166,9 +4178,9 @@ function baseCreateRenderer(options, createHydrationFns) {
     hostRemove(end);
   };
   const unmountComponent = (instance, parentSuspense, doRemove) => {
-    const { bum, scope, update, subTree, um, m, a: a2 } = instance;
+    const { bum, scope, update, subTree, um, m, a } = instance;
     invalidateMount(m);
-    invalidateMount(a2);
+    invalidateMount(a);
     if (bum) {
       invokeArrayFns(bum);
     }
@@ -4283,43 +4295,43 @@ function traverseStaticChildren(n1, n2, shallow = false) {
 }
 function getSequence(arr) {
   const p2 = arr.slice();
-  const result = [0];
+  const result2 = [0];
   let i, j, u, v, c;
   const len = arr.length;
   for (i = 0; i < len; i++) {
     const arrI = arr[i];
     if (arrI !== 0) {
-      j = result[result.length - 1];
+      j = result2[result2.length - 1];
       if (arr[j] < arrI) {
         p2[i] = j;
-        result.push(i);
+        result2.push(i);
         continue;
       }
       u = 0;
-      v = result.length - 1;
+      v = result2.length - 1;
       while (u < v) {
         c = u + v >> 1;
-        if (arr[result[c]] < arrI) {
+        if (arr[result2[c]] < arrI) {
           u = c + 1;
         } else {
           v = c;
         }
       }
-      if (arrI < arr[result[u]]) {
+      if (arrI < arr[result2[u]]) {
         if (u > 0) {
-          p2[i] = result[u - 1];
+          p2[i] = result2[u - 1];
         }
-        result[u] = i;
+        result2[u] = i;
       }
     }
   }
-  u = result.length;
-  v = result[u - 1];
+  u = result2.length;
+  v = result2[u - 1];
   while (u-- > 0) {
-    result[u] = v;
+    result2[u] = v;
     v = p2[v];
   }
-  return result;
+  return result2;
 }
 function locateNonHydratedAsyncRoot(instance) {
   const subComponent = instance.subTree.component;
@@ -4626,7 +4638,7 @@ function emit(instance, event, ...rawArgs) {
   const modifiers = isModelListener2 && getModelModifiers(props, event.slice(7));
   if (modifiers) {
     if (modifiers.trim) {
-      args = rawArgs.map((a2) => isString(a2) ? a2.trim() : a2);
+      args = rawArgs.map((a) => isString(a) ? a.trim() : a);
     }
     if (modifiers.number) {
       args = rawArgs.map(looseToNumber);
@@ -4733,7 +4745,7 @@ function renderComponentRoot(instance) {
     inheritAttrs
   } = instance;
   const prev = setCurrentRenderingInstance(instance);
-  let result;
+  let result2;
   let fallthroughAttrs;
   try {
     if (vnode.shapeFlag & 4) {
@@ -4748,7 +4760,7 @@ function renderComponentRoot(instance) {
           return Reflect.get(target, key, receiver);
         }
       }) : proxyToUse;
-      result = normalizeVNode(
+      result2 = normalizeVNode(
         render.call(
           thisProxy,
           proxyToUse,
@@ -4763,7 +4775,7 @@ function renderComponentRoot(instance) {
     } else {
       const render2 = Component;
       if (false) ;
-      result = normalizeVNode(
+      result2 = normalizeVNode(
         render2.length > 1 ? render2(
           false ? shallowReadonly(props) : props,
           false ? {
@@ -4784,9 +4796,9 @@ function renderComponentRoot(instance) {
   } catch (err) {
     blockStack.length = 0;
     handleError(err, instance, 1);
-    result = createVNode(Comment);
+    result2 = createVNode(Comment);
   }
-  let root = result;
+  let root = result2;
   if (fallthroughAttrs && inheritAttrs !== false) {
     const keys = Object.keys(fallthroughAttrs);
     const { shapeFlag } = root;
@@ -4810,10 +4822,10 @@ function renderComponentRoot(instance) {
     root.transition = vnode.transition;
   }
   {
-    result = root;
+    result2 = root;
   }
   setCurrentRenderingInstance(prev);
-  return result;
+  return result2;
 }
 const getFunctionalFallthrough = (attrs) => {
   let res;
@@ -6649,8 +6661,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "Bearer " + this.id;
     },
     baseURL() {
-      if (this.url !== void 0)
-        return this.url;
+      if (this.url !== void 0) return this.url;
       {
         logInfo("configStore:baseURL()", "Using base URL from env", window.location.href);
         this.url = window.location.href;
@@ -6661,7 +6672,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.0.0";
     },
     uiBuild() {
-      return "..e8e2c6";
+      return "..d914a0";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -6905,24 +6916,33 @@ function validateCurrentForm() {
   });
   return valid;
 }
+function roundVal(val, decimals) {
+  return parseFloat(Number(val).toFixed(decimals));
+}
+function gravityToPlato(sg) {
+  return 135.997 * sg * sg * sg - 630.272 * sg * sg + 1111.14 * sg - 616.868;
+}
+function gravityToSG(p2) {
+  return 1 + p2 / (258.6 - 227.1 * (p2 / 258.2));
+}
 function tempToF(c) {
   return c * 1.8 + 32;
 }
-function tempToC(f) {
-  return (f - 32) / 1.8;
+function tempToC(f2) {
+  return (f2 - 32) / 1.8;
 }
 function applyTemplate(status2, config2, template) {
   var s = template;
   s = s.replaceAll("${temp}", status2.temp);
   var c = status2.temp;
-  var f = status2.temp;
+  var f2 = status2.temp;
   if (config2.temp_format === "C") {
-    f = tempToF(status2.temp);
+    f2 = tempToF(status2.temp);
   } else {
     c = tempToC(status2.temp);
   }
   s = s.replaceAll("${temp-c}", c);
-  s = s.replaceAll("${temp-f}", f);
+  s = s.replaceAll("${temp-f}", f2);
   s = s.replaceAll("${angle}", status2.angle);
   s = s.replaceAll("${tilt}", status2.angle);
   s = s.replaceAll("${app-ver}", status2.app_ver);
@@ -7039,6 +7059,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       battery_saving: false,
       tempsensor_resolution: 0,
       temp_adjustment_value: 0,
+      // C or F
       voltage_pin: 0,
       // Wifi
       wifi_portal_timeout: 0,
@@ -7096,10 +7117,12 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       gravity_formula: "",
       gravity_temp_adjustment: false,
       formula_calculation_data: [],
+      // SG or P
       gyro_read_count: 0,
       gyro_moving_threashold: 0,
       formula_max_deviation: 0,
       formula_calibration_temp: 0,
+      // C or F
       ignore_low_angles: false,
       gyro_calibration_data: [],
       dark_mode: false,
@@ -7107,6 +7130,23 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
     };
   },
   actions: {
+    convertTemp() {
+      if (this.temp_format == this.internal_temp_format) return;
+      if (this.temp_format == "C") this.convertTempToC();
+      if (this.temp_format == "F") this.convertTempToF();
+    },
+    convertTempToC() {
+      if (this.internal_temp_format == "C") return;
+      this.temp_adjustment_value = roundVal(this.temp_adjustment_value / 1.8, 2);
+      this.formula_calibration_temp = roundVal(tempToC(this.formula_calibration_temp), 2);
+      this.internal_temp_format = "C";
+    },
+    convertTempToF() {
+      if (this.internal_temp_format == "F") return;
+      this.temp_adjustment_value = roundVal(this.temp_adjustment_value * 1.8, 2);
+      this.formula_calibration_temp = roundVal(tempToF(this.formula_calibration_temp), 2);
+      this.internal_temp_format = "F";
+    },
     toJson() {
       logInfo("configStore.toJSON()");
       var dest = {};
@@ -7209,6 +7249,8 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         this.formula_calculation_data = json.formula_calculation_data;
         this.gyro_calibration_data = json.gyro_calibration_data;
         this.dark_mode = json.dark_mode;
+        this.internal_temp_format = "C";
+        this.convertTemp();
         callback(true);
       }).catch((err) => {
         global$1.disabled = false;
@@ -7241,6 +7283,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
     sendConfig(callback) {
       global$1.disabled = true;
       logInfo("configStore.sendConfig()", "Sending /api/config");
+      this.convertTempToC();
       var data = getConfigChanges();
       delete data.http_post_format;
       delete data.http_post2_format;
@@ -7250,6 +7293,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       if (JSON.stringify(data).length == 2) {
         logInfo("configStore.sendConfig()", "No config data to store, skipping step");
         global$1.disabled = false;
+        this.convertTemp();
         callback(true);
         return;
       }
@@ -7265,13 +7309,16 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         global$1.disabled = false;
         if (res.status != 200) {
           logError("configStore.sendConfig()", "Sending /api/config failed", res.status);
+          this.convertTemp();
           callback(false);
         } else {
           logInfo("configStore.sendConfig()", "Sending /api/config completed");
+          this.convertTemp();
           callback(true);
         }
       }).catch((err) => {
         logError("configStore.sendConfig()", err);
+        this.convertTemp();
         callback(false);
         global$1.disabled = false;
       });
@@ -7729,28 +7776,28 @@ function stripBase(pathname, base) {
     return pathname;
   return pathname.slice(base.length) || "/";
 }
-function isSameRouteLocation(stringifyQuery2, a2, b) {
-  const aLastIndex = a2.matched.length - 1;
+function isSameRouteLocation(stringifyQuery2, a, b) {
+  const aLastIndex = a.matched.length - 1;
   const bLastIndex = b.matched.length - 1;
-  return aLastIndex > -1 && aLastIndex === bLastIndex && isSameRouteRecord(a2.matched[aLastIndex], b.matched[bLastIndex]) && isSameRouteLocationParams(a2.params, b.params) && stringifyQuery2(a2.query) === stringifyQuery2(b.query) && a2.hash === b.hash;
+  return aLastIndex > -1 && aLastIndex === bLastIndex && isSameRouteRecord(a.matched[aLastIndex], b.matched[bLastIndex]) && isSameRouteLocationParams(a.params, b.params) && stringifyQuery2(a.query) === stringifyQuery2(b.query) && a.hash === b.hash;
 }
-function isSameRouteRecord(a2, b) {
-  return (a2.aliasOf || a2) === (b.aliasOf || b);
+function isSameRouteRecord(a, b) {
+  return (a.aliasOf || a) === (b.aliasOf || b);
 }
-function isSameRouteLocationParams(a2, b) {
-  if (Object.keys(a2).length !== Object.keys(b).length)
+function isSameRouteLocationParams(a, b) {
+  if (Object.keys(a).length !== Object.keys(b).length)
     return false;
-  for (const key in a2) {
-    if (!isSameRouteLocationParamsValue(a2[key], b[key]))
+  for (const key in a) {
+    if (!isSameRouteLocationParamsValue(a[key], b[key]))
       return false;
   }
   return true;
 }
-function isSameRouteLocationParamsValue(a2, b) {
-  return isArray(a2) ? isEquivalentArray(a2, b) : isArray(b) ? isEquivalentArray(b, a2) : a2 === b;
+function isSameRouteLocationParamsValue(a, b) {
+  return isArray(a) ? isEquivalentArray(a, b) : isArray(b) ? isEquivalentArray(b, a) : a === b;
 }
-function isEquivalentArray(a2, b) {
-  return isArray(b) ? a2.length === b.length && a2.every((value, i) => value === b[i]) : a2.length === 1 && a2[0] === b;
+function isEquivalentArray(a, b) {
+  return isArray(b) ? a.length === b.length && a.every((value, i) => value === b[i]) : a.length === 1 && a[0] === b;
 }
 function resolveRelativePath(to, from) {
   if (to.startsWith("/"))
@@ -8199,24 +8246,24 @@ function tokensToParser(segments, extraOptions) {
     stringify
   };
 }
-function compareScoreArray(a2, b) {
+function compareScoreArray(a, b) {
   let i = 0;
-  while (i < a2.length && i < b.length) {
-    const diff = b[i] - a2[i];
+  while (i < a.length && i < b.length) {
+    const diff = b[i] - a[i];
     if (diff)
       return diff;
     i++;
   }
-  if (a2.length < b.length) {
-    return a2.length === 1 && a2[0] === 40 + 40 ? -1 : 1;
-  } else if (a2.length > b.length) {
+  if (a.length < b.length) {
+    return a.length === 1 && a[0] === 40 + 40 ? -1 : 1;
+  } else if (a.length > b.length) {
     return b.length === 1 && b[0] === 40 + 40 ? 1 : -1;
   }
   return 0;
 }
-function comparePathParserScore(a2, b) {
+function comparePathParserScore(a, b) {
   let i = 0;
-  const aScore = a2.score;
+  const aScore = a.score;
   const bScore = b.score;
   while (i < aScore.length && i < bScore.length) {
     const comp = compareScoreArray(aScore[i], bScore[i]);
@@ -9542,38 +9589,38 @@ function pushMqttBadge() {
 function pushBluetoothBadge() {
   return pushTargetCount() === 0 ? 1 : 0;
 }
-const _hoisted_1$U = { class: "container" };
-const _hoisted_2$Q = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _hoisted_3$G = {
+const _hoisted_1$X = { class: "container" };
+const _hoisted_2$T = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_3$J = {
   key: 1,
   class: "container overflow-hidden text-center"
 };
-const _hoisted_4$u = { class: "row gy-4" };
-const _hoisted_5$p = {
+const _hoisted_4$w = { class: "row gy-4" };
+const _hoisted_5$q = {
   key: 0,
   class: "col-md-4"
 };
-const _hoisted_6$n = { class: "text-center" };
-const _hoisted_7$n = {
+const _hoisted_6$o = { class: "text-center" };
+const _hoisted_7$o = {
   key: 1,
   class: "col-md-4"
 };
-const _hoisted_8$o = { class: "text-center" };
-const _hoisted_9$m = {
+const _hoisted_8$p = { class: "text-center" };
+const _hoisted_9$n = {
   key: 2,
   class: "col-md-4"
 };
-const _hoisted_10$m = { class: "text-center" };
-const _hoisted_11$j = {
+const _hoisted_10$n = { class: "text-center" };
+const _hoisted_11$k = {
   key: 3,
   class: "col-md-4"
 };
-const _hoisted_12$j = { class: "text-center" };
-const _hoisted_13$j = {
+const _hoisted_12$k = { class: "text-center" };
+const _hoisted_13$k = {
   key: 4,
   class: "col-md-4"
 };
-const _hoisted_14$i = { class: "text-center" };
+const _hoisted_14$j = { class: "text-center" };
 const _hoisted_15$h = {
   key: 5,
   class: "col-md-4"
@@ -9600,7 +9647,7 @@ const _hoisted_25$5 = { class: "col-md-4" };
 const _hoisted_26$4 = { class: "text-center" };
 const _hoisted_27$3 = { class: "col-md-4" };
 const _hoisted_28$3 = { class: "text-center" };
-const _hoisted_29$3 = { class: "col-md-4" };
+const _hoisted_29$2 = { class: "col-md-4" };
 const _hoisted_30$2 = { class: "text-center" };
 const _hoisted_31$2 = {
   key: 9,
@@ -9622,28 +9669,28 @@ const _hoisted_40 = {
   class: "form-check form-switch",
   style: { "height": "0.7rem" }
 };
-const _sfc_main$U = {
+const _sfc_main$X = {
   __name: "HomeView",
-  setup(__props2) {
+  setup(__props) {
     const polling = ref(null);
     const flag = ref(false);
-    const angle2 = ref({ average: 0, sum: 0, count: 0 });
+    const angle = ref({ average: 0, sum: 0, count: 0 });
     const newVersion = ref({ new: false, ver: "" });
     watch(flag, async () => {
       status.setSleepMode(flag.value, () => {
       });
     });
     function clearAverage() {
-      angle2.value.sum = 0;
-      angle2.value.count = 0;
-      angle2.value.sum = 0;
+      angle.value.sum = 0;
+      angle.value.count = 0;
+      angle.value.sum = 0;
     }
     function refresh() {
       status.load((success) => {
         if (success) {
-          angle2.value.sum += parseFloat(status.angle);
-          angle2.value.count++;
-          angle2.value.average = (Math.round(angle2.value.sum / angle2.value.count * 100) / 100).toFixed(
+          angle.value.sum += parseFloat(status.angle);
+          angle.value.count++;
+          angle.value.average = (Math.round(angle.value.sum / angle.value.count * 100) / 100).toFixed(
             2
           );
         }
@@ -9689,8 +9736,8 @@ const _sfc_main$U = {
       const _component_BsMessage = resolveComponent("BsMessage");
       const _component_BsCard = resolveComponent("BsCard");
       const _component_router_link = resolveComponent("router-link");
-      return openBlock(), createElementBlock("div", _hoisted_1$U, [
-        _hoisted_2$Q,
+      return openBlock(), createElementBlock("div", _hoisted_1$X, [
+        _hoisted_2$T,
         unref(status) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
           !unref(status).self_check.push_targets ? (openBlock(), createBlock(_component_BsMessage, {
             key: 0,
@@ -9715,21 +9762,21 @@ const _sfc_main$U = {
             _: 1
           })) : createCommentVNode("", true)
         ], 64)) : createCommentVNode("", true),
-        unref(status) ? (openBlock(), createElementBlock("div", _hoisted_3$G, [
-          createBaseVNode("div", _hoisted_4$u, [
-            unref(status).self_check.gravity_formula ? (openBlock(), createElementBlock("div", _hoisted_5$p, [
+        unref(status) ? (openBlock(), createElementBlock("div", _hoisted_3$J, [
+          createBaseVNode("div", _hoisted_4$w, [
+            unref(status).self_check.gravity_formula ? (openBlock(), createElementBlock("div", _hoisted_5$q, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
                 title: "Gravity"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_6$n, toDisplayString(unref(status).gravity) + " " + toDisplayString(unref(status).gravity_format === "G" ? " SG" : " P"), 1)
+                  createBaseVNode("p", _hoisted_6$o, toDisplayString(unref(status).gravity) + " " + toDisplayString(unref(status).gravity_format === "G" ? " SG" : " P"), 1)
                 ]),
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            !unref(status).self_check.gravity_formula ? (openBlock(), createElementBlock("div", _hoisted_7$n, [
+            !unref(status).self_check.gravity_formula ? (openBlock(), createElementBlock("div", _hoisted_7$o, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 title: "Error",
@@ -9737,7 +9784,7 @@ const _sfc_main$U = {
                 icon: "bi-x-circle"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_8$o, [
+                  createBaseVNode("p", _hoisted_8$p, [
                     createTextVNode(" Missing "),
                     createVNode(_component_router_link, {
                       class: "link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover",
@@ -9754,27 +9801,27 @@ const _sfc_main$U = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            unref(status).self_check.gyro_calibration && unref(status).self_check.gyro_connected ? (openBlock(), createElementBlock("div", _hoisted_9$m, [
+            unref(status).self_check.gyro_calibration && unref(status).self_check.gyro_connected ? (openBlock(), createElementBlock("div", _hoisted_9$n, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
                 title: "Angle"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_10$m, toDisplayString(unref(status).angle), 1)
+                  createBaseVNode("p", _hoisted_10$n, toDisplayString(unref(status).angle), 1)
                 ]),
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            unref(status).self_check.gyro_calibration && unref(status).self_check.gyro_connected ? (openBlock(), createElementBlock("div", _hoisted_11$j, [
+            unref(status).self_check.gyro_calibration && unref(status).self_check.gyro_connected ? (openBlock(), createElementBlock("div", _hoisted_11$k, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
                 title: "Average Angle"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_12$j, [
-                    createTextVNode(toDisplayString(angle2.value.average) + " (" + toDisplayString(angle2.value.count) + ") ", 1),
+                  createBaseVNode("p", _hoisted_12$k, [
+                    createTextVNode(toDisplayString(angle.value.average) + " (" + toDisplayString(angle.value.count) + ") ", 1),
                     createBaseVNode("button", {
                       onClick: clearAverage,
                       type: "button",
@@ -9786,7 +9833,7 @@ const _sfc_main$U = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            !unref(status).self_check.gyro_calibration ? (openBlock(), createElementBlock("div", _hoisted_13$j, [
+            !unref(status).self_check.gyro_calibration ? (openBlock(), createElementBlock("div", _hoisted_13$k, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 title: "Error",
@@ -9794,7 +9841,7 @@ const _sfc_main$U = {
                 icon: "bi-x-circle"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_14$i, [
+                  createBaseVNode("p", _hoisted_14$j, [
                     createTextVNode(" Gyro has not been "),
                     createVNode(_component_router_link, {
                       class: "link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover",
@@ -9895,7 +9942,7 @@ const _sfc_main$U = {
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_29$3, [
+            createBaseVNode("div", _hoisted_29$2, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Memory"
@@ -9970,26 +10017,26 @@ const _sfc_main$U = {
     };
   }
 };
-const _hoisted_1$T = { class: "container" };
-const _hoisted_2$P = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _hoisted_3$F = /* @__PURE__ */ createBaseVNode("p", { class: "h2" }, "Device - Settings", -1);
-const _hoisted_4$t = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
-const _hoisted_5$o = { class: "row" };
-const _hoisted_6$m = { class: "col-md-12" };
-const _hoisted_7$m = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_1$W = { class: "container" };
+const _hoisted_2$S = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_3$I = /* @__PURE__ */ createBaseVNode("p", { class: "h2" }, "Device - Settings", -1);
+const _hoisted_4$v = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
+const _hoisted_5$p = { class: "row" };
+const _hoisted_6$n = { class: "col-md-12" };
+const _hoisted_7$n = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_8$n = { class: "col-md-6" };
-const _hoisted_9$l = { class: "col-md-6" };
-const _hoisted_10$l = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_8$o = { class: "col-md-6" };
+const _hoisted_9$m = { class: "col-md-6" };
+const _hoisted_10$m = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_11$i = { class: "col-md-9" };
-const _hoisted_12$i = { class: "col-md-3" };
-const _hoisted_13$i = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_11$j = { class: "col-md-9" };
+const _hoisted_12$j = { class: "col-md-3" };
+const _hoisted_13$j = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_14$h = { class: "col-md-6" };
+const _hoisted_14$i = { class: "col-md-6" };
 const _hoisted_15$g = { class: "row gy-2" };
 const _hoisted_16$f = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
@@ -10003,9 +10050,9 @@ const _hoisted_22$7 = ["hidden"];
 const _hoisted_23$6 = { class: "col-sm-4" };
 const _hoisted_24$5 = ["disabled"];
 const _hoisted_25$4 = ["hidden"];
-const _sfc_main$T = {
+const _sfc_main$W = {
   __name: "DeviceSettingsView",
-  setup(__props2) {
+  setup(__props) {
     const otaOptions = ref([
       { label: "-blank-", value: "" },
       { label: "Gravitymon.com", value: "https://www.gravitymon.com/firmware/" }
@@ -10057,10 +10104,10 @@ const _sfc_main$T = {
       const _component_BsInputText = resolveComponent("BsInputText");
       const _component_BsInputRadio = resolveComponent("BsInputRadio");
       const _component_BsDropdown = resolveComponent("BsDropdown");
-      return openBlock(), createElementBlock("div", _hoisted_1$T, [
-        _hoisted_2$P,
-        _hoisted_3$F,
-        _hoisted_4$t,
+      return openBlock(), createElementBlock("div", _hoisted_1$W, [
+        _hoisted_2$S,
+        _hoisted_3$I,
+        _hoisted_4$v,
         unref(config).mdns === "" ? (openBlock(), createBlock(_component_BsMessage, {
           key: 0,
           dismissable: "true",
@@ -10077,8 +10124,8 @@ const _sfc_main$T = {
           class: "needs-validation",
           novalidate: ""
         }, [
-          createBaseVNode("div", _hoisted_5$o, [
-            createBaseVNode("div", _hoisted_6$m, [
+          createBaseVNode("div", _hoisted_5$p, [
+            createBaseVNode("div", _hoisted_6$n, [
               createVNode(_component_BsInputText, {
                 modelValue: unref(config).mdns,
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(config).mdns = $event),
@@ -10090,8 +10137,8 @@ const _sfc_main$T = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "badge", "disabled"])
             ]),
-            _hoisted_7$m,
-            createBaseVNode("div", _hoisted_8$n, [
+            _hoisted_7$n,
+            createBaseVNode("div", _hoisted_8$o, [
               createVNode(_component_BsInputRadio, {
                 modelValue: unref(config).temp_format,
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(config).temp_format = $event),
@@ -10101,7 +10148,7 @@ const _sfc_main$T = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_9$l, [
+            createBaseVNode("div", _hoisted_9$m, [
               createVNode(_component_BsInputRadio, {
                 modelValue: unref(config).gravity_format,
                 "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(config).gravity_format = $event),
@@ -10111,8 +10158,8 @@ const _sfc_main$T = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
-            _hoisted_10$l,
-            createBaseVNode("div", _hoisted_11$i, [
+            _hoisted_10$m,
+            createBaseVNode("div", _hoisted_11$j, [
               createVNode(_component_BsInputText, {
                 modelValue: unref(config).ota_url,
                 "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(config).ota_url = $event),
@@ -10123,7 +10170,7 @@ const _sfc_main$T = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_12$i, [
+            createBaseVNode("div", _hoisted_12$j, [
               createVNode(_component_BsDropdown, {
                 label: "Predefined ota",
                 button: "URL",
@@ -10132,8 +10179,8 @@ const _sfc_main$T = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["options", "disabled"])
             ]),
-            _hoisted_13$i,
-            createBaseVNode("div", _hoisted_14$h, [
+            _hoisted_13$j,
+            createBaseVNode("div", _hoisted_14$i, [
               createVNode(_component_BsInputRadio, {
                 modelValue: unref(config).dark_mode,
                 "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).dark_mode = $event),
@@ -10199,24 +10246,24 @@ const _sfc_main$T = {
     };
   }
 };
-const _hoisted_1$S = { class: "container" };
-const _hoisted_2$O = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _hoisted_3$E = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Device - Hardware", -1);
-const _hoisted_4$s = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
-const _hoisted_5$n = { class: "row" };
-const _hoisted_6$l = { class: "col-md-6" };
-const _hoisted_7$l = { class: "col-md-6" };
-const _hoisted_8$m = { class: "col-md-6" };
-const _hoisted_9$k = { class: "col-md-6" };
-const _hoisted_10$k = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_1$V = { class: "container" };
+const _hoisted_2$R = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_3$H = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Device - Hardware", -1);
+const _hoisted_4$u = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
+const _hoisted_5$o = { class: "row" };
+const _hoisted_6$m = { class: "col-md-6" };
+const _hoisted_7$m = { class: "col-md-6" };
+const _hoisted_8$n = { class: "col-md-6" };
+const _hoisted_9$l = { class: "col-md-6" };
+const _hoisted_10$l = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_11$h = { class: "col-md-6" };
-const _hoisted_12$h = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_11$i = { class: "col-md-6" };
+const _hoisted_12$i = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_13$h = { class: "col-md-12" };
-const _hoisted_14$g = { class: "col-md-6" };
+const _hoisted_13$i = { class: "col-md-12" };
+const _hoisted_14$h = { class: "col-md-6" };
 const _hoisted_15$f = { class: "col-md-6" };
 const _hoisted_16$e = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
@@ -10235,7 +10282,7 @@ const _hoisted_25$3 = ["disabled"];
 const _hoisted_26$3 = ["hidden"];
 const _hoisted_27$2 = { class: "col-md-3" };
 const _hoisted_28$2 = ["disabled"];
-const _hoisted_29$2 = ["hidden"];
+const _hoisted_29$1 = ["hidden"];
 const _hoisted_30$1 = {
   key: 0,
   class: "badge text-bg-danger rounded-circle"
@@ -10250,9 +10297,9 @@ const _hoisted_34$1 = {
   key: 0,
   class: "badge text-bg-danger rounded-circle"
 };
-const _sfc_main$S = {
+const _sfc_main$V = {
   __name: "DeviceHardwareView",
-  setup(__props2) {
+  setup(__props) {
     const tempsensorResolutionOptions = ref([
       { label: "0.5°C (93 ms)", value: 9 },
       { label: "0.25°C (187 ms)", value: 10 },
@@ -10341,10 +10388,10 @@ const _sfc_main$S = {
       const _component_BsInputSwitch = resolveComponent("BsInputSwitch");
       const _component_BsInputRadio = resolveComponent("BsInputRadio");
       const _component_BsInputReadonly = resolveComponent("BsInputReadonly");
-      return openBlock(), createElementBlock("div", _hoisted_1$S, [
-        _hoisted_2$O,
-        _hoisted_3$E,
-        _hoisted_4$s,
+      return openBlock(), createElementBlock("div", _hoisted_1$V, [
+        _hoisted_2$R,
+        _hoisted_3$H,
+        _hoisted_4$u,
         !unref(isGyroCalibrated)() ? (openBlock(), createBlock(_component_BsMessage, {
           key: 0,
           dismissable: "true",
@@ -10372,8 +10419,8 @@ const _sfc_main$S = {
           class: "needs-validation",
           novalidate: ""
         }, [
-          createBaseVNode("div", _hoisted_5$n, [
-            createBaseVNode("div", _hoisted_6$l, [
+          createBaseVNode("div", _hoisted_5$o, [
+            createBaseVNode("div", _hoisted_6$m, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).voltage_factor,
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(config).voltage_factor = $event),
@@ -10387,7 +10434,7 @@ const _sfc_main$S = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "unit", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_7$l, [
+            createBaseVNode("div", _hoisted_7$m, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).voltage_config,
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(config).voltage_config = $event),
@@ -10401,7 +10448,7 @@ const _sfc_main$S = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_8$m, [
+            createBaseVNode("div", _hoisted_8$n, [
               createVNode(_component_BsInputSwitch, {
                 modelValue: unref(config).storage_sleep,
                 "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(config).storage_sleep = $event),
@@ -10410,7 +10457,7 @@ const _sfc_main$S = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_9$k, [
+            createBaseVNode("div", _hoisted_9$l, [
               createVNode(_component_BsInputSwitch, {
                 modelValue: unref(config).battery_saving,
                 "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(config).battery_saving = $event),
@@ -10420,8 +10467,8 @@ const _sfc_main$S = {
               }, null, 8, ["modelValue", "disabled"])
             ]),
             unref(status).hardware == "floaty" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-              _hoisted_10$k,
-              createBaseVNode("div", _hoisted_11$h, [
+              _hoisted_10$l,
+              createBaseVNode("div", _hoisted_11$i, [
                 createVNode(_component_BsInputRadio, {
                   modelValue: unref(config).voltage_pin,
                   "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).voltage_pin = $event),
@@ -10432,8 +10479,8 @@ const _sfc_main$S = {
                 }, null, 8, ["modelValue", "options", "disabled"])
               ])
             ], 64)) : createCommentVNode("", true),
-            _hoisted_12$h,
-            createBaseVNode("div", _hoisted_13$h, [
+            _hoisted_12$i,
+            createBaseVNode("div", _hoisted_13$i, [
               createVNode(_component_BsInputRadio, {
                 modelValue: unref(config).tempsensor_resolution,
                 "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).tempsensor_resolution = $event),
@@ -10443,7 +10490,7 @@ const _sfc_main$S = {
                 disabled: disableDs18b20.value
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_14$g, [
+            createBaseVNode("div", _hoisted_14$h, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).temp_adjustment_value,
                 "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(config).temp_adjustment_value = $event),
@@ -10531,7 +10578,7 @@ const _sfc_main$S = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_29$2),
+                }, null, 8, _hoisted_29$1),
                 createTextVNode("  Calibrate gyro "),
                 deviceGyroCalibratedBadge() ? (openBlock(), createElementBlock("span", _hoisted_30$1, "1")) : createCommentVNode("", true)
               ], 8, _hoisted_28$2)
@@ -10559,22 +10606,22 @@ const _sfc_main$S = {
     };
   }
 };
-const _hoisted_1$R = { class: "container" };
-const _hoisted_2$N = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _hoisted_3$D = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Device - WIFI", -1);
-const _hoisted_4$r = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
-const _hoisted_5$m = { class: "row" };
-const _hoisted_6$k = { class: "col-md-6" };
-const _hoisted_7$k = { class: "col-md-6" };
-const _hoisted_8$l = { class: "col-md-6" };
-const _hoisted_9$j = { class: "col-md-6" };
-const _hoisted_10$j = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_1$U = { class: "container" };
+const _hoisted_2$Q = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_3$G = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Device - WIFI", -1);
+const _hoisted_4$t = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
+const _hoisted_5$n = { class: "row" };
+const _hoisted_6$l = { class: "col-md-6" };
+const _hoisted_7$l = { class: "col-md-6" };
+const _hoisted_8$m = { class: "col-md-6" };
+const _hoisted_9$k = { class: "col-md-6" };
+const _hoisted_10$k = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_11$g = { class: "col-md-6" };
-const _hoisted_12$g = { class: "col-md-6" };
-const _hoisted_13$g = { class: "col-md-6" };
-const _hoisted_14$f = { class: "row gy-2" };
+const _hoisted_11$h = { class: "col-md-6" };
+const _hoisted_12$h = { class: "col-md-6" };
+const _hoisted_13$h = { class: "col-md-6" };
+const _hoisted_14$g = { class: "row gy-2" };
 const _hoisted_15$e = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
@@ -10584,9 +10631,9 @@ const _hoisted_18$b = ["hidden"];
 const _hoisted_19$9 = { class: "col-md-3" };
 const _hoisted_20$9 = ["disabled"];
 const _hoisted_21$9 = ["hidden"];
-const _sfc_main$R = {
+const _sfc_main$U = {
   __name: "DeviceWifiView",
-  setup(__props2) {
+  setup(__props) {
     const scanning = ref(false);
     const networks = ref([]);
     function wifiName(label, rssi, encr) {
@@ -10604,19 +10651,19 @@ const _sfc_main$R = {
         if (success) {
           networks.value = [{ label: "-blank-", value: "", rssi: 0, encryption: 0, channel: 0 }];
           for (var n in data.networks) {
-            var d = data.networks[n];
+            var d2 = data.networks[n];
             var o = {
-              label: wifiName(d.wifi_ssid, d.rssi, d.encryption),
-              value: d.wifi_ssid,
-              rssi: d.rssi,
+              label: wifiName(d2.wifi_ssid, d2.rssi, d2.encryption),
+              value: d2.wifi_ssid,
+              rssi: d2.rssi,
               encryption: data.networks[n].encryption,
-              channel: d.channel
+              channel: d2.channel
             };
-            var f = networks.value.filter((obj) => {
-              return obj.value === d.wifi_ssid;
+            var f2 = networks.value.filter((obj) => {
+              return obj.value === d2.wifi_ssid;
             });
-            logDebug("DeviceWifiView.onMounted()", "result:", f, d.wifi_ssid);
-            if (f.length === 0) networks.value.push(o);
+            logDebug("DeviceWifiView.onMounted()", "result:", f2, d2.wifi_ssid);
+            if (f2.length === 0) networks.value.push(o);
           }
           scanning.value = false;
         }
@@ -10633,10 +10680,10 @@ const _sfc_main$R = {
       const _component_BsInputText = resolveComponent("BsInputText");
       const _component_BsInputNumber = resolveComponent("BsInputNumber");
       const _component_BsInputSwitch = resolveComponent("BsInputSwitch");
-      return openBlock(), createElementBlock("div", _hoisted_1$R, [
-        _hoisted_2$N,
-        _hoisted_3$D,
-        _hoisted_4$r,
+      return openBlock(), createElementBlock("div", _hoisted_1$U, [
+        _hoisted_2$Q,
+        _hoisted_3$G,
+        _hoisted_4$t,
         scanning.value ? (openBlock(), createBlock(_component_BsMessage, {
           key: 0,
           dismissable: false,
@@ -10659,8 +10706,8 @@ const _sfc_main$R = {
           class: "needs-validation",
           novalidate: ""
         }, [
-          createBaseVNode("div", _hoisted_5$m, [
-            createBaseVNode("div", _hoisted_6$k, [
+          createBaseVNode("div", _hoisted_5$n, [
+            createBaseVNode("div", _hoisted_6$l, [
               createVNode(_component_BsSelect, {
                 modelValue: unref(config).wifi_ssid,
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(config).wifi_ssid = $event),
@@ -10670,7 +10717,7 @@ const _sfc_main$R = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "badge", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_7$k, [
+            createBaseVNode("div", _hoisted_7$l, [
               createVNode(_component_BsInputText, {
                 modelValue: unref(config).wifi_pass,
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(config).wifi_pass = $event),
@@ -10681,7 +10728,7 @@ const _sfc_main$R = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_8$l, [
+            createBaseVNode("div", _hoisted_8$m, [
               createVNode(_component_BsSelect, {
                 modelValue: unref(config).wifi_ssid2,
                 "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(config).wifi_ssid2 = $event),
@@ -10691,7 +10738,7 @@ const _sfc_main$R = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "badge", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_9$j, [
+            createBaseVNode("div", _hoisted_9$k, [
               createVNode(_component_BsInputText, {
                 modelValue: unref(config).wifi_pass2,
                 "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(config).wifi_pass2 = $event),
@@ -10702,8 +10749,8 @@ const _sfc_main$R = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            _hoisted_10$j,
-            createBaseVNode("div", _hoisted_11$g, [
+            _hoisted_10$k,
+            createBaseVNode("div", _hoisted_11$h, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).wifi_portal_timeout,
                 "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).wifi_portal_timeout = $event),
@@ -10717,7 +10764,7 @@ const _sfc_main$R = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_12$g, [
+            createBaseVNode("div", _hoisted_12$h, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).wifi_connect_timeout,
                 "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).wifi_connect_timeout = $event),
@@ -10731,7 +10778,7 @@ const _sfc_main$R = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_13$g, [
+            createBaseVNode("div", _hoisted_13$h, [
               createVNode(_component_BsInputSwitch, {
                 modelValue: unref(config).wifi_scan_ap,
                 "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(config).wifi_scan_ap = $event),
@@ -10741,7 +10788,7 @@ const _sfc_main$R = {
               }, null, 8, ["modelValue", "disabled"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_14$f, [
+          createBaseVNode("div", _hoisted_14$g, [
             _hoisted_15$e,
             createBaseVNode("div", _hoisted_16$d, [
               createBaseVNode("button", {
@@ -10780,26 +10827,26 @@ const _sfc_main$R = {
     };
   }
 };
-const _hoisted_1$Q = { class: "container" };
-const _hoisted_2$M = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _hoisted_3$C = /* @__PURE__ */ createBaseVNode("p", { class: "h2" }, "Gravity - Settings", -1);
-const _hoisted_4$q = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
-const _hoisted_5$l = { class: "row" };
-const _hoisted_6$j = { class: "col-md-6" };
-const _hoisted_7$j = { class: "col-md-6" };
-const _hoisted_8$k = { class: "col-md-6" };
-const _hoisted_9$i = { class: "col-md-6" };
-const _hoisted_10$i = { class: "col-md-6" };
-const _hoisted_11$f = { class: "row gy-2" };
-const _hoisted_12$f = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_1$T = { class: "container" };
+const _hoisted_2$P = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_3$F = /* @__PURE__ */ createBaseVNode("p", { class: "h2" }, "Gravity - Settings", -1);
+const _hoisted_4$s = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
+const _hoisted_5$m = { class: "row" };
+const _hoisted_6$k = { class: "col-md-6" };
+const _hoisted_7$k = { class: "col-md-6" };
+const _hoisted_8$l = { class: "col-md-6" };
+const _hoisted_9$j = { class: "col-md-6" };
+const _hoisted_10$j = { class: "col-md-6" };
+const _hoisted_11$g = { class: "row gy-2" };
+const _hoisted_12$g = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_13$f = { class: "col-md-3" };
-const _hoisted_14$e = ["disabled"];
+const _hoisted_13$g = { class: "col-md-3" };
+const _hoisted_14$f = ["disabled"];
 const _hoisted_15$d = ["hidden"];
-const _sfc_main$Q = {
+const _sfc_main$T = {
   __name: "GravitySettingsView",
-  setup(__props2) {
+  setup(__props) {
     const calTempAdj = computed(() => {
       return !config.gravity_temp_adjustment || global$1.disabled;
     });
@@ -10811,10 +10858,10 @@ const _sfc_main$Q = {
       const _component_BsMessage = resolveComponent("BsMessage");
       const _component_BsInputSwitch = resolveComponent("BsInputSwitch");
       const _component_BsInputNumber = resolveComponent("BsInputNumber");
-      return openBlock(), createElementBlock("div", _hoisted_1$Q, [
-        _hoisted_2$M,
-        _hoisted_3$C,
-        _hoisted_4$q,
+      return openBlock(), createElementBlock("div", _hoisted_1$T, [
+        _hoisted_2$P,
+        _hoisted_3$F,
+        _hoisted_4$s,
         unref(config).gyro_disabled ? (openBlock(), createBlock(_component_BsMessage, {
           key: 0,
           dismissable: "true",
@@ -10831,8 +10878,8 @@ const _sfc_main$Q = {
           class: "needs-validation",
           novalidate: ""
         }, [
-          createBaseVNode("div", _hoisted_5$l, [
-            createBaseVNode("div", _hoisted_6$j, [
+          createBaseVNode("div", _hoisted_5$m, [
+            createBaseVNode("div", _hoisted_6$k, [
               createVNode(_component_BsInputSwitch, {
                 modelValue: unref(config).gravity_temp_adjustment,
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(config).gravity_temp_adjustment = $event),
@@ -10841,7 +10888,7 @@ const _sfc_main$Q = {
                 disabled: unref(global$1).disabled || unref(config).gyro_disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_7$j, [
+            createBaseVNode("div", _hoisted_7$k, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).formula_calibration_temp,
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(config).formula_calibration_temp = $event),
@@ -10855,7 +10902,7 @@ const _sfc_main$Q = {
                 disabled: calTempAdj.value || unref(config).gyro_disabled
               }, null, 8, ["modelValue", "unit", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_8$k, [
+            createBaseVNode("div", _hoisted_8$l, [
               createVNode(_component_BsInputSwitch, {
                 modelValue: unref(config).ignore_low_angles,
                 "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(config).ignore_low_angles = $event),
@@ -10864,7 +10911,7 @@ const _sfc_main$Q = {
                 disabled: unref(global$1).disabled || unref(config).gyro_disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_9$i, [
+            createBaseVNode("div", _hoisted_9$j, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).gyro_read_count,
                 "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(config).gyro_read_count = $event),
@@ -10876,7 +10923,7 @@ const _sfc_main$Q = {
                 disabled: unref(global$1).disabled || unref(config).gyro_disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_10$i, [
+            createBaseVNode("div", _hoisted_10$j, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).gyro_moving_threashold,
                 "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).gyro_moving_threashold = $event),
@@ -10889,9 +10936,9 @@ const _sfc_main$Q = {
               }, null, 8, ["modelValue", "disabled"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_11$f, [
-            _hoisted_12$f,
-            createBaseVNode("div", _hoisted_13$f, [
+          createBaseVNode("div", _hoisted_11$g, [
+            _hoisted_12$g,
+            createBaseVNode("div", _hoisted_13$g, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -10904,7 +10951,7 @@ const _sfc_main$Q = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_15$d),
                 createTextVNode("  Save ")
-              ], 8, _hoisted_14$e)
+              ], 8, _hoisted_14$f)
             ])
           ])
         ], 32)
@@ -10912,241 +10959,75 @@ const _sfc_main$Q = {
     };
   }
 };
-const _hoisted_1$P = { class: "container" };
-const _hoisted_2$L = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _hoisted_3$B = /* @__PURE__ */ createBaseVNode("p", { class: "h2" }, "Gravity - Formula", -1);
-const _hoisted_4$p = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
-const _hoisted_5$k = { class: "row" };
-const _hoisted_6$i = { class: "col-md-12" };
-const _hoisted_7$i = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
-  /* @__PURE__ */ createBaseVNode("hr")
-], -1);
-const _hoisted_8$j = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
-  /* @__PURE__ */ createBaseVNode("label", { class: "form-label fw-bold" }, "Data for gravity calculation (Angle and Gravity)")
-], -1);
-const _hoisted_9$h = { class: "col-md-6" };
-const _hoisted_10$h = { class: "input-group has-validation" };
-const _hoisted_11$e = { class: "input-group-text" };
-const _hoisted_12$e = ["onUpdate:modelValue", "disabled"];
-const _hoisted_13$e = /* @__PURE__ */ createBaseVNode("span", { class: "input-group-text" }, /* @__PURE__ */ toDisplayString("°"), -1);
-const _hoisted_14$d = { class: "col-md-6" };
-const _hoisted_15$c = { class: "input-group has-validation" };
-const _hoisted_16$c = { class: "input-group-text" };
-const _hoisted_17$a = ["onUpdate:modelValue", "disabled"];
-const _hoisted_18$a = { class: "input-group-text" };
-const _hoisted_19$8 = /* @__PURE__ */ createBaseVNode("div", { class: "form-text" }, " Enter the data that is used to create a new formula. The most optimal formula will be selected and also validated towards these values. ", -1);
-const _hoisted_20$8 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
-  /* @__PURE__ */ createBaseVNode("hr")
-], -1);
-const _hoisted_21$8 = { class: "col-md-6" };
-const _hoisted_22$5 = { class: "row gy-2" };
-const _hoisted_23$4 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
-  /* @__PURE__ */ createBaseVNode("hr")
-], -1);
-const _hoisted_24$3 = { class: "col-md-3" };
-const _hoisted_25$2 = ["disabled"];
-const _hoisted_26$2 = ["hidden"];
-const _hoisted_27$1 = { class: "col-md-3" };
-const _hoisted_28$1 = ["disabled"];
-const _hoisted_29$1 = ["hidden"];
-const _sfc_main$P = {
-  __name: "GravityFormulaView",
-  setup(__props2) {
-    const save = () => {
-      if (!validateCurrentForm()) return;
-      config.saveAll();
-    };
-    const calcFormula = () => {
-      if (!validateCurrentForm()) return;
-      global$1.clearMessages();
-      config.sendConfig((success) => {
-        if (success) {
-          fetch(global$1.baseURL + "api/formula", {
-            headers: { Authorization: global$1.token },
-            signal: AbortSignal.timeout(global$1.fetchTimout)
-          }).then((res) => res.json()).then((json) => {
-            if (json.success == true) {
-              config.gravity_formula = json.gravity_formula;
-              global$1.messageSuccess = json.message;
-            } else {
-              global$1.messageError = json.message;
-            }
-            global$1.disabled = false;
-          }).catch((err) => {
-            logError("GravityFormulaView.calcFormula()", err);
-            global$1.messageError = "Failed to request formula creation";
-            global$1.disabled = false;
-          });
-        } else {
-          global$1.messageError = "Failed to store configuration to device";
-          global$1.disabled = false;
-        }
-      });
-    };
-    return (_ctx, _cache) => {
-      const _component_BsMessage = resolveComponent("BsMessage");
-      const _component_BsInputText = resolveComponent("BsInputText");
-      const _component_BsInputNumber = resolveComponent("BsInputNumber");
-      return openBlock(), createElementBlock("div", _hoisted_1$P, [
-        _hoisted_2$L,
-        _hoisted_3$B,
-        _hoisted_4$p,
-        unref(config).gravity_formula === "" ? (openBlock(), createBlock(_component_BsMessage, {
-          key: 0,
-          dismissable: "true",
-          message: "",
-          alert: "warning"
-        }, {
-          default: withCtx(() => [
-            createTextVNode(" You need to enter a formula in order to report gravity ")
-          ]),
-          _: 1
-        })) : createCommentVNode("", true),
-        unref(config).gyro_disabled ? (openBlock(), createBlock(_component_BsMessage, {
-          key: 1,
-          dismissable: "true",
-          message: "",
-          alert: "warning"
-        }, {
-          default: withCtx(() => [
-            createTextVNode(" Gyro is disbled so the device will only be able to measure temperature ")
-          ]),
-          _: 1
-        })) : createCommentVNode("", true),
-        createBaseVNode("form", {
-          onSubmit: withModifiers(save, ["prevent"]),
-          class: "needs-validation",
-          novalidate: ""
-        }, [
-          createBaseVNode("div", _hoisted_5$k, [
-            createBaseVNode("div", _hoisted_6$i, [
-              createVNode(_component_BsInputText, {
-                modelValue: unref(config).gravity_formula,
-                "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(config).gravity_formula = $event),
-                maxlength: "200",
-                label: "Gravity formula",
-                help: "Formula used to convert angle to gravity",
-                badge: gravityFormulaBadge(),
-                disabled: unref(global$1).disabled || unref(config).gyro_disabled
-              }, null, 8, ["modelValue", "badge", "disabled"])
-            ]),
-            _hoisted_7$i,
-            _hoisted_8$j,
-            (openBlock(true), createElementBlock(Fragment, null, renderList(unref(config).formula_calculation_data, (data, index) => {
-              return openBlock(), createElementBlock(Fragment, { key: index }, [
-                createBaseVNode("div", _hoisted_9$h, [
-                  createBaseVNode("div", _hoisted_10$h, [
-                    createBaseVNode("span", _hoisted_11$e, toDisplayString(index + 1), 1),
-                    withDirectives(createBaseVNode("input", {
-                      "onUpdate:modelValue": ($event) => unref(config).formula_calculation_data[index].a = $event,
-                      class: "form-control w-2",
-                      type: "number",
-                      min: "0",
-                      max: "90",
-                      step: ".001",
-                      disabled: unref(global$1).disabled || unref(config).gyro_disabled
-                    }, null, 8, _hoisted_12$e), [
-                      [vModelText, unref(config).formula_calculation_data[index].a]
-                    ]),
-                    _hoisted_13$e
-                  ])
-                ]),
-                createBaseVNode("div", _hoisted_14$d, [
-                  createBaseVNode("div", _hoisted_15$c, [
-                    createBaseVNode("span", _hoisted_16$c, toDisplayString(index + 1), 1),
-                    withDirectives(createBaseVNode("input", {
-                      "onUpdate:modelValue": ($event) => unref(config).formula_calculation_data[index].g = $event,
-                      class: "form-control",
-                      type: "number",
-                      min: "1",
-                      max: "10",
-                      step: ".0001",
-                      disabled: unref(global$1).disabled || unref(config).gyro_disabled
-                    }, null, 8, _hoisted_17$a), [
-                      [vModelText, unref(config).formula_calculation_data[index].g]
-                    ]),
-                    createBaseVNode("span", _hoisted_18$a, toDisplayString(unref(config).gravity_format == "G" ? "SG" : "P"), 1)
-                  ])
-                ])
-              ], 64);
-            }), 128)),
-            _hoisted_19$8,
-            _hoisted_20$8,
-            createBaseVNode("div", _hoisted_21$8, [
-              createVNode(_component_BsInputNumber, {
-                modelValue: unref(config).formula_max_deviation,
-                "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(config).formula_max_deviation = $event),
-                unit: unref(config).gravity_format == "G" ? "SG" : "P",
-                label: "Max allowed deviation",
-                min: "1",
-                max: "10",
-                step: ".1",
-                width: "4",
-                help: "When validating the derived formula this is the maximum accepted deviation for the supplied values, use the analysis page to visually check where there are deviations",
-                disabled: unref(global$1).disabled || unref(config).gyro_disabled
-              }, null, 8, ["modelValue", "unit", "disabled"])
-            ])
-          ]),
-          createBaseVNode("div", _hoisted_22$5, [
-            _hoisted_23$4,
-            createBaseVNode("div", _hoisted_24$3, [
-              createBaseVNode("button", {
-                type: "submit",
-                class: "btn btn-primary w-2",
-                disabled: unref(global$1).disabled || !unref(global$1).configChanged
-              }, [
-                createBaseVNode("span", {
-                  class: "spinner-border spinner-border-sm",
-                  role: "status",
-                  "aria-hidden": "true",
-                  hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_26$2),
-                createTextVNode("  Save ")
-              ], 8, _hoisted_25$2)
-            ]),
-            createBaseVNode("div", _hoisted_27$1, [
-              createBaseVNode("button", {
-                onClick: withModifiers(calcFormula, ["prevent"]),
-                type: "button",
-                class: "btn btn-primary w-2",
-                disabled: unref(global$1).disabled
-              }, [
-                createBaseVNode("span", {
-                  class: "spinner-border spinner-border-sm",
-                  role: "status",
-                  "aria-hidden": "true",
-                  hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_29$1),
-                createTextVNode("  Calculate new Formula ")
-              ], 8, _hoisted_28$1)
-            ])
-          ])
-        ], 32)
-      ]);
-    };
+function applyValuesToFormula(formula2, tilt2) {
+  let angle = tilt2.toFixed(3);
+  let f2 = formula2;
+  f2 = f2.replaceAll("tilt^3", angle + "*" + angle + "*" + angle);
+  f2 = f2.replaceAll("tilt^2", angle + "*" + angle);
+  f2 = f2.replaceAll("tilt", angle);
+  return f2;
+}
+function calculate(formula, tilt) {
+  if (formula != "") {
+    let f = applyValuesToFormula(formula, tilt);
+    try {
+      let g = eval(f);
+      return config.gravity_format === "P" ? gravityToPlato(g) : g;
+    } catch (err) {
+      logError("formula.evaluateFormula()", err);
+    }
   }
-};
-const _hoisted_1$O = { class: "container" };
-const _hoisted_2$K = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _hoisted_3$A = /* @__PURE__ */ createBaseVNode("p", { class: "h2" }, "Gravity - Analysis", -1);
-const _hoisted_4$o = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
-const _hoisted_5$j = /* @__PURE__ */ createBaseVNode("canvas", { id: "gravityChart" }, null, -1);
-const _sfc_main$O = {
-  __name: "GravityAnalysisView",
+  return NaN;
+}
+function evaluateFormula(formula2) {
+  var result2 = [];
+  for (let a = 25; a < 80; a += 5) {
+    var g2 = calculate(formula2, a);
+    result2.push({ x: parseFloat(a), y: parseFloat(g2) });
+  }
+  return result2;
+}
+function validateFormula(formula) {
+  var result = true;
+  config.formula_calculation_data.forEach((d) => {
+    let f = applyValuesToFormula(formula, d.a);
+    try {
+      let g = eval(f);
+      if (config.gravity_format === "P") g = gravityToPlato(g);
+      if (Math.abs(g - d.g) > config.formula_max_deviation) {
+        logDebug("formula.validateFormula()", "Formula rejected due to high deviation", d.g, g);
+        result = false;
+      }
+    } catch {
+    }
+  });
+  return result;
+}
+const _hoisted_1$S = /* @__PURE__ */ createBaseVNode("div", { class: "row" }, [
+  /* @__PURE__ */ createBaseVNode("p"),
+  /* @__PURE__ */ createBaseVNode("hr")
+], -1);
+const _hoisted_2$O = /* @__PURE__ */ createBaseVNode("div", { class: "row" }, [
+  /* @__PURE__ */ createBaseVNode("div", { class: "form-text" }, " Below is a graphical representation of the current formula and data points for formula creation. ")
+], -1);
+const _hoisted_3$E = { class: "row" };
+const _hoisted_4$r = /* @__PURE__ */ createBaseVNode("canvas", { id: "gravityChart" }, null, -1);
+const _sfc_main$S = {
+  __name: "GravityGraphFragment",
   setup(__props) {
+    const chart = ref(null);
     const chartDataForm = ref([]);
     const chartDataCalc = ref([]);
-    const chart = ref(null);
     const dataSetChart = ref({
       datasets: [
         {
-          label: "Raw data",
+          label: "Data for gravity calculation",
           borderColor: "blue",
           backgroundColor: "blue",
           data: chartDataForm.value
         },
         {
-          label: "Calculated",
+          label: "Data based on current formula",
           borderColor: "green",
           backgroundColor: "green",
           data: chartDataCalc.value
@@ -11186,32 +11067,17 @@ const _sfc_main$O = {
         }
       }
     });
-    const convertToPlato = (sg) => {
-      return 259 - 259 / sg;
-    };
     onMounted(() => {
-      for (let a = 25; a < 80; a += 5) {
-        let angle = a.toFixed(3);
-        let formula = config.gravity_formula;
-        formula = formula.replaceAll("tilt^3", angle + "*" + angle + "*" + angle);
-        formula = formula.replaceAll("tilt^2", angle + "*" + angle);
-        formula = formula.replaceAll("tilt", angle);
-        try {
-          let g = eval(formula);
-          if (config.gravity_format === "P") {
-            g = convertToPlato(g);
-          }
-          chartDataCalc.value.push({ x: parseFloat(a), y: parseFloat(g) });
-        } catch (err) {
-          logError("GravityAnalysisView.onMounted()", err);
-          global$1.messageError = "Error evaluating the formula, the formula is invalid";
-        }
-      }
-      for (let i = 0; i < config.formula_calculation_data.length; i++) {
-        if (config.formula_calculation_data[i].a > 0)
+      evaluateFormula(config.gravity_formula).forEach((p2) => {
+        chartDataCalc.value.push(p2);
+      });
+      let data = config.formula_calculation_data;
+      data.sort((a, b) => a.a == 0 ? 100 : a.a - b.a);
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].a > 0)
           chartDataForm.value.push({
-            x: config.formula_calculation_data[i].a,
-            y: config.formula_calculation_data[i].g
+            x: data[i].a,
+            y: data[i].g
           });
       }
       try {
@@ -11222,28 +11088,5869 @@ const _sfc_main$O = {
     });
     return (_ctx, _cache) => {
       const _component_BsMessage = resolveComponent("BsMessage");
-      return openBlock(), createElementBlock("div", _hoisted_1$O, [
-        _hoisted_2$K,
+      return openBlock(), createElementBlock(Fragment, null, [
+        _hoisted_1$S,
+        _hoisted_2$O,
+        createBaseVNode("div", _hoisted_3$E, [
+          !chart.value ? (openBlock(), createBlock(_component_BsMessage, {
+            key: 0,
+            dismissable: "false",
+            message: "",
+            alert: "danger"
+          }, {
+            default: withCtx(() => [
+              createTextVNode(" Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection ")
+            ]),
+            _: 1
+          })) : createCommentVNode("", true),
+          _hoisted_4$r
+        ])
+      ], 64);
+    };
+  }
+};
+const _hoisted_1$R = { class: "input-group" };
+const _hoisted_2$N = ["data-bs-title"];
+const _sfc_main$R = /* @__PURE__ */ Object.assign({
+  inheritAttrs: false
+}, {
+  __name: "BsInputReadonly",
+  props: {
+    "modelValue": {},
+    "modelModifiers": {},
+    "label": {},
+    "labelModifiers": {},
+    "help": {},
+    "helpModifiers": {},
+    "width": {},
+    "widthModifiers": {}
+  },
+  emits: ["update:modelValue", "update:label", "update:help", "update:width"],
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    return (_ctx, _cache) => {
+      const _component_BsInputBase = resolveComponent("BsInputBase");
+      return openBlock(), createBlock(_component_BsInputBase, {
+        width: width.value,
+        label: label.value,
+        help: help.value
+      }, {
+        default: withCtx(() => [
+          createBaseVNode("div", _hoisted_1$R, [
+            withDirectives(createBaseVNode("input", mergeProps({
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
+              class: "form-control-plaintext",
+              readonly: "",
+              type: "text"
+            }, _ctx.$attrs, {
+              "data-bs-toggle": "tooltip",
+              "data-bs-custom-class": "custom-tooltip",
+              "data-bs-title": help.value
+            }), null, 16, _hoisted_2$N), [
+              [vModelText, model.value]
+            ])
+          ])
+        ]),
+        _: 1
+      }, 8, ["width", "label", "help"]);
+    };
+  }
+});
+const _hoisted_1$Q = /* @__PURE__ */ createBaseVNode("div", { class: "row" }, [
+  /* @__PURE__ */ createBaseVNode("p"),
+  /* @__PURE__ */ createBaseVNode("hr")
+], -1);
+const _hoisted_2$M = /* @__PURE__ */ createBaseVNode("div", { class: "row" }, [
+  /* @__PURE__ */ createBaseVNode("div", { class: "form-text" }, "Below is a list of the generated formulas.")
+], -1);
+const _hoisted_3$D = { class: "row" };
+const _sfc_main$Q = {
+  __name: "FormulaFragment",
+  props: {
+    "expressions": {},
+    "expressionsModifiers": {}
+  },
+  emits: ["update:expressions"],
+  setup(__props) {
+    const expressions = useModel(__props, "expressions");
+    const rejected = ref("Formula rejected");
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock(Fragment, null, [
+        _hoisted_1$Q,
+        _hoisted_2$M,
+        createBaseVNode("div", _hoisted_3$D, [
+          (openBlock(true), createElementBlock(Fragment, null, renderList(expressions.value, (i, index) => {
+            return openBlock(), createElementBlock("div", {
+              class: "col-md-12",
+              key: index
+            }, [
+              expressions.value[index] != "" ? (openBlock(), createBlock(_sfc_main$R, {
+                key: 0,
+                label: "Formula order " + index,
+                modelValue: expressions.value[index],
+                "onUpdate:modelValue": ($event) => expressions.value[index] = $event
+              }, null, 8, ["label", "modelValue", "onUpdate:modelValue"])) : createCommentVNode("", true),
+              expressions.value[index] == "" ? (openBlock(), createBlock(_sfc_main$R, {
+                key: 1,
+                label: "Formula order " + index,
+                modelValue: rejected.value,
+                "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => rejected.value = $event)
+              }, null, 8, ["label", "modelValue"])) : createCommentVNode("", true)
+            ]);
+          }), 128))
+        ])
+      ], 64);
+    };
+  }
+};
+const _hoisted_1$P = /* @__PURE__ */ createBaseVNode("div", { class: "row" }, [
+  /* @__PURE__ */ createBaseVNode("p"),
+  /* @__PURE__ */ createBaseVNode("hr")
+], -1);
+const _hoisted_2$L = /* @__PURE__ */ createBaseVNode("div", { class: "row" }, [
+  /* @__PURE__ */ createBaseVNode("div", { class: "form-text" }, " Below is a graphical representation of the formula options, click on the color to deselect one or more of the formulas. If you dont see more than one, try to reduce the deviation to dismiss invalid formulas. ")
+], -1);
+const _hoisted_3$C = { class: "row" };
+const _hoisted_4$q = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_5$l = /* @__PURE__ */ createBaseVNode("canvas", { id: "formulaChart" }, null, -1);
+const _sfc_main$P = {
+  __name: "FormulaGraphFragment",
+  props: {
+    "expressions": {},
+    "expressionsModifiers": {}
+  },
+  emits: ["update:expressions"],
+  setup(__props) {
+    const chart = ref(null);
+    const expressions = useModel(__props, "expressions");
+    const chartDataForm = ref([]);
+    const chartDataOrder1 = ref([]);
+    const chartDataOrder2 = ref([]);
+    const chartDataOrder3 = ref([]);
+    const chartDataOrder4 = ref([]);
+    const dataSetChart = ref({
+      datasets: [
+        {
+          label: "Raw data",
+          borderColor: "blue",
+          backgroundColor: "blue",
+          data: chartDataForm.value
+        },
+        {
+          label: "Order 1",
+          borderColor: "green",
+          backgroundColor: "green",
+          data: chartDataOrder1.value,
+          hidden: false
+        },
+        {
+          label: "Order 2",
+          borderColor: "purple",
+          backgroundColor: "purple",
+          data: chartDataOrder2.value,
+          hidden: false
+        },
+        {
+          label: "Order 3",
+          borderColor: "orange",
+          backgroundColor: "orange",
+          data: chartDataOrder3.value,
+          hidden: false
+        },
+        {
+          label: "Order 4",
+          borderColor: "pink",
+          backgroundColor: "pink",
+          data: chartDataOrder4.value,
+          hidden: false
+        }
+      ]
+    });
+    const configChart = ref({
+      type: "line",
+      data: dataSetChart.value,
+      options: {
+        responsive: true,
+        interaction: {
+          intersect: false
+        },
+        scales: {
+          x: {
+            display: true,
+            type: "linear",
+            grace: "5%",
+            title: {
+              display: true,
+              text: "Angle"
+            },
+            ticks: {
+              crossAlign: "far"
+            },
+            suggestedMin: 25
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: "Gravity"
+            },
+            suggestedMin: 1
+          }
+        }
+      }
+    });
+    onMounted(() => {
+      if (expressions.value["1"] != "") {
+        evaluateFormula(expressions.value["1"]).forEach((p2) => {
+          chartDataOrder1.value.push(p2);
+        });
+      } else {
+        dataSetChart.value.datasets[1].hidden = true;
+      }
+      if (expressions.value["2"] != "") {
+        evaluateFormula(expressions.value["2"]).forEach((p2) => {
+          chartDataOrder2.value.push(p2);
+        });
+      } else {
+        dataSetChart.value.datasets[2].hidden = true;
+      }
+      if (expressions.value["3"] != "") {
+        evaluateFormula(expressions.value["3"]).forEach((p2) => {
+          chartDataOrder3.value.push(p2);
+        });
+      } else {
+        dataSetChart.value.datasets[3].hidden = true;
+      }
+      if (expressions.value["4"] != "") {
+        evaluateFormula(expressions.value["4"]).forEach((p2) => {
+          chartDataOrder4.value.push(p2);
+        });
+      } else {
+        dataSetChart.value.datasets[4].hidden = true;
+      }
+      for (let i = 0; i < config.formula_calculation_data.length; i++) {
+        if (config.formula_calculation_data[i].a > 0)
+          chartDataForm.value.push({
+            x: config.formula_calculation_data[i].a,
+            y: config.formula_calculation_data[i].g
+          });
+      }
+      try {
+        chart.value = new Chart(document.getElementById("formulaChart"), configChart.value);
+      } catch (err) {
+        logError("GravityAnalysisView.onMounted()", err);
+      }
+    });
+    return (_ctx, _cache) => {
+      const _component_BsMessage = resolveComponent("BsMessage");
+      return openBlock(), createElementBlock(Fragment, null, [
+        _hoisted_1$P,
+        _hoisted_2$L,
+        createBaseVNode("div", _hoisted_3$C, [
+          _hoisted_4$q,
+          !chart.value ? (openBlock(), createBlock(_component_BsMessage, {
+            key: 0,
+            dismissable: "false",
+            message: "",
+            alert: "danger"
+          }, {
+            default: withCtx(() => [
+              createTextVNode(" Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection ")
+            ]),
+            _: 1
+          })) : createCommentVNode("", true),
+          _hoisted_5$l
+        ])
+      ], 64);
+    };
+  }
+};
+const _hoisted_1$O = /* @__PURE__ */ createBaseVNode("div", { class: "row" }, [
+  /* @__PURE__ */ createBaseVNode("p"),
+  /* @__PURE__ */ createBaseVNode("hr")
+], -1);
+const _hoisted_2$K = { class: "row" };
+const _hoisted_3$B = /* @__PURE__ */ createBaseVNode("div", { class: "form-text" }, " Below is a list of calculated values based on the formula options, devaition from input value is also shown. ", -1);
+const _hoisted_4$p = { class: "table table-striped" };
+const _hoisted_5$k = /* @__PURE__ */ createBaseVNode("th", {
+  scope: "col",
+  class: "col-sm-1"
+}, "Angle", -1);
+const _hoisted_6$j = /* @__PURE__ */ createBaseVNode("th", {
+  scope: "col",
+  class: "col-sm-1"
+}, "Gravity", -1);
+const _hoisted_7$j = /* @__PURE__ */ createBaseVNode("th", {
+  scope: "col",
+  class: "col-sm-1"
+}, "Order 1", -1);
+const _hoisted_8$k = {
+  scope: "col",
+  class: "col-sm-1"
+};
+const _hoisted_9$i = /* @__PURE__ */ createBaseVNode("th", {
+  scope: "col",
+  class: "col-sm-1"
+}, "Order 2", -1);
+const _hoisted_10$i = {
+  scope: "col",
+  class: "col-sm-1"
+};
+const _hoisted_11$f = /* @__PURE__ */ createBaseVNode("th", {
+  scope: "col",
+  class: "col-sm-1"
+}, "Order 3", -1);
+const _hoisted_12$f = {
+  scope: "col",
+  class: "col-sm-1"
+};
+const _hoisted_13$f = /* @__PURE__ */ createBaseVNode("th", {
+  scope: "col",
+  class: "col-sm-1"
+}, "Order 4", -1);
+const _hoisted_14$e = {
+  scope: "col",
+  class: "col-sm-1"
+};
+const _sfc_main$O = {
+  __name: "FormulaTableFragment",
+  props: {
+    "expressions": {},
+    "expressionsModifiers": {}
+  },
+  emits: ["update:expressions"],
+  setup(__props) {
+    const expressions = useModel(__props, "expressions");
+    const data = ref([]);
+    const maxDeviation = ref({ o1: 0, o2: 0, o3: 0, o4: 0 });
+    onMounted(() => {
+      config.formula_calculation_data.forEach((d2) => {
+        if (d2.a > 0) {
+          var o1 = calculate(expressions.value["1"], d2.a);
+          var o2 = calculate(expressions.value["2"], d2.a);
+          var o3 = calculate(expressions.value["3"], d2.a);
+          var o4 = calculate(expressions.value["4"], d2.a);
+          var o1d = Math.abs(o1 - d2.g);
+          var o2d = Math.abs(o2 - d2.g);
+          var o3d = Math.abs(o3 - d2.g);
+          var o4d = Math.abs(o4 - d2.g);
+          data.value.push({
+            a: Number(d2.a).toFixed(3),
+            g: Number(d2.g).toFixed(3),
+            o1: Number(o1).toFixed(3),
+            o1d: Number(o1d).toFixed(3),
+            o2: Number(o2).toFixed(3),
+            o2d: Number(o2d).toFixed(3),
+            o3: Number(o3).toFixed(3),
+            o3d: Number(o3d).toFixed(3),
+            o4: Number(o4).toFixed(3),
+            o4d: Number(o4d).toFixed(3)
+          });
+          if (o1d > maxDeviation.value.o1) maxDeviation.value.o1 = o1d;
+          if (o2d > maxDeviation.value.o2) maxDeviation.value.o2 = o2d;
+          if (o3d > maxDeviation.value.o3) maxDeviation.value.o3 = o3d;
+          if (o4d > maxDeviation.value.o4) maxDeviation.value.o4 = o4d;
+        }
+      });
+    });
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock(Fragment, null, [
+        _hoisted_1$O,
+        createBaseVNode("div", _hoisted_2$K, [
+          _hoisted_3$B,
+          createBaseVNode("table", _hoisted_4$p, [
+            createBaseVNode("thead", null, [
+              createBaseVNode("tr", null, [
+                _hoisted_5$k,
+                _hoisted_6$j,
+                _hoisted_7$j,
+                createBaseVNode("th", _hoisted_8$k, "(" + toDisplayString(Number(maxDeviation.value.o1).toFixed(3)) + ")", 1),
+                _hoisted_9$i,
+                createBaseVNode("th", _hoisted_10$i, "(" + toDisplayString(Number(maxDeviation.value.o2).toFixed(3)) + ")", 1),
+                _hoisted_11$f,
+                createBaseVNode("th", _hoisted_12$f, "(" + toDisplayString(Number(maxDeviation.value.o3).toFixed(3)) + ")", 1),
+                _hoisted_13$f,
+                createBaseVNode("th", _hoisted_14$e, "(" + toDisplayString(Number(maxDeviation.value.o4).toFixed(3)) + ")", 1)
+              ])
+            ]),
+            createBaseVNode("tbody", null, [
+              (openBlock(true), createElementBlock(Fragment, null, renderList(data.value, (d2, index) => {
+                return openBlock(), createElementBlock("tr", { key: index }, [
+                  createBaseVNode("td", null, toDisplayString(d2.a), 1),
+                  createBaseVNode("td", null, toDisplayString(d2.g), 1),
+                  createBaseVNode("td", null, toDisplayString(d2.o1), 1),
+                  createBaseVNode("td", null, toDisplayString(d2.o1d), 1),
+                  createBaseVNode("td", null, toDisplayString(d2.o2), 1),
+                  createBaseVNode("td", null, toDisplayString(d2.o2d), 1),
+                  createBaseVNode("td", null, toDisplayString(d2.o3), 1),
+                  createBaseVNode("td", null, toDisplayString(d2.o3d), 1),
+                  createBaseVNode("td", null, toDisplayString(d2.o4), 1),
+                  createBaseVNode("td", null, toDisplayString(d2.o4d), 1)
+                ]);
+              }), 128))
+            ])
+          ])
+        ])
+      ], 64);
+    };
+  }
+};
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+function getAugmentedNamespace(n) {
+  if (n.__esModule) return n;
+  var f2 = n.default;
+  if (typeof f2 == "function") {
+    var a = function a2() {
+      if (this instanceof a2) {
+        return Reflect.construct(f2, arguments, this.constructor);
+      }
+      return f2.apply(this, arguments);
+    };
+    a.prototype = f2.prototype;
+  } else a = {};
+  Object.defineProperty(a, "__esModule", { value: true });
+  Object.keys(n).forEach(function(k) {
+    var d2 = Object.getOwnPropertyDescriptor(n, k);
+    Object.defineProperty(a, k, d2.get ? d2 : {
+      enumerable: true,
+      get: function() {
+        return n[k];
+      }
+    });
+  });
+  return a;
+}
+var matrix = {};
+const toString = Object.prototype.toString;
+function isAnyArray$1(value) {
+  const tag = toString.call(value);
+  return tag.endsWith("Array]") && !tag.includes("Big");
+}
+const libEsm = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  isAnyArray: isAnyArray$1
+}, Symbol.toStringTag, { value: "Module" }));
+const require$$0 = /* @__PURE__ */ getAugmentedNamespace(libEsm);
+function max(input) {
+  var options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+  if (!isAnyArray$1(input)) {
+    throw new TypeError("input must be an array");
+  }
+  if (input.length === 0) {
+    throw new TypeError("input must not be empty");
+  }
+  var _options$fromIndex = options.fromIndex, fromIndex = _options$fromIndex === void 0 ? 0 : _options$fromIndex, _options$toIndex = options.toIndex, toIndex = _options$toIndex === void 0 ? input.length : _options$toIndex;
+  if (fromIndex < 0 || fromIndex >= input.length || !Number.isInteger(fromIndex)) {
+    throw new Error("fromIndex must be a positive integer smaller than length");
+  }
+  if (toIndex <= fromIndex || toIndex > input.length || !Number.isInteger(toIndex)) {
+    throw new Error("toIndex must be an integer greater than fromIndex and at most equal to length");
+  }
+  var maxValue = input[fromIndex];
+  for (var i = fromIndex + 1; i < toIndex; i++) {
+    if (input[i] > maxValue) maxValue = input[i];
+  }
+  return maxValue;
+}
+function min(input) {
+  var options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+  if (!isAnyArray$1(input)) {
+    throw new TypeError("input must be an array");
+  }
+  if (input.length === 0) {
+    throw new TypeError("input must not be empty");
+  }
+  var _options$fromIndex = options.fromIndex, fromIndex = _options$fromIndex === void 0 ? 0 : _options$fromIndex, _options$toIndex = options.toIndex, toIndex = _options$toIndex === void 0 ? input.length : _options$toIndex;
+  if (fromIndex < 0 || fromIndex >= input.length || !Number.isInteger(fromIndex)) {
+    throw new Error("fromIndex must be a positive integer smaller than length");
+  }
+  if (toIndex <= fromIndex || toIndex > input.length || !Number.isInteger(toIndex)) {
+    throw new Error("toIndex must be an integer greater than fromIndex and at most equal to length");
+  }
+  var minValue = input[fromIndex];
+  for (var i = fromIndex + 1; i < toIndex; i++) {
+    if (input[i] < minValue) minValue = input[i];
+  }
+  return minValue;
+}
+function rescale$1(input) {
+  var options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+  if (!isAnyArray$1(input)) {
+    throw new TypeError("input must be an array");
+  } else if (input.length === 0) {
+    throw new TypeError("input must not be empty");
+  }
+  var output;
+  if (options.output !== void 0) {
+    if (!isAnyArray$1(options.output)) {
+      throw new TypeError("output option must be an array if specified");
+    }
+    output = options.output;
+  } else {
+    output = new Array(input.length);
+  }
+  var currentMin = min(input);
+  var currentMax = max(input);
+  if (currentMin === currentMax) {
+    throw new RangeError("minimum and maximum input values are equal. Cannot rescale a constant array");
+  }
+  var _options$min = options.min, minValue = _options$min === void 0 ? options.autoMinMax ? currentMin : 0 : _options$min, _options$max = options.max, maxValue = _options$max === void 0 ? options.autoMinMax ? currentMax : 1 : _options$max;
+  if (minValue >= maxValue) {
+    throw new RangeError("min option must be smaller than max option");
+  }
+  var factor = (maxValue - minValue) / (currentMax - currentMin);
+  for (var i = 0; i < input.length; i++) {
+    output[i] = (input[i] - currentMin) * factor + minValue;
+  }
+  return output;
+}
+const libEs6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: rescale$1
+}, Symbol.toStringTag, { value: "Module" }));
+const require$$1 = /* @__PURE__ */ getAugmentedNamespace(libEs6);
+Object.defineProperty(matrix, "__esModule", { value: true });
+var isAnyArray = require$$0;
+var rescale = require$$1;
+const indent = " ".repeat(2);
+const indentData = " ".repeat(4);
+function inspectMatrix() {
+  return inspectMatrixWithOptions(this);
+}
+function inspectMatrixWithOptions(matrix2, options = {}) {
+  const {
+    maxRows = 15,
+    maxColumns = 10,
+    maxNumSize = 8,
+    padMinus = "auto"
+  } = options;
+  return `${matrix2.constructor.name} {
+${indent}[
+${indentData}${inspectData(matrix2, maxRows, maxColumns, maxNumSize, padMinus)}
+${indent}]
+${indent}rows: ${matrix2.rows}
+${indent}columns: ${matrix2.columns}
+}`;
+}
+function inspectData(matrix2, maxRows, maxColumns, maxNumSize, padMinus) {
+  const { rows, columns } = matrix2;
+  const maxI = Math.min(rows, maxRows);
+  const maxJ = Math.min(columns, maxColumns);
+  const result2 = [];
+  if (padMinus === "auto") {
+    padMinus = false;
+    loop: for (let i = 0; i < maxI; i++) {
+      for (let j = 0; j < maxJ; j++) {
+        if (matrix2.get(i, j) < 0) {
+          padMinus = true;
+          break loop;
+        }
+      }
+    }
+  }
+  for (let i = 0; i < maxI; i++) {
+    let line = [];
+    for (let j = 0; j < maxJ; j++) {
+      line.push(formatNumber(matrix2.get(i, j), maxNumSize, padMinus));
+    }
+    result2.push(`${line.join(" ")}`);
+  }
+  if (maxJ !== columns) {
+    result2[result2.length - 1] += ` ... ${columns - maxColumns} more columns`;
+  }
+  if (maxI !== rows) {
+    result2.push(`... ${rows - maxRows} more rows`);
+  }
+  return result2.join(`
+${indentData}`);
+}
+function formatNumber(num, maxNumSize, padMinus) {
+  return (num >= 0 && padMinus ? ` ${formatNumber2(num, maxNumSize - 1)}` : formatNumber2(num, maxNumSize)).padEnd(maxNumSize);
+}
+function formatNumber2(num, len) {
+  let str = num.toString();
+  if (str.length <= len) return str;
+  let fix = num.toFixed(len);
+  if (fix.length > len) {
+    fix = num.toFixed(Math.max(0, len - (fix.length - len)));
+  }
+  if (fix.length <= len && !fix.startsWith("0.000") && !fix.startsWith("-0.000")) {
+    return fix;
+  }
+  let exp = num.toExponential(len);
+  if (exp.length > len) {
+    exp = num.toExponential(Math.max(0, len - (exp.length - len)));
+  }
+  return exp.slice(0);
+}
+function installMathOperations(AbstractMatrix2, Matrix2) {
+  AbstractMatrix2.prototype.add = function add2(value) {
+    if (typeof value === "number") return this.addS(value);
+    return this.addM(value);
+  };
+  AbstractMatrix2.prototype.addS = function addS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) + value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.addM = function addM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) + matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.add = function add2(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.add(value);
+  };
+  AbstractMatrix2.prototype.sub = function sub(value) {
+    if (typeof value === "number") return this.subS(value);
+    return this.subM(value);
+  };
+  AbstractMatrix2.prototype.subS = function subS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) - value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.subM = function subM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) - matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.sub = function sub(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.sub(value);
+  };
+  AbstractMatrix2.prototype.subtract = AbstractMatrix2.prototype.sub;
+  AbstractMatrix2.prototype.subtractS = AbstractMatrix2.prototype.subS;
+  AbstractMatrix2.prototype.subtractM = AbstractMatrix2.prototype.subM;
+  AbstractMatrix2.subtract = AbstractMatrix2.sub;
+  AbstractMatrix2.prototype.mul = function mul(value) {
+    if (typeof value === "number") return this.mulS(value);
+    return this.mulM(value);
+  };
+  AbstractMatrix2.prototype.mulS = function mulS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) * value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.mulM = function mulM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) * matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.mul = function mul(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.mul(value);
+  };
+  AbstractMatrix2.prototype.multiply = AbstractMatrix2.prototype.mul;
+  AbstractMatrix2.prototype.multiplyS = AbstractMatrix2.prototype.mulS;
+  AbstractMatrix2.prototype.multiplyM = AbstractMatrix2.prototype.mulM;
+  AbstractMatrix2.multiply = AbstractMatrix2.mul;
+  AbstractMatrix2.prototype.div = function div(value) {
+    if (typeof value === "number") return this.divS(value);
+    return this.divM(value);
+  };
+  AbstractMatrix2.prototype.divS = function divS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) / value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.divM = function divM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) / matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.div = function div(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.div(value);
+  };
+  AbstractMatrix2.prototype.divide = AbstractMatrix2.prototype.div;
+  AbstractMatrix2.prototype.divideS = AbstractMatrix2.prototype.divS;
+  AbstractMatrix2.prototype.divideM = AbstractMatrix2.prototype.divM;
+  AbstractMatrix2.divide = AbstractMatrix2.div;
+  AbstractMatrix2.prototype.mod = function mod(value) {
+    if (typeof value === "number") return this.modS(value);
+    return this.modM(value);
+  };
+  AbstractMatrix2.prototype.modS = function modS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) % value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.modM = function modM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) % matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.mod = function mod(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.mod(value);
+  };
+  AbstractMatrix2.prototype.modulus = AbstractMatrix2.prototype.mod;
+  AbstractMatrix2.prototype.modulusS = AbstractMatrix2.prototype.modS;
+  AbstractMatrix2.prototype.modulusM = AbstractMatrix2.prototype.modM;
+  AbstractMatrix2.modulus = AbstractMatrix2.mod;
+  AbstractMatrix2.prototype.and = function and(value) {
+    if (typeof value === "number") return this.andS(value);
+    return this.andM(value);
+  };
+  AbstractMatrix2.prototype.andS = function andS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) & value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.andM = function andM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) & matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.and = function and(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.and(value);
+  };
+  AbstractMatrix2.prototype.or = function or(value) {
+    if (typeof value === "number") return this.orS(value);
+    return this.orM(value);
+  };
+  AbstractMatrix2.prototype.orS = function orS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) | value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.orM = function orM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) | matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.or = function or(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.or(value);
+  };
+  AbstractMatrix2.prototype.xor = function xor(value) {
+    if (typeof value === "number") return this.xorS(value);
+    return this.xorM(value);
+  };
+  AbstractMatrix2.prototype.xorS = function xorS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) ^ value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.xorM = function xorM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) ^ matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.xor = function xor(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.xor(value);
+  };
+  AbstractMatrix2.prototype.leftShift = function leftShift(value) {
+    if (typeof value === "number") return this.leftShiftS(value);
+    return this.leftShiftM(value);
+  };
+  AbstractMatrix2.prototype.leftShiftS = function leftShiftS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) << value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.leftShiftM = function leftShiftM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) << matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.leftShift = function leftShift(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.leftShift(value);
+  };
+  AbstractMatrix2.prototype.signPropagatingRightShift = function signPropagatingRightShift(value) {
+    if (typeof value === "number") return this.signPropagatingRightShiftS(value);
+    return this.signPropagatingRightShiftM(value);
+  };
+  AbstractMatrix2.prototype.signPropagatingRightShiftS = function signPropagatingRightShiftS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) >> value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.signPropagatingRightShiftM = function signPropagatingRightShiftM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) >> matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.signPropagatingRightShift = function signPropagatingRightShift(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.signPropagatingRightShift(value);
+  };
+  AbstractMatrix2.prototype.rightShift = function rightShift(value) {
+    if (typeof value === "number") return this.rightShiftS(value);
+    return this.rightShiftM(value);
+  };
+  AbstractMatrix2.prototype.rightShiftS = function rightShiftS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) >>> value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.rightShiftM = function rightShiftM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) >>> matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.rightShift = function rightShift(matrix2, value) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.rightShift(value);
+  };
+  AbstractMatrix2.prototype.zeroFillRightShift = AbstractMatrix2.prototype.rightShift;
+  AbstractMatrix2.prototype.zeroFillRightShiftS = AbstractMatrix2.prototype.rightShiftS;
+  AbstractMatrix2.prototype.zeroFillRightShiftM = AbstractMatrix2.prototype.rightShiftM;
+  AbstractMatrix2.zeroFillRightShift = AbstractMatrix2.rightShift;
+  AbstractMatrix2.prototype.not = function not() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, ~this.get(i, j));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.not = function not(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.not();
+  };
+  AbstractMatrix2.prototype.abs = function abs() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.abs(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.abs = function abs(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.abs();
+  };
+  AbstractMatrix2.prototype.acos = function acos() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.acos(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.acos = function acos(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.acos();
+  };
+  AbstractMatrix2.prototype.acosh = function acosh() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.acosh(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.acosh = function acosh(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.acosh();
+  };
+  AbstractMatrix2.prototype.asin = function asin() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.asin(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.asin = function asin(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.asin();
+  };
+  AbstractMatrix2.prototype.asinh = function asinh() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.asinh(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.asinh = function asinh(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.asinh();
+  };
+  AbstractMatrix2.prototype.atan = function atan() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.atan(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.atan = function atan(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.atan();
+  };
+  AbstractMatrix2.prototype.atanh = function atanh() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.atanh(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.atanh = function atanh(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.atanh();
+  };
+  AbstractMatrix2.prototype.cbrt = function cbrt() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.cbrt(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.cbrt = function cbrt(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.cbrt();
+  };
+  AbstractMatrix2.prototype.ceil = function ceil() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.ceil(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.ceil = function ceil(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.ceil();
+  };
+  AbstractMatrix2.prototype.clz32 = function clz32() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.clz32(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.clz32 = function clz32(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.clz32();
+  };
+  AbstractMatrix2.prototype.cos = function cos() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.cos(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.cos = function cos(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.cos();
+  };
+  AbstractMatrix2.prototype.cosh = function cosh() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.cosh(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.cosh = function cosh(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.cosh();
+  };
+  AbstractMatrix2.prototype.exp = function exp() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.exp(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.exp = function exp(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.exp();
+  };
+  AbstractMatrix2.prototype.expm1 = function expm1() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.expm1(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.expm1 = function expm1(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.expm1();
+  };
+  AbstractMatrix2.prototype.floor = function floor() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.floor(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.floor = function floor(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.floor();
+  };
+  AbstractMatrix2.prototype.fround = function fround() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.fround(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.fround = function fround(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.fround();
+  };
+  AbstractMatrix2.prototype.log = function log() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.log(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.log = function log(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.log();
+  };
+  AbstractMatrix2.prototype.log1p = function log1p() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.log1p(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.log1p = function log1p(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.log1p();
+  };
+  AbstractMatrix2.prototype.log10 = function log10() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.log10(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.log10 = function log10(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.log10();
+  };
+  AbstractMatrix2.prototype.log2 = function log2() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.log2(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.log2 = function log2(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.log2();
+  };
+  AbstractMatrix2.prototype.round = function round() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.round(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.round = function round(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.round();
+  };
+  AbstractMatrix2.prototype.sign = function sign() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.sign(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.sign = function sign(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.sign();
+  };
+  AbstractMatrix2.prototype.sin = function sin() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.sin(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.sin = function sin(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.sin();
+  };
+  AbstractMatrix2.prototype.sinh = function sinh() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.sinh(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.sinh = function sinh(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.sinh();
+  };
+  AbstractMatrix2.prototype.sqrt = function sqrt() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.sqrt(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.sqrt = function sqrt(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.sqrt();
+  };
+  AbstractMatrix2.prototype.tan = function tan() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.tan(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.tan = function tan(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.tan();
+  };
+  AbstractMatrix2.prototype.tanh = function tanh() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.tanh(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.tanh = function tanh(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.tanh();
+  };
+  AbstractMatrix2.prototype.trunc = function trunc() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, Math.trunc(this.get(i, j)));
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.trunc = function trunc(matrix2) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.trunc();
+  };
+  AbstractMatrix2.pow = function pow(matrix2, arg0) {
+    const newMatrix = new Matrix2(matrix2);
+    return newMatrix.pow(arg0);
+  };
+  AbstractMatrix2.prototype.pow = function pow(value) {
+    if (typeof value === "number") return this.powS(value);
+    return this.powM(value);
+  };
+  AbstractMatrix2.prototype.powS = function powS(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) ** value);
+      }
+    }
+    return this;
+  };
+  AbstractMatrix2.prototype.powM = function powM(matrix2) {
+    matrix2 = Matrix2.checkMatrix(matrix2);
+    if (this.rows !== matrix2.rows || this.columns !== matrix2.columns) {
+      throw new RangeError("Matrices dimensions must be equal");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) ** matrix2.get(i, j));
+      }
+    }
+    return this;
+  };
+}
+function checkRowIndex(matrix2, index, outer) {
+  let max2 = outer ? matrix2.rows : matrix2.rows - 1;
+  if (index < 0 || index > max2) {
+    throw new RangeError("Row index out of range");
+  }
+}
+function checkColumnIndex(matrix2, index, outer) {
+  let max2 = outer ? matrix2.columns : matrix2.columns - 1;
+  if (index < 0 || index > max2) {
+    throw new RangeError("Column index out of range");
+  }
+}
+function checkRowVector(matrix2, vector) {
+  if (vector.to1DArray) {
+    vector = vector.to1DArray();
+  }
+  if (vector.length !== matrix2.columns) {
+    throw new RangeError(
+      "vector size must be the same as the number of columns"
+    );
+  }
+  return vector;
+}
+function checkColumnVector(matrix2, vector) {
+  if (vector.to1DArray) {
+    vector = vector.to1DArray();
+  }
+  if (vector.length !== matrix2.rows) {
+    throw new RangeError("vector size must be the same as the number of rows");
+  }
+  return vector;
+}
+function checkRowIndices(matrix2, rowIndices) {
+  if (!isAnyArray.isAnyArray(rowIndices)) {
+    throw new TypeError("row indices must be an array");
+  }
+  for (let i = 0; i < rowIndices.length; i++) {
+    if (rowIndices[i] < 0 || rowIndices[i] >= matrix2.rows) {
+      throw new RangeError("row indices are out of range");
+    }
+  }
+}
+function checkColumnIndices(matrix2, columnIndices) {
+  if (!isAnyArray.isAnyArray(columnIndices)) {
+    throw new TypeError("column indices must be an array");
+  }
+  for (let i = 0; i < columnIndices.length; i++) {
+    if (columnIndices[i] < 0 || columnIndices[i] >= matrix2.columns) {
+      throw new RangeError("column indices are out of range");
+    }
+  }
+}
+function checkRange(matrix2, startRow, endRow, startColumn, endColumn) {
+  if (arguments.length !== 5) {
+    throw new RangeError("expected 4 arguments");
+  }
+  checkNumber("startRow", startRow);
+  checkNumber("endRow", endRow);
+  checkNumber("startColumn", startColumn);
+  checkNumber("endColumn", endColumn);
+  if (startRow > endRow || startColumn > endColumn || startRow < 0 || startRow >= matrix2.rows || endRow < 0 || endRow >= matrix2.rows || startColumn < 0 || startColumn >= matrix2.columns || endColumn < 0 || endColumn >= matrix2.columns) {
+    throw new RangeError("Submatrix indices are out of range");
+  }
+}
+function newArray(length, value = 0) {
+  let array = [];
+  for (let i = 0; i < length; i++) {
+    array.push(value);
+  }
+  return array;
+}
+function checkNumber(name, value) {
+  if (typeof value !== "number") {
+    throw new TypeError(`${name} must be a number`);
+  }
+}
+function checkNonEmpty(matrix2) {
+  if (matrix2.isEmpty()) {
+    throw new Error("Empty matrix has no elements to index");
+  }
+}
+function sumByRow(matrix2) {
+  let sum = newArray(matrix2.rows);
+  for (let i = 0; i < matrix2.rows; ++i) {
+    for (let j = 0; j < matrix2.columns; ++j) {
+      sum[i] += matrix2.get(i, j);
+    }
+  }
+  return sum;
+}
+function sumByColumn(matrix2) {
+  let sum = newArray(matrix2.columns);
+  for (let i = 0; i < matrix2.rows; ++i) {
+    for (let j = 0; j < matrix2.columns; ++j) {
+      sum[j] += matrix2.get(i, j);
+    }
+  }
+  return sum;
+}
+function sumAll(matrix2) {
+  let v = 0;
+  for (let i = 0; i < matrix2.rows; i++) {
+    for (let j = 0; j < matrix2.columns; j++) {
+      v += matrix2.get(i, j);
+    }
+  }
+  return v;
+}
+function productByRow(matrix2) {
+  let sum = newArray(matrix2.rows, 1);
+  for (let i = 0; i < matrix2.rows; ++i) {
+    for (let j = 0; j < matrix2.columns; ++j) {
+      sum[i] *= matrix2.get(i, j);
+    }
+  }
+  return sum;
+}
+function productByColumn(matrix2) {
+  let sum = newArray(matrix2.columns, 1);
+  for (let i = 0; i < matrix2.rows; ++i) {
+    for (let j = 0; j < matrix2.columns; ++j) {
+      sum[j] *= matrix2.get(i, j);
+    }
+  }
+  return sum;
+}
+function productAll(matrix2) {
+  let v = 1;
+  for (let i = 0; i < matrix2.rows; i++) {
+    for (let j = 0; j < matrix2.columns; j++) {
+      v *= matrix2.get(i, j);
+    }
+  }
+  return v;
+}
+function varianceByRow(matrix2, unbiased, mean) {
+  const rows = matrix2.rows;
+  const cols = matrix2.columns;
+  const variance = [];
+  for (let i = 0; i < rows; i++) {
+    let sum1 = 0;
+    let sum2 = 0;
+    let x = 0;
+    for (let j = 0; j < cols; j++) {
+      x = matrix2.get(i, j) - mean[i];
+      sum1 += x;
+      sum2 += x * x;
+    }
+    if (unbiased) {
+      variance.push((sum2 - sum1 * sum1 / cols) / (cols - 1));
+    } else {
+      variance.push((sum2 - sum1 * sum1 / cols) / cols);
+    }
+  }
+  return variance;
+}
+function varianceByColumn(matrix2, unbiased, mean) {
+  const rows = matrix2.rows;
+  const cols = matrix2.columns;
+  const variance = [];
+  for (let j = 0; j < cols; j++) {
+    let sum1 = 0;
+    let sum2 = 0;
+    let x = 0;
+    for (let i = 0; i < rows; i++) {
+      x = matrix2.get(i, j) - mean[j];
+      sum1 += x;
+      sum2 += x * x;
+    }
+    if (unbiased) {
+      variance.push((sum2 - sum1 * sum1 / rows) / (rows - 1));
+    } else {
+      variance.push((sum2 - sum1 * sum1 / rows) / rows);
+    }
+  }
+  return variance;
+}
+function varianceAll(matrix2, unbiased, mean) {
+  const rows = matrix2.rows;
+  const cols = matrix2.columns;
+  const size2 = rows * cols;
+  let sum1 = 0;
+  let sum2 = 0;
+  let x = 0;
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      x = matrix2.get(i, j) - mean;
+      sum1 += x;
+      sum2 += x * x;
+    }
+  }
+  if (unbiased) {
+    return (sum2 - sum1 * sum1 / size2) / (size2 - 1);
+  } else {
+    return (sum2 - sum1 * sum1 / size2) / size2;
+  }
+}
+function centerByRow(matrix2, mean) {
+  for (let i = 0; i < matrix2.rows; i++) {
+    for (let j = 0; j < matrix2.columns; j++) {
+      matrix2.set(i, j, matrix2.get(i, j) - mean[i]);
+    }
+  }
+}
+function centerByColumn(matrix2, mean) {
+  for (let i = 0; i < matrix2.rows; i++) {
+    for (let j = 0; j < matrix2.columns; j++) {
+      matrix2.set(i, j, matrix2.get(i, j) - mean[j]);
+    }
+  }
+}
+function centerAll(matrix2, mean) {
+  for (let i = 0; i < matrix2.rows; i++) {
+    for (let j = 0; j < matrix2.columns; j++) {
+      matrix2.set(i, j, matrix2.get(i, j) - mean);
+    }
+  }
+}
+function getScaleByRow(matrix2) {
+  const scale = [];
+  for (let i = 0; i < matrix2.rows; i++) {
+    let sum = 0;
+    for (let j = 0; j < matrix2.columns; j++) {
+      sum += matrix2.get(i, j) ** 2 / (matrix2.columns - 1);
+    }
+    scale.push(Math.sqrt(sum));
+  }
+  return scale;
+}
+function scaleByRow(matrix2, scale) {
+  for (let i = 0; i < matrix2.rows; i++) {
+    for (let j = 0; j < matrix2.columns; j++) {
+      matrix2.set(i, j, matrix2.get(i, j) / scale[i]);
+    }
+  }
+}
+function getScaleByColumn(matrix2) {
+  const scale = [];
+  for (let j = 0; j < matrix2.columns; j++) {
+    let sum = 0;
+    for (let i = 0; i < matrix2.rows; i++) {
+      sum += matrix2.get(i, j) ** 2 / (matrix2.rows - 1);
+    }
+    scale.push(Math.sqrt(sum));
+  }
+  return scale;
+}
+function scaleByColumn(matrix2, scale) {
+  for (let i = 0; i < matrix2.rows; i++) {
+    for (let j = 0; j < matrix2.columns; j++) {
+      matrix2.set(i, j, matrix2.get(i, j) / scale[j]);
+    }
+  }
+}
+function getScaleAll(matrix2) {
+  const divider = matrix2.size - 1;
+  let sum = 0;
+  for (let j = 0; j < matrix2.columns; j++) {
+    for (let i = 0; i < matrix2.rows; i++) {
+      sum += matrix2.get(i, j) ** 2 / divider;
+    }
+  }
+  return Math.sqrt(sum);
+}
+function scaleAll(matrix2, scale) {
+  for (let i = 0; i < matrix2.rows; i++) {
+    for (let j = 0; j < matrix2.columns; j++) {
+      matrix2.set(i, j, matrix2.get(i, j) / scale);
+    }
+  }
+}
+class AbstractMatrix {
+  static from1DArray(newRows, newColumns, newData) {
+    let length = newRows * newColumns;
+    if (length !== newData.length) {
+      throw new RangeError("data length does not match given dimensions");
+    }
+    let newMatrix = new Matrix$1(newRows, newColumns);
+    for (let row = 0; row < newRows; row++) {
+      for (let column = 0; column < newColumns; column++) {
+        newMatrix.set(row, column, newData[row * newColumns + column]);
+      }
+    }
+    return newMatrix;
+  }
+  static rowVector(newData) {
+    let vector = new Matrix$1(1, newData.length);
+    for (let i = 0; i < newData.length; i++) {
+      vector.set(0, i, newData[i]);
+    }
+    return vector;
+  }
+  static columnVector(newData) {
+    let vector = new Matrix$1(newData.length, 1);
+    for (let i = 0; i < newData.length; i++) {
+      vector.set(i, 0, newData[i]);
+    }
+    return vector;
+  }
+  static zeros(rows, columns) {
+    return new Matrix$1(rows, columns);
+  }
+  static ones(rows, columns) {
+    return new Matrix$1(rows, columns).fill(1);
+  }
+  static rand(rows, columns, options = {}) {
+    if (typeof options !== "object") {
+      throw new TypeError("options must be an object");
+    }
+    const { random = Math.random } = options;
+    let matrix2 = new Matrix$1(rows, columns);
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        matrix2.set(i, j, random());
+      }
+    }
+    return matrix2;
+  }
+  static randInt(rows, columns, options = {}) {
+    if (typeof options !== "object") {
+      throw new TypeError("options must be an object");
+    }
+    const { min: min2 = 0, max: max2 = 1e3, random = Math.random } = options;
+    if (!Number.isInteger(min2)) throw new TypeError("min must be an integer");
+    if (!Number.isInteger(max2)) throw new TypeError("max must be an integer");
+    if (min2 >= max2) throw new RangeError("min must be smaller than max");
+    let interval = max2 - min2;
+    let matrix2 = new Matrix$1(rows, columns);
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        let value = min2 + Math.round(random() * interval);
+        matrix2.set(i, j, value);
+      }
+    }
+    return matrix2;
+  }
+  static eye(rows, columns, value) {
+    if (columns === void 0) columns = rows;
+    if (value === void 0) value = 1;
+    let min2 = Math.min(rows, columns);
+    let matrix2 = this.zeros(rows, columns);
+    for (let i = 0; i < min2; i++) {
+      matrix2.set(i, i, value);
+    }
+    return matrix2;
+  }
+  static diag(data, rows, columns) {
+    let l = data.length;
+    if (rows === void 0) rows = l;
+    if (columns === void 0) columns = rows;
+    let min2 = Math.min(l, rows, columns);
+    let matrix2 = this.zeros(rows, columns);
+    for (let i = 0; i < min2; i++) {
+      matrix2.set(i, i, data[i]);
+    }
+    return matrix2;
+  }
+  static min(matrix1, matrix2) {
+    matrix1 = this.checkMatrix(matrix1);
+    matrix2 = this.checkMatrix(matrix2);
+    let rows = matrix1.rows;
+    let columns = matrix1.columns;
+    let result2 = new Matrix$1(rows, columns);
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        result2.set(i, j, Math.min(matrix1.get(i, j), matrix2.get(i, j)));
+      }
+    }
+    return result2;
+  }
+  static max(matrix1, matrix2) {
+    matrix1 = this.checkMatrix(matrix1);
+    matrix2 = this.checkMatrix(matrix2);
+    let rows = matrix1.rows;
+    let columns = matrix1.columns;
+    let result2 = new this(rows, columns);
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        result2.set(i, j, Math.max(matrix1.get(i, j), matrix2.get(i, j)));
+      }
+    }
+    return result2;
+  }
+  static checkMatrix(value) {
+    return AbstractMatrix.isMatrix(value) ? value : new Matrix$1(value);
+  }
+  static isMatrix(value) {
+    return value != null && value.klass === "Matrix";
+  }
+  get size() {
+    return this.rows * this.columns;
+  }
+  apply(callback) {
+    if (typeof callback !== "function") {
+      throw new TypeError("callback must be a function");
+    }
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        callback.call(this, i, j);
+      }
+    }
+    return this;
+  }
+  to1DArray() {
+    let array = [];
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        array.push(this.get(i, j));
+      }
+    }
+    return array;
+  }
+  to2DArray() {
+    let copy = [];
+    for (let i = 0; i < this.rows; i++) {
+      copy.push([]);
+      for (let j = 0; j < this.columns; j++) {
+        copy[i].push(this.get(i, j));
+      }
+    }
+    return copy;
+  }
+  toJSON() {
+    return this.to2DArray();
+  }
+  isRowVector() {
+    return this.rows === 1;
+  }
+  isColumnVector() {
+    return this.columns === 1;
+  }
+  isVector() {
+    return this.rows === 1 || this.columns === 1;
+  }
+  isSquare() {
+    return this.rows === this.columns;
+  }
+  isEmpty() {
+    return this.rows === 0 || this.columns === 0;
+  }
+  isSymmetric() {
+    if (this.isSquare()) {
+      for (let i = 0; i < this.rows; i++) {
+        for (let j = 0; j <= i; j++) {
+          if (this.get(i, j) !== this.get(j, i)) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+  isDistance() {
+    if (!this.isSymmetric()) return false;
+    for (let i = 0; i < this.rows; i++) {
+      if (this.get(i, i) !== 0) return false;
+    }
+    return true;
+  }
+  isEchelonForm() {
+    let i = 0;
+    let j = 0;
+    let previousColumn = -1;
+    let isEchelonForm = true;
+    let checked = false;
+    while (i < this.rows && isEchelonForm) {
+      j = 0;
+      checked = false;
+      while (j < this.columns && checked === false) {
+        if (this.get(i, j) === 0) {
+          j++;
+        } else if (this.get(i, j) === 1 && j > previousColumn) {
+          checked = true;
+          previousColumn = j;
+        } else {
+          isEchelonForm = false;
+          checked = true;
+        }
+      }
+      i++;
+    }
+    return isEchelonForm;
+  }
+  isReducedEchelonForm() {
+    let i = 0;
+    let j = 0;
+    let previousColumn = -1;
+    let isReducedEchelonForm = true;
+    let checked = false;
+    while (i < this.rows && isReducedEchelonForm) {
+      j = 0;
+      checked = false;
+      while (j < this.columns && checked === false) {
+        if (this.get(i, j) === 0) {
+          j++;
+        } else if (this.get(i, j) === 1 && j > previousColumn) {
+          checked = true;
+          previousColumn = j;
+        } else {
+          isReducedEchelonForm = false;
+          checked = true;
+        }
+      }
+      for (let k = j + 1; k < this.rows; k++) {
+        if (this.get(i, k) !== 0) {
+          isReducedEchelonForm = false;
+        }
+      }
+      i++;
+    }
+    return isReducedEchelonForm;
+  }
+  echelonForm() {
+    let result2 = this.clone();
+    let h2 = 0;
+    let k = 0;
+    while (h2 < result2.rows && k < result2.columns) {
+      let iMax = h2;
+      for (let i = h2; i < result2.rows; i++) {
+        if (result2.get(i, k) > result2.get(iMax, k)) {
+          iMax = i;
+        }
+      }
+      if (result2.get(iMax, k) === 0) {
+        k++;
+      } else {
+        result2.swapRows(h2, iMax);
+        let tmp = result2.get(h2, k);
+        for (let j = k; j < result2.columns; j++) {
+          result2.set(h2, j, result2.get(h2, j) / tmp);
+        }
+        for (let i = h2 + 1; i < result2.rows; i++) {
+          let factor = result2.get(i, k) / result2.get(h2, k);
+          result2.set(i, k, 0);
+          for (let j = k + 1; j < result2.columns; j++) {
+            result2.set(i, j, result2.get(i, j) - result2.get(h2, j) * factor);
+          }
+        }
+        h2++;
+        k++;
+      }
+    }
+    return result2;
+  }
+  reducedEchelonForm() {
+    let result2 = this.echelonForm();
+    let m = result2.columns;
+    let n = result2.rows;
+    let h2 = n - 1;
+    while (h2 >= 0) {
+      if (result2.maxRow(h2) === 0) {
+        h2--;
+      } else {
+        let p2 = 0;
+        let pivot = false;
+        while (p2 < n && pivot === false) {
+          if (result2.get(h2, p2) === 1) {
+            pivot = true;
+          } else {
+            p2++;
+          }
+        }
+        for (let i = 0; i < h2; i++) {
+          let factor = result2.get(i, p2);
+          for (let j = p2; j < m; j++) {
+            let tmp = result2.get(i, j) - factor * result2.get(h2, j);
+            result2.set(i, j, tmp);
+          }
+        }
+        h2--;
+      }
+    }
+    return result2;
+  }
+  set() {
+    throw new Error("set method is unimplemented");
+  }
+  get() {
+    throw new Error("get method is unimplemented");
+  }
+  repeat(options = {}) {
+    if (typeof options !== "object") {
+      throw new TypeError("options must be an object");
+    }
+    const { rows = 1, columns = 1 } = options;
+    if (!Number.isInteger(rows) || rows <= 0) {
+      throw new TypeError("rows must be a positive integer");
+    }
+    if (!Number.isInteger(columns) || columns <= 0) {
+      throw new TypeError("columns must be a positive integer");
+    }
+    let matrix2 = new Matrix$1(this.rows * rows, this.columns * columns);
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        matrix2.setSubMatrix(this, this.rows * i, this.columns * j);
+      }
+    }
+    return matrix2;
+  }
+  fill(value) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, value);
+      }
+    }
+    return this;
+  }
+  neg() {
+    return this.mulS(-1);
+  }
+  getRow(index) {
+    checkRowIndex(this, index);
+    let row = [];
+    for (let i = 0; i < this.columns; i++) {
+      row.push(this.get(index, i));
+    }
+    return row;
+  }
+  getRowVector(index) {
+    return Matrix$1.rowVector(this.getRow(index));
+  }
+  setRow(index, array) {
+    checkRowIndex(this, index);
+    array = checkRowVector(this, array);
+    for (let i = 0; i < this.columns; i++) {
+      this.set(index, i, array[i]);
+    }
+    return this;
+  }
+  swapRows(row1, row2) {
+    checkRowIndex(this, row1);
+    checkRowIndex(this, row2);
+    for (let i = 0; i < this.columns; i++) {
+      let temp = this.get(row1, i);
+      this.set(row1, i, this.get(row2, i));
+      this.set(row2, i, temp);
+    }
+    return this;
+  }
+  getColumn(index) {
+    checkColumnIndex(this, index);
+    let column = [];
+    for (let i = 0; i < this.rows; i++) {
+      column.push(this.get(i, index));
+    }
+    return column;
+  }
+  getColumnVector(index) {
+    return Matrix$1.columnVector(this.getColumn(index));
+  }
+  setColumn(index, array) {
+    checkColumnIndex(this, index);
+    array = checkColumnVector(this, array);
+    for (let i = 0; i < this.rows; i++) {
+      this.set(i, index, array[i]);
+    }
+    return this;
+  }
+  swapColumns(column1, column2) {
+    checkColumnIndex(this, column1);
+    checkColumnIndex(this, column2);
+    for (let i = 0; i < this.rows; i++) {
+      let temp = this.get(i, column1);
+      this.set(i, column1, this.get(i, column2));
+      this.set(i, column2, temp);
+    }
+    return this;
+  }
+  addRowVector(vector) {
+    vector = checkRowVector(this, vector);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) + vector[j]);
+      }
+    }
+    return this;
+  }
+  subRowVector(vector) {
+    vector = checkRowVector(this, vector);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) - vector[j]);
+      }
+    }
+    return this;
+  }
+  mulRowVector(vector) {
+    vector = checkRowVector(this, vector);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) * vector[j]);
+      }
+    }
+    return this;
+  }
+  divRowVector(vector) {
+    vector = checkRowVector(this, vector);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) / vector[j]);
+      }
+    }
+    return this;
+  }
+  addColumnVector(vector) {
+    vector = checkColumnVector(this, vector);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) + vector[i]);
+      }
+    }
+    return this;
+  }
+  subColumnVector(vector) {
+    vector = checkColumnVector(this, vector);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) - vector[i]);
+      }
+    }
+    return this;
+  }
+  mulColumnVector(vector) {
+    vector = checkColumnVector(this, vector);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) * vector[i]);
+      }
+    }
+    return this;
+  }
+  divColumnVector(vector) {
+    vector = checkColumnVector(this, vector);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        this.set(i, j, this.get(i, j) / vector[i]);
+      }
+    }
+    return this;
+  }
+  mulRow(index, value) {
+    checkRowIndex(this, index);
+    for (let i = 0; i < this.columns; i++) {
+      this.set(index, i, this.get(index, i) * value);
+    }
+    return this;
+  }
+  mulColumn(index, value) {
+    checkColumnIndex(this, index);
+    for (let i = 0; i < this.rows; i++) {
+      this.set(i, index, this.get(i, index) * value);
+    }
+    return this;
+  }
+  max(by) {
+    if (this.isEmpty()) {
+      return NaN;
+    }
+    switch (by) {
+      case "row": {
+        const max2 = new Array(this.rows).fill(Number.NEGATIVE_INFINITY);
+        for (let row = 0; row < this.rows; row++) {
+          for (let column = 0; column < this.columns; column++) {
+            if (this.get(row, column) > max2[row]) {
+              max2[row] = this.get(row, column);
+            }
+          }
+        }
+        return max2;
+      }
+      case "column": {
+        const max2 = new Array(this.columns).fill(Number.NEGATIVE_INFINITY);
+        for (let row = 0; row < this.rows; row++) {
+          for (let column = 0; column < this.columns; column++) {
+            if (this.get(row, column) > max2[column]) {
+              max2[column] = this.get(row, column);
+            }
+          }
+        }
+        return max2;
+      }
+      case void 0: {
+        let max2 = this.get(0, 0);
+        for (let row = 0; row < this.rows; row++) {
+          for (let column = 0; column < this.columns; column++) {
+            if (this.get(row, column) > max2) {
+              max2 = this.get(row, column);
+            }
+          }
+        }
+        return max2;
+      }
+      default:
+        throw new Error(`invalid option: ${by}`);
+    }
+  }
+  maxIndex() {
+    checkNonEmpty(this);
+    let v = this.get(0, 0);
+    let idx = [0, 0];
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        if (this.get(i, j) > v) {
+          v = this.get(i, j);
+          idx[0] = i;
+          idx[1] = j;
+        }
+      }
+    }
+    return idx;
+  }
+  min(by) {
+    if (this.isEmpty()) {
+      return NaN;
+    }
+    switch (by) {
+      case "row": {
+        const min2 = new Array(this.rows).fill(Number.POSITIVE_INFINITY);
+        for (let row = 0; row < this.rows; row++) {
+          for (let column = 0; column < this.columns; column++) {
+            if (this.get(row, column) < min2[row]) {
+              min2[row] = this.get(row, column);
+            }
+          }
+        }
+        return min2;
+      }
+      case "column": {
+        const min2 = new Array(this.columns).fill(Number.POSITIVE_INFINITY);
+        for (let row = 0; row < this.rows; row++) {
+          for (let column = 0; column < this.columns; column++) {
+            if (this.get(row, column) < min2[column]) {
+              min2[column] = this.get(row, column);
+            }
+          }
+        }
+        return min2;
+      }
+      case void 0: {
+        let min2 = this.get(0, 0);
+        for (let row = 0; row < this.rows; row++) {
+          for (let column = 0; column < this.columns; column++) {
+            if (this.get(row, column) < min2) {
+              min2 = this.get(row, column);
+            }
+          }
+        }
+        return min2;
+      }
+      default:
+        throw new Error(`invalid option: ${by}`);
+    }
+  }
+  minIndex() {
+    checkNonEmpty(this);
+    let v = this.get(0, 0);
+    let idx = [0, 0];
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        if (this.get(i, j) < v) {
+          v = this.get(i, j);
+          idx[0] = i;
+          idx[1] = j;
+        }
+      }
+    }
+    return idx;
+  }
+  maxRow(row) {
+    checkRowIndex(this, row);
+    if (this.isEmpty()) {
+      return NaN;
+    }
+    let v = this.get(row, 0);
+    for (let i = 1; i < this.columns; i++) {
+      if (this.get(row, i) > v) {
+        v = this.get(row, i);
+      }
+    }
+    return v;
+  }
+  maxRowIndex(row) {
+    checkRowIndex(this, row);
+    checkNonEmpty(this);
+    let v = this.get(row, 0);
+    let idx = [row, 0];
+    for (let i = 1; i < this.columns; i++) {
+      if (this.get(row, i) > v) {
+        v = this.get(row, i);
+        idx[1] = i;
+      }
+    }
+    return idx;
+  }
+  minRow(row) {
+    checkRowIndex(this, row);
+    if (this.isEmpty()) {
+      return NaN;
+    }
+    let v = this.get(row, 0);
+    for (let i = 1; i < this.columns; i++) {
+      if (this.get(row, i) < v) {
+        v = this.get(row, i);
+      }
+    }
+    return v;
+  }
+  minRowIndex(row) {
+    checkRowIndex(this, row);
+    checkNonEmpty(this);
+    let v = this.get(row, 0);
+    let idx = [row, 0];
+    for (let i = 1; i < this.columns; i++) {
+      if (this.get(row, i) < v) {
+        v = this.get(row, i);
+        idx[1] = i;
+      }
+    }
+    return idx;
+  }
+  maxColumn(column) {
+    checkColumnIndex(this, column);
+    if (this.isEmpty()) {
+      return NaN;
+    }
+    let v = this.get(0, column);
+    for (let i = 1; i < this.rows; i++) {
+      if (this.get(i, column) > v) {
+        v = this.get(i, column);
+      }
+    }
+    return v;
+  }
+  maxColumnIndex(column) {
+    checkColumnIndex(this, column);
+    checkNonEmpty(this);
+    let v = this.get(0, column);
+    let idx = [0, column];
+    for (let i = 1; i < this.rows; i++) {
+      if (this.get(i, column) > v) {
+        v = this.get(i, column);
+        idx[0] = i;
+      }
+    }
+    return idx;
+  }
+  minColumn(column) {
+    checkColumnIndex(this, column);
+    if (this.isEmpty()) {
+      return NaN;
+    }
+    let v = this.get(0, column);
+    for (let i = 1; i < this.rows; i++) {
+      if (this.get(i, column) < v) {
+        v = this.get(i, column);
+      }
+    }
+    return v;
+  }
+  minColumnIndex(column) {
+    checkColumnIndex(this, column);
+    checkNonEmpty(this);
+    let v = this.get(0, column);
+    let idx = [0, column];
+    for (let i = 1; i < this.rows; i++) {
+      if (this.get(i, column) < v) {
+        v = this.get(i, column);
+        idx[0] = i;
+      }
+    }
+    return idx;
+  }
+  diag() {
+    let min2 = Math.min(this.rows, this.columns);
+    let diag = [];
+    for (let i = 0; i < min2; i++) {
+      diag.push(this.get(i, i));
+    }
+    return diag;
+  }
+  norm(type = "frobenius") {
+    switch (type) {
+      case "max":
+        return this.max();
+      case "frobenius":
+        return Math.sqrt(this.dot(this));
+      default:
+        throw new RangeError(`unknown norm type: ${type}`);
+    }
+  }
+  cumulativeSum() {
+    let sum = 0;
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        sum += this.get(i, j);
+        this.set(i, j, sum);
+      }
+    }
+    return this;
+  }
+  dot(vector2) {
+    if (AbstractMatrix.isMatrix(vector2)) vector2 = vector2.to1DArray();
+    let vector1 = this.to1DArray();
+    if (vector1.length !== vector2.length) {
+      throw new RangeError("vectors do not have the same size");
+    }
+    let dot = 0;
+    for (let i = 0; i < vector1.length; i++) {
+      dot += vector1[i] * vector2[i];
+    }
+    return dot;
+  }
+  mmul(other) {
+    other = Matrix$1.checkMatrix(other);
+    let m = this.rows;
+    let n = this.columns;
+    let p2 = other.columns;
+    let result2 = new Matrix$1(m, p2);
+    let Bcolj = new Float64Array(n);
+    for (let j = 0; j < p2; j++) {
+      for (let k = 0; k < n; k++) {
+        Bcolj[k] = other.get(k, j);
+      }
+      for (let i = 0; i < m; i++) {
+        let s = 0;
+        for (let k = 0; k < n; k++) {
+          s += this.get(i, k) * Bcolj[k];
+        }
+        result2.set(i, j, s);
+      }
+    }
+    return result2;
+  }
+  mpow(scalar) {
+    if (!this.isSquare()) {
+      throw new RangeError("Matrix must be square");
+    }
+    if (!Number.isInteger(scalar) || scalar < 0) {
+      throw new RangeError("Exponent must be a non-negative integer");
+    }
+    let result2 = Matrix$1.eye(this.rows);
+    let bb = this;
+    for (let e = scalar; e > 1; e /= 2) {
+      if ((e & 1) !== 0) {
+        result2 = result2.mmul(bb);
+      }
+      bb = bb.mmul(bb);
+    }
+    return result2;
+  }
+  strassen2x2(other) {
+    other = Matrix$1.checkMatrix(other);
+    let result2 = new Matrix$1(2, 2);
+    const a11 = this.get(0, 0);
+    const b11 = other.get(0, 0);
+    const a12 = this.get(0, 1);
+    const b12 = other.get(0, 1);
+    const a21 = this.get(1, 0);
+    const b21 = other.get(1, 0);
+    const a22 = this.get(1, 1);
+    const b22 = other.get(1, 1);
+    const m1 = (a11 + a22) * (b11 + b22);
+    const m2 = (a21 + a22) * b11;
+    const m3 = a11 * (b12 - b22);
+    const m4 = a22 * (b21 - b11);
+    const m5 = (a11 + a12) * b22;
+    const m6 = (a21 - a11) * (b11 + b12);
+    const m7 = (a12 - a22) * (b21 + b22);
+    const c00 = m1 + m4 - m5 + m7;
+    const c01 = m3 + m5;
+    const c10 = m2 + m4;
+    const c11 = m1 - m2 + m3 + m6;
+    result2.set(0, 0, c00);
+    result2.set(0, 1, c01);
+    result2.set(1, 0, c10);
+    result2.set(1, 1, c11);
+    return result2;
+  }
+  strassen3x3(other) {
+    other = Matrix$1.checkMatrix(other);
+    let result2 = new Matrix$1(3, 3);
+    const a00 = this.get(0, 0);
+    const a01 = this.get(0, 1);
+    const a02 = this.get(0, 2);
+    const a10 = this.get(1, 0);
+    const a11 = this.get(1, 1);
+    const a12 = this.get(1, 2);
+    const a20 = this.get(2, 0);
+    const a21 = this.get(2, 1);
+    const a22 = this.get(2, 2);
+    const b00 = other.get(0, 0);
+    const b01 = other.get(0, 1);
+    const b02 = other.get(0, 2);
+    const b10 = other.get(1, 0);
+    const b11 = other.get(1, 1);
+    const b12 = other.get(1, 2);
+    const b20 = other.get(2, 0);
+    const b21 = other.get(2, 1);
+    const b22 = other.get(2, 2);
+    const m1 = (a00 + a01 + a02 - a10 - a11 - a21 - a22) * b11;
+    const m2 = (a00 - a10) * (-b01 + b11);
+    const m3 = a11 * (-b00 + b01 + b10 - b11 - b12 - b20 + b22);
+    const m4 = (-a00 + a10 + a11) * (b00 - b01 + b11);
+    const m5 = (a10 + a11) * (-b00 + b01);
+    const m6 = a00 * b00;
+    const m7 = (-a00 + a20 + a21) * (b00 - b02 + b12);
+    const m8 = (-a00 + a20) * (b02 - b12);
+    const m9 = (a20 + a21) * (-b00 + b02);
+    const m10 = (a00 + a01 + a02 - a11 - a12 - a20 - a21) * b12;
+    const m11 = a21 * (-b00 + b02 + b10 - b11 - b12 - b20 + b21);
+    const m12 = (-a02 + a21 + a22) * (b11 + b20 - b21);
+    const m13 = (a02 - a22) * (b11 - b21);
+    const m14 = a02 * b20;
+    const m15 = (a21 + a22) * (-b20 + b21);
+    const m16 = (-a02 + a11 + a12) * (b12 + b20 - b22);
+    const m17 = (a02 - a12) * (b12 - b22);
+    const m18 = (a11 + a12) * (-b20 + b22);
+    const m19 = a01 * b10;
+    const m20 = a12 * b21;
+    const m21 = a10 * b02;
+    const m22 = a20 * b01;
+    const m23 = a22 * b22;
+    const c00 = m6 + m14 + m19;
+    const c01 = m1 + m4 + m5 + m6 + m12 + m14 + m15;
+    const c02 = m6 + m7 + m9 + m10 + m14 + m16 + m18;
+    const c10 = m2 + m3 + m4 + m6 + m14 + m16 + m17;
+    const c11 = m2 + m4 + m5 + m6 + m20;
+    const c12 = m14 + m16 + m17 + m18 + m21;
+    const c20 = m6 + m7 + m8 + m11 + m12 + m13 + m14;
+    const c21 = m12 + m13 + m14 + m15 + m22;
+    const c22 = m6 + m7 + m8 + m9 + m23;
+    result2.set(0, 0, c00);
+    result2.set(0, 1, c01);
+    result2.set(0, 2, c02);
+    result2.set(1, 0, c10);
+    result2.set(1, 1, c11);
+    result2.set(1, 2, c12);
+    result2.set(2, 0, c20);
+    result2.set(2, 1, c21);
+    result2.set(2, 2, c22);
+    return result2;
+  }
+  mmulStrassen(y) {
+    y = Matrix$1.checkMatrix(y);
+    let x = this.clone();
+    let r1 = x.rows;
+    let c1 = x.columns;
+    let r2 = y.rows;
+    let c2 = y.columns;
+    if (c1 !== r2) {
+      console.warn(
+        `Multiplying ${r1} x ${c1} and ${r2} x ${c2} matrix: dimensions do not match.`
+      );
+    }
+    function embed(mat, rows, cols) {
+      let r3 = mat.rows;
+      let c3 = mat.columns;
+      if (r3 === rows && c3 === cols) {
+        return mat;
+      } else {
+        let resultat = AbstractMatrix.zeros(rows, cols);
+        resultat = resultat.setSubMatrix(mat, 0, 0);
+        return resultat;
+      }
+    }
+    let r = Math.max(r1, r2);
+    let c = Math.max(c1, c2);
+    x = embed(x, r, c);
+    y = embed(y, r, c);
+    function blockMult(a, b, rows, cols) {
+      if (rows <= 512 || cols <= 512) {
+        return a.mmul(b);
+      }
+      if (rows % 2 === 1 && cols % 2 === 1) {
+        a = embed(a, rows + 1, cols + 1);
+        b = embed(b, rows + 1, cols + 1);
+      } else if (rows % 2 === 1) {
+        a = embed(a, rows + 1, cols);
+        b = embed(b, rows + 1, cols);
+      } else if (cols % 2 === 1) {
+        a = embed(a, rows, cols + 1);
+        b = embed(b, rows, cols + 1);
+      }
+      let halfRows = parseInt(a.rows / 2, 10);
+      let halfCols = parseInt(a.columns / 2, 10);
+      let a11 = a.subMatrix(0, halfRows - 1, 0, halfCols - 1);
+      let b11 = b.subMatrix(0, halfRows - 1, 0, halfCols - 1);
+      let a12 = a.subMatrix(0, halfRows - 1, halfCols, a.columns - 1);
+      let b12 = b.subMatrix(0, halfRows - 1, halfCols, b.columns - 1);
+      let a21 = a.subMatrix(halfRows, a.rows - 1, 0, halfCols - 1);
+      let b21 = b.subMatrix(halfRows, b.rows - 1, 0, halfCols - 1);
+      let a22 = a.subMatrix(halfRows, a.rows - 1, halfCols, a.columns - 1);
+      let b22 = b.subMatrix(halfRows, b.rows - 1, halfCols, b.columns - 1);
+      let m1 = blockMult(
+        AbstractMatrix.add(a11, a22),
+        AbstractMatrix.add(b11, b22),
+        halfRows,
+        halfCols
+      );
+      let m2 = blockMult(AbstractMatrix.add(a21, a22), b11, halfRows, halfCols);
+      let m3 = blockMult(a11, AbstractMatrix.sub(b12, b22), halfRows, halfCols);
+      let m4 = blockMult(a22, AbstractMatrix.sub(b21, b11), halfRows, halfCols);
+      let m5 = blockMult(AbstractMatrix.add(a11, a12), b22, halfRows, halfCols);
+      let m6 = blockMult(
+        AbstractMatrix.sub(a21, a11),
+        AbstractMatrix.add(b11, b12),
+        halfRows,
+        halfCols
+      );
+      let m7 = blockMult(
+        AbstractMatrix.sub(a12, a22),
+        AbstractMatrix.add(b21, b22),
+        halfRows,
+        halfCols
+      );
+      let c11 = AbstractMatrix.add(m1, m4);
+      c11.sub(m5);
+      c11.add(m7);
+      let c12 = AbstractMatrix.add(m3, m5);
+      let c21 = AbstractMatrix.add(m2, m4);
+      let c22 = AbstractMatrix.sub(m1, m2);
+      c22.add(m3);
+      c22.add(m6);
+      let result2 = AbstractMatrix.zeros(2 * c11.rows, 2 * c11.columns);
+      result2 = result2.setSubMatrix(c11, 0, 0);
+      result2 = result2.setSubMatrix(c12, c11.rows, 0);
+      result2 = result2.setSubMatrix(c21, 0, c11.columns);
+      result2 = result2.setSubMatrix(c22, c11.rows, c11.columns);
+      return result2.subMatrix(0, rows - 1, 0, cols - 1);
+    }
+    return blockMult(x, y, r, c);
+  }
+  scaleRows(options = {}) {
+    if (typeof options !== "object") {
+      throw new TypeError("options must be an object");
+    }
+    const { min: min2 = 0, max: max2 = 1 } = options;
+    if (!Number.isFinite(min2)) throw new TypeError("min must be a number");
+    if (!Number.isFinite(max2)) throw new TypeError("max must be a number");
+    if (min2 >= max2) throw new RangeError("min must be smaller than max");
+    let newMatrix = new Matrix$1(this.rows, this.columns);
+    for (let i = 0; i < this.rows; i++) {
+      const row = this.getRow(i);
+      if (row.length > 0) {
+        rescale(row, { min: min2, max: max2, output: row });
+      }
+      newMatrix.setRow(i, row);
+    }
+    return newMatrix;
+  }
+  scaleColumns(options = {}) {
+    if (typeof options !== "object") {
+      throw new TypeError("options must be an object");
+    }
+    const { min: min2 = 0, max: max2 = 1 } = options;
+    if (!Number.isFinite(min2)) throw new TypeError("min must be a number");
+    if (!Number.isFinite(max2)) throw new TypeError("max must be a number");
+    if (min2 >= max2) throw new RangeError("min must be smaller than max");
+    let newMatrix = new Matrix$1(this.rows, this.columns);
+    for (let i = 0; i < this.columns; i++) {
+      const column = this.getColumn(i);
+      if (column.length) {
+        rescale(column, {
+          min: min2,
+          max: max2,
+          output: column
+        });
+      }
+      newMatrix.setColumn(i, column);
+    }
+    return newMatrix;
+  }
+  flipRows() {
+    const middle = Math.ceil(this.columns / 2);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < middle; j++) {
+        let first = this.get(i, j);
+        let last = this.get(i, this.columns - 1 - j);
+        this.set(i, j, last);
+        this.set(i, this.columns - 1 - j, first);
+      }
+    }
+    return this;
+  }
+  flipColumns() {
+    const middle = Math.ceil(this.rows / 2);
+    for (let j = 0; j < this.columns; j++) {
+      for (let i = 0; i < middle; i++) {
+        let first = this.get(i, j);
+        let last = this.get(this.rows - 1 - i, j);
+        this.set(i, j, last);
+        this.set(this.rows - 1 - i, j, first);
+      }
+    }
+    return this;
+  }
+  kroneckerProduct(other) {
+    other = Matrix$1.checkMatrix(other);
+    let m = this.rows;
+    let n = this.columns;
+    let p2 = other.rows;
+    let q = other.columns;
+    let result2 = new Matrix$1(m * p2, n * q);
+    for (let i = 0; i < m; i++) {
+      for (let j = 0; j < n; j++) {
+        for (let k = 0; k < p2; k++) {
+          for (let l = 0; l < q; l++) {
+            result2.set(p2 * i + k, q * j + l, this.get(i, j) * other.get(k, l));
+          }
+        }
+      }
+    }
+    return result2;
+  }
+  kroneckerSum(other) {
+    other = Matrix$1.checkMatrix(other);
+    if (!this.isSquare() || !other.isSquare()) {
+      throw new Error("Kronecker Sum needs two Square Matrices");
+    }
+    let m = this.rows;
+    let n = other.rows;
+    let AxI = this.kroneckerProduct(Matrix$1.eye(n, n));
+    let IxB = Matrix$1.eye(m, m).kroneckerProduct(other);
+    return AxI.add(IxB);
+  }
+  transpose() {
+    let result2 = new Matrix$1(this.columns, this.rows);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        result2.set(j, i, this.get(i, j));
+      }
+    }
+    return result2;
+  }
+  sortRows(compareFunction = compareNumbers) {
+    for (let i = 0; i < this.rows; i++) {
+      this.setRow(i, this.getRow(i).sort(compareFunction));
+    }
+    return this;
+  }
+  sortColumns(compareFunction = compareNumbers) {
+    for (let i = 0; i < this.columns; i++) {
+      this.setColumn(i, this.getColumn(i).sort(compareFunction));
+    }
+    return this;
+  }
+  subMatrix(startRow, endRow, startColumn, endColumn) {
+    checkRange(this, startRow, endRow, startColumn, endColumn);
+    let newMatrix = new Matrix$1(
+      endRow - startRow + 1,
+      endColumn - startColumn + 1
+    );
+    for (let i = startRow; i <= endRow; i++) {
+      for (let j = startColumn; j <= endColumn; j++) {
+        newMatrix.set(i - startRow, j - startColumn, this.get(i, j));
+      }
+    }
+    return newMatrix;
+  }
+  subMatrixRow(indices, startColumn, endColumn) {
+    if (startColumn === void 0) startColumn = 0;
+    if (endColumn === void 0) endColumn = this.columns - 1;
+    if (startColumn > endColumn || startColumn < 0 || startColumn >= this.columns || endColumn < 0 || endColumn >= this.columns) {
+      throw new RangeError("Argument out of range");
+    }
+    let newMatrix = new Matrix$1(indices.length, endColumn - startColumn + 1);
+    for (let i = 0; i < indices.length; i++) {
+      for (let j = startColumn; j <= endColumn; j++) {
+        if (indices[i] < 0 || indices[i] >= this.rows) {
+          throw new RangeError(`Row index out of range: ${indices[i]}`);
+        }
+        newMatrix.set(i, j - startColumn, this.get(indices[i], j));
+      }
+    }
+    return newMatrix;
+  }
+  subMatrixColumn(indices, startRow, endRow) {
+    if (startRow === void 0) startRow = 0;
+    if (endRow === void 0) endRow = this.rows - 1;
+    if (startRow > endRow || startRow < 0 || startRow >= this.rows || endRow < 0 || endRow >= this.rows) {
+      throw new RangeError("Argument out of range");
+    }
+    let newMatrix = new Matrix$1(endRow - startRow + 1, indices.length);
+    for (let i = 0; i < indices.length; i++) {
+      for (let j = startRow; j <= endRow; j++) {
+        if (indices[i] < 0 || indices[i] >= this.columns) {
+          throw new RangeError(`Column index out of range: ${indices[i]}`);
+        }
+        newMatrix.set(j - startRow, i, this.get(j, indices[i]));
+      }
+    }
+    return newMatrix;
+  }
+  setSubMatrix(matrix2, startRow, startColumn) {
+    matrix2 = Matrix$1.checkMatrix(matrix2);
+    if (matrix2.isEmpty()) {
+      return this;
+    }
+    let endRow = startRow + matrix2.rows - 1;
+    let endColumn = startColumn + matrix2.columns - 1;
+    checkRange(this, startRow, endRow, startColumn, endColumn);
+    for (let i = 0; i < matrix2.rows; i++) {
+      for (let j = 0; j < matrix2.columns; j++) {
+        this.set(startRow + i, startColumn + j, matrix2.get(i, j));
+      }
+    }
+    return this;
+  }
+  selection(rowIndices, columnIndices) {
+    checkRowIndices(this, rowIndices);
+    checkColumnIndices(this, columnIndices);
+    let newMatrix = new Matrix$1(rowIndices.length, columnIndices.length);
+    for (let i = 0; i < rowIndices.length; i++) {
+      let rowIndex = rowIndices[i];
+      for (let j = 0; j < columnIndices.length; j++) {
+        let columnIndex = columnIndices[j];
+        newMatrix.set(i, j, this.get(rowIndex, columnIndex));
+      }
+    }
+    return newMatrix;
+  }
+  trace() {
+    let min2 = Math.min(this.rows, this.columns);
+    let trace = 0;
+    for (let i = 0; i < min2; i++) {
+      trace += this.get(i, i);
+    }
+    return trace;
+  }
+  clone() {
+    return this.constructor.copy(this, new Matrix$1(this.rows, this.columns));
+  }
+  /**
+   * @template {AbstractMatrix} M
+   * @param {AbstractMatrix} from
+   * @param {M} to
+   * @return {M}
+   */
+  static copy(from, to) {
+    for (const [row, column, value] of from.entries()) {
+      to.set(row, column, value);
+    }
+    return to;
+  }
+  sum(by) {
+    switch (by) {
+      case "row":
+        return sumByRow(this);
+      case "column":
+        return sumByColumn(this);
+      case void 0:
+        return sumAll(this);
+      default:
+        throw new Error(`invalid option: ${by}`);
+    }
+  }
+  product(by) {
+    switch (by) {
+      case "row":
+        return productByRow(this);
+      case "column":
+        return productByColumn(this);
+      case void 0:
+        return productAll(this);
+      default:
+        throw new Error(`invalid option: ${by}`);
+    }
+  }
+  mean(by) {
+    const sum = this.sum(by);
+    switch (by) {
+      case "row": {
+        for (let i = 0; i < this.rows; i++) {
+          sum[i] /= this.columns;
+        }
+        return sum;
+      }
+      case "column": {
+        for (let i = 0; i < this.columns; i++) {
+          sum[i] /= this.rows;
+        }
+        return sum;
+      }
+      case void 0:
+        return sum / this.size;
+      default:
+        throw new Error(`invalid option: ${by}`);
+    }
+  }
+  variance(by, options = {}) {
+    if (typeof by === "object") {
+      options = by;
+      by = void 0;
+    }
+    if (typeof options !== "object") {
+      throw new TypeError("options must be an object");
+    }
+    const { unbiased = true, mean = this.mean(by) } = options;
+    if (typeof unbiased !== "boolean") {
+      throw new TypeError("unbiased must be a boolean");
+    }
+    switch (by) {
+      case "row": {
+        if (!isAnyArray.isAnyArray(mean)) {
+          throw new TypeError("mean must be an array");
+        }
+        return varianceByRow(this, unbiased, mean);
+      }
+      case "column": {
+        if (!isAnyArray.isAnyArray(mean)) {
+          throw new TypeError("mean must be an array");
+        }
+        return varianceByColumn(this, unbiased, mean);
+      }
+      case void 0: {
+        if (typeof mean !== "number") {
+          throw new TypeError("mean must be a number");
+        }
+        return varianceAll(this, unbiased, mean);
+      }
+      default:
+        throw new Error(`invalid option: ${by}`);
+    }
+  }
+  standardDeviation(by, options) {
+    if (typeof by === "object") {
+      options = by;
+      by = void 0;
+    }
+    const variance = this.variance(by, options);
+    if (by === void 0) {
+      return Math.sqrt(variance);
+    } else {
+      for (let i = 0; i < variance.length; i++) {
+        variance[i] = Math.sqrt(variance[i]);
+      }
+      return variance;
+    }
+  }
+  center(by, options = {}) {
+    if (typeof by === "object") {
+      options = by;
+      by = void 0;
+    }
+    if (typeof options !== "object") {
+      throw new TypeError("options must be an object");
+    }
+    const { center = this.mean(by) } = options;
+    switch (by) {
+      case "row": {
+        if (!isAnyArray.isAnyArray(center)) {
+          throw new TypeError("center must be an array");
+        }
+        centerByRow(this, center);
+        return this;
+      }
+      case "column": {
+        if (!isAnyArray.isAnyArray(center)) {
+          throw new TypeError("center must be an array");
+        }
+        centerByColumn(this, center);
+        return this;
+      }
+      case void 0: {
+        if (typeof center !== "number") {
+          throw new TypeError("center must be a number");
+        }
+        centerAll(this, center);
+        return this;
+      }
+      default:
+        throw new Error(`invalid option: ${by}`);
+    }
+  }
+  scale(by, options = {}) {
+    if (typeof by === "object") {
+      options = by;
+      by = void 0;
+    }
+    if (typeof options !== "object") {
+      throw new TypeError("options must be an object");
+    }
+    let scale = options.scale;
+    switch (by) {
+      case "row": {
+        if (scale === void 0) {
+          scale = getScaleByRow(this);
+        } else if (!isAnyArray.isAnyArray(scale)) {
+          throw new TypeError("scale must be an array");
+        }
+        scaleByRow(this, scale);
+        return this;
+      }
+      case "column": {
+        if (scale === void 0) {
+          scale = getScaleByColumn(this);
+        } else if (!isAnyArray.isAnyArray(scale)) {
+          throw new TypeError("scale must be an array");
+        }
+        scaleByColumn(this, scale);
+        return this;
+      }
+      case void 0: {
+        if (scale === void 0) {
+          scale = getScaleAll(this);
+        } else if (typeof scale !== "number") {
+          throw new TypeError("scale must be a number");
+        }
+        scaleAll(this, scale);
+        return this;
+      }
+      default:
+        throw new Error(`invalid option: ${by}`);
+    }
+  }
+  toString(options) {
+    return inspectMatrixWithOptions(this, options);
+  }
+  [Symbol.iterator]() {
+    return this.entries();
+  }
+  /**
+   * iterator from left to right, from top to bottom
+   * yield [row, column, value]
+   * @returns {Generator<[number, number, number], void, void>}
+   */
+  *entries() {
+    for (let row = 0; row < this.rows; row++) {
+      for (let col = 0; col < this.columns; col++) {
+        yield [row, col, this.get(row, col)];
+      }
+    }
+  }
+  /**
+   * iterator from left to right, from top to bottom
+   * yield value
+   * @returns {Generator<number, void, void>}
+   */
+  *values() {
+    for (let row = 0; row < this.rows; row++) {
+      for (let col = 0; col < this.columns; col++) {
+        yield this.get(row, col);
+      }
+    }
+  }
+}
+AbstractMatrix.prototype.klass = "Matrix";
+if (typeof Symbol !== "undefined") {
+  AbstractMatrix.prototype[Symbol.for("nodejs.util.inspect.custom")] = inspectMatrix;
+}
+function compareNumbers(a, b) {
+  return a - b;
+}
+function isArrayOfNumbers(array) {
+  return array.every((element) => {
+    return typeof element === "number";
+  });
+}
+AbstractMatrix.random = AbstractMatrix.rand;
+AbstractMatrix.randomInt = AbstractMatrix.randInt;
+AbstractMatrix.diagonal = AbstractMatrix.diag;
+AbstractMatrix.prototype.diagonal = AbstractMatrix.prototype.diag;
+AbstractMatrix.identity = AbstractMatrix.eye;
+AbstractMatrix.prototype.negate = AbstractMatrix.prototype.neg;
+AbstractMatrix.prototype.tensorProduct = AbstractMatrix.prototype.kroneckerProduct;
+let Matrix$1 = (_a = class extends AbstractMatrix {
+  constructor(nRows, nColumns) {
+    super();
+    __privateAdd(this, _Matrix_instances);
+    /**
+     * @type {Float64Array[]}
+     */
+    __publicField(this, "data");
+    if (_a.isMatrix(nRows)) {
+      __privateMethod(this, _Matrix_instances, initData_fn).call(this, nRows.rows, nRows.columns);
+      _a.copy(nRows, this);
+    } else if (Number.isInteger(nRows) && nRows >= 0) {
+      __privateMethod(this, _Matrix_instances, initData_fn).call(this, nRows, nColumns);
+    } else if (isAnyArray.isAnyArray(nRows)) {
+      const arrayData = nRows;
+      nRows = arrayData.length;
+      nColumns = nRows ? arrayData[0].length : 0;
+      if (typeof nColumns !== "number") {
+        throw new TypeError(
+          "Data must be a 2D array with at least one element"
+        );
+      }
+      this.data = [];
+      for (let i = 0; i < nRows; i++) {
+        if (arrayData[i].length !== nColumns) {
+          throw new RangeError("Inconsistent array dimensions");
+        }
+        if (!isArrayOfNumbers(arrayData[i])) {
+          throw new TypeError("Input data contains non-numeric values");
+        }
+        this.data.push(Float64Array.from(arrayData[i]));
+      }
+      this.rows = nRows;
+      this.columns = nColumns;
+    } else {
+      throw new TypeError(
+        "First argument must be a positive number or an array"
+      );
+    }
+  }
+  set(rowIndex, columnIndex, value) {
+    this.data[rowIndex][columnIndex] = value;
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.data[rowIndex][columnIndex];
+  }
+  removeRow(index) {
+    checkRowIndex(this, index);
+    this.data.splice(index, 1);
+    this.rows -= 1;
+    return this;
+  }
+  addRow(index, array) {
+    if (array === void 0) {
+      array = index;
+      index = this.rows;
+    }
+    checkRowIndex(this, index, true);
+    array = Float64Array.from(checkRowVector(this, array));
+    this.data.splice(index, 0, array);
+    this.rows += 1;
+    return this;
+  }
+  removeColumn(index) {
+    checkColumnIndex(this, index);
+    for (let i = 0; i < this.rows; i++) {
+      const newRow = new Float64Array(this.columns - 1);
+      for (let j = 0; j < index; j++) {
+        newRow[j] = this.data[i][j];
+      }
+      for (let j = index + 1; j < this.columns; j++) {
+        newRow[j - 1] = this.data[i][j];
+      }
+      this.data[i] = newRow;
+    }
+    this.columns -= 1;
+    return this;
+  }
+  addColumn(index, array) {
+    if (typeof array === "undefined") {
+      array = index;
+      index = this.columns;
+    }
+    checkColumnIndex(this, index, true);
+    array = checkColumnVector(this, array);
+    for (let i = 0; i < this.rows; i++) {
+      const newRow = new Float64Array(this.columns + 1);
+      let j = 0;
+      for (; j < index; j++) {
+        newRow[j] = this.data[i][j];
+      }
+      newRow[j++] = array[i];
+      for (; j < this.columns + 1; j++) {
+        newRow[j] = this.data[i][j - 1];
+      }
+      this.data[i] = newRow;
+    }
+    this.columns += 1;
+    return this;
+  }
+}, _Matrix_instances = new WeakSet(), /**
+ * Init an empty matrix
+ * @param {number} nRows
+ * @param {number} nColumns
+ */
+initData_fn = function(nRows, nColumns) {
+  this.data = [];
+  if (Number.isInteger(nColumns) && nColumns >= 0) {
+    for (let i = 0; i < nRows; i++) {
+      this.data.push(new Float64Array(nColumns));
+    }
+  } else {
+    throw new TypeError("nColumns must be a positive integer");
+  }
+  this.rows = nRows;
+  this.columns = nColumns;
+}, _a);
+installMathOperations(AbstractMatrix, Matrix$1);
+const _SymmetricMatrix = class _SymmetricMatrix extends AbstractMatrix {
+  /**
+   * @param {number | AbstractMatrix | ArrayLike<ArrayLike<number>>} diagonalSize
+   * @return {this}
+   */
+  constructor(diagonalSize) {
+    super();
+    /** @type {Matrix} */
+    __privateAdd(this, _matrix);
+    if (Matrix$1.isMatrix(diagonalSize)) {
+      if (!diagonalSize.isSymmetric()) {
+        throw new TypeError("not symmetric data");
+      }
+      __privateSet(this, _matrix, Matrix$1.copy(
+        diagonalSize,
+        new Matrix$1(diagonalSize.rows, diagonalSize.rows)
+      ));
+    } else if (Number.isInteger(diagonalSize) && diagonalSize >= 0) {
+      __privateSet(this, _matrix, new Matrix$1(diagonalSize, diagonalSize));
+    } else {
+      __privateSet(this, _matrix, new Matrix$1(diagonalSize));
+      if (!this.isSymmetric()) {
+        throw new TypeError("not symmetric data");
+      }
+    }
+  }
+  get size() {
+    return __privateGet(this, _matrix).size;
+  }
+  get rows() {
+    return __privateGet(this, _matrix).rows;
+  }
+  get columns() {
+    return __privateGet(this, _matrix).columns;
+  }
+  get diagonalSize() {
+    return this.rows;
+  }
+  /**
+   * not the same as matrix.isSymmetric()
+   * Here is to check if it's instanceof SymmetricMatrix without bundling issues
+   *
+   * @param value
+   * @returns {boolean}
+   */
+  static isSymmetricMatrix(value) {
+    return Matrix$1.isMatrix(value) && value.klassType === "SymmetricMatrix";
+  }
+  /**
+   * @param diagonalSize
+   * @return {SymmetricMatrix}
+   */
+  static zeros(diagonalSize) {
+    return new this(diagonalSize);
+  }
+  /**
+   * @param diagonalSize
+   * @return {SymmetricMatrix}
+   */
+  static ones(diagonalSize) {
+    return new this(diagonalSize).fill(1);
+  }
+  clone() {
+    const matrix2 = new _SymmetricMatrix(this.diagonalSize);
+    for (const [row, col, value] of this.upperRightEntries()) {
+      matrix2.set(row, col, value);
+    }
+    return matrix2;
+  }
+  toMatrix() {
+    return new Matrix$1(this);
+  }
+  get(rowIndex, columnIndex) {
+    return __privateGet(this, _matrix).get(rowIndex, columnIndex);
+  }
+  set(rowIndex, columnIndex, value) {
+    __privateGet(this, _matrix).set(rowIndex, columnIndex, value);
+    __privateGet(this, _matrix).set(columnIndex, rowIndex, value);
+    return this;
+  }
+  removeCross(index) {
+    __privateGet(this, _matrix).removeRow(index);
+    __privateGet(this, _matrix).removeColumn(index);
+    return this;
+  }
+  addCross(index, array) {
+    if (array === void 0) {
+      array = index;
+      index = this.diagonalSize;
+    }
+    const row = array.slice();
+    row.splice(index, 1);
+    __privateGet(this, _matrix).addRow(index, row);
+    __privateGet(this, _matrix).addColumn(index, array);
+    return this;
+  }
+  /**
+   * @param {Mask[]} mask
+   */
+  applyMask(mask) {
+    if (mask.length !== this.diagonalSize) {
+      throw new RangeError("Mask size do not match with matrix size");
+    }
+    const sidesToRemove = [];
+    for (const [index, passthroughs] of mask.entries()) {
+      if (passthroughs) continue;
+      sidesToRemove.push(index);
+    }
+    sidesToRemove.reverse();
+    for (const sideIndex of sidesToRemove) {
+      this.removeCross(sideIndex);
+    }
+    return this;
+  }
+  /**
+   * Compact format upper-right corner of matrix
+   * iterate from left to right, from top to bottom.
+   *
+   * ```
+   *   A B C D
+   * A 1 2 3 4
+   * B 2 5 6 7
+   * C 3 6 8 9
+   * D 4 7 9 10
+   * ```
+   *
+   * will return compact 1D array `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`
+   *
+   * length is S(i=0, n=sideSize) => 10 for a 4 sideSized matrix
+   *
+   * @returns {number[]}
+   */
+  toCompact() {
+    const { diagonalSize } = this;
+    const compact = new Array(diagonalSize * (diagonalSize + 1) / 2);
+    for (let col = 0, row = 0, index = 0; index < compact.length; index++) {
+      compact[index] = this.get(row, col);
+      if (++col >= diagonalSize) col = ++row;
+    }
+    return compact;
+  }
+  /**
+   * @param {number[]} compact
+   * @return {SymmetricMatrix}
+   */
+  static fromCompact(compact) {
+    const compactSize = compact.length;
+    const diagonalSize = (Math.sqrt(8 * compactSize + 1) - 1) / 2;
+    if (!Number.isInteger(diagonalSize)) {
+      throw new TypeError(
+        `This array is not a compact representation of a Symmetric Matrix, ${JSON.stringify(
+          compact
+        )}`
+      );
+    }
+    const matrix2 = new _SymmetricMatrix(diagonalSize);
+    for (let col = 0, row = 0, index = 0; index < compactSize; index++) {
+      matrix2.set(col, row, compact[index]);
+      if (++col >= diagonalSize) col = ++row;
+    }
+    return matrix2;
+  }
+  /**
+   * half iterator upper-right-corner from left to right, from top to bottom
+   * yield [row, column, value]
+   *
+   * @returns {Generator<[number, number, number], void, void>}
+   */
+  *upperRightEntries() {
+    for (let row = 0, col = 0; row < this.diagonalSize; void 0) {
+      const value = this.get(row, col);
+      yield [row, col, value];
+      if (++col >= this.diagonalSize) col = ++row;
+    }
+  }
+  /**
+   * half iterator upper-right-corner from left to right, from top to bottom
+   * yield value
+   *
+   * @returns {Generator<[number, number, number], void, void>}
+   */
+  *upperRightValues() {
+    for (let row = 0, col = 0; row < this.diagonalSize; void 0) {
+      const value = this.get(row, col);
+      yield value;
+      if (++col >= this.diagonalSize) col = ++row;
+    }
+  }
+};
+_matrix = new WeakMap();
+let SymmetricMatrix = _SymmetricMatrix;
+SymmetricMatrix.prototype.klassType = "SymmetricMatrix";
+class DistanceMatrix extends SymmetricMatrix {
+  /**
+   * not the same as matrix.isSymmetric()
+   * Here is to check if it's instanceof SymmetricMatrix without bundling issues
+   *
+   * @param value
+   * @returns {boolean}
+   */
+  static isDistanceMatrix(value) {
+    return SymmetricMatrix.isSymmetricMatrix(value) && value.klassSubType === "DistanceMatrix";
+  }
+  constructor(sideSize) {
+    super(sideSize);
+    if (!this.isDistance()) {
+      throw new TypeError("Provided arguments do no produce a distance matrix");
+    }
+  }
+  set(rowIndex, columnIndex, value) {
+    if (rowIndex === columnIndex) value = 0;
+    return super.set(rowIndex, columnIndex, value);
+  }
+  addCross(index, array) {
+    if (array === void 0) {
+      array = index;
+      index = this.diagonalSize;
+    }
+    array = array.slice();
+    array[index] = 0;
+    return super.addCross(index, array);
+  }
+  toSymmetricMatrix() {
+    return new SymmetricMatrix(this);
+  }
+  clone() {
+    const matrix2 = new DistanceMatrix(this.diagonalSize);
+    for (const [row, col, value] of this.upperRightEntries()) {
+      if (row === col) continue;
+      matrix2.set(row, col, value);
+    }
+    return matrix2;
+  }
+  /**
+   * Compact format upper-right corner of matrix
+   * no diagonal (only zeros)
+   * iterable from left to right, from top to bottom.
+   *
+   * ```
+   *   A B C D
+   * A 0 1 2 3
+   * B 1 0 4 5
+   * C 2 4 0 6
+   * D 3 5 6 0
+   * ```
+   *
+   * will return compact 1D array `[1, 2, 3, 4, 5, 6]`
+   *
+   * length is S(i=0, n=sideSize-1) => 6 for a 4 side sized matrix
+   *
+   * @returns {number[]}
+   */
+  toCompact() {
+    const { diagonalSize } = this;
+    const compactLength = (diagonalSize - 1) * diagonalSize / 2;
+    const compact = new Array(compactLength);
+    for (let col = 1, row = 0, index = 0; index < compact.length; index++) {
+      compact[index] = this.get(row, col);
+      if (++col >= diagonalSize) col = ++row + 1;
+    }
+    return compact;
+  }
+  /**
+   * @param {number[]} compact
+   */
+  static fromCompact(compact) {
+    const compactSize = compact.length;
+    if (compactSize === 0) {
+      return new this(0);
+    }
+    const diagonalSize = (Math.sqrt(8 * compactSize + 1) + 1) / 2;
+    if (!Number.isInteger(diagonalSize)) {
+      throw new TypeError(
+        `This array is not a compact representation of a DistanceMatrix, ${JSON.stringify(
+          compact
+        )}`
+      );
+    }
+    const matrix2 = new this(diagonalSize);
+    for (let col = 1, row = 0, index = 0; index < compactSize; index++) {
+      matrix2.set(col, row, compact[index]);
+      if (++col >= diagonalSize) col = ++row + 1;
+    }
+    return matrix2;
+  }
+}
+DistanceMatrix.prototype.klassSubType = "DistanceMatrix";
+class BaseView extends AbstractMatrix {
+  constructor(matrix2, rows, columns) {
+    super();
+    this.matrix = matrix2;
+    this.rows = rows;
+    this.columns = columns;
+  }
+}
+class MatrixColumnView extends BaseView {
+  constructor(matrix2, column) {
+    checkColumnIndex(matrix2, column);
+    super(matrix2, matrix2.rows, 1);
+    this.column = column;
+  }
+  set(rowIndex, columnIndex, value) {
+    this.matrix.set(rowIndex, this.column, value);
+    return this;
+  }
+  get(rowIndex) {
+    return this.matrix.get(rowIndex, this.column);
+  }
+}
+class MatrixColumnSelectionView extends BaseView {
+  constructor(matrix2, columnIndices) {
+    checkColumnIndices(matrix2, columnIndices);
+    super(matrix2, matrix2.rows, columnIndices.length);
+    this.columnIndices = columnIndices;
+  }
+  set(rowIndex, columnIndex, value) {
+    this.matrix.set(rowIndex, this.columnIndices[columnIndex], value);
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.matrix.get(rowIndex, this.columnIndices[columnIndex]);
+  }
+}
+class MatrixFlipColumnView extends BaseView {
+  constructor(matrix2) {
+    super(matrix2, matrix2.rows, matrix2.columns);
+  }
+  set(rowIndex, columnIndex, value) {
+    this.matrix.set(rowIndex, this.columns - columnIndex - 1, value);
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.matrix.get(rowIndex, this.columns - columnIndex - 1);
+  }
+}
+class MatrixFlipRowView extends BaseView {
+  constructor(matrix2) {
+    super(matrix2, matrix2.rows, matrix2.columns);
+  }
+  set(rowIndex, columnIndex, value) {
+    this.matrix.set(this.rows - rowIndex - 1, columnIndex, value);
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.matrix.get(this.rows - rowIndex - 1, columnIndex);
+  }
+}
+class MatrixRowView extends BaseView {
+  constructor(matrix2, row) {
+    checkRowIndex(matrix2, row);
+    super(matrix2, 1, matrix2.columns);
+    this.row = row;
+  }
+  set(rowIndex, columnIndex, value) {
+    this.matrix.set(this.row, columnIndex, value);
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.matrix.get(this.row, columnIndex);
+  }
+}
+class MatrixRowSelectionView extends BaseView {
+  constructor(matrix2, rowIndices) {
+    checkRowIndices(matrix2, rowIndices);
+    super(matrix2, rowIndices.length, matrix2.columns);
+    this.rowIndices = rowIndices;
+  }
+  set(rowIndex, columnIndex, value) {
+    this.matrix.set(this.rowIndices[rowIndex], columnIndex, value);
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.matrix.get(this.rowIndices[rowIndex], columnIndex);
+  }
+}
+class MatrixSelectionView extends BaseView {
+  constructor(matrix2, rowIndices, columnIndices) {
+    checkRowIndices(matrix2, rowIndices);
+    checkColumnIndices(matrix2, columnIndices);
+    super(matrix2, rowIndices.length, columnIndices.length);
+    this.rowIndices = rowIndices;
+    this.columnIndices = columnIndices;
+  }
+  set(rowIndex, columnIndex, value) {
+    this.matrix.set(
+      this.rowIndices[rowIndex],
+      this.columnIndices[columnIndex],
+      value
+    );
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.matrix.get(
+      this.rowIndices[rowIndex],
+      this.columnIndices[columnIndex]
+    );
+  }
+}
+class MatrixSubView extends BaseView {
+  constructor(matrix2, startRow, endRow, startColumn, endColumn) {
+    checkRange(matrix2, startRow, endRow, startColumn, endColumn);
+    super(matrix2, endRow - startRow + 1, endColumn - startColumn + 1);
+    this.startRow = startRow;
+    this.startColumn = startColumn;
+  }
+  set(rowIndex, columnIndex, value) {
+    this.matrix.set(
+      this.startRow + rowIndex,
+      this.startColumn + columnIndex,
+      value
+    );
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.matrix.get(
+      this.startRow + rowIndex,
+      this.startColumn + columnIndex
+    );
+  }
+}
+let MatrixTransposeView$1 = class MatrixTransposeView2 extends BaseView {
+  constructor(matrix2) {
+    super(matrix2, matrix2.columns, matrix2.rows);
+  }
+  set(rowIndex, columnIndex, value) {
+    this.matrix.set(columnIndex, rowIndex, value);
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.matrix.get(columnIndex, rowIndex);
+  }
+};
+class WrapperMatrix1D extends AbstractMatrix {
+  constructor(data, options = {}) {
+    const { rows = 1 } = options;
+    if (data.length % rows !== 0) {
+      throw new Error("the data length is not divisible by the number of rows");
+    }
+    super();
+    this.rows = rows;
+    this.columns = data.length / rows;
+    this.data = data;
+  }
+  set(rowIndex, columnIndex, value) {
+    let index = this._calculateIndex(rowIndex, columnIndex);
+    this.data[index] = value;
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    let index = this._calculateIndex(rowIndex, columnIndex);
+    return this.data[index];
+  }
+  _calculateIndex(row, column) {
+    return row * this.columns + column;
+  }
+}
+class WrapperMatrix2D extends AbstractMatrix {
+  constructor(data) {
+    super();
+    this.data = data;
+    this.rows = data.length;
+    this.columns = data[0].length;
+  }
+  set(rowIndex, columnIndex, value) {
+    this.data[rowIndex][columnIndex] = value;
+    return this;
+  }
+  get(rowIndex, columnIndex) {
+    return this.data[rowIndex][columnIndex];
+  }
+}
+function wrap(array, options) {
+  if (isAnyArray.isAnyArray(array)) {
+    if (array[0] && isAnyArray.isAnyArray(array[0])) {
+      return new WrapperMatrix2D(array);
+    } else {
+      return new WrapperMatrix1D(array, options);
+    }
+  } else {
+    throw new Error("the argument is not an array");
+  }
+}
+class LuDecomposition {
+  constructor(matrix2) {
+    matrix2 = WrapperMatrix2D.checkMatrix(matrix2);
+    let lu = matrix2.clone();
+    let rows = lu.rows;
+    let columns = lu.columns;
+    let pivotVector = new Float64Array(rows);
+    let pivotSign = 1;
+    let i, j, k, p2, s, t, v;
+    let LUcolj, kmax;
+    for (i = 0; i < rows; i++) {
+      pivotVector[i] = i;
+    }
+    LUcolj = new Float64Array(rows);
+    for (j = 0; j < columns; j++) {
+      for (i = 0; i < rows; i++) {
+        LUcolj[i] = lu.get(i, j);
+      }
+      for (i = 0; i < rows; i++) {
+        kmax = Math.min(i, j);
+        s = 0;
+        for (k = 0; k < kmax; k++) {
+          s += lu.get(i, k) * LUcolj[k];
+        }
+        LUcolj[i] -= s;
+        lu.set(i, j, LUcolj[i]);
+      }
+      p2 = j;
+      for (i = j + 1; i < rows; i++) {
+        if (Math.abs(LUcolj[i]) > Math.abs(LUcolj[p2])) {
+          p2 = i;
+        }
+      }
+      if (p2 !== j) {
+        for (k = 0; k < columns; k++) {
+          t = lu.get(p2, k);
+          lu.set(p2, k, lu.get(j, k));
+          lu.set(j, k, t);
+        }
+        v = pivotVector[p2];
+        pivotVector[p2] = pivotVector[j];
+        pivotVector[j] = v;
+        pivotSign = -pivotSign;
+      }
+      if (j < rows && lu.get(j, j) !== 0) {
+        for (i = j + 1; i < rows; i++) {
+          lu.set(i, j, lu.get(i, j) / lu.get(j, j));
+        }
+      }
+    }
+    this.LU = lu;
+    this.pivotVector = pivotVector;
+    this.pivotSign = pivotSign;
+  }
+  isSingular() {
+    let data = this.LU;
+    let col = data.columns;
+    for (let j = 0; j < col; j++) {
+      if (data.get(j, j) === 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+  solve(value) {
+    value = Matrix$1.checkMatrix(value);
+    let lu = this.LU;
+    let rows = lu.rows;
+    if (rows !== value.rows) {
+      throw new Error("Invalid matrix dimensions");
+    }
+    if (this.isSingular()) {
+      throw new Error("LU matrix is singular");
+    }
+    let count = value.columns;
+    let X = value.subMatrixRow(this.pivotVector, 0, count - 1);
+    let columns = lu.columns;
+    let i, j, k;
+    for (k = 0; k < columns; k++) {
+      for (i = k + 1; i < columns; i++) {
+        for (j = 0; j < count; j++) {
+          X.set(i, j, X.get(i, j) - X.get(k, j) * lu.get(i, k));
+        }
+      }
+    }
+    for (k = columns - 1; k >= 0; k--) {
+      for (j = 0; j < count; j++) {
+        X.set(k, j, X.get(k, j) / lu.get(k, k));
+      }
+      for (i = 0; i < k; i++) {
+        for (j = 0; j < count; j++) {
+          X.set(i, j, X.get(i, j) - X.get(k, j) * lu.get(i, k));
+        }
+      }
+    }
+    return X;
+  }
+  get determinant() {
+    let data = this.LU;
+    if (!data.isSquare()) {
+      throw new Error("Matrix must be square");
+    }
+    let determinant2 = this.pivotSign;
+    let col = data.columns;
+    for (let j = 0; j < col; j++) {
+      determinant2 *= data.get(j, j);
+    }
+    return determinant2;
+  }
+  get lowerTriangularMatrix() {
+    let data = this.LU;
+    let rows = data.rows;
+    let columns = data.columns;
+    let X = new Matrix$1(rows, columns);
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        if (i > j) {
+          X.set(i, j, data.get(i, j));
+        } else if (i === j) {
+          X.set(i, j, 1);
+        } else {
+          X.set(i, j, 0);
+        }
+      }
+    }
+    return X;
+  }
+  get upperTriangularMatrix() {
+    let data = this.LU;
+    let rows = data.rows;
+    let columns = data.columns;
+    let X = new Matrix$1(rows, columns);
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        if (i <= j) {
+          X.set(i, j, data.get(i, j));
+        } else {
+          X.set(i, j, 0);
+        }
+      }
+    }
+    return X;
+  }
+  get pivotPermutationVector() {
+    return Array.from(this.pivotVector);
+  }
+}
+function hypotenuse(a, b) {
+  let r = 0;
+  if (Math.abs(a) > Math.abs(b)) {
+    r = b / a;
+    return Math.abs(a) * Math.sqrt(1 + r * r);
+  }
+  if (b !== 0) {
+    r = a / b;
+    return Math.abs(b) * Math.sqrt(1 + r * r);
+  }
+  return 0;
+}
+class QrDecomposition {
+  constructor(value) {
+    value = WrapperMatrix2D.checkMatrix(value);
+    let qr = value.clone();
+    let m = value.rows;
+    let n = value.columns;
+    let rdiag = new Float64Array(n);
+    let i, j, k, s;
+    for (k = 0; k < n; k++) {
+      let nrm = 0;
+      for (i = k; i < m; i++) {
+        nrm = hypotenuse(nrm, qr.get(i, k));
+      }
+      if (nrm !== 0) {
+        if (qr.get(k, k) < 0) {
+          nrm = -nrm;
+        }
+        for (i = k; i < m; i++) {
+          qr.set(i, k, qr.get(i, k) / nrm);
+        }
+        qr.set(k, k, qr.get(k, k) + 1);
+        for (j = k + 1; j < n; j++) {
+          s = 0;
+          for (i = k; i < m; i++) {
+            s += qr.get(i, k) * qr.get(i, j);
+          }
+          s = -s / qr.get(k, k);
+          for (i = k; i < m; i++) {
+            qr.set(i, j, qr.get(i, j) + s * qr.get(i, k));
+          }
+        }
+      }
+      rdiag[k] = -nrm;
+    }
+    this.QR = qr;
+    this.Rdiag = rdiag;
+  }
+  solve(value) {
+    value = Matrix$1.checkMatrix(value);
+    let qr = this.QR;
+    let m = qr.rows;
+    if (value.rows !== m) {
+      throw new Error("Matrix row dimensions must agree");
+    }
+    if (!this.isFullRank()) {
+      throw new Error("Matrix is rank deficient");
+    }
+    let count = value.columns;
+    let X = value.clone();
+    let n = qr.columns;
+    let i, j, k, s;
+    for (k = 0; k < n; k++) {
+      for (j = 0; j < count; j++) {
+        s = 0;
+        for (i = k; i < m; i++) {
+          s += qr.get(i, k) * X.get(i, j);
+        }
+        s = -s / qr.get(k, k);
+        for (i = k; i < m; i++) {
+          X.set(i, j, X.get(i, j) + s * qr.get(i, k));
+        }
+      }
+    }
+    for (k = n - 1; k >= 0; k--) {
+      for (j = 0; j < count; j++) {
+        X.set(k, j, X.get(k, j) / this.Rdiag[k]);
+      }
+      for (i = 0; i < k; i++) {
+        for (j = 0; j < count; j++) {
+          X.set(i, j, X.get(i, j) - X.get(k, j) * qr.get(i, k));
+        }
+      }
+    }
+    return X.subMatrix(0, n - 1, 0, count - 1);
+  }
+  isFullRank() {
+    let columns = this.QR.columns;
+    for (let i = 0; i < columns; i++) {
+      if (this.Rdiag[i] === 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+  get upperTriangularMatrix() {
+    let qr = this.QR;
+    let n = qr.columns;
+    let X = new Matrix$1(n, n);
+    let i, j;
+    for (i = 0; i < n; i++) {
+      for (j = 0; j < n; j++) {
+        if (i < j) {
+          X.set(i, j, qr.get(i, j));
+        } else if (i === j) {
+          X.set(i, j, this.Rdiag[i]);
+        } else {
+          X.set(i, j, 0);
+        }
+      }
+    }
+    return X;
+  }
+  get orthogonalMatrix() {
+    let qr = this.QR;
+    let rows = qr.rows;
+    let columns = qr.columns;
+    let X = new Matrix$1(rows, columns);
+    let i, j, k, s;
+    for (k = columns - 1; k >= 0; k--) {
+      for (i = 0; i < rows; i++) {
+        X.set(i, k, 0);
+      }
+      X.set(k, k, 1);
+      for (j = k; j < columns; j++) {
+        if (qr.get(k, k) !== 0) {
+          s = 0;
+          for (i = k; i < rows; i++) {
+            s += qr.get(i, k) * X.get(i, j);
+          }
+          s = -s / qr.get(k, k);
+          for (i = k; i < rows; i++) {
+            X.set(i, j, X.get(i, j) + s * qr.get(i, k));
+          }
+        }
+      }
+    }
+    return X;
+  }
+}
+class SingularValueDecomposition {
+  constructor(value, options = {}) {
+    value = WrapperMatrix2D.checkMatrix(value);
+    if (value.isEmpty()) {
+      throw new Error("Matrix must be non-empty");
+    }
+    let m = value.rows;
+    let n = value.columns;
+    const {
+      computeLeftSingularVectors = true,
+      computeRightSingularVectors = true,
+      autoTranspose = false
+    } = options;
+    let wantu = Boolean(computeLeftSingularVectors);
+    let wantv = Boolean(computeRightSingularVectors);
+    let swapped = false;
+    let a;
+    if (m < n) {
+      if (!autoTranspose) {
+        a = value.clone();
+        console.warn(
+          "Computing SVD on a matrix with more columns than rows. Consider enabling autoTranspose"
+        );
+      } else {
+        a = value.transpose();
+        m = a.rows;
+        n = a.columns;
+        swapped = true;
+        let aux = wantu;
+        wantu = wantv;
+        wantv = aux;
+      }
+    } else {
+      a = value.clone();
+    }
+    let nu = Math.min(m, n);
+    let ni = Math.min(m + 1, n);
+    let s = new Float64Array(ni);
+    let U = new Matrix$1(m, nu);
+    let V = new Matrix$1(n, n);
+    let e = new Float64Array(n);
+    let work = new Float64Array(m);
+    let si = new Float64Array(ni);
+    for (let i = 0; i < ni; i++) si[i] = i;
+    let nct = Math.min(m - 1, n);
+    let nrt = Math.max(0, Math.min(n - 2, m));
+    let mrc = Math.max(nct, nrt);
+    for (let k = 0; k < mrc; k++) {
+      if (k < nct) {
+        s[k] = 0;
+        for (let i = k; i < m; i++) {
+          s[k] = hypotenuse(s[k], a.get(i, k));
+        }
+        if (s[k] !== 0) {
+          if (a.get(k, k) < 0) {
+            s[k] = -s[k];
+          }
+          for (let i = k; i < m; i++) {
+            a.set(i, k, a.get(i, k) / s[k]);
+          }
+          a.set(k, k, a.get(k, k) + 1);
+        }
+        s[k] = -s[k];
+      }
+      for (let j = k + 1; j < n; j++) {
+        if (k < nct && s[k] !== 0) {
+          let t = 0;
+          for (let i = k; i < m; i++) {
+            t += a.get(i, k) * a.get(i, j);
+          }
+          t = -t / a.get(k, k);
+          for (let i = k; i < m; i++) {
+            a.set(i, j, a.get(i, j) + t * a.get(i, k));
+          }
+        }
+        e[j] = a.get(k, j);
+      }
+      if (wantu && k < nct) {
+        for (let i = k; i < m; i++) {
+          U.set(i, k, a.get(i, k));
+        }
+      }
+      if (k < nrt) {
+        e[k] = 0;
+        for (let i = k + 1; i < n; i++) {
+          e[k] = hypotenuse(e[k], e[i]);
+        }
+        if (e[k] !== 0) {
+          if (e[k + 1] < 0) {
+            e[k] = 0 - e[k];
+          }
+          for (let i = k + 1; i < n; i++) {
+            e[i] /= e[k];
+          }
+          e[k + 1] += 1;
+        }
+        e[k] = -e[k];
+        if (k + 1 < m && e[k] !== 0) {
+          for (let i = k + 1; i < m; i++) {
+            work[i] = 0;
+          }
+          for (let i = k + 1; i < m; i++) {
+            for (let j = k + 1; j < n; j++) {
+              work[i] += e[j] * a.get(i, j);
+            }
+          }
+          for (let j = k + 1; j < n; j++) {
+            let t = -e[j] / e[k + 1];
+            for (let i = k + 1; i < m; i++) {
+              a.set(i, j, a.get(i, j) + t * work[i]);
+            }
+          }
+        }
+        if (wantv) {
+          for (let i = k + 1; i < n; i++) {
+            V.set(i, k, e[i]);
+          }
+        }
+      }
+    }
+    let p2 = Math.min(n, m + 1);
+    if (nct < n) {
+      s[nct] = a.get(nct, nct);
+    }
+    if (m < p2) {
+      s[p2 - 1] = 0;
+    }
+    if (nrt + 1 < p2) {
+      e[nrt] = a.get(nrt, p2 - 1);
+    }
+    e[p2 - 1] = 0;
+    if (wantu) {
+      for (let j = nct; j < nu; j++) {
+        for (let i = 0; i < m; i++) {
+          U.set(i, j, 0);
+        }
+        U.set(j, j, 1);
+      }
+      for (let k = nct - 1; k >= 0; k--) {
+        if (s[k] !== 0) {
+          for (let j = k + 1; j < nu; j++) {
+            let t = 0;
+            for (let i = k; i < m; i++) {
+              t += U.get(i, k) * U.get(i, j);
+            }
+            t = -t / U.get(k, k);
+            for (let i = k; i < m; i++) {
+              U.set(i, j, U.get(i, j) + t * U.get(i, k));
+            }
+          }
+          for (let i = k; i < m; i++) {
+            U.set(i, k, -U.get(i, k));
+          }
+          U.set(k, k, 1 + U.get(k, k));
+          for (let i = 0; i < k - 1; i++) {
+            U.set(i, k, 0);
+          }
+        } else {
+          for (let i = 0; i < m; i++) {
+            U.set(i, k, 0);
+          }
+          U.set(k, k, 1);
+        }
+      }
+    }
+    if (wantv) {
+      for (let k = n - 1; k >= 0; k--) {
+        if (k < nrt && e[k] !== 0) {
+          for (let j = k + 1; j < n; j++) {
+            let t = 0;
+            for (let i = k + 1; i < n; i++) {
+              t += V.get(i, k) * V.get(i, j);
+            }
+            t = -t / V.get(k + 1, k);
+            for (let i = k + 1; i < n; i++) {
+              V.set(i, j, V.get(i, j) + t * V.get(i, k));
+            }
+          }
+        }
+        for (let i = 0; i < n; i++) {
+          V.set(i, k, 0);
+        }
+        V.set(k, k, 1);
+      }
+    }
+    let pp = p2 - 1;
+    let eps = Number.EPSILON;
+    while (p2 > 0) {
+      let k, kase;
+      for (k = p2 - 2; k >= -1; k--) {
+        if (k === -1) {
+          break;
+        }
+        const alpha = Number.MIN_VALUE + eps * Math.abs(s[k] + Math.abs(s[k + 1]));
+        if (Math.abs(e[k]) <= alpha || Number.isNaN(e[k])) {
+          e[k] = 0;
+          break;
+        }
+      }
+      if (k === p2 - 2) {
+        kase = 4;
+      } else {
+        let ks;
+        for (ks = p2 - 1; ks >= k; ks--) {
+          if (ks === k) {
+            break;
+          }
+          let t = (ks !== p2 ? Math.abs(e[ks]) : 0) + (ks !== k + 1 ? Math.abs(e[ks - 1]) : 0);
+          if (Math.abs(s[ks]) <= eps * t) {
+            s[ks] = 0;
+            break;
+          }
+        }
+        if (ks === k) {
+          kase = 3;
+        } else if (ks === p2 - 1) {
+          kase = 1;
+        } else {
+          kase = 2;
+          k = ks;
+        }
+      }
+      k++;
+      switch (kase) {
+        case 1: {
+          let f2 = e[p2 - 2];
+          e[p2 - 2] = 0;
+          for (let j = p2 - 2; j >= k; j--) {
+            let t = hypotenuse(s[j], f2);
+            let cs = s[j] / t;
+            let sn = f2 / t;
+            s[j] = t;
+            if (j !== k) {
+              f2 = -sn * e[j - 1];
+              e[j - 1] = cs * e[j - 1];
+            }
+            if (wantv) {
+              for (let i = 0; i < n; i++) {
+                t = cs * V.get(i, j) + sn * V.get(i, p2 - 1);
+                V.set(i, p2 - 1, -sn * V.get(i, j) + cs * V.get(i, p2 - 1));
+                V.set(i, j, t);
+              }
+            }
+          }
+          break;
+        }
+        case 2: {
+          let f2 = e[k - 1];
+          e[k - 1] = 0;
+          for (let j = k; j < p2; j++) {
+            let t = hypotenuse(s[j], f2);
+            let cs = s[j] / t;
+            let sn = f2 / t;
+            s[j] = t;
+            f2 = -sn * e[j];
+            e[j] = cs * e[j];
+            if (wantu) {
+              for (let i = 0; i < m; i++) {
+                t = cs * U.get(i, j) + sn * U.get(i, k - 1);
+                U.set(i, k - 1, -sn * U.get(i, j) + cs * U.get(i, k - 1));
+                U.set(i, j, t);
+              }
+            }
+          }
+          break;
+        }
+        case 3: {
+          const scale = Math.max(
+            Math.abs(s[p2 - 1]),
+            Math.abs(s[p2 - 2]),
+            Math.abs(e[p2 - 2]),
+            Math.abs(s[k]),
+            Math.abs(e[k])
+          );
+          const sp = s[p2 - 1] / scale;
+          const spm1 = s[p2 - 2] / scale;
+          const epm1 = e[p2 - 2] / scale;
+          const sk = s[k] / scale;
+          const ek = e[k] / scale;
+          const b = ((spm1 + sp) * (spm1 - sp) + epm1 * epm1) / 2;
+          const c = sp * epm1 * (sp * epm1);
+          let shift = 0;
+          if (b !== 0 || c !== 0) {
+            if (b < 0) {
+              shift = 0 - Math.sqrt(b * b + c);
+            } else {
+              shift = Math.sqrt(b * b + c);
+            }
+            shift = c / (b + shift);
+          }
+          let f2 = (sk + sp) * (sk - sp) + shift;
+          let g2 = sk * ek;
+          for (let j = k; j < p2 - 1; j++) {
+            let t = hypotenuse(f2, g2);
+            if (t === 0) t = Number.MIN_VALUE;
+            let cs = f2 / t;
+            let sn = g2 / t;
+            if (j !== k) {
+              e[j - 1] = t;
+            }
+            f2 = cs * s[j] + sn * e[j];
+            e[j] = cs * e[j] - sn * s[j];
+            g2 = sn * s[j + 1];
+            s[j + 1] = cs * s[j + 1];
+            if (wantv) {
+              for (let i = 0; i < n; i++) {
+                t = cs * V.get(i, j) + sn * V.get(i, j + 1);
+                V.set(i, j + 1, -sn * V.get(i, j) + cs * V.get(i, j + 1));
+                V.set(i, j, t);
+              }
+            }
+            t = hypotenuse(f2, g2);
+            if (t === 0) t = Number.MIN_VALUE;
+            cs = f2 / t;
+            sn = g2 / t;
+            s[j] = t;
+            f2 = cs * e[j] + sn * s[j + 1];
+            s[j + 1] = -sn * e[j] + cs * s[j + 1];
+            g2 = sn * e[j + 1];
+            e[j + 1] = cs * e[j + 1];
+            if (wantu && j < m - 1) {
+              for (let i = 0; i < m; i++) {
+                t = cs * U.get(i, j) + sn * U.get(i, j + 1);
+                U.set(i, j + 1, -sn * U.get(i, j) + cs * U.get(i, j + 1));
+                U.set(i, j, t);
+              }
+            }
+          }
+          e[p2 - 2] = f2;
+          break;
+        }
+        case 4: {
+          if (s[k] <= 0) {
+            s[k] = s[k] < 0 ? -s[k] : 0;
+            if (wantv) {
+              for (let i = 0; i <= pp; i++) {
+                V.set(i, k, -V.get(i, k));
+              }
+            }
+          }
+          while (k < pp) {
+            if (s[k] >= s[k + 1]) {
+              break;
+            }
+            let t = s[k];
+            s[k] = s[k + 1];
+            s[k + 1] = t;
+            if (wantv && k < n - 1) {
+              for (let i = 0; i < n; i++) {
+                t = V.get(i, k + 1);
+                V.set(i, k + 1, V.get(i, k));
+                V.set(i, k, t);
+              }
+            }
+            if (wantu && k < m - 1) {
+              for (let i = 0; i < m; i++) {
+                t = U.get(i, k + 1);
+                U.set(i, k + 1, U.get(i, k));
+                U.set(i, k, t);
+              }
+            }
+            k++;
+          }
+          p2--;
+          break;
+        }
+      }
+    }
+    if (swapped) {
+      let tmp = V;
+      V = U;
+      U = tmp;
+    }
+    this.m = m;
+    this.n = n;
+    this.s = s;
+    this.U = U;
+    this.V = V;
+  }
+  solve(value) {
+    let Y = value;
+    let e = this.threshold;
+    let scols = this.s.length;
+    let Ls = Matrix$1.zeros(scols, scols);
+    for (let i = 0; i < scols; i++) {
+      if (Math.abs(this.s[i]) <= e) {
+        Ls.set(i, i, 0);
+      } else {
+        Ls.set(i, i, 1 / this.s[i]);
+      }
+    }
+    let U = this.U;
+    let V = this.rightSingularVectors;
+    let VL = V.mmul(Ls);
+    let vrows = V.rows;
+    let urows = U.rows;
+    let VLU = Matrix$1.zeros(vrows, urows);
+    for (let i = 0; i < vrows; i++) {
+      for (let j = 0; j < urows; j++) {
+        let sum = 0;
+        for (let k = 0; k < scols; k++) {
+          sum += VL.get(i, k) * U.get(j, k);
+        }
+        VLU.set(i, j, sum);
+      }
+    }
+    return VLU.mmul(Y);
+  }
+  solveForDiagonal(value) {
+    return this.solve(Matrix$1.diag(value));
+  }
+  inverse() {
+    let V = this.V;
+    let e = this.threshold;
+    let vrows = V.rows;
+    let vcols = V.columns;
+    let X = new Matrix$1(vrows, this.s.length);
+    for (let i = 0; i < vrows; i++) {
+      for (let j = 0; j < vcols; j++) {
+        if (Math.abs(this.s[j]) > e) {
+          X.set(i, j, V.get(i, j) / this.s[j]);
+        }
+      }
+    }
+    let U = this.U;
+    let urows = U.rows;
+    let ucols = U.columns;
+    let Y = new Matrix$1(vrows, urows);
+    for (let i = 0; i < vrows; i++) {
+      for (let j = 0; j < urows; j++) {
+        let sum = 0;
+        for (let k = 0; k < ucols; k++) {
+          sum += X.get(i, k) * U.get(j, k);
+        }
+        Y.set(i, j, sum);
+      }
+    }
+    return Y;
+  }
+  get condition() {
+    return this.s[0] / this.s[Math.min(this.m, this.n) - 1];
+  }
+  get norm2() {
+    return this.s[0];
+  }
+  get rank() {
+    let tol = Math.max(this.m, this.n) * this.s[0] * Number.EPSILON;
+    let r = 0;
+    let s = this.s;
+    for (let i = 0, ii = s.length; i < ii; i++) {
+      if (s[i] > tol) {
+        r++;
+      }
+    }
+    return r;
+  }
+  get diagonal() {
+    return Array.from(this.s);
+  }
+  get threshold() {
+    return Number.EPSILON / 2 * Math.max(this.m, this.n) * this.s[0];
+  }
+  get leftSingularVectors() {
+    return this.U;
+  }
+  get rightSingularVectors() {
+    return this.V;
+  }
+  get diagonalMatrix() {
+    return Matrix$1.diag(this.s);
+  }
+}
+function inverse(matrix2, useSVD = false) {
+  matrix2 = WrapperMatrix2D.checkMatrix(matrix2);
+  if (useSVD) {
+    return new SingularValueDecomposition(matrix2).inverse();
+  } else {
+    return solve$1(matrix2, Matrix$1.eye(matrix2.rows));
+  }
+}
+function solve$1(leftHandSide, rightHandSide, useSVD = false) {
+  leftHandSide = WrapperMatrix2D.checkMatrix(leftHandSide);
+  rightHandSide = WrapperMatrix2D.checkMatrix(rightHandSide);
+  if (useSVD) {
+    return new SingularValueDecomposition(leftHandSide).solve(rightHandSide);
+  } else {
+    return leftHandSide.isSquare() ? new LuDecomposition(leftHandSide).solve(rightHandSide) : new QrDecomposition(leftHandSide).solve(rightHandSide);
+  }
+}
+function determinant(matrix2) {
+  matrix2 = Matrix$1.checkMatrix(matrix2);
+  if (matrix2.isSquare()) {
+    if (matrix2.columns === 0) {
+      return 1;
+    }
+    let a, b, c, d2;
+    if (matrix2.columns === 2) {
+      a = matrix2.get(0, 0);
+      b = matrix2.get(0, 1);
+      c = matrix2.get(1, 0);
+      d2 = matrix2.get(1, 1);
+      return a * d2 - b * c;
+    } else if (matrix2.columns === 3) {
+      let subMatrix0, subMatrix1, subMatrix2;
+      subMatrix0 = new MatrixSelectionView(matrix2, [1, 2], [1, 2]);
+      subMatrix1 = new MatrixSelectionView(matrix2, [1, 2], [0, 2]);
+      subMatrix2 = new MatrixSelectionView(matrix2, [1, 2], [0, 1]);
+      a = matrix2.get(0, 0);
+      b = matrix2.get(0, 1);
+      c = matrix2.get(0, 2);
+      return a * determinant(subMatrix0) - b * determinant(subMatrix1) + c * determinant(subMatrix2);
+    } else {
+      return new LuDecomposition(matrix2).determinant;
+    }
+  } else {
+    throw Error("determinant can only be calculated for a square matrix");
+  }
+}
+function xrange(n, exception) {
+  let range = [];
+  for (let i = 0; i < n; i++) {
+    if (i !== exception) {
+      range.push(i);
+    }
+  }
+  return range;
+}
+function dependenciesOneRow(error, matrix2, index, thresholdValue = 1e-9, thresholdError = 1e-9) {
+  if (error > thresholdError) {
+    return new Array(matrix2.rows + 1).fill(0);
+  } else {
+    let returnArray = matrix2.addRow(index, [0]);
+    for (let i = 0; i < returnArray.rows; i++) {
+      if (Math.abs(returnArray.get(i, 0)) < thresholdValue) {
+        returnArray.set(i, 0, 0);
+      }
+    }
+    return returnArray.to1DArray();
+  }
+}
+function linearDependencies(matrix2, options = {}) {
+  const { thresholdValue = 1e-9, thresholdError = 1e-9 } = options;
+  matrix2 = Matrix$1.checkMatrix(matrix2);
+  let n = matrix2.rows;
+  let results = new Matrix$1(n, n);
+  for (let i = 0; i < n; i++) {
+    let b = Matrix$1.columnVector(matrix2.getRow(i));
+    let Abis = matrix2.subMatrixRow(xrange(n, i)).transpose();
+    let svd = new SingularValueDecomposition(Abis);
+    let x = svd.solve(b);
+    let error = Matrix$1.sub(b, Abis.mmul(x)).abs().max();
+    results.setRow(
+      i,
+      dependenciesOneRow(error, x, i, thresholdValue, thresholdError)
+    );
+  }
+  return results;
+}
+function pseudoInverse(matrix2, threshold = Number.EPSILON) {
+  matrix2 = Matrix$1.checkMatrix(matrix2);
+  if (matrix2.isEmpty()) {
+    return matrix2.transpose();
+  }
+  let svdSolution = new SingularValueDecomposition(matrix2, { autoTranspose: true });
+  let U = svdSolution.leftSingularVectors;
+  let V = svdSolution.rightSingularVectors;
+  let s = svdSolution.diagonal;
+  for (let i = 0; i < s.length; i++) {
+    if (Math.abs(s[i]) > threshold) {
+      s[i] = 1 / s[i];
+    } else {
+      s[i] = 0;
+    }
+  }
+  return V.mmul(Matrix$1.diag(s).mmul(U.transpose()));
+}
+function covariance(xMatrix, yMatrix = xMatrix, options = {}) {
+  xMatrix = new Matrix$1(xMatrix);
+  let yIsSame = false;
+  if (typeof yMatrix === "object" && !Matrix$1.isMatrix(yMatrix) && !isAnyArray.isAnyArray(yMatrix)) {
+    options = yMatrix;
+    yMatrix = xMatrix;
+    yIsSame = true;
+  } else {
+    yMatrix = new Matrix$1(yMatrix);
+  }
+  if (xMatrix.rows !== yMatrix.rows) {
+    throw new TypeError("Both matrices must have the same number of rows");
+  }
+  const { center = true } = options;
+  if (center) {
+    xMatrix = xMatrix.center("column");
+    if (!yIsSame) {
+      yMatrix = yMatrix.center("column");
+    }
+  }
+  const cov = xMatrix.transpose().mmul(yMatrix);
+  for (let i = 0; i < cov.rows; i++) {
+    for (let j = 0; j < cov.columns; j++) {
+      cov.set(i, j, cov.get(i, j) * (1 / (xMatrix.rows - 1)));
+    }
+  }
+  return cov;
+}
+function correlation(xMatrix, yMatrix = xMatrix, options = {}) {
+  xMatrix = new Matrix$1(xMatrix);
+  let yIsSame = false;
+  if (typeof yMatrix === "object" && !Matrix$1.isMatrix(yMatrix) && !isAnyArray.isAnyArray(yMatrix)) {
+    options = yMatrix;
+    yMatrix = xMatrix;
+    yIsSame = true;
+  } else {
+    yMatrix = new Matrix$1(yMatrix);
+  }
+  if (xMatrix.rows !== yMatrix.rows) {
+    throw new TypeError("Both matrices must have the same number of rows");
+  }
+  const { center = true, scale = true } = options;
+  if (center) {
+    xMatrix.center("column");
+    if (!yIsSame) {
+      yMatrix.center("column");
+    }
+  }
+  if (scale) {
+    xMatrix.scale("column");
+    if (!yIsSame) {
+      yMatrix.scale("column");
+    }
+  }
+  const sdx = xMatrix.standardDeviation("column", { unbiased: true });
+  const sdy = yIsSame ? sdx : yMatrix.standardDeviation("column", { unbiased: true });
+  const corr = xMatrix.transpose().mmul(yMatrix);
+  for (let i = 0; i < corr.rows; i++) {
+    for (let j = 0; j < corr.columns; j++) {
+      corr.set(
+        i,
+        j,
+        corr.get(i, j) * (1 / (sdx[i] * sdy[j])) * (1 / (xMatrix.rows - 1))
+      );
+    }
+  }
+  return corr;
+}
+class EigenvalueDecomposition {
+  constructor(matrix2, options = {}) {
+    const { assumeSymmetric = false } = options;
+    matrix2 = WrapperMatrix2D.checkMatrix(matrix2);
+    if (!matrix2.isSquare()) {
+      throw new Error("Matrix is not a square matrix");
+    }
+    if (matrix2.isEmpty()) {
+      throw new Error("Matrix must be non-empty");
+    }
+    let n = matrix2.columns;
+    let V = new Matrix$1(n, n);
+    let d2 = new Float64Array(n);
+    let e = new Float64Array(n);
+    let value = matrix2;
+    let i, j;
+    let isSymmetric = false;
+    if (assumeSymmetric) {
+      isSymmetric = true;
+    } else {
+      isSymmetric = matrix2.isSymmetric();
+    }
+    if (isSymmetric) {
+      for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+          V.set(i, j, value.get(i, j));
+        }
+      }
+      tred2(n, e, d2, V);
+      tql2(n, e, d2, V);
+    } else {
+      let H = new Matrix$1(n, n);
+      let ort = new Float64Array(n);
+      for (j = 0; j < n; j++) {
+        for (i = 0; i < n; i++) {
+          H.set(i, j, value.get(i, j));
+        }
+      }
+      orthes(n, H, ort, V);
+      hqr2(n, e, d2, V, H);
+    }
+    this.n = n;
+    this.e = e;
+    this.d = d2;
+    this.V = V;
+  }
+  get realEigenvalues() {
+    return Array.from(this.d);
+  }
+  get imaginaryEigenvalues() {
+    return Array.from(this.e);
+  }
+  get eigenvectorMatrix() {
+    return this.V;
+  }
+  get diagonalMatrix() {
+    let n = this.n;
+    let e = this.e;
+    let d2 = this.d;
+    let X = new Matrix$1(n, n);
+    let i, j;
+    for (i = 0; i < n; i++) {
+      for (j = 0; j < n; j++) {
+        X.set(i, j, 0);
+      }
+      X.set(i, i, d2[i]);
+      if (e[i] > 0) {
+        X.set(i, i + 1, e[i]);
+      } else if (e[i] < 0) {
+        X.set(i, i - 1, e[i]);
+      }
+    }
+    return X;
+  }
+}
+function tred2(n, e, d2, V) {
+  let f2, g2, h2, i, j, k, hh, scale;
+  for (j = 0; j < n; j++) {
+    d2[j] = V.get(n - 1, j);
+  }
+  for (i = n - 1; i > 0; i--) {
+    scale = 0;
+    h2 = 0;
+    for (k = 0; k < i; k++) {
+      scale = scale + Math.abs(d2[k]);
+    }
+    if (scale === 0) {
+      e[i] = d2[i - 1];
+      for (j = 0; j < i; j++) {
+        d2[j] = V.get(i - 1, j);
+        V.set(i, j, 0);
+        V.set(j, i, 0);
+      }
+    } else {
+      for (k = 0; k < i; k++) {
+        d2[k] /= scale;
+        h2 += d2[k] * d2[k];
+      }
+      f2 = d2[i - 1];
+      g2 = Math.sqrt(h2);
+      if (f2 > 0) {
+        g2 = -g2;
+      }
+      e[i] = scale * g2;
+      h2 = h2 - f2 * g2;
+      d2[i - 1] = f2 - g2;
+      for (j = 0; j < i; j++) {
+        e[j] = 0;
+      }
+      for (j = 0; j < i; j++) {
+        f2 = d2[j];
+        V.set(j, i, f2);
+        g2 = e[j] + V.get(j, j) * f2;
+        for (k = j + 1; k <= i - 1; k++) {
+          g2 += V.get(k, j) * d2[k];
+          e[k] += V.get(k, j) * f2;
+        }
+        e[j] = g2;
+      }
+      f2 = 0;
+      for (j = 0; j < i; j++) {
+        e[j] /= h2;
+        f2 += e[j] * d2[j];
+      }
+      hh = f2 / (h2 + h2);
+      for (j = 0; j < i; j++) {
+        e[j] -= hh * d2[j];
+      }
+      for (j = 0; j < i; j++) {
+        f2 = d2[j];
+        g2 = e[j];
+        for (k = j; k <= i - 1; k++) {
+          V.set(k, j, V.get(k, j) - (f2 * e[k] + g2 * d2[k]));
+        }
+        d2[j] = V.get(i - 1, j);
+        V.set(i, j, 0);
+      }
+    }
+    d2[i] = h2;
+  }
+  for (i = 0; i < n - 1; i++) {
+    V.set(n - 1, i, V.get(i, i));
+    V.set(i, i, 1);
+    h2 = d2[i + 1];
+    if (h2 !== 0) {
+      for (k = 0; k <= i; k++) {
+        d2[k] = V.get(k, i + 1) / h2;
+      }
+      for (j = 0; j <= i; j++) {
+        g2 = 0;
+        for (k = 0; k <= i; k++) {
+          g2 += V.get(k, i + 1) * V.get(k, j);
+        }
+        for (k = 0; k <= i; k++) {
+          V.set(k, j, V.get(k, j) - g2 * d2[k]);
+        }
+      }
+    }
+    for (k = 0; k <= i; k++) {
+      V.set(k, i + 1, 0);
+    }
+  }
+  for (j = 0; j < n; j++) {
+    d2[j] = V.get(n - 1, j);
+    V.set(n - 1, j, 0);
+  }
+  V.set(n - 1, n - 1, 1);
+  e[0] = 0;
+}
+function tql2(n, e, d2, V) {
+  let g2, h2, i, j, k, l, m, p2, r, dl1, c, c2, c3, el1, s, s2;
+  for (i = 1; i < n; i++) {
+    e[i - 1] = e[i];
+  }
+  e[n - 1] = 0;
+  let f2 = 0;
+  let tst1 = 0;
+  let eps = Number.EPSILON;
+  for (l = 0; l < n; l++) {
+    tst1 = Math.max(tst1, Math.abs(d2[l]) + Math.abs(e[l]));
+    m = l;
+    while (m < n) {
+      if (Math.abs(e[m]) <= eps * tst1) {
+        break;
+      }
+      m++;
+    }
+    if (m > l) {
+      do {
+        g2 = d2[l];
+        p2 = (d2[l + 1] - g2) / (2 * e[l]);
+        r = hypotenuse(p2, 1);
+        if (p2 < 0) {
+          r = -r;
+        }
+        d2[l] = e[l] / (p2 + r);
+        d2[l + 1] = e[l] * (p2 + r);
+        dl1 = d2[l + 1];
+        h2 = g2 - d2[l];
+        for (i = l + 2; i < n; i++) {
+          d2[i] -= h2;
+        }
+        f2 = f2 + h2;
+        p2 = d2[m];
+        c = 1;
+        c2 = c;
+        c3 = c;
+        el1 = e[l + 1];
+        s = 0;
+        s2 = 0;
+        for (i = m - 1; i >= l; i--) {
+          c3 = c2;
+          c2 = c;
+          s2 = s;
+          g2 = c * e[i];
+          h2 = c * p2;
+          r = hypotenuse(p2, e[i]);
+          e[i + 1] = s * r;
+          s = e[i] / r;
+          c = p2 / r;
+          p2 = c * d2[i] - s * g2;
+          d2[i + 1] = h2 + s * (c * g2 + s * d2[i]);
+          for (k = 0; k < n; k++) {
+            h2 = V.get(k, i + 1);
+            V.set(k, i + 1, s * V.get(k, i) + c * h2);
+            V.set(k, i, c * V.get(k, i) - s * h2);
+          }
+        }
+        p2 = -s * s2 * c3 * el1 * e[l] / dl1;
+        e[l] = s * p2;
+        d2[l] = c * p2;
+      } while (Math.abs(e[l]) > eps * tst1);
+    }
+    d2[l] = d2[l] + f2;
+    e[l] = 0;
+  }
+  for (i = 0; i < n - 1; i++) {
+    k = i;
+    p2 = d2[i];
+    for (j = i + 1; j < n; j++) {
+      if (d2[j] < p2) {
+        k = j;
+        p2 = d2[j];
+      }
+    }
+    if (k !== i) {
+      d2[k] = d2[i];
+      d2[i] = p2;
+      for (j = 0; j < n; j++) {
+        p2 = V.get(j, i);
+        V.set(j, i, V.get(j, k));
+        V.set(j, k, p2);
+      }
+    }
+  }
+}
+function orthes(n, H, ort, V) {
+  let low = 0;
+  let high = n - 1;
+  let f2, g2, h2, i, j, m;
+  let scale;
+  for (m = low + 1; m <= high - 1; m++) {
+    scale = 0;
+    for (i = m; i <= high; i++) {
+      scale = scale + Math.abs(H.get(i, m - 1));
+    }
+    if (scale !== 0) {
+      h2 = 0;
+      for (i = high; i >= m; i--) {
+        ort[i] = H.get(i, m - 1) / scale;
+        h2 += ort[i] * ort[i];
+      }
+      g2 = Math.sqrt(h2);
+      if (ort[m] > 0) {
+        g2 = -g2;
+      }
+      h2 = h2 - ort[m] * g2;
+      ort[m] = ort[m] - g2;
+      for (j = m; j < n; j++) {
+        f2 = 0;
+        for (i = high; i >= m; i--) {
+          f2 += ort[i] * H.get(i, j);
+        }
+        f2 = f2 / h2;
+        for (i = m; i <= high; i++) {
+          H.set(i, j, H.get(i, j) - f2 * ort[i]);
+        }
+      }
+      for (i = 0; i <= high; i++) {
+        f2 = 0;
+        for (j = high; j >= m; j--) {
+          f2 += ort[j] * H.get(i, j);
+        }
+        f2 = f2 / h2;
+        for (j = m; j <= high; j++) {
+          H.set(i, j, H.get(i, j) - f2 * ort[j]);
+        }
+      }
+      ort[m] = scale * ort[m];
+      H.set(m, m - 1, scale * g2);
+    }
+  }
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < n; j++) {
+      V.set(i, j, i === j ? 1 : 0);
+    }
+  }
+  for (m = high - 1; m >= low + 1; m--) {
+    if (H.get(m, m - 1) !== 0) {
+      for (i = m + 1; i <= high; i++) {
+        ort[i] = H.get(i, m - 1);
+      }
+      for (j = m; j <= high; j++) {
+        g2 = 0;
+        for (i = m; i <= high; i++) {
+          g2 += ort[i] * V.get(i, j);
+        }
+        g2 = g2 / ort[m] / H.get(m, m - 1);
+        for (i = m; i <= high; i++) {
+          V.set(i, j, V.get(i, j) + g2 * ort[i]);
+        }
+      }
+    }
+  }
+}
+function hqr2(nn, e, d2, V, H) {
+  let n = nn - 1;
+  let low = 0;
+  let high = nn - 1;
+  let eps = Number.EPSILON;
+  let exshift = 0;
+  let norm = 0;
+  let p2 = 0;
+  let q = 0;
+  let r = 0;
+  let s = 0;
+  let z = 0;
+  let iter = 0;
+  let i, j, k, l, m, t, w, x, y;
+  let ra, sa, vr, vi;
+  let notlast, cdivres;
+  for (i = 0; i < nn; i++) {
+    if (i < low || i > high) {
+      d2[i] = H.get(i, i);
+      e[i] = 0;
+    }
+    for (j = Math.max(i - 1, 0); j < nn; j++) {
+      norm = norm + Math.abs(H.get(i, j));
+    }
+  }
+  while (n >= low) {
+    l = n;
+    while (l > low) {
+      s = Math.abs(H.get(l - 1, l - 1)) + Math.abs(H.get(l, l));
+      if (s === 0) {
+        s = norm;
+      }
+      if (Math.abs(H.get(l, l - 1)) < eps * s) {
+        break;
+      }
+      l--;
+    }
+    if (l === n) {
+      H.set(n, n, H.get(n, n) + exshift);
+      d2[n] = H.get(n, n);
+      e[n] = 0;
+      n--;
+      iter = 0;
+    } else if (l === n - 1) {
+      w = H.get(n, n - 1) * H.get(n - 1, n);
+      p2 = (H.get(n - 1, n - 1) - H.get(n, n)) / 2;
+      q = p2 * p2 + w;
+      z = Math.sqrt(Math.abs(q));
+      H.set(n, n, H.get(n, n) + exshift);
+      H.set(n - 1, n - 1, H.get(n - 1, n - 1) + exshift);
+      x = H.get(n, n);
+      if (q >= 0) {
+        z = p2 >= 0 ? p2 + z : p2 - z;
+        d2[n - 1] = x + z;
+        d2[n] = d2[n - 1];
+        if (z !== 0) {
+          d2[n] = x - w / z;
+        }
+        e[n - 1] = 0;
+        e[n] = 0;
+        x = H.get(n, n - 1);
+        s = Math.abs(x) + Math.abs(z);
+        p2 = x / s;
+        q = z / s;
+        r = Math.sqrt(p2 * p2 + q * q);
+        p2 = p2 / r;
+        q = q / r;
+        for (j = n - 1; j < nn; j++) {
+          z = H.get(n - 1, j);
+          H.set(n - 1, j, q * z + p2 * H.get(n, j));
+          H.set(n, j, q * H.get(n, j) - p2 * z);
+        }
+        for (i = 0; i <= n; i++) {
+          z = H.get(i, n - 1);
+          H.set(i, n - 1, q * z + p2 * H.get(i, n));
+          H.set(i, n, q * H.get(i, n) - p2 * z);
+        }
+        for (i = low; i <= high; i++) {
+          z = V.get(i, n - 1);
+          V.set(i, n - 1, q * z + p2 * V.get(i, n));
+          V.set(i, n, q * V.get(i, n) - p2 * z);
+        }
+      } else {
+        d2[n - 1] = x + p2;
+        d2[n] = x + p2;
+        e[n - 1] = z;
+        e[n] = -z;
+      }
+      n = n - 2;
+      iter = 0;
+    } else {
+      x = H.get(n, n);
+      y = 0;
+      w = 0;
+      if (l < n) {
+        y = H.get(n - 1, n - 1);
+        w = H.get(n, n - 1) * H.get(n - 1, n);
+      }
+      if (iter === 10) {
+        exshift += x;
+        for (i = low; i <= n; i++) {
+          H.set(i, i, H.get(i, i) - x);
+        }
+        s = Math.abs(H.get(n, n - 1)) + Math.abs(H.get(n - 1, n - 2));
+        x = y = 0.75 * s;
+        w = -0.4375 * s * s;
+      }
+      if (iter === 30) {
+        s = (y - x) / 2;
+        s = s * s + w;
+        if (s > 0) {
+          s = Math.sqrt(s);
+          if (y < x) {
+            s = -s;
+          }
+          s = x - w / ((y - x) / 2 + s);
+          for (i = low; i <= n; i++) {
+            H.set(i, i, H.get(i, i) - s);
+          }
+          exshift += s;
+          x = y = w = 0.964;
+        }
+      }
+      iter = iter + 1;
+      m = n - 2;
+      while (m >= l) {
+        z = H.get(m, m);
+        r = x - z;
+        s = y - z;
+        p2 = (r * s - w) / H.get(m + 1, m) + H.get(m, m + 1);
+        q = H.get(m + 1, m + 1) - z - r - s;
+        r = H.get(m + 2, m + 1);
+        s = Math.abs(p2) + Math.abs(q) + Math.abs(r);
+        p2 = p2 / s;
+        q = q / s;
+        r = r / s;
+        if (m === l) {
+          break;
+        }
+        if (Math.abs(H.get(m, m - 1)) * (Math.abs(q) + Math.abs(r)) < eps * (Math.abs(p2) * (Math.abs(H.get(m - 1, m - 1)) + Math.abs(z) + Math.abs(H.get(m + 1, m + 1))))) {
+          break;
+        }
+        m--;
+      }
+      for (i = m + 2; i <= n; i++) {
+        H.set(i, i - 2, 0);
+        if (i > m + 2) {
+          H.set(i, i - 3, 0);
+        }
+      }
+      for (k = m; k <= n - 1; k++) {
+        notlast = k !== n - 1;
+        if (k !== m) {
+          p2 = H.get(k, k - 1);
+          q = H.get(k + 1, k - 1);
+          r = notlast ? H.get(k + 2, k - 1) : 0;
+          x = Math.abs(p2) + Math.abs(q) + Math.abs(r);
+          if (x !== 0) {
+            p2 = p2 / x;
+            q = q / x;
+            r = r / x;
+          }
+        }
+        if (x === 0) {
+          break;
+        }
+        s = Math.sqrt(p2 * p2 + q * q + r * r);
+        if (p2 < 0) {
+          s = -s;
+        }
+        if (s !== 0) {
+          if (k !== m) {
+            H.set(k, k - 1, -s * x);
+          } else if (l !== m) {
+            H.set(k, k - 1, -H.get(k, k - 1));
+          }
+          p2 = p2 + s;
+          x = p2 / s;
+          y = q / s;
+          z = r / s;
+          q = q / p2;
+          r = r / p2;
+          for (j = k; j < nn; j++) {
+            p2 = H.get(k, j) + q * H.get(k + 1, j);
+            if (notlast) {
+              p2 = p2 + r * H.get(k + 2, j);
+              H.set(k + 2, j, H.get(k + 2, j) - p2 * z);
+            }
+            H.set(k, j, H.get(k, j) - p2 * x);
+            H.set(k + 1, j, H.get(k + 1, j) - p2 * y);
+          }
+          for (i = 0; i <= Math.min(n, k + 3); i++) {
+            p2 = x * H.get(i, k) + y * H.get(i, k + 1);
+            if (notlast) {
+              p2 = p2 + z * H.get(i, k + 2);
+              H.set(i, k + 2, H.get(i, k + 2) - p2 * r);
+            }
+            H.set(i, k, H.get(i, k) - p2);
+            H.set(i, k + 1, H.get(i, k + 1) - p2 * q);
+          }
+          for (i = low; i <= high; i++) {
+            p2 = x * V.get(i, k) + y * V.get(i, k + 1);
+            if (notlast) {
+              p2 = p2 + z * V.get(i, k + 2);
+              V.set(i, k + 2, V.get(i, k + 2) - p2 * r);
+            }
+            V.set(i, k, V.get(i, k) - p2);
+            V.set(i, k + 1, V.get(i, k + 1) - p2 * q);
+          }
+        }
+      }
+    }
+  }
+  if (norm === 0) {
+    return;
+  }
+  for (n = nn - 1; n >= 0; n--) {
+    p2 = d2[n];
+    q = e[n];
+    if (q === 0) {
+      l = n;
+      H.set(n, n, 1);
+      for (i = n - 1; i >= 0; i--) {
+        w = H.get(i, i) - p2;
+        r = 0;
+        for (j = l; j <= n; j++) {
+          r = r + H.get(i, j) * H.get(j, n);
+        }
+        if (e[i] < 0) {
+          z = w;
+          s = r;
+        } else {
+          l = i;
+          if (e[i] === 0) {
+            H.set(i, n, w !== 0 ? -r / w : -r / (eps * norm));
+          } else {
+            x = H.get(i, i + 1);
+            y = H.get(i + 1, i);
+            q = (d2[i] - p2) * (d2[i] - p2) + e[i] * e[i];
+            t = (x * s - z * r) / q;
+            H.set(i, n, t);
+            H.set(
+              i + 1,
+              n,
+              Math.abs(x) > Math.abs(z) ? (-r - w * t) / x : (-s - y * t) / z
+            );
+          }
+          t = Math.abs(H.get(i, n));
+          if (eps * t * t > 1) {
+            for (j = i; j <= n; j++) {
+              H.set(j, n, H.get(j, n) / t);
+            }
+          }
+        }
+      }
+    } else if (q < 0) {
+      l = n - 1;
+      if (Math.abs(H.get(n, n - 1)) > Math.abs(H.get(n - 1, n))) {
+        H.set(n - 1, n - 1, q / H.get(n, n - 1));
+        H.set(n - 1, n, -(H.get(n, n) - p2) / H.get(n, n - 1));
+      } else {
+        cdivres = cdiv(0, -H.get(n - 1, n), H.get(n - 1, n - 1) - p2, q);
+        H.set(n - 1, n - 1, cdivres[0]);
+        H.set(n - 1, n, cdivres[1]);
+      }
+      H.set(n, n - 1, 0);
+      H.set(n, n, 1);
+      for (i = n - 2; i >= 0; i--) {
+        ra = 0;
+        sa = 0;
+        for (j = l; j <= n; j++) {
+          ra = ra + H.get(i, j) * H.get(j, n - 1);
+          sa = sa + H.get(i, j) * H.get(j, n);
+        }
+        w = H.get(i, i) - p2;
+        if (e[i] < 0) {
+          z = w;
+          r = ra;
+          s = sa;
+        } else {
+          l = i;
+          if (e[i] === 0) {
+            cdivres = cdiv(-ra, -sa, w, q);
+            H.set(i, n - 1, cdivres[0]);
+            H.set(i, n, cdivres[1]);
+          } else {
+            x = H.get(i, i + 1);
+            y = H.get(i + 1, i);
+            vr = (d2[i] - p2) * (d2[i] - p2) + e[i] * e[i] - q * q;
+            vi = (d2[i] - p2) * 2 * q;
+            if (vr === 0 && vi === 0) {
+              vr = eps * norm * (Math.abs(w) + Math.abs(q) + Math.abs(x) + Math.abs(y) + Math.abs(z));
+            }
+            cdivres = cdiv(
+              x * r - z * ra + q * sa,
+              x * s - z * sa - q * ra,
+              vr,
+              vi
+            );
+            H.set(i, n - 1, cdivres[0]);
+            H.set(i, n, cdivres[1]);
+            if (Math.abs(x) > Math.abs(z) + Math.abs(q)) {
+              H.set(
+                i + 1,
+                n - 1,
+                (-ra - w * H.get(i, n - 1) + q * H.get(i, n)) / x
+              );
+              H.set(
+                i + 1,
+                n,
+                (-sa - w * H.get(i, n) - q * H.get(i, n - 1)) / x
+              );
+            } else {
+              cdivres = cdiv(
+                -r - y * H.get(i, n - 1),
+                -s - y * H.get(i, n),
+                z,
+                q
+              );
+              H.set(i + 1, n - 1, cdivres[0]);
+              H.set(i + 1, n, cdivres[1]);
+            }
+          }
+          t = Math.max(Math.abs(H.get(i, n - 1)), Math.abs(H.get(i, n)));
+          if (eps * t * t > 1) {
+            for (j = i; j <= n; j++) {
+              H.set(j, n - 1, H.get(j, n - 1) / t);
+              H.set(j, n, H.get(j, n) / t);
+            }
+          }
+        }
+      }
+    }
+  }
+  for (i = 0; i < nn; i++) {
+    if (i < low || i > high) {
+      for (j = i; j < nn; j++) {
+        V.set(i, j, H.get(i, j));
+      }
+    }
+  }
+  for (j = nn - 1; j >= low; j--) {
+    for (i = low; i <= high; i++) {
+      z = 0;
+      for (k = low; k <= Math.min(j, high); k++) {
+        z = z + V.get(i, k) * H.get(k, j);
+      }
+      V.set(i, j, z);
+    }
+  }
+}
+function cdiv(xr, xi, yr, yi) {
+  let r, d2;
+  if (Math.abs(yr) > Math.abs(yi)) {
+    r = yi / yr;
+    d2 = yr + r * yi;
+    return [(xr + r * xi) / d2, (xi - r * xr) / d2];
+  } else {
+    r = yr / yi;
+    d2 = yi + r * yr;
+    return [(r * xr + xi) / d2, (r * xi - xr) / d2];
+  }
+}
+class CholeskyDecomposition {
+  constructor(value) {
+    value = WrapperMatrix2D.checkMatrix(value);
+    if (!value.isSymmetric()) {
+      throw new Error("Matrix is not symmetric");
+    }
+    let a = value;
+    let dimension = a.rows;
+    let l = new Matrix$1(dimension, dimension);
+    let positiveDefinite = true;
+    let i, j, k;
+    for (j = 0; j < dimension; j++) {
+      let d2 = 0;
+      for (k = 0; k < j; k++) {
+        let s = 0;
+        for (i = 0; i < k; i++) {
+          s += l.get(k, i) * l.get(j, i);
+        }
+        s = (a.get(j, k) - s) / l.get(k, k);
+        l.set(j, k, s);
+        d2 = d2 + s * s;
+      }
+      d2 = a.get(j, j) - d2;
+      positiveDefinite && (positiveDefinite = d2 > 0);
+      l.set(j, j, Math.sqrt(Math.max(d2, 0)));
+      for (k = j + 1; k < dimension; k++) {
+        l.set(j, k, 0);
+      }
+    }
+    this.L = l;
+    this.positiveDefinite = positiveDefinite;
+  }
+  isPositiveDefinite() {
+    return this.positiveDefinite;
+  }
+  solve(value) {
+    value = WrapperMatrix2D.checkMatrix(value);
+    let l = this.L;
+    let dimension = l.rows;
+    if (value.rows !== dimension) {
+      throw new Error("Matrix dimensions do not match");
+    }
+    if (this.isPositiveDefinite() === false) {
+      throw new Error("Matrix is not positive definite");
+    }
+    let count = value.columns;
+    let B = value.clone();
+    let i, j, k;
+    for (k = 0; k < dimension; k++) {
+      for (j = 0; j < count; j++) {
+        for (i = 0; i < k; i++) {
+          B.set(k, j, B.get(k, j) - B.get(i, j) * l.get(k, i));
+        }
+        B.set(k, j, B.get(k, j) / l.get(k, k));
+      }
+    }
+    for (k = dimension - 1; k >= 0; k--) {
+      for (j = 0; j < count; j++) {
+        for (i = k + 1; i < dimension; i++) {
+          B.set(k, j, B.get(k, j) - B.get(i, j) * l.get(i, k));
+        }
+        B.set(k, j, B.get(k, j) / l.get(k, k));
+      }
+    }
+    return B;
+  }
+  get lowerTriangularMatrix() {
+    return this.L;
+  }
+}
+class nipals {
+  constructor(X, options = {}) {
+    X = WrapperMatrix2D.checkMatrix(X);
+    let { Y } = options;
+    const {
+      scaleScores = false,
+      maxIterations = 1e3,
+      terminationCriteria = 1e-10
+    } = options;
+    let u;
+    if (Y) {
+      if (isAnyArray.isAnyArray(Y) && typeof Y[0] === "number") {
+        Y = Matrix$1.columnVector(Y);
+      } else {
+        Y = WrapperMatrix2D.checkMatrix(Y);
+      }
+      if (Y.rows !== X.rows) {
+        throw new Error("Y should have the same number of rows as X");
+      }
+      u = Y.getColumnVector(0);
+    } else {
+      u = X.getColumnVector(0);
+    }
+    let diff = 1;
+    let t, q, w, tOld;
+    for (let counter = 0; counter < maxIterations && diff > terminationCriteria; counter++) {
+      w = X.transpose().mmul(u).div(u.transpose().mmul(u).get(0, 0));
+      w = w.div(w.norm());
+      t = X.mmul(w).div(w.transpose().mmul(w).get(0, 0));
+      if (counter > 0) {
+        diff = t.clone().sub(tOld).pow(2).sum();
+      }
+      tOld = t.clone();
+      if (Y) {
+        q = Y.transpose().mmul(t).div(t.transpose().mmul(t).get(0, 0));
+        q = q.div(q.norm());
+        u = Y.mmul(q).div(q.transpose().mmul(q).get(0, 0));
+      } else {
+        u = t;
+      }
+    }
+    if (Y) {
+      let p2 = X.transpose().mmul(t).div(t.transpose().mmul(t).get(0, 0));
+      p2 = p2.div(p2.norm());
+      let xResidual = X.clone().sub(t.clone().mmul(p2.transpose()));
+      let residual = u.transpose().mmul(t).div(t.transpose().mmul(t).get(0, 0));
+      let yResidual = Y.clone().sub(
+        t.clone().mulS(residual.get(0, 0)).mmul(q.transpose())
+      );
+      this.t = t;
+      this.p = p2.transpose();
+      this.w = w.transpose();
+      this.q = q;
+      this.u = u;
+      this.s = t.transpose().mmul(t);
+      this.xResidual = xResidual;
+      this.yResidual = yResidual;
+      this.betas = residual;
+    } else {
+      this.w = w.transpose();
+      this.s = t.transpose().mmul(t).sqrt();
+      if (scaleScores) {
+        this.t = t.clone().div(this.s.get(0, 0));
+      } else {
+        this.t = t;
+      }
+      this.xResidual = X.sub(t.mmul(w.transpose()));
+    }
+  }
+}
+matrix.AbstractMatrix = AbstractMatrix;
+matrix.CHO = CholeskyDecomposition;
+matrix.CholeskyDecomposition = CholeskyDecomposition;
+matrix.DistanceMatrix = DistanceMatrix;
+matrix.EVD = EigenvalueDecomposition;
+matrix.EigenvalueDecomposition = EigenvalueDecomposition;
+matrix.LU = LuDecomposition;
+matrix.LuDecomposition = LuDecomposition;
+var Matrix_1 = matrix.Matrix = Matrix$1;
+matrix.MatrixColumnSelectionView = MatrixColumnSelectionView;
+matrix.MatrixColumnView = MatrixColumnView;
+matrix.MatrixFlipColumnView = MatrixFlipColumnView;
+matrix.MatrixFlipRowView = MatrixFlipRowView;
+matrix.MatrixRowSelectionView = MatrixRowSelectionView;
+matrix.MatrixRowView = MatrixRowView;
+matrix.MatrixSelectionView = MatrixSelectionView;
+matrix.MatrixSubView = MatrixSubView;
+var MatrixTransposeView_1 = matrix.MatrixTransposeView = MatrixTransposeView$1;
+matrix.NIPALS = nipals;
+matrix.Nipals = nipals;
+matrix.QR = QrDecomposition;
+matrix.QrDecomposition = QrDecomposition;
+matrix.SVD = SingularValueDecomposition;
+matrix.SingularValueDecomposition = SingularValueDecomposition;
+matrix.SymmetricMatrix = SymmetricMatrix;
+matrix.WrapperMatrix1D = WrapperMatrix1D;
+matrix.WrapperMatrix2D = WrapperMatrix2D;
+matrix.correlation = correlation;
+matrix.covariance = covariance;
+var _default = matrix.default = Matrix$1;
+matrix.determinant = determinant;
+matrix.inverse = inverse;
+matrix.linearDependencies = linearDependencies;
+matrix.pseudoInverse = pseudoInverse;
+var solve_1 = matrix.solve = solve$1;
+matrix.wrap = wrap;
+const Matrix = Matrix_1;
+const MatrixTransposeView = MatrixTransposeView_1;
+_default.Matrix ? _default.Matrix : Matrix_1;
+const solve = solve_1;
+function checkArrayLength(x, y) {
+  if (!isAnyArray$1(x) || !isAnyArray$1(y)) {
+    throw new TypeError("x and y must be arrays");
+  }
+  if (x.length !== y.length) {
+    throw new RangeError("x and y arrays must have the same length");
+  }
+}
+class BaseRegression {
+  constructor() {
+    if (new.target === BaseRegression) {
+      throw new Error("BaseRegression must be subclassed");
+    }
+  }
+  predict(x) {
+    if (typeof x === "number") {
+      return this._predict(x);
+    } else if (isAnyArray$1(x)) {
+      const y = [];
+      for (const xVal of x) {
+        y.push(this._predict(xVal));
+      }
+      return y;
+    } else {
+      throw new TypeError("x must be a number or array");
+    }
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _predict(x) {
+    throw new Error("_predict must be implemented");
+  }
+  train() {
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  toString(precision) {
+    return "";
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  toLaTeX(precision) {
+    return "";
+  }
+  /**
+   * Return the correlation coefficient of determination (r) and chi-square.
+   * @param x - explanatory variable
+   * @param y - response variable
+   * @return - Object with further statistics.
+   */
+  score(x, y) {
+    checkArrayLength(x, y);
+    const n = x.length;
+    const y2 = new Array(n);
+    for (let i = 0; i < n; i++) {
+      y2[i] = this._predict(x[i]);
+    }
+    let xSum = 0;
+    let ySum = 0;
+    let chi2 = 0;
+    let rmsd = 0;
+    let xSquared = 0;
+    let ySquared = 0;
+    let xY = 0;
+    for (let i = 0; i < n; i++) {
+      xSum += y2[i];
+      ySum += y[i];
+      xSquared += y2[i] * y2[i];
+      ySquared += y[i] * y[i];
+      xY += y2[i] * y[i];
+      if (y[i] !== 0) {
+        chi2 += (y[i] - y2[i]) * (y[i] - y2[i]) / y[i];
+      }
+      rmsd += (y[i] - y2[i]) * (y[i] - y2[i]);
+    }
+    const r = (n * xY - xSum * ySum) / Math.sqrt((n * xSquared - xSum * xSum) * (n * ySquared - ySum * ySum));
+    return {
+      r,
+      r2: r * r,
+      chi2,
+      rmsd: Math.sqrt(rmsd / n)
+    };
+  }
+}
+function maybeToPrecision(number, figures) {
+  if (number < 0) {
+    number = 0 - number;
+    if (typeof figures === "number") {
+      return `- ${number.toPrecision(figures)}`;
+    } else {
+      return `- ${number.toString()}`;
+    }
+  } else if (typeof figures === "number") {
+    return number.toPrecision(figures);
+  } else {
+    return number.toString();
+  }
+}
+class PolynomialRegression extends BaseRegression {
+  /**
+   * @param x - independent or explanatory variable
+   * @param y - dependent or response variable
+   * @param degree - degree of the polynomial regression, or array of powers to be used. When degree is an array, intercept at zero is forced to false/ignored.
+   * @example `new PolynomialRegression(x, y, 2)`, in this case, you can pass the option `interceptAtZero`, if you need it.
+   * @example `new PolynomialRegression(x, y, [1, 3, 5])`
+   * Each of the degrees corresponds to a column, so if you have them switched, just do:
+   * @example `new PolynomialRegression(x, y, [3, 1, 5])`
+   *
+   * @param options.interceptAtZero - force the polynomial regression so that f(0) = 0
+   */
+  constructor(x, y, degree, options = {}) {
+    super();
+    if (x === true) {
+      this.degree = y.degree;
+      this.powers = y.powers;
+      this.coefficients = y.coefficients;
+    } else {
+      checkArrayLength(x, y);
+      const result2 = regress(x, y, degree, options);
+      this.degree = result2.degree;
+      this.powers = result2.powers;
+      this.coefficients = result2.coefficients;
+    }
+  }
+  _predict(x) {
+    let y = 0;
+    for (let k = 0; k < this.powers.length; k++) {
+      y += this.coefficients[k] * x ** this.powers[k];
+    }
+    return y;
+  }
+  toJSON() {
+    return {
+      name: "polynomialRegression",
+      degree: this.degree,
+      powers: this.powers,
+      coefficients: this.coefficients
+    };
+  }
+  toString(precision) {
+    return this._toFormula(precision, false);
+  }
+  toLaTeX(precision) {
+    return this._toFormula(precision, true);
+  }
+  _toFormula(precision, isLaTeX) {
+    let sup = "^";
+    let closeSup = "";
+    let times = " * ";
+    if (isLaTeX) {
+      sup = "^{";
+      closeSup = "}";
+      times = "";
+    }
+    let fn = "";
+    let str = "";
+    for (let k = 0; k < this.coefficients.length; k++) {
+      str = "";
+      if (this.coefficients[k] !== 0) {
+        if (this.powers[k] === 0) {
+          str = maybeToPrecision(this.coefficients[k], precision);
+        } else if (this.powers[k] === 1) {
+          str = `${maybeToPrecision(this.coefficients[k], precision) + times}x`;
+        } else {
+          str = `${maybeToPrecision(this.coefficients[k], precision) + times}x${sup}${this.powers[k]}${closeSup}`;
+        }
+        if (this.coefficients[k] > 0 && k !== this.coefficients.length - 1) {
+          str = ` + ${str}`;
+        } else if (k !== this.coefficients.length - 1) {
+          str = ` ${str}`;
+        }
+      }
+      fn = str + fn;
+    }
+    if (fn.startsWith("+")) {
+      fn = fn.slice(1);
+    }
+    return `f(x) = ${fn}`;
+  }
+  static load(json) {
+    if (json.name !== "polynomialRegression") {
+      throw new TypeError("not a polynomial regression model");
+    }
+    return new PolynomialRegression(true, json);
+  }
+}
+function regress(x, y, degree, options = {}) {
+  const n = x.length;
+  let { interceptAtZero = false } = options;
+  let powers = [];
+  if (Array.isArray(degree)) {
+    powers = degree;
+    interceptAtZero = false;
+  } else if (typeof degree === "number") {
+    if (interceptAtZero) {
+      powers = new Array(degree);
+      for (let k = 0; k < degree; k++) {
+        powers[k] = k + 1;
+      }
+    } else {
+      powers = new Array(degree + 1);
+      for (let k = 0; k <= degree; k++) {
+        powers[k] = k;
+      }
+    }
+  }
+  const nCoefficients = powers.length;
+  const F = new Matrix(n, nCoefficients);
+  const Y = new Matrix([y]);
+  for (let k = 0; k < nCoefficients; k++) {
+    for (let i = 0; i < n; i++) {
+      if (powers[k] === 0) {
+        F.set(i, k, 1);
+      } else {
+        F.set(i, k, x[i] ** powers[k]);
+      }
+    }
+  }
+  const FT = new MatrixTransposeView(F);
+  const A = FT.mmul(F);
+  const B = FT.mmul(new MatrixTransposeView(Y));
+  return {
+    coefficients: solve(A, B).to1DArray(),
+    degree: Math.max(...powers),
+    powers
+  };
+}
+const _hoisted_1$N = { class: "container" };
+const _hoisted_2$J = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_3$A = /* @__PURE__ */ createBaseVNode("p", { class: "h2" }, "Gravity - Formula", -1);
+const _hoisted_4$o = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
+const _hoisted_5$j = { class: "row" };
+const _hoisted_6$i = { class: "col-md-10" };
+const _hoisted_7$i = { class: "col-md-2" };
+const _hoisted_8$j = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+  /* @__PURE__ */ createBaseVNode("label", { class: "form-label fw-bold" }, "Data for gravity calculation (Angle and Gravity)")
+], -1);
+const _hoisted_9$h = { class: "col-md-6" };
+const _hoisted_10$h = { class: "input-group has-validation" };
+const _hoisted_11$e = { class: "input-group-text" };
+const _hoisted_12$e = ["onUpdate:modelValue", "disabled"];
+const _hoisted_13$e = /* @__PURE__ */ createBaseVNode("span", { class: "input-group-text" }, /* @__PURE__ */ toDisplayString("°"), -1);
+const _hoisted_14$d = { class: "col-md-6" };
+const _hoisted_15$c = { class: "input-group has-validation" };
+const _hoisted_16$c = { class: "input-group-text" };
+const _hoisted_17$a = ["onUpdate:modelValue", "disabled"];
+const _hoisted_18$a = { class: "input-group-text" };
+const _hoisted_19$8 = /* @__PURE__ */ createBaseVNode("div", { class: "form-text" }, " Enter the data that is used to create a new formula. The most optimal formula will be selected and also validated towards these values. ", -1);
+const _hoisted_20$8 = { class: "col-md-6" };
+const _hoisted_21$8 = { class: "col-md-6" };
+const _hoisted_22$5 = { class: "row gy-2" };
+const _hoisted_23$4 = { class: "col-md-12" };
+const _hoisted_24$3 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_25$2 = ["disabled"];
+const _hoisted_26$2 = ["hidden"];
+const _hoisted_27$1 = ["disabled"];
+const _hoisted_28$1 = {
+  key: 0,
+  class: "row"
+};
+const _sfc_main$N = {
+  __name: "GravityFormulaView",
+  setup(__props) {
+    const expressions = ref(null);
+    const noDecimals = ref(8);
+    const formulaOptions = ref([]);
+    const renderComponent = ref(true);
+    const formulaOutput = ref(0);
+    const formulaOutputOptions = ref([
+      { label: "Current", value: 0 },
+      { label: "Formula", value: 1 },
+      { label: "Table", value: 2 },
+      { label: "Graph", value: 3 }
+    ]);
+    const formulaSelectCallback = (opt) => {
+      config.gravity_formula = opt;
+    };
+    const createFormula = () => {
+      if (!validateCurrentForm()) return;
+      expressions.value = null;
+      formulaOptions.value = [];
+      formulaOutput.value = 3;
+      var x = [], y = [], res = { 1: "", 2: "", 3: "", 4: "" };
+      for (let i2 = 0; i2 < config.formula_calculation_data.length; i2++) {
+        x.push(config.formula_calculation_data[i2].a);
+        y.push(
+          config.gravity_format == "P" ? gravityToSG(config.formula_calculation_data[i2].g) : config.formula_calculation_data[i2].g
+        );
+      }
+      for (var i = 1; i < 5; i++) {
+        const regression = new PolynomialRegression(x, y, i);
+        var f2 = regression.toString(noDecimals.value);
+        f2 = f2.replaceAll(" ", "");
+        f2 = f2.replaceAll("f(x)=", "");
+        f2 = f2.replaceAll("x", "tilt");
+        if (validateFormula(f2)) {
+          res[i] = f2;
+          formulaOptions.value.push({ value: f2, label: "Formula Order " + i });
+        } else {
+          res[i] = "";
+        }
+      }
+      expressions.value = res;
+      forceRerender();
+    };
+    const forceRerender = async () => {
+      renderComponent.value = false;
+      await nextTick();
+      renderComponent.value = true;
+    };
+    const save = () => {
+      if (!validateCurrentForm()) return;
+      config.saveAll();
+      forceRerender();
+    };
+    return (_ctx, _cache) => {
+      const _component_BsMessage = resolveComponent("BsMessage");
+      const _component_BsInputText = resolveComponent("BsInputText");
+      const _component_BsDropdown = resolveComponent("BsDropdown");
+      const _component_BsInputNumber = resolveComponent("BsInputNumber");
+      const _component_BsInputRadio = resolveComponent("BsInputRadio");
+      return openBlock(), createElementBlock("div", _hoisted_1$N, [
+        _hoisted_2$J,
         _hoisted_3$A,
         _hoisted_4$o,
-        !chart.value ? (openBlock(), createBlock(_component_BsMessage, {
+        unref(config).gravity_formula === "" ? (openBlock(), createBlock(_component_BsMessage, {
           key: 0,
-          dismissable: "false",
+          dismissable: "true",
           message: "",
-          alert: "danger"
+          alert: "warning"
         }, {
           default: withCtx(() => [
-            createTextVNode(" Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection ")
+            createTextVNode(" You need to enter a formula in order to report gravity ")
           ]),
           _: 1
         })) : createCommentVNode("", true),
-        _hoisted_5$j
+        unref(config).gyro_disabled ? (openBlock(), createBlock(_component_BsMessage, {
+          key: 1,
+          dismissable: "true",
+          message: "",
+          alert: "warning"
+        }, {
+          default: withCtx(() => [
+            createTextVNode(" Gyro is disbled so the device will only be able to measure temperature ")
+          ]),
+          _: 1
+        })) : createCommentVNode("", true),
+        createBaseVNode("form", {
+          onSubmit: withModifiers(save, ["prevent"]),
+          class: "needs-validation",
+          novalidate: ""
+        }, [
+          createBaseVNode("div", _hoisted_5$j, [
+            createBaseVNode("div", _hoisted_6$i, [
+              createVNode(_component_BsInputText, {
+                modelValue: unref(config).gravity_formula,
+                "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(config).gravity_formula = $event),
+                maxlength: "200",
+                label: "Gravity formula",
+                help: "Formula used to convert angle to gravity. If created outside Gravitymon the formula needs to be created for Specific Gravity!",
+                badge: gravityFormulaBadge(),
+                disabled: unref(global$1).disabled || unref(config).gyro_disabled
+              }, null, 8, ["modelValue", "badge", "disabled"])
+            ]),
+            createBaseVNode("div", _hoisted_7$i, [
+              createVNode(_component_BsDropdown, {
+                label: "Formulas",
+                button: "Formula",
+                options: formulaOptions.value,
+                callback: formulaSelectCallback,
+                disabled: formulaOptions.value.length == 0
+              }, null, 8, ["options", "disabled"])
+            ]),
+            _hoisted_8$j,
+            (openBlock(true), createElementBlock(Fragment, null, renderList(unref(config).formula_calculation_data, (data, index) => {
+              return openBlock(), createElementBlock(Fragment, { key: index }, [
+                createBaseVNode("div", _hoisted_9$h, [
+                  createBaseVNode("div", _hoisted_10$h, [
+                    createBaseVNode("span", _hoisted_11$e, toDisplayString(index + 1), 1),
+                    withDirectives(createBaseVNode("input", {
+                      "onUpdate:modelValue": ($event) => unref(config).formula_calculation_data[index].a = $event,
+                      class: "form-control w-2",
+                      type: "number",
+                      min: "0",
+                      max: "90",
+                      step: ".001",
+                      disabled: unref(global$1).disabled || unref(config).gyro_disabled
+                    }, null, 8, _hoisted_12$e), [
+                      [vModelText, unref(config).formula_calculation_data[index].a]
+                    ]),
+                    _hoisted_13$e
+                  ])
+                ]),
+                createBaseVNode("div", _hoisted_14$d, [
+                  createBaseVNode("div", _hoisted_15$c, [
+                    createBaseVNode("span", _hoisted_16$c, toDisplayString(index + 1), 1),
+                    withDirectives(createBaseVNode("input", {
+                      "onUpdate:modelValue": ($event) => unref(config).formula_calculation_data[index].g = $event,
+                      class: "form-control",
+                      type: "number",
+                      min: "1",
+                      max: "30",
+                      step: ".0001",
+                      disabled: unref(global$1).disabled || unref(config).gyro_disabled
+                    }, null, 8, _hoisted_17$a), [
+                      [vModelText, unref(config).formula_calculation_data[index].g]
+                    ]),
+                    createBaseVNode("span", _hoisted_18$a, toDisplayString(unref(config).gravity_format == "G" ? "SG" : "P"), 1)
+                  ])
+                ])
+              ], 64);
+            }), 128)),
+            _hoisted_19$8,
+            createBaseVNode("div", _hoisted_20$8, [
+              createVNode(_component_BsInputNumber, {
+                modelValue: unref(config).formula_max_deviation,
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(config).formula_max_deviation = $event),
+                label: "Max allowed deviation",
+                min: "0",
+                max: "10",
+                step: ".0001",
+                width: "4",
+                help: "When validating the derived formula this is the maximum accepted deviation for the supplied values, use graph below to visually check where there are deviations",
+                disabled: unref(global$1).disabled || unref(config).gyro_disabled
+              }, null, 8, ["modelValue", "disabled"])
+            ]),
+            createBaseVNode("div", _hoisted_21$8, [
+              createVNode(_component_BsInputNumber, {
+                modelValue: noDecimals.value,
+                "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => noDecimals.value = $event),
+                label: "Number of decimals in formula",
+                min: "1",
+                max: "10",
+                step: "1",
+                width: "4",
+                help: "How many decimals to try to limit in the formula",
+                disabled: unref(global$1).disabled || unref(config).gyro_disabled
+              }, null, 8, ["modelValue", "disabled"])
+            ])
+          ]),
+          createBaseVNode("div", _hoisted_22$5, [
+            createBaseVNode("div", _hoisted_23$4, [
+              _hoisted_24$3,
+              createBaseVNode("button", {
+                type: "submit",
+                class: "btn btn-primary w-2",
+                disabled: unref(global$1).disabled || !unref(global$1).configChanged
+              }, [
+                createBaseVNode("span", {
+                  class: "spinner-border spinner-border-sm",
+                  role: "status",
+                  "aria-hidden": "true",
+                  hidden: !unref(global$1).disabled
+                }, null, 8, _hoisted_26$2),
+                createTextVNode("  Save")
+              ], 8, _hoisted_25$2),
+              createTextVNode("  "),
+              createBaseVNode("button", {
+                onClick: withModifiers(createFormula, ["prevent"]),
+                type: "button",
+                class: "btn btn-primary w-2",
+                disabled: unref(global$1).disabled || unref(config).gyro_disabled
+              }, " Create formula", 8, _hoisted_27$1),
+              createTextVNode("  ")
+            ])
+          ]),
+          expressions.value != null ? (openBlock(), createElementBlock("div", _hoisted_28$1, [
+            createVNode(_component_BsInputRadio, {
+              modelValue: formulaOutput.value,
+              "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => formulaOutput.value = $event),
+              options: formulaOutputOptions.value,
+              label: "Output format",
+              disabled: unref(global$1).disabled
+            }, null, 8, ["modelValue", "options", "disabled"])
+          ])) : createCommentVNode("", true)
+        ], 32),
+        renderComponent.value && formulaOutput.value == 0 ? (openBlock(), createBlock(_sfc_main$S, { key: 2 })) : createCommentVNode("", true),
+        renderComponent.value && expressions.value != null && formulaOutput.value == 1 ? (openBlock(), createBlock(_sfc_main$Q, {
+          key: 3,
+          expressions: expressions.value
+        }, null, 8, ["expressions"])) : createCommentVNode("", true),
+        renderComponent.value && expressions.value != null && formulaOutput.value == 2 ? (openBlock(), createBlock(_sfc_main$O, {
+          key: 4,
+          expressions: expressions.value
+        }, null, 8, ["expressions"])) : createCommentVNode("", true),
+        renderComponent.value && expressions.value != null && formulaOutput.value == 3 ? (openBlock(), createBlock(_sfc_main$P, {
+          key: 5,
+          expressions: expressions.value
+        }, null, 8, ["expressions"])) : createCommentVNode("", true)
       ]);
     };
   }
 };
-const _hoisted_1$N = { class: "container" };
-const _hoisted_2$J = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$M = { class: "container" };
+const _hoisted_2$I = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$z = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Push - Settings", -1);
 const _hoisted_4$n = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$i = { class: "row" };
@@ -11272,9 +16979,9 @@ const _hoisted_18$9 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12
 const _hoisted_19$7 = { class: "col-md-3" };
 const _hoisted_20$7 = ["disabled"];
 const _hoisted_21$7 = ["hidden"];
-const _sfc_main$N = {
+const _sfc_main$M = {
   __name: "PushSettingsView",
-  setup(__props2) {
+  setup(__props) {
     const { sleep_interval } = storeToRefs(config);
     const batteryLife = ref("");
     const sleepLabel = ref("");
@@ -11364,8 +17071,8 @@ const _sfc_main$N = {
       const _component_BsInputNumber = resolveComponent("BsInputNumber");
       const _component_BsInputReadonly = resolveComponent("BsInputReadonly");
       const _component_BsInputSwitch = resolveComponent("BsInputSwitch");
-      return openBlock(), createElementBlock("div", _hoisted_1$N, [
-        _hoisted_2$J,
+      return openBlock(), createElementBlock("div", _hoisted_1$M, [
+        _hoisted_2$I,
         _hoisted_3$z,
         _hoisted_4$n,
         unref(config).sleep_interval < 300 ? (openBlock(), createBlock(_component_BsMessage, {
@@ -11517,8 +17224,8 @@ const _sfc_main$N = {
     };
   }
 };
-const _hoisted_1$M = { class: "container" };
-const _hoisted_2$I = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$L = { class: "container" };
+const _hoisted_2$H = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$y = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Push - HTTP Post #1", -1);
 const _hoisted_4$m = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$h = ["disabled"];
@@ -11542,9 +17249,9 @@ const _hoisted_20$6 = ["hidden"];
 const _hoisted_21$6 = { class: "col-md-3" };
 const _hoisted_22$4 = ["disabled"];
 const _hoisted_23$3 = ["hidden"];
-const _sfc_main$M = {
+const _sfc_main$L = {
   __name: "PushHttpPost1View",
-  setup(__props2) {
+  setup(__props) {
     const render = ref("");
     const pushDisabled = computed(() => {
       return global$1.disabled || config.use_wifi_direct;
@@ -11582,8 +17289,8 @@ const _sfc_main$M = {
       const _component_BsInputNumber = resolveComponent("BsInputNumber");
       const _component_BsInputTextAreaFormat = resolveComponent("BsInputTextAreaFormat");
       const _component_BsModal = resolveComponent("BsModal");
-      return openBlock(), createElementBlock("div", _hoisted_1$M, [
-        _hoisted_2$I,
+      return openBlock(), createElementBlock("div", _hoisted_1$L, [
+        _hoisted_2$H,
         _hoisted_3$y,
         _hoisted_4$m,
         createBaseVNode("form", {
@@ -11733,8 +17440,8 @@ const _sfc_main$M = {
     };
   }
 };
-const _hoisted_1$L = { class: "container" };
-const _hoisted_2$H = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$K = { class: "container" };
+const _hoisted_2$G = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$x = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Push - HTTP Post #2", -1);
 const _hoisted_4$l = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$g = ["disabled"];
@@ -11759,9 +17466,9 @@ const _hoisted_21$5 = ["hidden"];
 const _hoisted_22$3 = { class: "col-md-3" };
 const _hoisted_23$2 = ["disabled"];
 const _hoisted_24$2 = ["hidden"];
-const _sfc_main$L = {
+const _sfc_main$K = {
   __name: "PushHttpPost2View",
-  setup(__props2) {
+  setup(__props) {
     const render = ref("");
     const pushDisabled = computed(() => {
       return global$1.disabled || config.use_wifi_direct;
@@ -11799,8 +17506,8 @@ const _sfc_main$L = {
       const _component_BsInputNumber = resolveComponent("BsInputNumber");
       const _component_BsInputTextAreaFormat = resolveComponent("BsInputTextAreaFormat");
       const _component_BsModal = resolveComponent("BsModal");
-      return openBlock(), createElementBlock("div", _hoisted_1$L, [
-        _hoisted_2$H,
+      return openBlock(), createElementBlock("div", _hoisted_1$K, [
+        _hoisted_2$G,
         _hoisted_3$x,
         _hoisted_4$l,
         createBaseVNode("form", {
@@ -11952,8 +17659,8 @@ const _sfc_main$L = {
     };
   }
 };
-const _hoisted_1$K = { class: "container" };
-const _hoisted_2$G = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$J = { class: "container" };
+const _hoisted_2$F = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$w = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Push - HTTP Get", -1);
 const _hoisted_4$k = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$f = { class: "row" };
@@ -11976,9 +17683,9 @@ const _hoisted_19$4 = ["hidden"];
 const _hoisted_20$4 = { class: "col-md-3" };
 const _hoisted_21$4 = ["disabled"];
 const _hoisted_22$2 = ["hidden"];
-const _sfc_main$K = {
+const _sfc_main$J = {
   __name: "PushHttpGetView",
-  setup(__props2) {
+  setup(__props) {
     const render = ref("");
     const pushDisabled = computed(() => {
       return global$1.disabled || config.use_wifi_direct;
@@ -12017,8 +17724,8 @@ const _sfc_main$K = {
       const _component_BsInputNumber = resolveComponent("BsInputNumber");
       const _component_BsInputTextAreaFormat = resolveComponent("BsInputTextAreaFormat");
       const _component_BsModal = resolveComponent("BsModal");
-      return openBlock(), createElementBlock("div", _hoisted_1$K, [
-        _hoisted_2$G,
+      return openBlock(), createElementBlock("div", _hoisted_1$J, [
+        _hoisted_2$F,
         _hoisted_3$w,
         _hoisted_4$k,
         createBaseVNode("form", {
@@ -12167,8 +17874,8 @@ const _sfc_main$K = {
     };
   }
 };
-const _hoisted_1$J = { class: "container" };
-const _hoisted_2$F = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$I = { class: "container" };
+const _hoisted_2$E = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$v = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Push - Influxdb v2", -1);
 const _hoisted_4$j = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$e = ["disabled"];
@@ -12190,9 +17897,9 @@ const _hoisted_18$5 = ["hidden"];
 const _hoisted_19$3 = { class: "col-md-3" };
 const _hoisted_20$3 = ["disabled"];
 const _hoisted_21$3 = ["hidden"];
-const _sfc_main$J = {
+const _sfc_main$I = {
   __name: "PushInfluxdbView",
-  setup(__props2) {
+  setup(__props) {
     const render = ref("");
     const pushDisabled = computed(() => {
       return global$1.disabled || config.use_wifi_direct;
@@ -12221,8 +17928,8 @@ const _sfc_main$J = {
       const _component_BsInputTextAreaFormat = resolveComponent("BsInputTextAreaFormat");
       const _component_BsDropdown = resolveComponent("BsDropdown");
       const _component_BsModal = resolveComponent("BsModal");
-      return openBlock(), createElementBlock("div", _hoisted_1$J, [
-        _hoisted_2$F,
+      return openBlock(), createElementBlock("div", _hoisted_1$I, [
+        _hoisted_2$E,
         _hoisted_3$v,
         _hoisted_4$j,
         createBaseVNode("form", {
@@ -12354,8 +18061,8 @@ const _sfc_main$J = {
     };
   }
 };
-const _hoisted_1$I = { class: "container" };
-const _hoisted_2$E = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$H = { class: "container" };
+const _hoisted_2$D = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$u = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Push - MQTT", -1);
 const _hoisted_4$i = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$d = ["disabled"];
@@ -12377,9 +18084,9 @@ const _hoisted_18$4 = ["hidden"];
 const _hoisted_19$2 = { class: "col-md-3" };
 const _hoisted_20$2 = ["disabled"];
 const _hoisted_21$2 = ["hidden"];
-const _sfc_main$I = {
+const _sfc_main$H = {
   __name: "PushMqttView",
-  setup(__props2) {
+  setup(__props) {
     const render = ref("");
     const pushDisabled = computed(() => {
       return global$1.disabled || config.use_wifi_direct;
@@ -12409,8 +18116,8 @@ const _sfc_main$I = {
       const _component_BsInputTextAreaFormat = resolveComponent("BsInputTextAreaFormat");
       const _component_BsDropdown = resolveComponent("BsDropdown");
       const _component_BsModal = resolveComponent("BsModal");
-      return openBlock(), createElementBlock("div", _hoisted_1$I, [
-        _hoisted_2$E,
+      return openBlock(), createElementBlock("div", _hoisted_1$H, [
+        _hoisted_2$D,
         _hoisted_3$u,
         _hoisted_4$i,
         createBaseVNode("form", {
@@ -12542,8 +18249,8 @@ const _sfc_main$I = {
     };
   }
 };
-const _hoisted_1$H = { class: "container" };
-const _hoisted_2$D = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$G = { class: "container" };
+const _hoisted_2$C = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$t = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Push - Bluetooth", -1);
 const _hoisted_4$h = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$c = { class: "row" };
@@ -12570,9 +18277,9 @@ const _hoisted_15$5 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12
 const _hoisted_16$5 = [
   _hoisted_15$5
 ];
-const _sfc_main$H = {
+const _sfc_main$G = {
   __name: "PushBluetoothView",
-  setup(__props2) {
+  setup(__props) {
     const bleTiltColorOptions = ref([
       { label: "red", value: "red" },
       { label: "green", value: "green" },
@@ -12591,7 +18298,7 @@ const _sfc_main$H = {
       // { label: 'Gravitymon Service', value: 3 },
       { label: "Gravitymon Eddystone", value: 4 }
     ]);
-    const tilt = computed(() => {
+    const tilt2 = computed(() => {
       if (global$1.disabled32) return global$1.disabled32;
       if (config.ble_format == 1 || config.ble_format == 2) return false;
       return true;
@@ -12606,8 +18313,8 @@ const _sfc_main$H = {
     };
     return (_ctx, _cache) => {
       const _component_BsInputRadio = resolveComponent("BsInputRadio");
-      return openBlock(), createElementBlock("div", _hoisted_1$H, [
-        _hoisted_2$D,
+      return openBlock(), createElementBlock("div", _hoisted_1$G, [
+        _hoisted_2$C,
         _hoisted_3$t,
         _hoisted_4$h,
         unref(status).platform !== "esp8266" && unref(status).platform !== "esp32s2" ? (openBlock(), createElementBlock("form", {
@@ -12624,7 +18331,7 @@ const _sfc_main$H = {
                 options: bleTiltColorOptions.value,
                 label: "Tilt color",
                 help: "Tilt color beacon. Only used when tilt type is selected.",
-                disabled: tilt.value
+                disabled: tilt2.value
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
             createBaseVNode("div", _hoisted_7$b, [
@@ -12669,16 +18376,16 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$G = {};
-const _hoisted_1$G = { class: "container" };
-const _hoisted_2$C = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _sfc_main$F = {};
+const _hoisted_1$F = { class: "container" };
+const _hoisted_2$B = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$s = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "About - Gravitymon", -1);
 const _hoisted_4$g = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$b = /* @__PURE__ */ createBaseVNode("p", { class: "fw-normal" }, " This is a piece of software for the iSpindle hardware and will work in a similar way. No part of this software is copied from the iSpindle project. ", -1);
 const _hoisted_6$a = /* @__PURE__ */ createBaseVNode("p", { class: "h4" }, "MIT License", -1);
 const _hoisted_7$a = /* @__PURE__ */ createBaseVNode("p", { class: "fw-normal" }, ' Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. ', -1);
 const _hoisted_8$b = [
-  _hoisted_2$C,
+  _hoisted_2$B,
   _hoisted_3$s,
   _hoisted_4$g,
   _hoisted_5$b,
@@ -12686,11 +18393,11 @@ const _hoisted_8$b = [
   _hoisted_7$a
 ];
 function _sfc_render$1(_ctx, _cache) {
-  return openBlock(), createElementBlock("div", _hoisted_1$G, _hoisted_8$b);
+  return openBlock(), createElementBlock("div", _hoisted_1$F, _hoisted_8$b);
 }
-const AboutView = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["render", _sfc_render$1]]);
-const _hoisted_1$F = { class: "container" };
-const _hoisted_2$B = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const AboutView = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["render", _sfc_render$1]]);
+const _hoisted_1$E = { class: "container" };
+const _hoisted_2$A = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$r = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Backup & Restore", -1);
 const _hoisted_4$f = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$a = { class: "row" };
@@ -12716,9 +18423,9 @@ const _hoisted_17$3 = {
   class: "col-md-12"
 };
 const _hoisted_18$3 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _sfc_main$F = {
+const _sfc_main$E = {
   __name: "BackupView",
-  setup(__props2) {
+  setup(__props) {
     const progress = ref(0);
     function backup() {
       var backup2 = {
@@ -12764,12 +18471,12 @@ const _sfc_main$F = {
       }
     }
     function download(content, mimeType, filename) {
-      const a2 = document.createElement("a");
+      const a = document.createElement("a");
       const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
-      a2.setAttribute("href", url);
-      a2.setAttribute("download", filename);
-      a2.click();
+      a.setAttribute("href", url);
+      a.setAttribute("download", filename);
+      a.click();
     }
     function doRestore1(json) {
       delete json.advanced["id"];
@@ -12875,8 +18582,8 @@ const _sfc_main$F = {
     return (_ctx, _cache) => {
       const _component_BsFileUpload = resolveComponent("BsFileUpload");
       const _component_BsProgress = resolveComponent("BsProgress");
-      return openBlock(), createElementBlock("div", _hoisted_1$F, [
-        _hoisted_2$B,
+      return openBlock(), createElementBlock("div", _hoisted_1$E, [
+        _hoisted_2$A,
         _hoisted_3$r,
         _hoisted_4$f,
         createBaseVNode("div", _hoisted_5$a, [
@@ -12935,8 +18642,8 @@ const _sfc_main$F = {
     };
   }
 };
-const _hoisted_1$E = { class: "container" };
-const _hoisted_2$A = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$D = { class: "container" };
+const _hoisted_2$z = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$q = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Firmware Upload", -1);
 const _hoisted_4$e = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$9 = { class: "row" };
@@ -12954,9 +18661,9 @@ const _hoisted_15$3 = {
   class: "col-md-12"
 };
 const _hoisted_16$3 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _sfc_main$E = {
+const _sfc_main$D = {
   __name: "FirmwareView",
-  setup(__props2) {
+  setup(__props) {
     const progress = ref(0);
     function upload() {
       const fileElement = document.getElementById("upload");
@@ -13014,8 +18721,8 @@ const _sfc_main$E = {
     return (_ctx, _cache) => {
       const _component_BsFileUpload = resolveComponent("BsFileUpload");
       const _component_BsProgress = resolveComponent("BsProgress");
-      return openBlock(), createElementBlock("div", _hoisted_1$E, [
-        _hoisted_2$A,
+      return openBlock(), createElementBlock("div", _hoisted_1$D, [
+        _hoisted_2$z,
         _hoisted_3$q,
         _hoisted_4$e,
         createBaseVNode("div", _hoisted_5$9, [
@@ -13072,8 +18779,8 @@ const _sfc_main$E = {
     };
   }
 };
-const _hoisted_1$D = { class: "container" };
-const _hoisted_2$z = /* @__PURE__ */ createStaticVNode('<p></p><p class="h3">Links and device logs</p><hr><div class="row"><p> If you need support, want to discuss the software or request any new features you can do that on github.com or homebrewtalk.com. </p></div><div class="row"><div class="col-md-4"><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="https://github.com/mp-se/gravitymon" target="_blank">Report issues on github.com</a></div><div class="col-md-4"><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="https://www.homebrewtalk.com/" target="_blank">Discuss on homebrewtalk.com</a></div><div class="col-md-4"><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="https://www.gravitymon.com/" target="_blank">Read docs on gravitymon.com</a></div></div><hr>', 6);
+const _hoisted_1$C = { class: "container" };
+const _hoisted_2$y = /* @__PURE__ */ createStaticVNode('<p></p><p class="h3">Links and device logs</p><hr><div class="row"><p> If you need support, want to discuss the software or request any new features you can do that on github.com or homebrewtalk.com. </p></div><div class="row"><div class="col-md-4"><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="https://github.com/mp-se/gravitymon" target="_blank">Report issues on github.com</a></div><div class="col-md-4"><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="https://www.homebrewtalk.com/" target="_blank">Discuss on homebrewtalk.com</a></div><div class="col-md-4"><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="https://www.gravitymon.com/" target="_blank">Read docs on gravitymon.com</a></div></div><hr>', 6);
 const _hoisted_8$8 = { class: "row" };
 const _hoisted_9$7 = { class: "col" };
 const _hoisted_10$7 = { class: "badge bg-secondary" };
@@ -13116,9 +18823,9 @@ const _hoisted_36 = /* @__PURE__ */ createStaticVNode('<div class="col-md-12"><p
 const _hoisted_38 = [
   _hoisted_36
 ];
-const _sfc_main$D = {
+const _sfc_main$C = {
   __name: "SupportView",
-  setup(__props2) {
+  setup(__props) {
     const logData = ref("");
     const showHelp = ref(false);
     function fetchLog(file, callback) {
@@ -13190,8 +18897,8 @@ const _sfc_main$D = {
       });
     }
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$D, [
-        _hoisted_2$z,
+      return openBlock(), createElementBlock("div", _hoisted_1$C, [
+        _hoisted_2$y,
         createBaseVNode("div", _hoisted_8$8, [
           createBaseVNode("div", _hoisted_9$7, [
             createBaseVNode("p", null, [
@@ -13301,8 +19008,8 @@ const _sfc_main$D = {
     };
   }
 };
-const _hoisted_1$C = { class: "container" };
-const _hoisted_2$y = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$B = { class: "container" };
+const _hoisted_2$x = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$p = { class: "h3" };
 const _hoisted_4$d = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$8 = { class: "row gy-2" };
@@ -13314,9 +19021,9 @@ const _hoisted_8$7 = ["disabled"];
 const _hoisted_9$6 = { class: "col-md-3" };
 const _hoisted_10$6 = ["disabled"];
 const maxLines = 50;
-const _sfc_main$C = {
+const _sfc_main$B = {
   __name: "SerialView",
-  setup(__props2) {
+  setup(__props) {
     const socket = ref(null);
     const serial = ref("");
     function clear2() {
@@ -13356,8 +19063,8 @@ const _sfc_main$C = {
       connect();
     });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$C, [
-        _hoisted_2$y,
+      return openBlock(), createElementBlock("div", _hoisted_1$B, [
+        _hoisted_2$x,
         createBaseVNode("p", _hoisted_3$p, "Serial console (" + toDisplayString(connected.value) + ")", 1),
         _hoisted_4$d,
         createBaseVNode("pre", null, toDisplayString(serial.value), 1),
@@ -13384,8 +19091,8 @@ const _sfc_main$C = {
     };
   }
 };
-const _hoisted_1$B = /* @__PURE__ */ createBaseVNode("h5", null, "Calculate a new voltage factor", -1);
-const _hoisted_2$x = { class: "row" };
+const _hoisted_1$A = /* @__PURE__ */ createBaseVNode("h5", null, "Calculate a new voltage factor", -1);
+const _hoisted_2$w = { class: "row" };
 const _hoisted_3$o = { class: "col-md-4" };
 const _hoisted_4$c = { class: "col-md-4" };
 const _hoisted_5$7 = { class: "col-md-4" };
@@ -13394,9 +19101,9 @@ const _hoisted_7$6 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12"
 const _hoisted_8$6 = { class: "col-md-3" };
 const _hoisted_9$5 = ["disabled"];
 const _hoisted_10$5 = ["hidden"];
-const _sfc_main$B = {
+const _sfc_main$A = {
   __name: "VoltageFragment",
-  setup(__props2) {
+  setup(__props) {
     const measuredVoltage = ref(0);
     const calculateFactor = () => {
       global$1.disabled = true;
@@ -13423,8 +19130,8 @@ const _sfc_main$B = {
       const _component_BsInputNumber = resolveComponent("BsInputNumber");
       const _component_BsInputReadonly = resolveComponent("BsInputReadonly");
       return openBlock(), createElementBlock(Fragment, null, [
-        _hoisted_1$B,
-        createBaseVNode("div", _hoisted_2$x, [
+        _hoisted_1$A,
+        createBaseVNode("div", _hoisted_2$w, [
           createBaseVNode("div", _hoisted_3$o, [
             createVNode(_component_BsInputNumber, {
               modelValue: measuredVoltage.value,
@@ -13484,8 +19191,8 @@ const _sfc_main$B = {
     };
   }
 };
-const _hoisted_1$A = /* @__PURE__ */ createBaseVNode("h5", null, "Explore the file system", -1);
-const _hoisted_2$w = { class: "row gy-4" };
+const _hoisted_1$z = /* @__PURE__ */ createBaseVNode("h5", null, "Explore the file system", -1);
+const _hoisted_2$v = { class: "row gy-4" };
 const _hoisted_3$n = { class: "col-md-3" };
 const _hoisted_4$b = ["disabled"];
 const _hoisted_5$6 = ["hidden"];
@@ -13503,20 +19210,20 @@ const _hoisted_11$3 = {
 };
 const _hoisted_12$3 = /* @__PURE__ */ createBaseVNode("h6", null, "File contents", -1);
 const _hoisted_13$3 = { class: "border p-2" };
-const _sfc_main$A = {
+const _sfc_main$z = {
   __name: "ListFilesFragment",
-  setup(__props2) {
+  setup(__props) {
     const filesystemUsage = ref(null);
     const filesystemUsageText = ref(null);
     const filesView = ref([]);
     const fileData = ref(null);
-    const viewFile = (f) => {
+    const viewFile = (f2) => {
       global$1.disabled = true;
       global$1.clearMessages();
       fileData.value = null;
       var data = {
         command: "get",
-        file: f
+        file: f2
       };
       config.sendFilesystemRequest(data, (success, text) => {
         if (success) {
@@ -13540,8 +19247,8 @@ const _sfc_main$A = {
           var json = JSON.parse(text);
           filesystemUsage.value = json.used / json.total * 100;
           filesystemUsageText.value = "Total space " + json.total / 1024 + "kb, Free space " + json.free / 1024 + "kb, Used space " + json.used / 1024 + "kb";
-          for (var f in json.files) {
-            filesView.value.push(json.files[f].file);
+          for (var f2 in json.files) {
+            filesView.value.push(json.files[f2].file);
           }
         }
         global$1.disabled = false;
@@ -13550,8 +19257,8 @@ const _sfc_main$A = {
     return (_ctx, _cache) => {
       const _component_BsProgress = resolveComponent("BsProgress");
       return openBlock(), createElementBlock(Fragment, null, [
-        _hoisted_1$A,
-        createBaseVNode("div", _hoisted_2$w, [
+        _hoisted_1$z,
+        createBaseVNode("div", _hoisted_2$v, [
           createBaseVNode("div", _hoisted_3$n, [
             createBaseVNode("button", {
               onClick: listFilesView,
@@ -13571,15 +19278,15 @@ const _sfc_main$A = {
           ]),
           createBaseVNode("div", _hoisted_6$5, [
             createBaseVNode("div", _hoisted_7$5, [
-              (openBlock(true), createElementBlock(Fragment, null, renderList(filesView.value, (f, index) => {
+              (openBlock(true), createElementBlock(Fragment, null, renderList(filesView.value, (f2, index) => {
                 return openBlock(), createElementBlock(Fragment, { key: index }, [
                   createBaseVNode("button", {
                     type: "button",
-                    onClick: withModifiers(($event) => viewFile(f), ["prevent"]),
+                    onClick: withModifiers(($event) => viewFile(f2), ["prevent"]),
                     class: "btn btn-outline-primary",
                     href: "#",
                     disabled: unref(global$1).disabled
-                  }, toDisplayString(f), 9, _hoisted_8$5),
+                  }, toDisplayString(f2), 9, _hoisted_8$5),
                   createTextVNode("  ")
                 ], 64);
               }), 128))
@@ -13599,8 +19306,8 @@ const _sfc_main$A = {
     };
   }
 };
-const _hoisted_1$z = /* @__PURE__ */ createBaseVNode("h5", null, "Upload files to file system", -1);
-const _hoisted_2$v = { class: "row gy-4" };
+const _hoisted_1$y = /* @__PURE__ */ createBaseVNode("h5", null, "Upload files to file system", -1);
+const _hoisted_2$u = { class: "row gy-4" };
 const _hoisted_3$m = { class: "col-md-12" };
 const _hoisted_4$a = { class: "col-md-3" };
 const _hoisted_5$5 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
@@ -13623,15 +19330,15 @@ const _hoisted_15$1 = ["hidden"];
 const _hoisted_16$1 = { class: "col-md-6" };
 const _hoisted_17$1 = { class: "button-group" };
 const _hoisted_18$1 = ["onClick", "disabled"];
-const _sfc_main$z = {
+const _sfc_main$y = {
   __name: "AdvancedFilesFragment",
-  setup(__props2) {
+  setup(__props) {
     const fileData = ref(null);
     const filesDelete = ref([]);
     const confirmDeleteMessage = ref(null);
     const confirmDeleteFile = ref(null);
-    const confirmDeleteCallback = (result) => {
-      if (result) {
+    const confirmDeleteCallback = (result2) => {
+      if (result2) {
         global$1.disabled = true;
         global$1.clearMessages();
         fileData.value = null;
@@ -13645,9 +19352,9 @@ const _sfc_main$z = {
         });
       }
     };
-    const deleteFile = (f) => {
-      confirmDeleteMessage.value = "Do you really want to delete file " + f;
-      confirmDeleteFile.value = f;
+    const deleteFile = (f2) => {
+      confirmDeleteMessage.value = "Do you really want to delete file " + f2;
+      confirmDeleteFile.value = f2;
       document.getElementById("deleteFile").click();
     };
     const listFilesDelete = () => {
@@ -13660,8 +19367,8 @@ const _sfc_main$z = {
       config.sendFilesystemRequest(data, (success, text) => {
         if (success) {
           var json = JSON.parse(text);
-          for (var f in json.files) {
-            filesDelete.value.push(json.files[f].file);
+          for (var f2 in json.files) {
+            filesDelete.value.push(json.files[f2].file);
           }
         }
         global$1.disabled = false;
@@ -13728,8 +19435,8 @@ const _sfc_main$z = {
       const _component_BsProgress = resolveComponent("BsProgress");
       const _component_BsModalConfirm = resolveComponent("BsModalConfirm");
       return openBlock(), createElementBlock(Fragment, null, [
-        _hoisted_1$z,
-        createBaseVNode("div", _hoisted_2$v, [
+        _hoisted_1$y,
+        createBaseVNode("div", _hoisted_2$u, [
           createBaseVNode("form", {
             onSubmit: withModifiers(upload, ["prevent"])
           }, [
@@ -13790,15 +19497,15 @@ const _sfc_main$z = {
           ]),
           createBaseVNode("div", _hoisted_16$1, [
             createBaseVNode("div", _hoisted_17$1, [
-              (openBlock(true), createElementBlock(Fragment, null, renderList(filesDelete.value, (f, index) => {
+              (openBlock(true), createElementBlock(Fragment, null, renderList(filesDelete.value, (f2, index) => {
                 return openBlock(), createElementBlock(Fragment, { key: index }, [
                   createBaseVNode("button", {
                     type: "button",
-                    onClick: withModifiers(($event) => deleteFile(f), ["prevent"]),
+                    onClick: withModifiers(($event) => deleteFile(f2), ["prevent"]),
                     class: "btn btn-outline-primary",
                     href: "#",
                     disabled: unref(global$1).disabled
-                  }, toDisplayString(f), 9, _hoisted_18$1),
+                  }, toDisplayString(f2), 9, _hoisted_18$1),
                   createTextVNode("  ")
                 ], 64);
               }), 128))
@@ -13816,14 +19523,14 @@ const _sfc_main$z = {
     };
   }
 };
-const _hoisted_1$y = /* @__PURE__ */ createBaseVNode("h5", null, "Developer settings", -1);
-const _hoisted_2$u = { class: "row gy-4" };
+const _hoisted_1$x = /* @__PURE__ */ createBaseVNode("h5", null, "Developer settings", -1);
+const _hoisted_2$t = { class: "row gy-4" };
 const _hoisted_3$l = { class: "col-md-3" };
 const _hoisted_4$9 = ["disabled"];
 const _hoisted_5$4 = ["hidden"];
-const _sfc_main$y = {
+const _sfc_main$x = {
   __name: "EnableCorsFragment",
-  setup(__props2) {
+  setup(__props) {
     const enableCors = () => {
       global$1.disabled = true;
       global$1.clearMessages();
@@ -13855,8 +19562,8 @@ const _sfc_main$y = {
     };
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock(Fragment, null, [
-        _hoisted_1$y,
-        createBaseVNode("div", _hoisted_2$u, [
+        _hoisted_1$x,
+        createBaseVNode("div", _hoisted_2$t, [
           createBaseVNode("div", _hoisted_3$l, [
             createBaseVNode("button", {
               onClick: enableCors,
@@ -13879,8 +19586,8 @@ const _sfc_main$y = {
     };
   }
 };
-const _hoisted_1$x = { class: "container" };
-const _hoisted_2$t = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_1$w = { class: "container" };
+const _hoisted_2$s = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_3$k = /* @__PURE__ */ createBaseVNode("p", { class: "h3" }, "Tools", -1);
 const _hoisted_4$8 = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_5$3 = /* @__PURE__ */ createBaseVNode("div", { class: "row gy-4" }, [
@@ -13908,21 +19615,21 @@ const _hoisted_14$1 = [
   _hoisted_12$1,
   _hoisted_13$1
 ];
-const _sfc_main$x = {
+const _sfc_main$w = {
   __name: "ToolsView",
-  setup(__props2) {
+  setup(__props) {
     const hideAdvanced = ref(true);
     function enableAdvanced() {
       hideAdvanced.value = !hideAdvanced.value;
     }
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$x, [
-        _hoisted_2$t,
+      return openBlock(), createElementBlock("div", _hoisted_1$w, [
+        _hoisted_2$s,
         _hoisted_3$k,
         _hoisted_4$8,
-        createVNode(_sfc_main$B),
-        _hoisted_5$3,
         createVNode(_sfc_main$A),
+        _hoisted_5$3,
+        createVNode(_sfc_main$z),
         _hoisted_6$3,
         hideAdvanced.value ? (openBlock(), createElementBlock("div", _hoisted_7$3, [
           createBaseVNode("div", _hoisted_8$3, [
@@ -13942,15 +19649,15 @@ const _sfc_main$x = {
             ], 8, _hoisted_9$2)
           ])
         ])) : createCommentVNode("", true),
-        !hideAdvanced.value ? (openBlock(), createBlock(_sfc_main$z, { key: 1 })) : createCommentVNode("", true),
+        !hideAdvanced.value ? (openBlock(), createBlock(_sfc_main$y, { key: 1 })) : createCommentVNode("", true),
         !hideAdvanced.value ? (openBlock(), createElementBlock("div", _hoisted_11$1, _hoisted_14$1)) : createCommentVNode("", true),
-        !hideAdvanced.value ? (openBlock(), createBlock(_sfc_main$y, { key: 3 })) : createCommentVNode("", true)
+        !hideAdvanced.value ? (openBlock(), createBlock(_sfc_main$x, { key: 3 })) : createCommentVNode("", true)
       ]);
     };
   }
 };
-const _sfc_main$w = {};
-const _hoisted_1$w = { class: "fw-bold" };
+const _sfc_main$v = {};
+const _hoisted_1$v = { class: "fw-bold" };
 function _sfc_render(_ctx, _cache) {
   const _component_BsMessage = resolveComponent("BsMessage");
   return openBlock(), createBlock(_component_BsMessage, {
@@ -13959,108 +19666,103 @@ function _sfc_render(_ctx, _cache) {
   }, {
     default: withCtx(() => [
       createTextVNode(" Page not found! "),
-      createBaseVNode("span", _hoisted_1$w, toDisplayString(this.$route.path), 1),
+      createBaseVNode("span", _hoisted_1$v, toDisplayString(this.$route.path), 1),
       createTextVNode(" is not a valid URL for this application! ")
     ]),
     _: 1
   });
 }
-const NotFoundView = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["render", _sfc_render]]);
+const NotFoundView = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["render", _sfc_render]]);
 const routes = [
   {
     path: "/",
     name: "home",
-    component: _sfc_main$U
+    component: _sfc_main$X
   },
   {
     path: "/device/settings",
     name: "device-settings",
-    component: _sfc_main$T
+    component: _sfc_main$W
   },
   {
     path: "/device/hardware",
     name: "device-hardware",
-    component: _sfc_main$S
+    component: _sfc_main$V
   },
   {
     path: "/device/wifi",
     name: "device-wifi",
-    component: _sfc_main$R
+    component: _sfc_main$U
   },
   {
     path: "/other/backup",
     name: "backup",
-    component: _sfc_main$F
+    component: _sfc_main$E
   },
   {
     path: "/gravity/settings",
     name: "gravity-settings",
-    component: _sfc_main$Q
+    component: _sfc_main$T
   },
   {
     path: "/gravity/formula",
     name: "gravity-formula",
-    component: _sfc_main$P
-  },
-  {
-    path: "/gravity/analysis",
-    name: "gravity-analysis",
-    component: _sfc_main$O
+    component: _sfc_main$N
   },
   {
     path: "/other/firmware",
     name: "firmware",
-    component: _sfc_main$E
+    component: _sfc_main$D
   },
   {
     path: "/push/settings",
     name: "push-settings",
-    component: _sfc_main$N
+    component: _sfc_main$M
   },
   {
     path: "/push/http-post1",
     name: "push-http-post1",
-    component: _sfc_main$M
+    component: _sfc_main$L
   },
   {
     path: "/push/http-post2",
     name: "push-http-post2",
-    component: _sfc_main$L
+    component: _sfc_main$K
   },
   {
     path: "/push/http-get",
     name: "push-http-get",
-    component: _sfc_main$K
+    component: _sfc_main$J
   },
   {
     path: "/push/influxdb",
     name: "push-influxdb",
-    component: _sfc_main$J
+    component: _sfc_main$I
   },
   {
     path: "/push/mqtt",
     name: "push-Mqtt",
-    component: _sfc_main$I
+    component: _sfc_main$H
   },
   {
     path: "/push/bluetooth",
     name: "push-bluetooth",
-    component: _sfc_main$H
+    component: _sfc_main$G
   },
   {
     path: "/other/support",
     name: "support",
-    component: _sfc_main$D
+    component: _sfc_main$C
   },
   {
     path: "/other/tools",
     name: "tools",
-    component: _sfc_main$x
+    component: _sfc_main$w
   },
   {
     path: "/other/serial",
     name: "serial",
-    component: _sfc_main$C
+    component: _sfc_main$B
   },
   {
     path: "/other/about",
@@ -14128,10 +19830,6 @@ const items = ref([
         label: "Formula",
         badge: gravityFormulaBadge,
         path: "/gravity/formula"
-      },
-      {
-        label: "Analysis",
-        path: "/gravity/analysis"
       }
     ]
   },
@@ -14210,8 +19908,8 @@ const items = ref([
     ]
   }
 ]);
-const _hoisted_1$v = { class: "navbar navbar-expand-lg navbar-dark bg-primary" };
-const _hoisted_2$s = { class: "container-fluid align-center" };
+const _hoisted_1$u = { class: "navbar navbar-expand-lg navbar-dark bg-primary" };
+const _hoisted_2$r = { class: "container-fluid align-center" };
 const _hoisted_3$j = /* @__PURE__ */ createBaseVNode("button", {
   class: "navbar-toggler",
   type: "button",
@@ -14268,7 +19966,7 @@ const _hoisted_24 = [
 ];
 const _hoisted_25 = { class: "p-2" };
 const _hoisted_26 = { class: "form-check form-switch" };
-const _sfc_main$v = {
+const _sfc_main$u = {
   __name: "BsMenuBar",
   props: {
     "disabled": {},
@@ -14277,9 +19975,9 @@ const _sfc_main$v = {
     "brandModifiers": {}
   },
   emits: ["update:disabled", "update:brand"],
-  setup(__props2) {
-    const disabled = useModel(__props2, "disabled");
-    const brand = useModel(__props2, "brand");
+  setup(__props) {
+    const disabled = useModel(__props, "disabled");
+    const brand = useModel(__props, "brand");
     const { dark_mode } = storeToRefs(config);
     onMounted(() => {
       setMode();
@@ -14302,8 +20000,8 @@ const _sfc_main$v = {
     };
     return (_ctx, _cache) => {
       const _component_router_link = resolveComponent("router-link");
-      return openBlock(), createElementBlock("nav", _hoisted_1$v, [
-        createBaseVNode("div", _hoisted_2$s, [
+      return openBlock(), createElementBlock("nav", _hoisted_1$u, [
+        createBaseVNode("div", _hoisted_2$r, [
           _hoisted_3$j,
           createBaseVNode("div", _hoisted_4$7, toDisplayString(brand.value), 1),
           _hoisted_5$2,
@@ -14415,30 +20113,30 @@ const _sfc_main$v = {
     };
   }
 };
-const _hoisted_1$u = { class: "container-fluid" };
-const _hoisted_2$r = /* @__PURE__ */ createBaseVNode("div", { style: { "height": "20px" } }, null, -1);
+const _hoisted_1$t = { class: "container-fluid" };
+const _hoisted_2$q = /* @__PURE__ */ createBaseVNode("div", { style: { "height": "20px" } }, null, -1);
 const _hoisted_3$i = {
   class: "text-light text-center rounded-pill bg-primary",
   style: { "height": "30px" }
 };
-const _sfc_main$u = {
+const _sfc_main$t = {
   __name: "BsFooter",
   props: {
     "text": {},
     "textModifiers": {}
   },
   emits: ["update:text"],
-  setup(__props2) {
-    const text = useModel(__props2, "text");
+  setup(__props) {
+    const text = useModel(__props, "text");
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$u, [
-        _hoisted_2$r,
+      return openBlock(), createElementBlock("div", _hoisted_1$t, [
+        _hoisted_2$q,
         createBaseVNode("div", _hoisted_3$i, toDisplayString(text.value), 1)
       ]);
     };
   }
 };
-const _hoisted_1$t = /* @__PURE__ */ createBaseVNode("dialog", {
+const _hoisted_1$s = /* @__PURE__ */ createBaseVNode("dialog", {
   id: "spinner",
   class: "loading"
 }, [
@@ -14459,7 +20157,7 @@ const _hoisted_1$t = /* @__PURE__ */ createBaseVNode("dialog", {
     ])
   ])
 ], -1);
-const _hoisted_2$q = {
+const _hoisted_2$p = {
   key: 0,
   class: "container text-center"
 };
@@ -14467,9 +20165,9 @@ const _hoisted_3$h = { class: "container" };
 const _hoisted_4$6 = /* @__PURE__ */ createBaseVNode("div", null, [
   /* @__PURE__ */ createBaseVNode("p")
 ], -1);
-const _sfc_main$t = {
+const _sfc_main$s = {
   __name: "App",
-  setup(__props2) {
+  setup(__props) {
     const polling = ref(null);
     const { disabled } = storeToRefs(global$1);
     const close = (alert) => {
@@ -14539,8 +20237,8 @@ const _sfc_main$t = {
       const _component_router_link = resolveComponent("router-link");
       const _component_router_view = resolveComponent("router-view");
       return openBlock(), createElementBlock(Fragment, null, [
-        _hoisted_1$t,
-        !unref(global$1).initialized ? (openBlock(), createElementBlock("div", _hoisted_2$q, [
+        _hoisted_1$s,
+        !unref(global$1).initialized ? (openBlock(), createElementBlock("div", _hoisted_2$p, [
           createVNode(_component_BsMessage, {
             message: "Initalizing GravityMon Web interface",
             class: "h2",
@@ -14548,7 +20246,7 @@ const _sfc_main$t = {
             alert: "info"
           })
         ])) : createCommentVNode("", true),
-        unref(global$1).initialized ? (openBlock(), createBlock(_sfc_main$v, {
+        unref(global$1).initialized ? (openBlock(), createBlock(_sfc_main$u, {
           key: 1,
           disabled: unref(global$1).disabled,
           brand: "GravityMon"
@@ -14642,7 +20340,7 @@ const _sfc_main$t = {
           })) : createCommentVNode("", true)
         ]),
         unref(global$1).initialized ? (openBlock(), createBlock(_component_router_view, { key: 2 })) : createCommentVNode("", true),
-        unref(global$1).initialized ? (openBlock(), createBlock(_sfc_main$u, {
+        unref(global$1).initialized ? (openBlock(), createBlock(_sfc_main$t, {
           key: 3,
           text: "(c) 2021-2024 Magnus Persson"
         })) : createCommentVNode("", true)
@@ -14650,17 +20348,17 @@ const _sfc_main$t = {
     };
   }
 };
-const _hoisted_1$s = /* @__PURE__ */ createBaseVNode("path", { d: "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" }, null, -1);
-const _hoisted_2$p = /* @__PURE__ */ createBaseVNode("path", { d: "M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" }, null, -1);
+const _hoisted_1$r = /* @__PURE__ */ createBaseVNode("path", { d: "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" }, null, -1);
+const _hoisted_2$o = /* @__PURE__ */ createBaseVNode("path", { d: "M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" }, null, -1);
 const _hoisted_3$g = [
-  _hoisted_1$s,
-  _hoisted_2$p
+  _hoisted_1$r,
+  _hoisted_2$o
 ];
-const _sfc_main$s = /* @__PURE__ */ Object.assign({
+const _sfc_main$r = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconXCircle",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -14670,17 +20368,17 @@ const _sfc_main$s = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$r = /* @__PURE__ */ createBaseVNode("path", { d: "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" }, null, -1);
-const _hoisted_2$o = /* @__PURE__ */ createBaseVNode("path", { d: "m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" }, null, -1);
+const _hoisted_1$q = /* @__PURE__ */ createBaseVNode("path", { d: "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" }, null, -1);
+const _hoisted_2$n = /* @__PURE__ */ createBaseVNode("path", { d: "m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" }, null, -1);
 const _hoisted_3$f = [
-  _hoisted_1$r,
-  _hoisted_2$o
+  _hoisted_1$q,
+  _hoisted_2$n
 ];
-const _sfc_main$r = /* @__PURE__ */ Object.assign({
+const _sfc_main$q = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconCheckCircle",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -14690,17 +20388,17 @@ const _sfc_main$r = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$q = /* @__PURE__ */ createBaseVNode("path", { d: "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" }, null, -1);
-const _hoisted_2$n = /* @__PURE__ */ createBaseVNode("path", { d: "m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" }, null, -1);
+const _hoisted_1$p = /* @__PURE__ */ createBaseVNode("path", { d: "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" }, null, -1);
+const _hoisted_2$m = /* @__PURE__ */ createBaseVNode("path", { d: "m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" }, null, -1);
 const _hoisted_3$e = [
-  _hoisted_1$q,
-  _hoisted_2$n
+  _hoisted_1$p,
+  _hoisted_2$m
 ];
-const _sfc_main$q = /* @__PURE__ */ Object.assign({
+const _sfc_main$p = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconInfoCircle",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -14710,17 +20408,17 @@ const _sfc_main$q = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$p = /* @__PURE__ */ createBaseVNode("path", { d: "M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.2.2 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.2.2 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z" }, null, -1);
-const _hoisted_2$m = /* @__PURE__ */ createBaseVNode("path", { d: "M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z" }, null, -1);
+const _hoisted_1$o = /* @__PURE__ */ createBaseVNode("path", { d: "M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.2.2 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.2.2 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z" }, null, -1);
+const _hoisted_2$l = /* @__PURE__ */ createBaseVNode("path", { d: "M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z" }, null, -1);
 const _hoisted_3$d = [
-  _hoisted_1$p,
-  _hoisted_2$m
+  _hoisted_1$o,
+  _hoisted_2$l
 ];
-const _sfc_main$p = /* @__PURE__ */ Object.assign({
+const _sfc_main$o = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconExclamationTriangle",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -14730,14 +20428,14 @@ const _sfc_main$p = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$o = {
+const _hoisted_1$n = {
   key: 5,
   type: "button",
   class: "btn-close",
   "data-bs-dismiss": "alert",
   "aria-label": "Close"
 };
-const _sfc_main$o = /* @__PURE__ */ Object.assign({
+const _sfc_main$n = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "BsMessage",
@@ -14752,11 +20450,11 @@ const _sfc_main$o = /* @__PURE__ */ Object.assign({
     "closeModifiers": {}
   },
   emits: ["update:message", "update:dismissable", "update:alert", "update:close"],
-  setup(__props2) {
-    const message = useModel(__props2, "message");
-    const dismissable = useModel(__props2, "dismissable");
-    const alert = useModel(__props2, "alert");
-    const close = useModel(__props2, "close");
+  setup(__props) {
+    const message = useModel(__props, "message");
+    const dismissable = useModel(__props, "dismissable");
+    const alert = useModel(__props, "alert");
+    const close = useModel(__props, "close");
     function classNames() {
       const cn = dismissable.value ? "alert alert-" + alert.value + " align-items-center alert-dismissible fade show" : "alert alert-" + alert.value + " align-items-center";
       return cn;
@@ -14766,22 +20464,22 @@ const _sfc_main$o = /* @__PURE__ */ Object.assign({
         class: normalizeClass(classNames()),
         role: "alert"
       }, [
-        alert.value === "danger" ? (openBlock(), createBlock(_sfc_main$s, {
+        alert.value === "danger" ? (openBlock(), createBlock(_sfc_main$r, {
           key: 0,
           height: "20",
           width: "20"
         })) : createCommentVNode("", true),
-        alert.value === "warning" ? (openBlock(), createBlock(_sfc_main$p, {
+        alert.value === "warning" ? (openBlock(), createBlock(_sfc_main$o, {
           key: 1,
           height: "20",
           width: "20"
         })) : createCommentVNode("", true),
-        alert.value === "info" ? (openBlock(), createBlock(_sfc_main$q, {
+        alert.value === "info" ? (openBlock(), createBlock(_sfc_main$p, {
           key: 2,
           height: "20",
           width: "20"
         })) : createCommentVNode("", true),
-        alert.value === "success" ? (openBlock(), createBlock(_sfc_main$r, {
+        alert.value === "success" ? (openBlock(), createBlock(_sfc_main$q, {
           key: 3,
           height: "20",
           width: "20"
@@ -14795,16 +20493,16 @@ const _sfc_main$o = /* @__PURE__ */ Object.assign({
           class: "btn-close",
           "aria-label": "Close"
         })) : createCommentVNode("", true),
-        dismissable.value && close.value === void 0 ? (openBlock(), createElementBlock("button", _hoisted_1$o)) : createCommentVNode("", true)
+        dismissable.value && close.value === void 0 ? (openBlock(), createElementBlock("button", _hoisted_1$n)) : createCommentVNode("", true)
       ], 2);
     };
   }
 });
-const _hoisted_1$n = { class: "card" };
-const _hoisted_2$l = { class: "card-body" };
+const _hoisted_1$m = { class: "card" };
+const _hoisted_2$k = { class: "card-body" };
 const _hoisted_3$c = { class: "card-title" };
 const _hoisted_4$5 = { class: "card-text" };
-const _sfc_main$n = /* @__PURE__ */ Object.assign({
+const _sfc_main$m = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "BsCard",
@@ -14821,23 +20519,23 @@ const _sfc_main$n = /* @__PURE__ */ Object.assign({
     "colorModifiers": {}
   },
   emits: ["update:header", "update:title", "update:icon", "update:iserr", "update:color"],
-  setup(__props2) {
-    const header = useModel(__props2, "header");
-    const title = useModel(__props2, "title");
-    const icon = useModel(__props2, "icon");
-    const iserr = useModel(__props2, "iserr");
-    const headerColor = useModel(__props2, "color");
+  setup(__props) {
+    const header = useModel(__props, "header");
+    const title = useModel(__props, "title");
+    const icon = useModel(__props, "icon");
+    const iserr = useModel(__props, "iserr");
+    const headerColor = useModel(__props, "color");
     function headerStyle() {
       if (iserr.value !== void 0 && iserr.value) return "card-header bg-danger-subtle";
       if (headerColor.value === void 0) return "card-header bg-primary-subtle";
       return "card-header bg-" + headerColor.value + "-subtle";
     }
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$n, [
+      return openBlock(), createElementBlock("div", _hoisted_1$m, [
         createBaseVNode("div", {
           class: normalizeClass(headerStyle())
         }, toDisplayString(header.value), 3),
-        createBaseVNode("div", _hoisted_2$l, [
+        createBaseVNode("div", _hoisted_2$k, [
           createBaseVNode("h5", _hoisted_3$c, [
             icon.value !== void 0 ? (openBlock(), createBlock(resolveDynamicComponent(icon.value), {
               key: 0,
@@ -14854,12 +20552,12 @@ const _sfc_main$n = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$m = {
+const _hoisted_1$l = {
   class: "btn-group",
   role: "group"
 };
-const _hoisted_2$k = ["disabled"];
-const _sfc_main$m = /* @__PURE__ */ Object.assign({
+const _hoisted_2$j = ["disabled"];
+const _sfc_main$l = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "BsFileUpload",
@@ -14876,12 +20574,12 @@ const _sfc_main$m = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:label", "update:help", "update:width", "update:disabled", "update:badge"],
-  setup(__props2) {
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const disabled = useModel(__props2, "disabled");
-    const badge = useModel(__props2, "badge");
+  setup(__props) {
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const disabled = useModel(__props, "disabled");
+    const badge = useModel(__props, "badge");
     return (_ctx, _cache) => {
       const _component_BsInputBase = resolveComponent("BsInputBase");
       return openBlock(), createBlock(_component_BsInputBase, {
@@ -14891,11 +20589,11 @@ const _sfc_main$m = /* @__PURE__ */ Object.assign({
         badge: badge.value
       }, {
         default: withCtx(() => [
-          createBaseVNode("div", _hoisted_1$m, [
+          createBaseVNode("div", _hoisted_1$l, [
             createBaseVNode("input", mergeProps({
               class: "form-control",
               type: "file"
-            }, _ctx.$attrs, { disabled: disabled.value }), null, 16, _hoisted_2$k)
+            }, _ctx.$attrs, { disabled: disabled.value }), null, 16, _hoisted_2$j)
           ])
         ]),
         _: 1
@@ -14903,24 +20601,24 @@ const _sfc_main$m = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$l = {
+const _hoisted_1$k = {
   class: "progress",
   style: { "height": "20px" }
 };
-const _sfc_main$l = {
+const _sfc_main$k = {
   __name: "BsProgress",
   props: {
     "progress": {},
     "progressModifiers": {}
   },
   emits: ["update:progress"],
-  setup(__props2) {
-    const progress = useModel(__props2, "progress");
+  setup(__props) {
+    const progress = useModel(__props, "progress");
     const progressStyle = computed(() => {
       return "width: " + progress.value + "%";
     });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$l, [
+      return openBlock(), createElementBlock("div", _hoisted_1$k, [
         createBaseVNode("div", {
           class: "progress-bar",
           role: "progressbar",
@@ -14930,8 +20628,8 @@ const _sfc_main$l = {
     };
   }
 };
-const _hoisted_1$k = { class: "has-validation pt-2" };
-const _hoisted_2$j = {
+const _hoisted_1$j = { class: "has-validation pt-2" };
+const _hoisted_2$i = {
   key: 0,
   class: "form-label fw-bold"
 };
@@ -14940,7 +20638,7 @@ const _hoisted_3$b = {
   class: "badge text-bg-danger rounded-circle"
 };
 const _hoisted_4$4 = { class: "form-text" };
-const _sfc_main$k = /* @__PURE__ */ Object.assign({
+const _sfc_main$j = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "BsInputBase",
@@ -14955,14 +20653,14 @@ const _sfc_main$k = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:label", "update:help", "update:width", "update:badge"],
-  setup(__props2) {
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const badge = useModel(__props2, "badge");
+  setup(__props) {
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const badge = useModel(__props, "badge");
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$k, [
-        label.value !== void 0 ? (openBlock(), createElementBlock("label", _hoisted_2$j, toDisplayString(label.value), 1)) : createCommentVNode("", true),
+      return openBlock(), createElementBlock("div", _hoisted_1$j, [
+        label.value !== void 0 ? (openBlock(), createElementBlock("label", _hoisted_2$i, toDisplayString(label.value), 1)) : createCommentVNode("", true),
         createTextVNode("  "),
         badge.value ? (openBlock(), createElementBlock("span", _hoisted_3$b, "1")) : createCommentVNode("", true),
         createBaseVNode("div", {
@@ -14975,19 +20673,19 @@ const _sfc_main$k = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$j = /* @__PURE__ */ createBaseVNode("path", { d: "M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z" }, null, -1);
-const _hoisted_2$i = /* @__PURE__ */ createBaseVNode("path", { d: "M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829" }, null, -1);
+const _hoisted_1$i = /* @__PURE__ */ createBaseVNode("path", { d: "M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z" }, null, -1);
+const _hoisted_2$h = /* @__PURE__ */ createBaseVNode("path", { d: "M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829" }, null, -1);
 const _hoisted_3$a = /* @__PURE__ */ createBaseVNode("path", { d: "M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z" }, null, -1);
 const _hoisted_4$3 = [
-  _hoisted_1$j,
-  _hoisted_2$i,
+  _hoisted_1$i,
+  _hoisted_2$h,
   _hoisted_3$a
 ];
-const _sfc_main$j = /* @__PURE__ */ Object.assign({
+const _sfc_main$i = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconEyeSlash",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -14997,17 +20695,17 @@ const _sfc_main$j = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$i = /* @__PURE__ */ createBaseVNode("path", { d: "M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" }, null, -1);
-const _hoisted_2$h = /* @__PURE__ */ createBaseVNode("path", { d: "M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" }, null, -1);
+const _hoisted_1$h = /* @__PURE__ */ createBaseVNode("path", { d: "M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" }, null, -1);
+const _hoisted_2$g = /* @__PURE__ */ createBaseVNode("path", { d: "M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" }, null, -1);
 const _hoisted_3$9 = [
-  _hoisted_1$i,
-  _hoisted_2$h
+  _hoisted_1$h,
+  _hoisted_2$g
 ];
-const _sfc_main$i = /* @__PURE__ */ Object.assign({
+const _sfc_main$h = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconEye",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -15017,13 +20715,13 @@ const _sfc_main$i = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$h = { class: "input-group" };
-const _hoisted_2$g = ["type", "data-bs-title"];
+const _hoisted_1$g = { class: "input-group" };
+const _hoisted_2$f = ["type", "data-bs-title"];
 const _hoisted_3$8 = {
   key: 0,
   class: "input-group-text"
 };
-const _sfc_main$h = /* @__PURE__ */ Object.assign({
+const _sfc_main$g = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "BsInputText",
@@ -15042,13 +20740,13 @@ const _sfc_main$h = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:modelValue", "update:label", "update:help", "update:width", "update:type", "update:badge"],
-  setup(__props2) {
-    const model = useModel(__props2, "modelValue");
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const type = useModel(__props2, "type");
-    const badge = useModel(__props2, "badge");
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const type = useModel(__props, "type");
+    const badge = useModel(__props, "badge");
     const flag = ref(false);
     function toggle() {
       flag.value = !flag.value;
@@ -15062,7 +20760,7 @@ const _sfc_main$h = /* @__PURE__ */ Object.assign({
         badge: badge.value
       }, {
         default: withCtx(() => [
-          createBaseVNode("div", _hoisted_1$h, [
+          createBaseVNode("div", _hoisted_1$g, [
             withDirectives(createBaseVNode("input", mergeProps({
               "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
               class: "form-control",
@@ -15071,17 +20769,17 @@ const _sfc_main$h = /* @__PURE__ */ Object.assign({
               "data-bs-toggle": "tooltip",
               "data-bs-custom-class": "custom-tooltip",
               "data-bs-title": help.value
-            }), null, 16, _hoisted_2$g), [
+            }), null, 16, _hoisted_2$f), [
               [vModelDynamic, model.value]
             ]),
             type.value === "password" ? (openBlock(), createElementBlock("span", _hoisted_3$8, [
-              !flag.value ? (openBlock(), createBlock(_sfc_main$i, {
+              !flag.value ? (openBlock(), createBlock(_sfc_main$h, {
                 key: 0,
                 onClick: toggle,
                 width: "1rem",
                 height: "1rem"
               })) : createCommentVNode("", true),
-              flag.value ? (openBlock(), createBlock(_sfc_main$j, {
+              flag.value ? (openBlock(), createBlock(_sfc_main$i, {
                 key: 1,
                 onClick: toggle,
                 width: "1rem",
@@ -15095,56 +20793,6 @@ const _sfc_main$h = /* @__PURE__ */ Object.assign({
     };
   }
 });
-const _hoisted_1$g = { class: "input-group" };
-const _hoisted_2$f = ["data-bs-title"];
-const _sfc_main$g = /* @__PURE__ */ Object.assign({
-  inheritAttrs: false
-}, {
-  __name: "BsInputReadonly",
-  props: {
-    "modelValue": {},
-    "modelModifiers": {},
-    "label": {},
-    "labelModifiers": {},
-    "help": {},
-    "helpModifiers": {},
-    "width": {},
-    "widthModifiers": {}
-  },
-  emits: ["update:modelValue", "update:label", "update:help", "update:width"],
-  setup(__props2) {
-    const model = useModel(__props2, "modelValue");
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    return (_ctx, _cache) => {
-      const _component_BsInputBase = resolveComponent("BsInputBase");
-      return openBlock(), createBlock(_component_BsInputBase, {
-        width: width.value,
-        label: label.value,
-        help: help.value
-      }, {
-        default: withCtx(() => [
-          createBaseVNode("div", _hoisted_1$g, [
-            withDirectives(createBaseVNode("input", mergeProps({
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
-              class: "form-control-plaintext",
-              readonly: "",
-              type: "text"
-            }, _ctx.$attrs, {
-              "data-bs-toggle": "tooltip",
-              "data-bs-custom-class": "custom-tooltip",
-              "data-bs-title": help.value
-            }), null, 16, _hoisted_2$f), [
-              [vModelText, model.value]
-            ])
-          ])
-        ]),
-        _: 1
-      }, 8, ["width", "label", "help"]);
-    };
-  }
-});
 const _hoisted_1$f = /* @__PURE__ */ createBaseVNode("path", { d: "M15.384 6.115a.485.485 0 0 0-.047-.736A12.44 12.44 0 0 0 8 3C5.259 3 2.723 3.882.663 5.379a.485.485 0 0 0-.048.736.52.52 0 0 0 .668.05A11.45 11.45 0 0 1 8 4c2.507 0 4.827.802 6.716 2.164.205.148.49.13.668-.049" }, null, -1);
 const _hoisted_2$e = /* @__PURE__ */ createBaseVNode("path", { d: "M13.229 8.271a.482.482 0 0 0-.063-.745A9.46 9.46 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.576 1.336c.206.132.48.108.653-.065m-2.183 2.183c.226-.226.185-.605-.1-.75A6.5 6.5 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.407.19.611.09A5.5 5.5 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.61-.091zM9.06 12.44c.196-.196.198-.52-.04-.66A2 2 0 0 0 8 11.5a2 2 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .707 0l.707-.707z" }, null, -1);
 const _hoisted_3$7 = [
@@ -15155,7 +20803,7 @@ const _sfc_main$f = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconWifi",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -15189,14 +20837,14 @@ const _sfc_main$e = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:modelValue", "update:label", "update:help", "update:width", "update:options", "update:disabled", "update:badge"],
-  setup(__props2) {
-    const model = useModel(__props2, "modelValue");
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const options = useModel(__props2, "options");
-    const disabled = useModel(__props2, "disabled");
-    const badge = useModel(__props2, "badge");
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const options = useModel(__props, "options");
+    const disabled = useModel(__props, "disabled");
+    const badge = useModel(__props, "badge");
     return (_ctx, _cache) => {
       const _component_BsInputBase = resolveComponent("BsInputBase");
       return openBlock(), createBlock(_component_BsInputBase, {
@@ -15255,12 +20903,12 @@ const _sfc_main$d = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:modelValue", "update:label", "update:help", "update:width", "update:badge"],
-  setup(__props2) {
-    const model = useModel(__props2, "modelValue");
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const badge = useModel(__props2, "badge");
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const badge = useModel(__props, "badge");
     return (_ctx, _cache) => {
       const _component_BsInputBase = resolveComponent("BsInputBase");
       return openBlock(), createBlock(_component_BsInputBase, {
@@ -15314,14 +20962,14 @@ const _sfc_main$c = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:modelValue", "update:label", "update:help", "update:width", "update:unit", "update:disabled", "update:badge"],
-  setup(__props2) {
-    const model = useModel(__props2, "modelValue");
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const unit = useModel(__props2, "unit");
-    const disabled = useModel(__props2, "disabled");
-    const badge = useModel(__props2, "badge");
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const unit = useModel(__props, "unit");
+    const disabled = useModel(__props, "disabled");
+    const badge = useModel(__props, "badge");
     return (_ctx, _cache) => {
       const _component_BsInputBase = resolveComponent("BsInputBase");
       return openBlock(), createBlock(_component_BsInputBase, {
@@ -15376,13 +21024,13 @@ const _sfc_main$b = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:modelValue", "update:label", "update:help", "update:width", "update:disabled", "update:badge"],
-  setup(__props2) {
-    const model = useModel(__props2, "modelValue");
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const disabled = useModel(__props2, "disabled");
-    const badge = useModel(__props2, "badge");
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const disabled = useModel(__props, "disabled");
+    const badge = useModel(__props, "badge");
     return (_ctx, _cache) => {
       const _component_BsInputBase = resolveComponent("BsInputBase");
       return openBlock(), createBlock(_component_BsInputBase, {
@@ -15440,14 +21088,14 @@ const _sfc_main$a = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:modelValue", "update:options", "update:label", "update:help", "update:width", "update:disabled", "update:badge"],
-  setup(__props2) {
-    const model = useModel(__props2, "modelValue");
-    const options = useModel(__props2, "options");
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const disabled = useModel(__props2, "disabled");
-    const badge = useModel(__props2, "badge");
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const options = useModel(__props, "options");
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const disabled = useModel(__props, "disabled");
+    const badge = useModel(__props, "badge");
     return (_ctx, _cache) => {
       const _component_BsInputBase = resolveComponent("BsInputBase");
       return openBlock(), createBlock(_component_BsInputBase, {
@@ -15513,15 +21161,15 @@ const _sfc_main$9 = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:label", "update:help", "update:width", "update:options", "update:button", "update:callback", "update:disabled", "update:badge"],
-  setup(__props2) {
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const options = useModel(__props2, "options");
-    const button = useModel(__props2, "button");
-    const callback = useModel(__props2, "callback");
-    const disabled = useModel(__props2, "disabled");
-    const badge = useModel(__props2, "badge");
+  setup(__props) {
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const options = useModel(__props, "options");
+    const button = useModel(__props, "button");
+    const callback = useModel(__props, "callback");
+    const disabled = useModel(__props, "disabled");
+    const badge = useModel(__props, "badge");
     return (_ctx, _cache) => {
       const _component_BsInputBase = resolveComponent("BsInputBase");
       return openBlock(), createBlock(_component_BsInputBase, {
@@ -15566,7 +21214,7 @@ const _sfc_main$8 = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconHome",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -15584,7 +21232,7 @@ const _sfc_main$7 = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconTools",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -15605,7 +21253,7 @@ const _sfc_main$6 = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconGraphUpArrow",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -15628,7 +21276,7 @@ const _sfc_main$5 = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconCloudUpArrow",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -15649,7 +21297,7 @@ const _sfc_main$4 = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconUpArrow",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -15667,7 +21315,7 @@ const _sfc_main$3 = /* @__PURE__ */ Object.assign({
   inheritAttrs: false
 }, {
   __name: "IconCpu",
-  setup(__props2) {
+  setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("svg", mergeProps(_ctx.$attrs, {
         xmlns: "http://www.w3.org/2000/svg",
@@ -15711,10 +21359,10 @@ const _sfc_main$2 = /* @__PURE__ */ Object.assign({
     "titleModifiers": {}
   },
   emits: ["update:modelValue", "update:button", "update:title"],
-  setup(__props2) {
-    const model = useModel(__props2, "modelValue");
-    const button = useModel(__props2, "button");
-    const title = useModel(__props2, "title");
+  setup(__props) {
+    const model = useModel(__props, "modelValue");
+    const button = useModel(__props, "button");
+    const title = useModel(__props, "title");
     const format = (s) => {
       if (isValidJson(model.value)) return JSON.stringify(JSON.parse(s), null, 2);
       if (isValidFormData(model.value)) return s.replaceAll("&", "&\n\r");
@@ -15779,11 +21427,11 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign({
     "titleModifiers": {}
   },
   emits: ["update:callback", "update:message", "update:id", "update:title"],
-  setup(__props2) {
-    const callback = useModel(__props2, "callback");
-    const message = useModel(__props2, "message");
-    const id = useModel(__props2, "id");
-    const title = useModel(__props2, "title");
+  setup(__props) {
+    const callback = useModel(__props, "callback");
+    const message = useModel(__props, "message");
+    const id = useModel(__props, "id");
+    const title = useModel(__props, "title");
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock(Fragment, null, [
         createBaseVNode("button", {
@@ -15846,7 +21494,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
     "badgeModifiers": {}
   },
   emits: ["update:modelValue", "update:label", "update:help", "update:width", "update:badge"],
-  setup(__props2) {
+  setup(__props) {
     const contextMenuOptions = ref([
       { label: "Cancel", value: "" },
       { label: "Network name, ${mdns}", value: "${mdns}" },
@@ -15893,11 +21541,11 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
       menu.style.left = event.pageX + "px";
       menu.style.top = event.pageY + "px";
     };
-    const model = useModel(__props2, "modelValue");
-    const label = useModel(__props2, "label");
-    const help = useModel(__props2, "help");
-    const width = useModel(__props2, "width");
-    const badge = useModel(__props2, "badge");
+    const model = useModel(__props, "modelValue");
+    const label = useModel(__props, "label");
+    const help = useModel(__props, "help");
+    const width = useModel(__props, "width");
+    const badge = useModel(__props, "badge");
     return (_ctx, _cache) => {
       const _component_BsInputBase = resolveComponent("BsInputBase");
       return openBlock(), createElementBlock(Fragment, null, [
@@ -15941,7 +21589,6 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
     };
   }
 });
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var bootstrap_bundle = { exports: {} };
 /*!
   * Bootstrap v5.3.3 (https://getbootstrap.com/)
@@ -17419,8 +23066,8 @@ var bootstrap_bundle = { exports: {} };
     function getBasePlacement(placement) {
       return placement.split("-")[0];
     }
-    var max = Math.max;
-    var min = Math.min;
+    var max2 = Math.max;
+    var min2 = Math.min;
     var round = Math.round;
     function getUAString() {
       var uaData = navigator.userAgentData;
@@ -17569,11 +23216,11 @@ var bootstrap_bundle = { exports: {} };
       return ["top", "bottom"].indexOf(placement) >= 0 ? "x" : "y";
     }
     function within(min$1, value, max$1) {
-      return max(min$1, min(value, max$1));
+      return max2(min$1, min2(value, max$1));
     }
-    function withinMaxClamp(min2, value, max2) {
-      var v = within(min2, value, max2);
-      return v > max2 ? max2 : v;
+    function withinMaxClamp(min3, value, max3) {
+      var v = within(min3, value, max3);
+      return v > max3 ? max3 : v;
     }
     function getFreshSideObject() {
       return {
@@ -17619,10 +23266,10 @@ var bootstrap_bundle = { exports: {} };
       var arrowOffsetParent = getOffsetParent(arrowElement);
       var clientSize = arrowOffsetParent ? axis === "y" ? arrowOffsetParent.clientHeight || 0 : arrowOffsetParent.clientWidth || 0 : 0;
       var centerToReference = endDiff / 2 - startDiff / 2;
-      var min2 = paddingObject[minProp];
-      var max2 = clientSize - arrowRect[len] - paddingObject[maxProp];
+      var min3 = paddingObject[minProp];
+      var max3 = clientSize - arrowRect[len] - paddingObject[maxProp];
       var center = clientSize / 2 - arrowRect[len] / 2 + centerToReference;
-      var offset2 = within(min2, center, max2);
+      var offset2 = within(min3, center, max3);
       var axisProp = axis;
       state.modifiersData[name] = (_state$modifiersData$ = {}, _state$modifiersData$[axisProp] = offset2, _state$modifiersData$.centerOffset = offset2 - center, _state$modifiersData$);
     }
@@ -17871,12 +23518,12 @@ var bootstrap_bundle = { exports: {} };
       var html = getDocumentElement(element);
       var winScroll = getWindowScroll(element);
       var body = (_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body;
-      var width = max(html.scrollWidth, html.clientWidth, body ? body.scrollWidth : 0, body ? body.clientWidth : 0);
-      var height = max(html.scrollHeight, html.clientHeight, body ? body.scrollHeight : 0, body ? body.clientHeight : 0);
+      var width = max2(html.scrollWidth, html.clientWidth, body ? body.scrollWidth : 0, body ? body.clientWidth : 0);
+      var height = max2(html.scrollHeight, html.clientHeight, body ? body.scrollHeight : 0, body ? body.clientHeight : 0);
       var x = -winScroll.scrollLeft + getWindowScrollBarX(element);
       var y = -winScroll.scrollTop;
       if (getComputedStyle$1(body || html).direction === "rtl") {
-        x += max(html.clientWidth, body ? body.clientWidth : 0) - width;
+        x += max2(html.clientWidth, body ? body.clientWidth : 0) - width;
       }
       return {
         width,
@@ -17953,10 +23600,10 @@ var bootstrap_bundle = { exports: {} };
       var firstClippingParent = clippingParents2[0];
       var clippingRect = clippingParents2.reduce(function(accRect, clippingParent) {
         var rect = getClientRectFromMixedType(element, clippingParent, strategy);
-        accRect.top = max(rect.top, accRect.top);
-        accRect.right = min(rect.right, accRect.right);
-        accRect.bottom = min(rect.bottom, accRect.bottom);
-        accRect.left = max(rect.left, accRect.left);
+        accRect.top = max2(rect.top, accRect.top);
+        accRect.right = min2(rect.right, accRect.right);
+        accRect.bottom = min2(rect.bottom, accRect.bottom);
+        accRect.left = max2(rect.left, accRect.left);
         return accRect;
       }, getClientRectFromMixedType(element, firstClippingParent, strategy));
       clippingRect.width = clippingRect.right - clippingRect.left;
@@ -18077,8 +23724,8 @@ var bootstrap_bundle = { exports: {} };
         })[getBasePlacement(placement2)];
         return acc;
       }, {});
-      return Object.keys(overflows).sort(function(a2, b) {
-        return overflows[a2] - overflows[b];
+      return Object.keys(overflows).sort(function(a, b) {
+        return overflows[a] - overflows[b];
       });
     }
     function getExpandedFallbackPlacements(placement) {
@@ -18354,7 +24001,7 @@ var bootstrap_bundle = { exports: {} };
         var offsetModifierValue = (_offsetModifierState$ = offsetModifierState == null ? void 0 : offsetModifierState[mainAxis]) != null ? _offsetModifierState$ : 0;
         var tetherMin = offset2 + minOffset - offsetModifierValue - clientOffset;
         var tetherMax = offset2 + maxOffset - offsetModifierValue;
-        var preventedOffset = within(tether ? min(min$1, tetherMin) : min$1, offset2, tether ? max(max$1, tetherMax) : max$1);
+        var preventedOffset = within(tether ? min2(min$1, tetherMin) : min$1, offset2, tether ? max2(max$1, tetherMax) : max$1);
         popperOffsets2[mainAxis] = preventedOffset;
         data[mainAxis] = preventedOffset - offset2;
       }
@@ -18441,7 +24088,7 @@ var bootstrap_bundle = { exports: {} };
     function order(modifiers) {
       var map = /* @__PURE__ */ new Map();
       var visited = /* @__PURE__ */ new Set();
-      var result = [];
+      var result2 = [];
       modifiers.forEach(function(modifier) {
         map.set(modifier.name, modifier);
       });
@@ -18456,14 +24103,14 @@ var bootstrap_bundle = { exports: {} };
             }
           }
         });
-        result.push(modifier);
+        result2.push(modifier);
       }
       modifiers.forEach(function(modifier) {
         if (!visited.has(modifier.name)) {
           sort(modifier);
         }
       });
-      return result;
+      return result2;
     }
     function orderModifiers(modifiers) {
       var orderedModifiers = order(modifiers);
@@ -21012,17 +26659,17 @@ var bootstrap_bundle = { exports: {} };
     return index_umd;
   });
 })(bootstrap_bundle);
-const app = createApp(_sfc_main$t);
+const app = createApp(_sfc_main$s);
 app.use(piniaInstance);
 app.use(router);
-app.component("BsMessage", _sfc_main$o);
+app.component("BsMessage", _sfc_main$n);
 app.component("BsDropdown", _sfc_main$9);
-app.component("BsCard", _sfc_main$n);
-app.component("BsFileUpload", _sfc_main$m);
-app.component("BsProgress", _sfc_main$l);
-app.component("BsInputBase", _sfc_main$k);
-app.component("BsInputText", _sfc_main$h);
-app.component("BsInputReadonly", _sfc_main$g);
+app.component("BsCard", _sfc_main$m);
+app.component("BsFileUpload", _sfc_main$l);
+app.component("BsProgress", _sfc_main$k);
+app.component("BsInputBase", _sfc_main$j);
+app.component("BsInputText", _sfc_main$g);
+app.component("BsInputReadonly", _sfc_main$R);
 app.component("BsSelect", _sfc_main$e);
 app.component("BsInputTextArea", _sfc_main$d);
 app.component("BsInputNumber", _sfc_main$c);
