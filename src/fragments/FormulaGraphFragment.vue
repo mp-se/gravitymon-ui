@@ -20,21 +20,6 @@
     </BsMessage>
     <canvas id="formulaChart"></canvas>
   </div>
-
-  <div class="row">
-    <div class="col-md-12" v-for="(i, index) in expressions" :key="index">
-      <BsInputReadonly
-        :label="'Formula order ' + index"
-        v-model="expressions[index]"
-        v-if="expressions[index] != ''"
-      ></BsInputReadonly>
-      <BsInputReadonly
-        :label="'Formula order ' + index"
-        v-model="rejected"
-        v-if="expressions[index] == ''"
-      ></BsInputReadonly>
-    </div>
-  </div>
 </template>
 
 <script setup>
@@ -42,12 +27,10 @@ import { ref, onMounted } from 'vue'
 import { config } from '@/modules/pinia'
 import { logError } from '@/modules/logger'
 import { evaluateFormula } from '@/modules/formula'
-import BsInputReadonly from '@/components/BsInputReadonly.vue'
 
 const chart = ref(null)
 
 const expressions = defineModel('expressions') // Hold results from regression library
-const rejected = ref('Formula rejected')
 
 const chartDataForm = ref([])
 const chartDataOrder1 = ref([])

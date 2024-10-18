@@ -118,8 +118,16 @@ export function validateCurrentForm() {
   return valid
 }
 
-export function convertToPlato(sg) {
-  return 259 - 259 / sg
+export function roundVal(val, decimals) {
+  return parseFloat(Number(val).toFixed(decimals))
+}
+
+export function gravityToPlato(sg) {
+  return 135.997*sg*sg*sg - 630.272*sg*sg + 1111.14*sg - 616.868
+}
+
+export function gravityToSG(p) {
+  return  1 + p/(258.6 - 227.1*(p/258.2))
 }
 
 export function tempToF(c) {

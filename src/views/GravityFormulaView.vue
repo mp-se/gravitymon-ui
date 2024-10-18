@@ -19,7 +19,7 @@
             v-model="config.gravity_formula"
             maxlength="200"
             label="Gravity formula"
-            help="Formula used to convert angle to gravity"
+            help="Formula used to convert angle to gravity. If created outside Gravitymon the formula needs to be created for Specific Gravity!"
             :badge="badge.gravityFormulaBadge()"
             :disabled="global.disabled || config.gyro_disabled"
           >
@@ -64,7 +64,7 @@
                 class="form-control"
                 type="number"
                 min="1"
-                max="10"
+                max="30"
                 step=".0001"
                 :disabled="global.disabled || config.gyro_disabled"
               />
@@ -83,9 +83,9 @@
             v-model="config.formula_max_deviation"
             :unit="config.gravity_format == 'G' ? 'SG' : 'P'"
             label="Max allowed deviation"
-            min="1"
+            min="0"
             max="10"
-            step=".1"
+            step=".0001"
             width="4"
             help="When validating the derived formula this is the maximum accepted deviation for the supplied values, use graph below to visually check where there are deviations"
             :disabled="global.disabled || config.gyro_disabled"
@@ -95,7 +95,7 @@
         <div class="col-md-6">
           <BsInputNumber
             v-model="noDecimals"
-            label="Number of decimans in formula"
+            label="Number of decimals in formula"
             min="1"
             max="10"
             step="1"
@@ -130,17 +130,32 @@
           >
             Create formula</button
           >&nbsp;
+
         </div>
       </div>
+
+      <div class="row" v-if="expressions != null">
+        <BsInputRadio 
+            v-model="formulaOutput"
+            :options="formulaOutputOptions"
+            label="Output format"
+            :disabled="global.disabled"
+          ></BsInputRadio>
+      </div>
+
     </form>
 
     <GravityGraphFragment v-if="renderComponent && expressions == null"></GravityGraphFragment>
+    <FormulaFragment
+      v-if="renderComponent && expressions != null && formulaOutput == 0"
+      :expressions="expressions"
+    ></FormulaFragment>
     <FormulaTableFragment
-      v-if="renderComponent && expressions != null"
+      v-if="renderComponent && expressions != null && formulaOutput == 1"
       :expressions="expressions"
     ></FormulaTableFragment>
     <FormulaGraphFragment
-      v-if="renderComponent && expressions != null"
+      v-if="renderComponent && expressions != null && formulaOutput == 2"
       :expressions="expressions"
     ></FormulaGraphFragment>
   </div>
@@ -153,17 +168,23 @@ import { global, config } from '@/modules/pinia'
 import GravityGraphFragment from '@/fragments/GravityGraphFragment.vue'
 import { logDebug } from '@/modules/logger'
 import * as badge from '@/modules/badge'
+import FormulaFragment from '@/fragments/FormulaFragment.vue'
 import FormulaGraphFragment from '@/fragments/FormulaGraphFragment.vue'
 import FormulaTableFragment from '@/fragments/FormulaTableFragment.vue'
 import { PolynomialRegression } from 'ml-regression-polynomial'
 import { validateFormula } from '@/modules/formula'
+import { gravityToPlato, gravityToSG } from '@/modules/utils'
 
-// TODO: On mount convert all data points to Plato and back on unmount
-
-const renderComponent = ref(true)
 const expressions = ref(null)
 const noDecimals = ref(8)
 const formulaOptions = ref([])
+const renderComponent = ref(true)
+const formulaOutput = ref(0)
+const formulaOutputOptions = ref([
+{ label: 'Formula', value: 0 },
+{ label: 'Table', value: 1 },
+{ label: 'Graph', value: 2 },
+])
 
 const formulaSelectCallback = (opt) => {
   config.gravity_formula = opt
@@ -182,13 +203,16 @@ const createFormula = () => {
 
   for (let i = 0; i < config.formula_calculation_data.length; i++) {
     x.push(config.formula_calculation_data[i].a)
-    y.push(config.formula_calculation_data[i].g)
+    y.push(config.gravity_format == 'P' ? gravityToSG(config.formula_calculation_data[i].g) : config.formula_calculation_data[i].g)
   }
 
   for (var i = 1; i < 5; i++) {
     const regression = new PolynomialRegression(x, y, i)
 
     var f = regression.toString(noDecimals.value)
+
+    logDebug(x, y, f)
+
     f = f.replaceAll(' ', '')
     f = f.replaceAll('f(x)=', '')
     f = f.replaceAll('x', 'tilt')
@@ -200,15 +224,6 @@ const createFormula = () => {
       res[i] = ''
     }
   }
-
-  /*
-  formulas.value = []
-
-if (json.poly1 != '') formulas.value.push({ value: json.poly1, label: 'Formula Order 1' })
-if (json.poly2 != '') formulas.value.push({ value: json.poly2, label: 'Formula Order 2' })
-if (json.poly3 != '') formulas.value.push({ value: json.poly3, label: 'Formula Order 3' })
-if (json.poly4 != '') formulas.value.push({ value: json.poly4, label: 'Formula Order 4' })
-*/
 
   expressions.value = res
   forceRerender()

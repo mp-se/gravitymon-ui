@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { global, saveConfigState, getConfigChanges } from '@/modules/pinia'
 import { getErrorString } from '@/modules/utils'
 import { logDebug, logError, logInfo } from '@/modules/logger'
+import { tempToC, tempToF, roundVal } from '@/modules/utils'
 
 // TODO: Add option to do NTP sync (will add a few seconds)
 
@@ -92,6 +93,30 @@ export const useConfigStore = defineStore('config', {
     }
   },
   actions: {
+    convertTemp() {
+      if(this.temp_format == this.internal_temp_format)
+        return
+      if(this.temp_format == 'C')
+        this.convertTempToC()
+      if(this.temp_format == 'F')
+        this.convertTempToF()
+    },
+    convertTempToC() {
+      if(this.internal_temp_format == 'C')
+        return
+
+      this.temp_adjustment_value = roundVal(this.temp_adjustment_value / 1.8, 2)
+      this.formula_calibration_temp = roundVal(tempToC(this.formula_calibration_temp), 2)
+      this.internal_temp_format = 'C'
+    },
+    convertTempToF() {
+      if(this.internal_temp_format == 'F')
+        return
+
+      this.temp_adjustment_value = roundVal(this.temp_adjustment_value * 1.8, 2)  // Delta value
+      this.formula_calibration_temp = roundVal(tempToF(this.formula_calibration_temp), 2)
+      this.internal_temp_format = 'F'
+    },
     toJson() {
       logInfo('configStore.toJSON()')
       var dest = {}
@@ -210,6 +235,9 @@ export const useConfigStore = defineStore('config', {
           this.formula_calculation_data = json.formula_calculation_data
           this.gyro_calibration_data = json.gyro_calibration_data
           this.dark_mode = json.dark_mode
+
+          this.internal_temp_format = 'C'
+          this.convertTemp()
           callback(true)
         })
         .catch((err) => {
@@ -250,6 +278,8 @@ export const useConfigStore = defineStore('config', {
       global.disabled = true
       logInfo('configStore.sendConfig()', 'Sending /api/config')
 
+      this.convertTempToC() // Device use C internally
+
       var data = getConfigChanges()
       delete data.http_post_format
       delete data.http_post2_format
@@ -261,6 +291,7 @@ export const useConfigStore = defineStore('config', {
       if (JSON.stringify(data).length == 2) {
         logInfo('configStore.sendConfig()', 'No config data to store, skipping step')
         global.disabled = false
+        this.convertTemp()
         callback(true)
         return
       }
@@ -278,14 +309,17 @@ export const useConfigStore = defineStore('config', {
           global.disabled = false
           if (res.status != 200) {
             logError('configStore.sendConfig()', 'Sending /api/config failed', res.status)
+            this.convertTemp()
             callback(false)
           } else {
             logInfo('configStore.sendConfig()', 'Sending /api/config completed')
+            this.convertTemp()
             callback(true)
           }
         })
         .catch((err) => {
           logError('configStore.sendConfig()', err)
+          this.convertTemp()
           callback(false)
           global.disabled = false
         })

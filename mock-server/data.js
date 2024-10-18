@@ -9,7 +9,6 @@ export var configData = {
   id: '7376ef',
   mdns: 'gravmon3',
   temp_format: 'C',
-  gravity_format: 'G',
   // Hardware
   ota_url: 'https://www.gravitymon.com/firmware/',
   storage_sleep: true,
@@ -64,7 +63,7 @@ export var configData = {
   ble_tilt_color: 'pink',
   ble_format: 1,
   // Gravity - Generic
-  gravity_formula: '0.0*tilt^3+0.0*tilt^2+0.0017978*tilt+0.9436',
+  gravity_formula: '-0.0000047197506*tilt^2+0.0019926321*tilt+0.96079491',
   gravity_temp_adjustment: false,
   gyro_read_count: 50,
   gyro_moving_threashold: 500,
@@ -73,6 +72,21 @@ export var configData = {
   ignore_low_angles: false,
   gyro_disabled: false,
   voltage_pin: 35,
+/*
+  gravity_format: 'P',
+  formula_calculation_data: [
+    { a: 25.6, g: 2.0515 },
+    { a: 27.4, g: 2.8147 },
+    { a: 31.75, g: 5.0809 },
+    { a: 37.08, g: 7.5582 },
+    { a: 44.9, g: 10.2348 },
+    { a: 51.45, g: 12.6248 },
+    { a: 59.76, g: 14.9746 },
+    { a: 65.24, g: 16.8259 },
+    { a: 69.62, g: 19.1052 }
+  ],
+*/
+  gravity_format: 'G',
   formula_calculation_data: [
     { a: 25.6, g: 1.008 },
     { a: 27.4, g: 1.011 },
@@ -83,8 +97,10 @@ export var configData = {
     { a: 59.76, g: 1.061 },
     { a: 65.24, g: 1.069 },
     { a: 69.62, g: 1.079 }
-
-    /* 
+  ],
+/* 
+  gravity_format: 'G',
+  formula_calculation_data: [
     { a: 25, g: 1.000 },
     { a: 30, g: 1.010 },
     { a: 35, g: 1.020 },
@@ -95,8 +111,8 @@ export var configData = {
     { a: 60, g: 1.070 },
     { a: 65, g: 1.080 },
     { a: 70, g: 1.090 }
-*/
   ],
+*/
   gyro_calibration_data: {
     ax: 0,
     ay: 0,
