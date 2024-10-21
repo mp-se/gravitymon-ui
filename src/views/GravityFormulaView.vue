@@ -178,9 +178,9 @@ const formulaOptions = ref([])
 const renderComponent = ref(true)
 const formulaOutput = ref(0)
 const formulaOutputOptions = ref([
-{ label: 'Current', value: 0 },
-{ label: 'Formula', value: 1 },
-{ label: 'Table', value: 2 },
+  { label: 'Current', value: 0 },
+  { label: 'Formula', value: 1 },
+  { label: 'Table', value: 2 },
   { label: 'Graph', value: 3 }
 ])
 

@@ -87,9 +87,8 @@ onMounted(() => {
     chartDataCalc.value.push(p)
   })
 
-
   let data = config.formula_calculation_data
-  data.sort((a,b) => a.a == 0 ? 100 : a.a - b.a)
+  data.sort((a, b) => (a.a == 0 ? 100 : a.a - b.a))
 
   for (let i = 0; i < data.length; i++) {
     if (data[i].a > 0)

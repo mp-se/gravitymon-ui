@@ -33,7 +33,7 @@ export function evaluateFormula(formula) {
     var g = calculate(formula, a)
     result.push({ x: parseFloat(a), y: parseFloat(g) })
   }
-  
+
   return result
 }
 
