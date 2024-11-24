@@ -6672,7 +6672,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.1.0";
     },
     uiBuild() {
-      return "..6f9dd1";
+      return "..572286";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -6715,6 +6715,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
       ispindel_config: false,
       self_check: {
         gyro_connected: true,
+        gyro_moving: true,
         gyro_calibration: true,
         temp_connected: true,
         gravity_formula: true,
@@ -6751,6 +6752,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.runtime_average = json.runtime_average;
         this.ispindel_config = json.ispindel_config;
         this.self_check.gyro_connected = json.self_check.gyro_connected;
+        this.self_check.gyro_moving = json.self_check.gyro_moving;
         this.self_check.gyro_calibration = json.self_check.gyro_calibration;
         this.self_check.temp_connected = json.self_check.temp_connected;
         this.self_check.gravity_formula = json.self_check.gravity_formula;
@@ -9688,11 +9690,11 @@ const _sfc_main$X = {
     function refresh() {
       status.load((success) => {
         if (success) {
-          angle.value.sum += parseFloat(status.angle);
-          angle.value.count++;
-          angle.value.average = (Math.round(angle.value.sum / angle.value.count * 100) / 100).toFixed(
-            2
-          );
+          if (!status.self_check.gyro_moving) {
+            angle.value.sum += parseFloat(status.angle);
+            angle.value.count++;
+            angle.value.average = (Math.round(angle.value.sum / angle.value.count * 100) / 100).toFixed(2);
+          }
         }
       });
     }
@@ -9808,7 +9810,13 @@ const _sfc_main$X = {
                 title: "Angle"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_10$n, toDisplayString(unref(status).angle), 1)
+                  createBaseVNode("p", _hoisted_10$n, [
+                    unref(status).self_check.gyro_moving ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+                      createTextVNode(" Gyro is moving ")
+                    ], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+                      createTextVNode(toDisplayString(unref(status).angle), 1)
+                    ], 64))
+                  ])
                 ]),
                 _: 1
               })
@@ -9984,7 +9992,7 @@ const _sfc_main$X = {
                 title: "Platform"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_37, toDisplayString(unref(status).platform), 1)
+                  createBaseVNode("p", _hoisted_37, toDisplayString(unref(status).platform) + ", " + toDisplayString(unref(status).id) + ", " + toDisplayString(unref(status).hardware), 1)
                 ]),
                 _: 1
               })
