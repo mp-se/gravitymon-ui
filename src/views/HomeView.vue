@@ -52,7 +52,10 @@
         >
           <BsCard header="Measurement" color="info" title="Angle">
             <p class="text-center">
-              {{ status.angle }}
+              <template v-if="status.self_check.gyro_moving"> Gyro is moving </template>
+              <template v-else>
+                {{ status.angle }}
+              </template>
             </p>
           </BsCard>
         </div>
@@ -165,9 +168,7 @@
 
         <div class="col-md-4">
           <BsCard header="Device" title="Platform">
-            <p class="text-center">
-             {{ status.platform }}, {{ status.id }}, {{ status.hardware }}
-            </p>
+            <p class="text-center">{{ status.platform }}, {{ status.id }}, {{ status.hardware }}</p>
           </BsCard>
         </div>
 
@@ -208,11 +209,13 @@ function clearAverage() {
 function refresh() {
   status.load((success) => {
     if (success) {
-      angle.value.sum += parseFloat(status.angle)
-      angle.value.count++
-      angle.value.average = (Math.round((angle.value.sum / angle.value.count) * 100) / 100).toFixed(
-        2
-      )
+      if (!status.self_check.gyro_moving) {
+        angle.value.sum += parseFloat(status.angle)
+        angle.value.count++
+        angle.value.average = (
+          Math.round((angle.value.sum / angle.value.count) * 100) / 100
+        ).toFixed(2)
+      }
     }
   })
 }

@@ -28,6 +28,7 @@ export const useStatusStore = defineStore('status', {
       ispindel_config: false,
       self_check: {
         gyro_connected: true,
+        gyro_moving: true,
         gyro_calibration: true,
         temp_connected: true,
         gravity_formula: true,
@@ -67,6 +68,7 @@ export const useStatusStore = defineStore('status', {
           this.runtime_average = json.runtime_average
           this.ispindel_config = json.ispindel_config
           this.self_check.gyro_connected = json.self_check.gyro_connected
+          this.self_check.gyro_moving = json.self_check.gyro_moving
           this.self_check.gyro_calibration = json.self_check.gyro_calibration
           this.self_check.temp_connected = json.self_check.temp_connected
           this.self_check.gravity_formula = json.self_check.gravity_formula

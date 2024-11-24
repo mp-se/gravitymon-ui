@@ -191,6 +191,7 @@ export var statusData = {
   ip: '192.0.0.1',
   self_check: {
     gyro_connected: true,
+    gyro_moving: false,
     gyro_calibration: true,
     temp_connected: true,
     gravity_formula: true,
