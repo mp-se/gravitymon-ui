@@ -1,6 +1,6 @@
 {
-  "name": "GravityMon",
-  "version": "2.0.0",
+  "name": "Gravitymon",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "scripts": {
