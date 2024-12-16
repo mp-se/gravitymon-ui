@@ -6672,7 +6672,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.1.0";
     },
     uiBuild() {
-      return "..bd10c3";
+      return "..a8e3f4";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -18811,16 +18811,16 @@ const _hoisted_12$4 = { class: "badge bg-secondary" };
 const _hoisted_13$4 = { class: "badge bg-secondary" };
 const _hoisted_14$3 = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_15$2 = { class: "row" };
-const _hoisted_16$2 = { class: "col-md-3" };
+const _hoisted_16$2 = { class: "col-md-2" };
 const _hoisted_17$2 = ["disabled"];
 const _hoisted_18$2 = ["hidden"];
-const _hoisted_19$1 = { class: "col-md-3" };
+const _hoisted_19$1 = { class: "col-md-2" };
 const _hoisted_20$1 = ["disabled"];
 const _hoisted_21$1 = ["hidden"];
-const _hoisted_22$1 = { class: "col-md-3" };
+const _hoisted_22$1 = { class: "col-md-2" };
 const _hoisted_23$1 = ["disabled"];
 const _hoisted_24$1 = ["hidden"];
-const _hoisted_25$1 = { class: "col-md-3" };
+const _hoisted_25$1 = { class: "col-md-2" };
 const _hoisted_26$1 = ["disabled"];
 const _hoisted_27 = ["hidden"];
 const _hoisted_28 = {
@@ -20349,7 +20349,7 @@ const _sfc_main$s = {
               createTextVNode(" formula/gyro or "),
               createVNode(_component_router_link, {
                 class: "alert-link",
-                to: "/other/links"
+                to: "/other/support"
               }, {
                 default: withCtx(() => [
                   createTextVNode("delete")
