@@ -60,6 +60,15 @@
             :disabled="pushDisabled"
           />
         </div>
+        <div class="col-md-6">
+          <BsInputSwitch
+            v-model="config.mqtt_retain"
+            label="Set MQTT retain flag"
+            width="4"
+            help="Set the retain flag for messages sent to MQTT."
+            :disabled="pushDisabled"
+          />
+        </div>
         <div class="col-md-9">
           <BsInputTextAreaFormat
             v-model="config.mqtt_format"

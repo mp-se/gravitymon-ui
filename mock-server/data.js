@@ -59,6 +59,7 @@ export var configData = {
   mqtt_user: 'user',
   mqtt_pass: 'pass',
   mqtt_int: 1,
+  mqtt_retain: false,
   // Push BLE
   ble_tilt_color: 'pink',
   ble_format: 1,

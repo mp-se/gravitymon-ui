@@ -73,6 +73,7 @@ export const useConfigStore = defineStore('config', {
       mqtt_pass: '',
       mqtt_int: 0,
       mqtt_format: '',
+      mqtt_retain: false,
       // Push BLE
       ble_tilt_color: '',
       ble_format: 0,
@@ -214,6 +215,7 @@ export const useConfigStore = defineStore('config', {
           this.mqtt_pass = json.mqtt_pass
           this.mqtt_int = json.mqtt_int
           this.mqtt_format = json.mqtt_format
+          this.mqtt_retain = json.mqtt_retain
           // Push BLE
           this.ble_tilt_color = json.ble_tilt_color
           this.ble_format = json.ble_format
