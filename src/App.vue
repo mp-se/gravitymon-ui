@@ -73,7 +73,7 @@
       iSpindel configuration found,
       <router-link class="alert-link" to="/device/hardware">import</router-link>
       formula/gyro or
-      <router-link class="alert-link" to="/other/links">delete</router-link> the configuration.
+      <router-link class="alert-link" to="/other/support">delete</router-link> the configuration.
     </BsMessage>
   </div>
 

@@ -53,7 +53,7 @@
     <hr />
 
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-2">
         <button @click="viewLogs" type="button" class="btn btn-primary" :disabled="global.disabled">
           <span
             class="spinner-border spinner-border-sm"
@@ -64,7 +64,7 @@
           &nbsp;View device logs
         </button>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <button
           @click="removeLogs"
           type="button"
@@ -80,7 +80,7 @@
           &nbsp;Erase device logs
         </button>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <button
           @click="hardwareScan"
           type="button"
@@ -96,7 +96,7 @@
           &nbsp;Hardware scan
         </button>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <button
           @click="showHelp = !showHelp"
           type="button"
