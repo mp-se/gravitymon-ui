@@ -6672,7 +6672,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.1.0";
     },
     uiBuild() {
-      return "..a8e3f4";
+      return "..3d4e94";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -18099,6 +18099,16 @@ const _sfc_main$H = {
   __name: "PushMqttView",
   setup(__props) {
     const render = ref("");
+    const { mqtt_format } = storeToRefs(config);
+    watch(mqtt_format, () => {
+      if (status.platform == "esp8266") {
+        var s = applyTemplate(status, config, config.mqtt_format);
+        if (s.length > 500)
+          global$1.messageWarning = "On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template.";
+        else
+          global$1.messageWarning = "";
+      }
+    });
     const pushDisabled = computed(() => {
       return global$1.disabled || config.use_wifi_direct;
     });
