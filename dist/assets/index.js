@@ -6672,7 +6672,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.1.0";
     },
     uiBuild() {
-      return "..3d4e94";
+      return "..7577da";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -16866,7 +16866,7 @@ const _sfc_main$N = {
                       "onUpdate:modelValue": ($event) => unref(config).formula_calculation_data[index].g = $event,
                       class: "form-control",
                       type: "number",
-                      min: "1",
+                      min: "0",
                       max: "30",
                       step: ".0001",
                       disabled: unref(global$1).disabled || unref(config).gyro_disabled
