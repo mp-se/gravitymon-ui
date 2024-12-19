@@ -63,7 +63,7 @@
                 v-model="config.formula_calculation_data[index].g"
                 class="form-control"
                 type="number"
-                min="1"
+                min="0"
                 max="30"
                 step=".0001"
                 :disabled="global.disabled || config.gyro_disabled"
