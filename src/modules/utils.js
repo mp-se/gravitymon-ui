@@ -236,7 +236,7 @@ export function getErrorString(code) {
       return 'Paylod cannot be parsed, check format and http headers'
   }
 
-  return 'Unknown code, check documentation (' + code + ')'
+  return ''
 }
 
 export function isGyroCalibrated() {

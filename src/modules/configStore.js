@@ -585,10 +585,13 @@ export const useConfigStore = defineStore('config', {
                   if (!data.push_enabled) {
                     global.messageWarning =
                       'No endpoint is defined for this target. Cannot run test.'
-                  } else if (!data.success) {
-                    global.messageError =
-                      'Test failed with error code ' + getErrorString(data.last_error)
-                  } else {
+                    } else if (!data.success && data.push_return_code > 0) {
+                      global.messageError =
+                        'Test failed with error code (' + getErrorString(data.push_return_code) + ')'
+                    } else if (!data.success && data.push_return_code == 0) {
+                      global.messageError =
+                        'Test not started. Might be blocked due to skip SSL flag enabled on esp8266' 
+                    } else {
                     global.messageSuccess = 'Test was successful'
                   }
 
