@@ -6672,7 +6672,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.1.0";
     },
     uiBuild() {
-      return "..74cc24";
+      return "..7641d0";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -7014,7 +7014,7 @@ function getErrorString(code) {
     case 422:
       return "Paylod cannot be parsed, check format and http headers";
   }
-  return "Unknown code, check documentation (" + code + ")";
+  return "";
 }
 function isGyroCalibrated() {
   var g2 = config.gyro_calibration_data;
@@ -7542,8 +7542,10 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
                   global$1.disabled = false;
                   if (!data2.push_enabled) {
                     global$1.messageWarning = "No endpoint is defined for this target. Cannot run test.";
-                  } else if (!data2.success) {
-                    global$1.messageError = "Test failed with error code " + getErrorString(data2.last_error);
+                  } else if (!data2.success && data2.push_return_code > 0) {
+                    global$1.messageError = "Test failed with error code (" + getErrorString(data2.push_return_code) + ")";
+                  } else if (!data2.success && data2.push_return_code == 0) {
+                    global$1.messageError = "Test not started. Might be blocked due to skip SSL flag enabled on esp8266";
                   } else {
                     global$1.messageSuccess = "Test was successful";
                   }
