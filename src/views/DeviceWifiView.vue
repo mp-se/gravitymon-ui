@@ -109,7 +109,7 @@
         <div class="col-md-12">
           <hr />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-12">
           <button
             type="submit"
             class="btn btn-primary w-2"
@@ -122,9 +122,8 @@
               :hidden="!global.disabled"
             ></span>
             &nbsp;Save
-          </button>
-        </div>
-        <div class="col-md-3">
+          </button>&nbsp;
+
           <button
             @click="restart()"
             type="button"

@@ -182,7 +182,7 @@ export var statusData = {
   app_ver: '2.0.0',
   app_build: 'gitrev',
   mdns: 'gravmon',
-  platform: 'esp8266',
+  platform: 'esp32',
   hardware: 'ispindel',
   wifi_ssid: 'wifi',
   runtime_average: 3.12,

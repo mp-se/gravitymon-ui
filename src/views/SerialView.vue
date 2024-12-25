@@ -10,12 +10,11 @@
       <div class="col-md-12">
         <hr />
       </div>
-      <div class="col-md-3">
+      <div class="col-md-12">
         <button @click="clear" type="button" class="btn btn-primary w-2" :disabled="!isConnected">
           Clear
-        </button>
-      </div>
-      <div class="col-md-3">
+        </button>&nbsp;
+
         <button
           @click="connect"
           type="button"

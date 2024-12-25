@@ -128,7 +128,7 @@
         <div class="col-md-12">
           <hr />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-12">
           <button
             type="submit"
             class="btn btn-primary w-2"
@@ -141,9 +141,8 @@
               :hidden="!global.disabled"
             ></span>
             &nbsp;Save
-          </button>
-        </div>
-        <div class="col-md-3">
+          </button>&nbsp;
+
           <button
             @click="restart()"
             type="button"
@@ -157,9 +156,8 @@
               :hidden="!global.disabled"
             ></span>
             &nbsp;Restart device
-          </button>
-        </div>
-        <div class="col-md-3">
+          </button>&nbsp;
+
           <button
             @click="calibrate"
             type="button"
@@ -177,9 +175,8 @@
               class="badge text-bg-danger rounded-circle"
               >1</span
             >
-          </button>
-        </div>
-        <div v-if="status.ispindel_config" class="col-md-3">
+          </button>&nbsp;
+        <template v-if="status.ispindel_config">
           <button
             @click="ispindel"
             type="button"
@@ -198,6 +195,7 @@
               >1</span
             >
           </button>
+          </template>
         </div>
       </div>
     </form>
