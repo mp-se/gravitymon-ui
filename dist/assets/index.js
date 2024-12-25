@@ -6672,7 +6672,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.1.0";
     },
     uiBuild() {
-      return "..7641d0";
+      return "..581c35";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -9615,7 +9615,7 @@ const _hoisted_9$n = {
   key: 2,
   class: "col-md-4"
 };
-const _hoisted_10$n = { class: "text-center" };
+const _hoisted_10$m = { class: "text-center" };
 const _hoisted_11$k = {
   key: 3,
   class: "col-md-4"
@@ -9641,14 +9641,14 @@ const _hoisted_19$c = {
   class: "col-md-4"
 };
 const _hoisted_20$c = { class: "text-center" };
-const _hoisted_21$c = {
+const _hoisted_21$9 = {
   key: 8,
   class: "col-md-4"
 };
-const _hoisted_22$8 = /* @__PURE__ */ createBaseVNode("p", { class: "text-center" }, "Battery level not valid", -1);
-const _hoisted_23$7 = { class: "col-md-4" };
-const _hoisted_24$6 = { class: "text-center" };
-const _hoisted_25$5 = { class: "col-md-4" };
+const _hoisted_22$7 = /* @__PURE__ */ createBaseVNode("p", { class: "text-center" }, "Battery level not valid", -1);
+const _hoisted_23$6 = { class: "col-md-4" };
+const _hoisted_24$4 = { class: "text-center" };
+const _hoisted_25$4 = { class: "col-md-4" };
 const _hoisted_26$4 = { class: "text-center" };
 const _hoisted_27$3 = { class: "col-md-4" };
 const _hoisted_28$3 = { class: "text-center" };
@@ -9658,17 +9658,17 @@ const _hoisted_31$2 = {
   key: 9,
   class: "col-md-4"
 };
-const _hoisted_32$2 = { class: "text-center" };
-const _hoisted_33$2 = /* @__PURE__ */ createBaseVNode("a", {
+const _hoisted_32$1 = { class: "text-center" };
+const _hoisted_33 = /* @__PURE__ */ createBaseVNode("a", {
   class: "link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover",
   href: "https://github.com/mp-se/gravitymon/releases",
   target: "_blank"
 }, "github.com", -1);
-const _hoisted_34$2 = { class: "col-md-4" };
-const _hoisted_35$1 = { class: "text-center" };
-const _hoisted_36$1 = { class: "col-md-4" };
+const _hoisted_34$1 = { class: "col-md-4" };
+const _hoisted_35 = { class: "text-center" };
+const _hoisted_36 = { class: "col-md-4" };
 const _hoisted_37 = { class: "text-center" };
-const _hoisted_38$1 = { class: "col-md-4" };
+const _hoisted_38 = { class: "col-md-4" };
 const _hoisted_39 = { class: "d-flex justify-content-center" };
 const _hoisted_40 = {
   class: "form-check form-switch",
@@ -9813,7 +9813,7 @@ const _sfc_main$X = {
                 title: "Angle"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_10$n, [
+                  createBaseVNode("p", _hoisted_10$m, [
                     unref(status).self_check.gyro_moving ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                       createTextVNode(" Gyro is moving ")
                     ], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
@@ -9906,7 +9906,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            !unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_21$c, [
+            !unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_21$9, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 title: "Error",
@@ -9914,24 +9914,24 @@ const _sfc_main$X = {
                 icon: "bi-x-circle"
               }, {
                 default: withCtx(() => [
-                  _hoisted_22$8
+                  _hoisted_22$7
                 ]),
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            createBaseVNode("div", _hoisted_23$7, [
+            createBaseVNode("div", _hoisted_23$6, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
                 title: "Average runtime"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_24$6, toDisplayString(unref(status).runtime_average) + " s", 1)
+                  createBaseVNode("p", _hoisted_24$4, toDisplayString(unref(status).runtime_average) + " s", 1)
                 ]),
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_25$5, [
+            createBaseVNode("div", _hoisted_25$4, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "WIFI"
@@ -9970,26 +9970,26 @@ const _sfc_main$X = {
                 title: "Upgrade available"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_32$2, [
+                  createBaseVNode("p", _hoisted_32$1, [
                     createTextVNode(toDisplayString(newVersion.value.ver) + " available on ", 1),
-                    _hoisted_33$2
+                    _hoisted_33
                   ])
                 ]),
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            createBaseVNode("div", _hoisted_34$2, [
+            createBaseVNode("div", _hoisted_34$1, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Software version"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_35$1, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
+                  createBaseVNode("p", _hoisted_35, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
                 ]),
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_36$1, [
+            createBaseVNode("div", _hoisted_36, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Platform"
@@ -10000,7 +10000,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_38$1, [
+            createBaseVNode("div", _hoisted_38, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Force gravity mode"
@@ -10039,7 +10039,7 @@ const _hoisted_7$n = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12"
 ], -1);
 const _hoisted_8$o = { class: "col-md-6" };
 const _hoisted_9$m = { class: "col-md-6" };
-const _hoisted_10$m = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_10$l = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
 const _hoisted_11$j = { class: "col-md-9" };
@@ -10052,15 +10052,13 @@ const _hoisted_15$g = { class: "row gy-2" };
 const _hoisted_16$f = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_17$d = { class: "col-md-3" };
+const _hoisted_17$d = { class: "col-md-12" };
 const _hoisted_18$d = ["disabled"];
 const _hoisted_19$b = ["hidden"];
-const _hoisted_20$b = { class: "col-md-3" };
-const _hoisted_21$b = ["disabled"];
-const _hoisted_22$7 = ["hidden"];
-const _hoisted_23$6 = { class: "col-sm-4" };
-const _hoisted_24$5 = ["disabled"];
-const _hoisted_25$4 = ["hidden"];
+const _hoisted_20$b = ["disabled"];
+const _hoisted_21$8 = ["hidden"];
+const _hoisted_22$6 = ["disabled"];
+const _hoisted_23$5 = ["hidden"];
 const _sfc_main$W = {
   __name: "DeviceSettingsView",
   setup(__props) {
@@ -10169,7 +10167,7 @@ const _sfc_main$W = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
-            _hoisted_10$m,
+            _hoisted_10$l,
             createBaseVNode("div", _hoisted_11$j, [
               createVNode(_component_BsInputText, {
                 modelValue: unref(config).ota_url,
@@ -10217,9 +10215,8 @@ const _sfc_main$W = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_19$b),
                 createTextVNode("  Save ")
-              ], 8, _hoisted_18$d)
-            ]),
-            createBaseVNode("div", _hoisted_20$b, [
+              ], 8, _hoisted_18$d),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: _cache[5] || (_cache[5] = ($event) => unref(restart)()),
                 type: "button",
@@ -10231,11 +10228,10 @@ const _sfc_main$W = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_22$7),
+                }, null, 8, _hoisted_21$8),
                 createTextVNode("  Restart device ")
-              ], 8, _hoisted_21$b)
-            ]),
-            createBaseVNode("div", _hoisted_23$6, [
+              ], 8, _hoisted_20$b),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: factory,
                 type: "button",
@@ -10247,9 +10243,9 @@ const _sfc_main$W = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_25$4),
+                }, null, 8, _hoisted_23$5),
                 createTextVNode("  Restore factory defaults ")
-              ], 8, _hoisted_24$5)
+              ], 8, _hoisted_22$6)
             ])
           ])
         ], 32)
@@ -10266,7 +10262,7 @@ const _hoisted_6$m = { class: "col-md-6" };
 const _hoisted_7$m = { class: "col-md-6" };
 const _hoisted_8$n = { class: "col-md-6" };
 const _hoisted_9$l = { class: "col-md-6" };
-const _hoisted_10$l = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_10$k = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
 const _hoisted_11$i = { class: "col-md-6" };
@@ -10285,26 +10281,20 @@ const _hoisted_19$a = { class: "row gy-2" };
 const _hoisted_20$a = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_21$a = { class: "col-md-3" };
-const _hoisted_22$6 = ["disabled"];
-const _hoisted_23$5 = ["hidden"];
-const _hoisted_24$4 = { class: "col-md-3" };
-const _hoisted_25$3 = ["disabled"];
-const _hoisted_26$3 = ["hidden"];
-const _hoisted_27$2 = { class: "col-md-3" };
-const _hoisted_28$2 = ["disabled"];
-const _hoisted_29$1 = ["hidden"];
-const _hoisted_30$1 = {
+const _hoisted_21$7 = { class: "col-md-12" };
+const _hoisted_22$5 = ["disabled"];
+const _hoisted_23$4 = ["hidden"];
+const _hoisted_24$3 = ["disabled"];
+const _hoisted_25$3 = ["hidden"];
+const _hoisted_26$3 = ["disabled"];
+const _hoisted_27$2 = ["hidden"];
+const _hoisted_28$2 = {
   key: 0,
   class: "badge text-bg-danger rounded-circle"
 };
+const _hoisted_29$1 = ["disabled"];
+const _hoisted_30$1 = ["hidden"];
 const _hoisted_31$1 = {
-  key: 0,
-  class: "col-md-3"
-};
-const _hoisted_32$1 = ["disabled"];
-const _hoisted_33$1 = ["hidden"];
-const _hoisted_34$1 = {
   key: 0,
   class: "badge text-bg-danger rounded-circle"
 };
@@ -10478,7 +10468,7 @@ const _sfc_main$V = {
               }, null, 8, ["modelValue", "disabled"])
             ]),
             unref(status).hardware == "floaty" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-              _hoisted_10$l,
+              _hoisted_10$k,
               createBaseVNode("div", _hoisted_11$i, [
                 createVNode(_component_BsInputRadio, {
                   modelValue: unref(config).voltage_pin,
@@ -10546,7 +10536,7 @@ const _sfc_main$V = {
           ]),
           createBaseVNode("div", _hoisted_19$a, [
             _hoisted_20$a,
-            createBaseVNode("div", _hoisted_21$a, [
+            createBaseVNode("div", _hoisted_21$7, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -10557,11 +10547,10 @@ const _sfc_main$V = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_23$5),
+                }, null, 8, _hoisted_23$4),
                 createTextVNode("  Save ")
-              ], 8, _hoisted_22$6)
-            ]),
-            createBaseVNode("div", _hoisted_24$4, [
+              ], 8, _hoisted_22$5),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: _cache[10] || (_cache[10] = ($event) => unref(restart)()),
                 type: "button",
@@ -10573,11 +10562,10 @@ const _sfc_main$V = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_26$3),
+                }, null, 8, _hoisted_25$3),
                 createTextVNode("  Restart device ")
-              ], 8, _hoisted_25$3)
-            ]),
-            createBaseVNode("div", _hoisted_27$2, [
+              ], 8, _hoisted_24$3),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: calibrate,
                 type: "button",
@@ -10589,13 +10577,13 @@ const _sfc_main$V = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_29$1),
+                }, null, 8, _hoisted_27$2),
                 createTextVNode("  Calibrate gyro "),
-                deviceGyroCalibratedBadge() ? (openBlock(), createElementBlock("span", _hoisted_30$1, "1")) : createCommentVNode("", true)
-              ], 8, _hoisted_28$2)
-            ]),
-            unref(status).ispindel_config ? (openBlock(), createElementBlock("div", _hoisted_31$1, [
-              createBaseVNode("button", {
+                deviceGyroCalibratedBadge() ? (openBlock(), createElementBlock("span", _hoisted_28$2, "1")) : createCommentVNode("", true)
+              ], 8, _hoisted_26$3),
+              createTextVNode("  "),
+              unref(status).ispindel_config ? (openBlock(), createElementBlock("button", {
+                key: 0,
                 onClick: ispindel,
                 type: "button",
                 class: "btn btn-secondary",
@@ -10606,11 +10594,11 @@ const _sfc_main$V = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_33$1),
+                }, null, 8, _hoisted_30$1),
                 createTextVNode("  Import iSpindel config "),
-                deviceMigrateIspindelBadge() ? (openBlock(), createElementBlock("span", _hoisted_34$1, "1")) : createCommentVNode("", true)
-              ], 8, _hoisted_32$1)
-            ])) : createCommentVNode("", true)
+                deviceMigrateIspindelBadge() ? (openBlock(), createElementBlock("span", _hoisted_31$1, "1")) : createCommentVNode("", true)
+              ], 8, _hoisted_29$1)) : createCommentVNode("", true)
+            ])
           ])
         ], 32)
       ]);
@@ -10626,7 +10614,7 @@ const _hoisted_6$l = { class: "col-md-6" };
 const _hoisted_7$l = { class: "col-md-6" };
 const _hoisted_8$m = { class: "col-md-6" };
 const _hoisted_9$k = { class: "col-md-6" };
-const _hoisted_10$k = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_10$j = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
 const _hoisted_11$h = { class: "col-md-6" };
@@ -10636,12 +10624,11 @@ const _hoisted_14$g = { class: "row gy-2" };
 const _hoisted_15$e = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_16$d = { class: "col-md-3" };
+const _hoisted_16$d = { class: "col-md-12" };
 const _hoisted_17$b = ["disabled"];
 const _hoisted_18$b = ["hidden"];
-const _hoisted_19$9 = { class: "col-md-3" };
-const _hoisted_20$9 = ["disabled"];
-const _hoisted_21$9 = ["hidden"];
+const _hoisted_19$9 = ["disabled"];
+const _hoisted_20$9 = ["hidden"];
 const _sfc_main$U = {
   __name: "DeviceWifiView",
   setup(__props) {
@@ -10760,7 +10747,7 @@ const _sfc_main$U = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            _hoisted_10$k,
+            _hoisted_10$j,
             createBaseVNode("div", _hoisted_11$h, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).wifi_portal_timeout,
@@ -10814,9 +10801,8 @@ const _sfc_main$U = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_18$b),
                 createTextVNode("  Save ")
-              ], 8, _hoisted_17$b)
-            ]),
-            createBaseVNode("div", _hoisted_19$9, [
+              ], 8, _hoisted_17$b),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: _cache[7] || (_cache[7] = ($event) => unref(restart)()),
                 type: "button",
@@ -10828,9 +10814,9 @@ const _sfc_main$U = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_21$9),
+                }, null, 8, _hoisted_20$9),
                 createTextVNode("  Restart device ")
-              ], 8, _hoisted_20$9)
+              ], 8, _hoisted_19$9)
             ])
           ])
         ], 32)
@@ -10847,7 +10833,7 @@ const _hoisted_6$k = { class: "col-md-6" };
 const _hoisted_7$k = { class: "col-md-6" };
 const _hoisted_8$l = { class: "col-md-6" };
 const _hoisted_9$j = { class: "col-md-6" };
-const _hoisted_10$j = { class: "col-md-6" };
+const _hoisted_10$i = { class: "col-md-6" };
 const _hoisted_11$g = { class: "row gy-2" };
 const _hoisted_12$g = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
@@ -10934,7 +10920,7 @@ const _sfc_main$T = {
                 disabled: unref(global$1).disabled || unref(config).gyro_disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_10$j, [
+            createBaseVNode("div", _hoisted_10$i, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).gyro_moving_threashold,
                 "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).gyro_moving_threashold = $event),
@@ -11406,7 +11392,7 @@ const _hoisted_9$i = /* @__PURE__ */ createBaseVNode("th", {
   scope: "col",
   class: "col-sm-1"
 }, "Order 2", -1);
-const _hoisted_10$i = {
+const _hoisted_10$h = {
   scope: "col",
   class: "col-sm-1"
 };
@@ -11480,7 +11466,7 @@ const _sfc_main$O = {
                 _hoisted_7$j,
                 createBaseVNode("th", _hoisted_8$k, "(" + toDisplayString(Number(maxDeviation.value.o1).toFixed(3)) + ")", 1),
                 _hoisted_9$i,
-                createBaseVNode("th", _hoisted_10$i, "(" + toDisplayString(Number(maxDeviation.value.o2).toFixed(3)) + ")", 1),
+                createBaseVNode("th", _hoisted_10$h, "(" + toDisplayString(Number(maxDeviation.value.o2).toFixed(3)) + ")", 1),
                 _hoisted_11$f,
                 createBaseVNode("th", _hoisted_12$f, "(" + toDisplayString(Number(maxDeviation.value.o3).toFixed(3)) + ")", 1),
                 _hoisted_13$f,
@@ -16705,7 +16691,7 @@ const _hoisted_8$j = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12"
   /* @__PURE__ */ createBaseVNode("label", { class: "form-label fw-bold" }, "Data for gravity calculation (Angle and Gravity)")
 ], -1);
 const _hoisted_9$h = { class: "col-md-6" };
-const _hoisted_10$h = { class: "input-group has-validation" };
+const _hoisted_10$g = { class: "input-group has-validation" };
 const _hoisted_11$e = { class: "input-group-text" };
 const _hoisted_12$e = ["onUpdate:modelValue", "disabled"];
 const _hoisted_13$e = /* @__PURE__ */ createBaseVNode("span", { class: "input-group-text" }, /* @__PURE__ */ toDisplayString("°"), -1);
@@ -16716,10 +16702,10 @@ const _hoisted_17$a = ["onUpdate:modelValue", "disabled"];
 const _hoisted_18$a = { class: "input-group-text" };
 const _hoisted_19$8 = /* @__PURE__ */ createBaseVNode("div", { class: "form-text" }, " Enter the data that is used to create a new formula. The most optimal formula will be selected and also validated towards these values. ", -1);
 const _hoisted_20$8 = { class: "col-md-6" };
-const _hoisted_21$8 = { class: "col-md-6" };
-const _hoisted_22$5 = { class: "row gy-2" };
-const _hoisted_23$4 = { class: "col-md-12" };
-const _hoisted_24$3 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_21$6 = { class: "col-md-6" };
+const _hoisted_22$4 = { class: "row gy-2" };
+const _hoisted_23$3 = { class: "col-md-12" };
+const _hoisted_24$2 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_25$2 = ["disabled"];
 const _hoisted_26$2 = ["hidden"];
 const _hoisted_27$1 = ["disabled"];
@@ -16844,7 +16830,7 @@ const _sfc_main$N = {
             (openBlock(true), createElementBlock(Fragment, null, renderList(unref(config).formula_calculation_data, (data, index) => {
               return openBlock(), createElementBlock(Fragment, { key: index }, [
                 createBaseVNode("div", _hoisted_9$h, [
-                  createBaseVNode("div", _hoisted_10$h, [
+                  createBaseVNode("div", _hoisted_10$g, [
                     createBaseVNode("span", _hoisted_11$e, toDisplayString(index + 1), 1),
                     withDirectives(createBaseVNode("input", {
                       "onUpdate:modelValue": ($event) => unref(config).formula_calculation_data[index].a = $event,
@@ -16893,7 +16879,7 @@ const _sfc_main$N = {
                 disabled: unref(global$1).disabled || unref(config).gyro_disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_21$8, [
+            createBaseVNode("div", _hoisted_21$6, [
               createVNode(_component_BsInputNumber, {
                 modelValue: noDecimals.value,
                 "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => noDecimals.value = $event),
@@ -16907,9 +16893,9 @@ const _sfc_main$N = {
               }, null, 8, ["modelValue", "disabled"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_22$5, [
-            createBaseVNode("div", _hoisted_23$4, [
-              _hoisted_24$3,
+          createBaseVNode("div", _hoisted_22$4, [
+            createBaseVNode("div", _hoisted_23$3, [
+              _hoisted_24$2,
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -16969,7 +16955,7 @@ const _hoisted_6$h = { class: "col-md-6" };
 const _hoisted_7$h = { class: "col-md-6" };
 const _hoisted_8$i = { class: "col-md-6" };
 const _hoisted_9$g = { class: "col-md-6" };
-const _hoisted_10$g = { class: "col-md-6" };
+const _hoisted_10$f = { class: "col-md-6" };
 const _hoisted_11$d = {
   key: 0,
   class: "col-md-6"
@@ -16989,7 +16975,7 @@ const _hoisted_18$9 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12
 ], -1);
 const _hoisted_19$7 = { class: "col-md-3" };
 const _hoisted_20$7 = ["disabled"];
-const _hoisted_21$7 = ["hidden"];
+const _hoisted_21$5 = ["hidden"];
 const _sfc_main$M = {
   __name: "PushSettingsView",
   setup(__props) {
@@ -17157,7 +17143,7 @@ const _sfc_main$M = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_10$g, [
+            createBaseVNode("div", _hoisted_10$f, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).push_timeout,
                 "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).push_timeout = $event),
@@ -17225,7 +17211,7 @@ const _sfc_main$M = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_21$7),
+                }, null, 8, _hoisted_21$5),
                 createTextVNode("  Save ")
               ], 8, _hoisted_20$7)
             ])
@@ -17244,7 +17230,7 @@ const _hoisted_6$g = { class: "row" };
 const _hoisted_7$g = { class: "col-md-9" };
 const _hoisted_8$h = { class: "col-md-3" };
 const _hoisted_9$f = { class: "col-md-9" };
-const _hoisted_10$f = { class: "col-md-3" };
+const _hoisted_10$e = { class: "col-md-3" };
 const _hoisted_11$c = { class: "col-md-9" };
 const _hoisted_12$c = { class: "col-md-3" };
 const _hoisted_13$c = { class: "col-md-6" };
@@ -17254,12 +17240,11 @@ const _hoisted_16$a = { class: "row gy-2" };
 const _hoisted_17$8 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_18$8 = { class: "col-md-3" };
+const _hoisted_18$8 = { class: "col-md-12" };
 const _hoisted_19$6 = ["disabled"];
 const _hoisted_20$6 = ["hidden"];
-const _hoisted_21$6 = { class: "col-md-3" };
-const _hoisted_22$4 = ["disabled"];
-const _hoisted_23$3 = ["hidden"];
+const _hoisted_21$4 = ["disabled"];
+const _hoisted_22$3 = ["hidden"];
 const _sfc_main$L = {
   __name: "PushHttpPost1View",
   setup(__props) {
@@ -17342,7 +17327,7 @@ const _sfc_main$L = {
                 disabled: pushDisabled.value
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_10$f, [
+            createBaseVNode("div", _hoisted_10$e, [
               createVNode(_component_BsDropdown, {
                 label: "Predefined headers",
                 button: "Header",
@@ -17427,9 +17412,8 @@ const _sfc_main$L = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_20$6),
                 createTextVNode("  Save ")
-              ], 8, _hoisted_19$6)
-            ]),
-            createBaseVNode("div", _hoisted_21$6, [
+              ], 8, _hoisted_19$6),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: runTest,
                 type: "button",
@@ -17441,9 +17425,9 @@ const _sfc_main$L = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_23$3),
+                }, null, 8, _hoisted_22$3),
                 createTextVNode("  Run push test ")
-              ], 8, _hoisted_22$4)
+              ], 8, _hoisted_21$4)
             ])
           ])
         ], 40, _hoisted_5$h)
@@ -17460,7 +17444,7 @@ const _hoisted_6$f = { class: "row" };
 const _hoisted_7$f = { class: "col-md-9" };
 const _hoisted_8$g = { class: "col-md-3" };
 const _hoisted_9$e = { class: "col-md-9" };
-const _hoisted_10$e = { class: "col-md-3" };
+const _hoisted_10$d = { class: "col-md-3" };
 const _hoisted_11$b = { class: "col-md-9" };
 const _hoisted_12$b = { class: "col-md-3" };
 const _hoisted_13$b = { class: "col-md-6" };
@@ -17471,12 +17455,11 @@ const _hoisted_17$7 = { class: "row gy-2" };
 const _hoisted_18$7 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_19$5 = { class: "col-md-3" };
+const _hoisted_19$5 = { class: "col-md-12" };
 const _hoisted_20$5 = ["disabled"];
-const _hoisted_21$5 = ["hidden"];
-const _hoisted_22$3 = { class: "col-md-3" };
-const _hoisted_23$2 = ["disabled"];
-const _hoisted_24$2 = ["hidden"];
+const _hoisted_21$3 = ["hidden"];
+const _hoisted_22$2 = ["disabled"];
+const _hoisted_23$2 = ["hidden"];
 const _sfc_main$K = {
   __name: "PushHttpPost2View",
   setup(__props) {
@@ -17559,7 +17542,7 @@ const _sfc_main$K = {
                 disabled: pushDisabled.value
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_10$e, [
+            createBaseVNode("div", _hoisted_10$d, [
               createVNode(_component_BsDropdown, {
                 label: "Predefined headers",
                 button: "Header",
@@ -17644,11 +17627,10 @@ const _sfc_main$K = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_21$5),
+                }, null, 8, _hoisted_21$3),
                 createTextVNode("  Save ")
-              ], 8, _hoisted_20$5)
-            ]),
-            createBaseVNode("div", _hoisted_22$3, [
+              ], 8, _hoisted_20$5),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: runTest,
                 type: "button",
@@ -17660,9 +17642,9 @@ const _sfc_main$K = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_24$2),
+                }, null, 8, _hoisted_23$2),
                 createTextVNode("  Run push test ")
-              ], 8, _hoisted_23$2)
+              ], 8, _hoisted_22$2)
             ])
           ])
         ], 40, _hoisted_5$g)
@@ -17679,7 +17661,7 @@ const _hoisted_6$e = { class: "col-md-9" };
 const _hoisted_7$e = { class: "col-md-3" };
 const _hoisted_8$f = { class: "col-md-9" };
 const _hoisted_9$d = { class: "col-md-3" };
-const _hoisted_10$d = { class: "col-md-9" };
+const _hoisted_10$c = { class: "col-md-9" };
 const _hoisted_11$a = { class: "col-md-3" };
 const _hoisted_12$a = { class: "col-md-6" };
 const _hoisted_13$a = { class: "col-md-9" };
@@ -17688,12 +17670,11 @@ const _hoisted_15$8 = { class: "row gy-2" };
 const _hoisted_16$8 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_17$6 = { class: "col-md-3" };
+const _hoisted_17$6 = { class: "col-md-12" };
 const _hoisted_18$6 = ["disabled"];
 const _hoisted_19$4 = ["hidden"];
-const _hoisted_20$4 = { class: "col-md-3" };
-const _hoisted_21$4 = ["disabled"];
-const _hoisted_22$2 = ["hidden"];
+const _hoisted_20$4 = ["disabled"];
+const _hoisted_21$2 = ["hidden"];
 const _sfc_main$J = {
   __name: "PushHttpGetView",
   setup(__props) {
@@ -17785,7 +17766,7 @@ const _sfc_main$J = {
                 disabled: pushDisabled.value
               }, null, 8, ["options", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_10$d, [
+            createBaseVNode("div", _hoisted_10$c, [
               createVNode(_component_BsInputText, {
                 modelValue: unref(config).http_get_header2,
                 "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(config).http_get_header2 = $event),
@@ -17861,9 +17842,8 @@ const _sfc_main$J = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_19$4),
                 createTextVNode("  Save ")
-              ], 8, _hoisted_18$6)
-            ]),
-            createBaseVNode("div", _hoisted_20$4, [
+              ], 8, _hoisted_18$6),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: runTest,
                 type: "button",
@@ -17875,9 +17855,9 @@ const _sfc_main$J = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_22$2),
+                }, null, 8, _hoisted_21$2),
                 createTextVNode("  Run push test ")
-              ], 8, _hoisted_21$4)
+              ], 8, _hoisted_20$4)
             ])
           ])
         ], 32)
@@ -17894,7 +17874,7 @@ const _hoisted_6$d = { class: "row" };
 const _hoisted_7$d = { class: "col-md-12" };
 const _hoisted_8$e = { class: "col-md-6" };
 const _hoisted_9$c = { class: "col-md-6" };
-const _hoisted_10$c = { class: "col-md-6" };
+const _hoisted_10$b = { class: "col-md-6" };
 const _hoisted_11$9 = { class: "col-md-6" };
 const _hoisted_12$9 = { class: "col-md-9" };
 const _hoisted_13$9 = { class: "col-md-3 gy-2" };
@@ -17902,12 +17882,11 @@ const _hoisted_14$8 = { class: "row gy-2" };
 const _hoisted_15$7 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_16$7 = { class: "col-sm-3" };
+const _hoisted_16$7 = { class: "col-sm-12" };
 const _hoisted_17$5 = ["disabled"];
 const _hoisted_18$5 = ["hidden"];
-const _hoisted_19$3 = { class: "col-md-3" };
-const _hoisted_20$3 = ["disabled"];
-const _hoisted_21$3 = ["hidden"];
+const _hoisted_19$3 = ["disabled"];
+const _hoisted_20$3 = ["hidden"];
 const _sfc_main$I = {
   __name: "PushInfluxdbView",
   setup(__props) {
@@ -17981,7 +17960,7 @@ const _sfc_main$I = {
                 disabled: pushDisabled.value
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_10$c, [
+            createBaseVNode("div", _hoisted_10$b, [
               createVNode(_component_BsInputText, {
                 modelValue: unref(config).influxdb2_token,
                 "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(config).influxdb2_token = $event),
@@ -18048,9 +18027,8 @@ const _sfc_main$I = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_18$5),
                 createTextVNode("  Save ")
-              ], 8, _hoisted_17$5)
-            ]),
-            createBaseVNode("div", _hoisted_19$3, [
+              ], 8, _hoisted_17$5),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: runTest,
                 type: "button",
@@ -18062,9 +18040,9 @@ const _sfc_main$I = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_21$3),
+                }, null, 8, _hoisted_20$3),
                 createTextVNode("  Run push test ")
-              ], 8, _hoisted_20$3)
+              ], 8, _hoisted_19$3)
             ])
           ])
         ], 40, _hoisted_5$e)
@@ -18081,7 +18059,7 @@ const _hoisted_6$c = { class: "row" };
 const _hoisted_7$c = { class: "col-md-9" };
 const _hoisted_8$d = { class: "col-md-3" };
 const _hoisted_9$b = { class: "col-md-6" };
-const _hoisted_10$b = { class: "col-md-6" };
+const _hoisted_10$a = { class: "col-md-6" };
 const _hoisted_11$8 = { class: "col-md-6" };
 const _hoisted_12$8 = { class: "col-md-9" };
 const _hoisted_13$8 = { class: "col-md-3" };
@@ -18089,12 +18067,11 @@ const _hoisted_14$7 = { class: "row gy-2" };
 const _hoisted_15$6 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_16$6 = { class: "col-md-3" };
+const _hoisted_16$6 = { class: "col-md-12" };
 const _hoisted_17$4 = ["disabled"];
 const _hoisted_18$4 = ["hidden"];
-const _hoisted_19$2 = { class: "col-md-3" };
-const _hoisted_20$2 = ["disabled"];
-const _hoisted_21$2 = ["hidden"];
+const _hoisted_19$2 = ["disabled"];
+const _hoisted_20$2 = ["hidden"];
 const _sfc_main$H = {
   __name: "PushMqttView",
   setup(__props) {
@@ -18179,7 +18156,7 @@ const _sfc_main$H = {
                 disabled: pushDisabled.value
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_10$b, [
+            createBaseVNode("div", _hoisted_10$a, [
               createVNode(_component_BsInputText, {
                 modelValue: unref(config).mqtt_pass,
                 "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(config).mqtt_pass = $event),
@@ -18246,9 +18223,8 @@ const _sfc_main$H = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_18$4),
                 createTextVNode("  Save ")
-              ], 8, _hoisted_17$4)
-            ]),
-            createBaseVNode("div", _hoisted_19$2, [
+              ], 8, _hoisted_17$4),
+              createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: runTest,
                 type: "button",
@@ -18260,9 +18236,9 @@ const _sfc_main$H = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_21$2),
+                }, null, 8, _hoisted_20$2),
                 createTextVNode("  Run push test ")
-              ], 8, _hoisted_20$2)
+              ], 8, _hoisted_19$2)
             ])
           ])
         ], 40, _hoisted_5$d)
@@ -18282,7 +18258,7 @@ const _hoisted_8$c = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12"
   /* @__PURE__ */ createBaseVNode("p", null, "Changing bluetooth settings might require a restart to function properly")
 ], -1);
 const _hoisted_9$a = { class: "row gy-2" };
-const _hoisted_10$a = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_10$9 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
 const _hoisted_11$7 = { class: "col-md-3" };
@@ -18368,7 +18344,7 @@ const _sfc_main$G = {
             _hoisted_8$c
           ]),
           createBaseVNode("div", _hoisted_9$a, [
-            _hoisted_10$a,
+            _hoisted_10$9,
             createBaseVNode("div", _hoisted_11$7, [
               createBaseVNode("button", {
                 type: "submit",
@@ -18430,7 +18406,7 @@ const _hoisted_8$a = ["disabled"];
 const _hoisted_9$9 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_10$9 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_10$8 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("p", null, "Restore a previous backup of the device configuration by uploading it.")
 ], -1);
 const _hoisted_11$6 = { class: "row" };
@@ -18619,7 +18595,7 @@ const _sfc_main$E = {
             }, " Create backup ", 8, _hoisted_8$a)
           ]),
           _hoisted_9$9,
-          _hoisted_10$9
+          _hoisted_10$8
         ]),
         createBaseVNode("div", _hoisted_11$6, [
           createBaseVNode("form", {
@@ -18672,7 +18648,7 @@ const _hoisted_6$8 = { style: {} };
 const _hoisted_7$8 = { class: "badge bg-secondary" };
 const _hoisted_8$9 = { class: "badge bg-secondary" };
 const _hoisted_9$8 = { class: "badge bg-secondary" };
-const _hoisted_10$8 = { class: "col-md-12" };
+const _hoisted_10$7 = { class: "col-md-12" };
 const _hoisted_11$5 = { class: "col-md-3" };
 const _hoisted_12$5 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_13$5 = ["disabled"];
@@ -18760,7 +18736,7 @@ const _sfc_main$D = {
                 createBaseVNode("span", _hoisted_9$8, toDisplayString(unref(status).hardware), 1)
               ])
             ]),
-            createBaseVNode("div", _hoisted_10$8, [
+            createBaseVNode("div", _hoisted_10$7, [
               createVNode(_component_BsFileUpload, {
                 name: "upload",
                 id: "upload",
@@ -18804,45 +18780,38 @@ const _hoisted_1$C = { class: "container" };
 const _hoisted_2$y = /* @__PURE__ */ createStaticVNode('<p></p><p class="h3">Links and device logs</p><hr><div class="row"><p> If you need support, want to discuss the software or request any new features you can do that on github.com or homebrewtalk.com. </p></div><div class="row"><div class="col-md-4"><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="https://github.com/mp-se/gravitymon" target="_blank">Report issues on github.com</a></div><div class="col-md-4"><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="https://www.homebrewtalk.com/" target="_blank">Discuss on homebrewtalk.com</a></div><div class="col-md-4"><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="https://www.gravitymon.com/" target="_blank">Read docs on gravitymon.com</a></div></div><hr>', 6);
 const _hoisted_8$8 = { class: "row" };
 const _hoisted_9$7 = { class: "col" };
-const _hoisted_10$7 = { class: "badge bg-secondary" };
+const _hoisted_10$6 = { class: "badge bg-secondary" };
 const _hoisted_11$4 = { class: "badge bg-secondary" };
 const _hoisted_12$4 = { class: "badge bg-secondary" };
 const _hoisted_13$4 = { class: "badge bg-secondary" };
 const _hoisted_14$3 = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
 const _hoisted_15$2 = { class: "row" };
-const _hoisted_16$2 = { class: "col-md-2" };
+const _hoisted_16$2 = { class: "col-md-12" };
 const _hoisted_17$2 = ["disabled"];
 const _hoisted_18$2 = ["hidden"];
-const _hoisted_19$1 = { class: "col-md-2" };
-const _hoisted_20$1 = ["disabled"];
-const _hoisted_21$1 = ["hidden"];
-const _hoisted_22$1 = { class: "col-md-2" };
+const _hoisted_19$1 = ["disabled"];
+const _hoisted_20$1 = ["hidden"];
+const _hoisted_21$1 = ["disabled"];
+const _hoisted_22$1 = ["hidden"];
 const _hoisted_23$1 = ["disabled"];
 const _hoisted_24$1 = ["hidden"];
-const _hoisted_25$1 = { class: "col-md-2" };
-const _hoisted_26$1 = ["disabled"];
-const _hoisted_27 = ["hidden"];
-const _hoisted_28 = {
-  key: 0,
-  class: "col-md-3"
-};
-const _hoisted_29 = ["disabled"];
-const _hoisted_30 = ["hidden"];
-const _hoisted_31 = /* @__PURE__ */ createBaseVNode("div", { class: "row" }, [
+const _hoisted_25$1 = ["disabled"];
+const _hoisted_26$1 = ["hidden"];
+const _hoisted_27 = /* @__PURE__ */ createBaseVNode("div", { class: "row" }, [
   /* @__PURE__ */ createBaseVNode("div", { class: "col" }, [
     /* @__PURE__ */ createBaseVNode("p")
   ])
 ], -1);
-const _hoisted_32 = { class: "row" };
-const _hoisted_33 = { class: "col" };
-const _hoisted_34 = /* @__PURE__ */ createBaseVNode("div", { class: "form-text" }, "Starts with the latest log entry first.", -1);
-const _hoisted_35 = {
+const _hoisted_28 = { class: "row" };
+const _hoisted_29 = { class: "col" };
+const _hoisted_30 = /* @__PURE__ */ createBaseVNode("div", { class: "form-text" }, "Starts with the latest log entry first.", -1);
+const _hoisted_31 = {
   key: 0,
   class: "row"
 };
-const _hoisted_36 = /* @__PURE__ */ createStaticVNode('<div class="col-md-12"><p></p></div><div class="col-md-12"> Common HTTP error codes: <li> 400 - Bad request. Probably an issue with the post format. Do a preview of the format to identify the issue. </li><li> 401 - Unauthorized. The service needs an token or other means to authenticate the device. </li><li>403 - Forbidden. Could be an issue with token or URL.</li><li>404 - Not found. Probably a wrong URL.</li><br> MQTT connection errors: <li>-1 - Connection refused</li><li>-2 - Send header failed</li><li>-3 - Send payload failed</li><li>-4 - Not connected</li><li>-5 - Connection lost</li><li>-6 - No stream</li><li>-7 - No HTTP server</li><li>-8 - Too little RAM available</li><li>-9 - Error encoding</li><li>-10 - Error writing to stream</li><li>-11 - Read timeout</li><li>-100 - Endpoint skipped since its SSL and the device is in gravity mode</li><br> MQTT push on topic errors: <li>-1 - Buffer to short</li><li>-2 - Overflow</li><li>-3 - Network failed connected</li><li>-4 - Network timeout</li><li>-5 - Network read failed</li><li>-6 - Network write failed</li><li>-10 - Connection denied</li><li>-11 - Failed subscription</li><br> WIFI error codes <li>1 - No SSID found.</li><li>4 - Connection failed.</li><li>5 - Connection lost.</li><li>6 - Wrong password.</li><li>7 - Disconnected by AP.</li></div>', 2);
-const _hoisted_38 = [
-  _hoisted_36
+const _hoisted_32 = /* @__PURE__ */ createStaticVNode('<div class="col-md-12"><p></p></div><div class="col-md-12"> Common HTTP error codes: <li> 400 - Bad request. Probably an issue with the post format. Do a preview of the format to identify the issue. </li><li> 401 - Unauthorized. The service needs an token or other means to authenticate the device. </li><li>403 - Forbidden. Could be an issue with token or URL.</li><li>404 - Not found. Probably a wrong URL.</li><br> MQTT connection errors: <li>-1 - Connection refused</li><li>-2 - Send header failed</li><li>-3 - Send payload failed</li><li>-4 - Not connected</li><li>-5 - Connection lost</li><li>-6 - No stream</li><li>-7 - No HTTP server</li><li>-8 - Too little RAM available</li><li>-9 - Error encoding</li><li>-10 - Error writing to stream</li><li>-11 - Read timeout</li><li>-100 - Endpoint skipped since its SSL and the device is in gravity mode</li><br> MQTT push on topic errors: <li>-1 - Buffer to short</li><li>-2 - Overflow</li><li>-3 - Network failed connected</li><li>-4 - Network timeout</li><li>-5 - Network read failed</li><li>-6 - Network write failed</li><li>-10 - Connection denied</li><li>-11 - Failed subscription</li><br> WIFI error codes <li>1 - No SSID found.</li><li>4 - Connection failed.</li><li>5 - Connection lost.</li><li>6 - Wrong password.</li><li>7 - Disconnected by AP.</li></div>', 2);
+const _hoisted_34 = [
+  _hoisted_32
 ];
 const _sfc_main$C = {
   __name: "SupportView",
@@ -18924,7 +18893,7 @@ const _sfc_main$C = {
           createBaseVNode("div", _hoisted_9$7, [
             createBaseVNode("p", null, [
               createTextVNode(" Platform: "),
-              createBaseVNode("span", _hoisted_10$7, toDisplayString(unref(status).platform), 1),
+              createBaseVNode("span", _hoisted_10$6, toDisplayString(unref(status).platform), 1),
               createTextVNode(" Firmware: "),
               createBaseVNode("span", _hoisted_11$4, toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ")", 1),
               createTextVNode(" Hardware: "),
@@ -18949,10 +18918,9 @@ const _sfc_main$C = {
                 "aria-hidden": "true",
                 hidden: !unref(global$1).disabled
               }, null, 8, _hoisted_18$2),
-              createTextVNode("  View device logs ")
-            ], 8, _hoisted_17$2)
-          ]),
-          createBaseVNode("div", _hoisted_19$1, [
+              createTextVNode("  View device logs")
+            ], 8, _hoisted_17$2),
+            createTextVNode("  "),
             createBaseVNode("button", {
               onClick: removeLogs,
               type: "button",
@@ -18964,11 +18932,10 @@ const _sfc_main$C = {
                 role: "status",
                 "aria-hidden": "true",
                 hidden: !unref(global$1).disabled
-              }, null, 8, _hoisted_21$1),
-              createTextVNode("  Erase device logs ")
-            ], 8, _hoisted_20$1)
-          ]),
-          createBaseVNode("div", _hoisted_22$1, [
+              }, null, 8, _hoisted_20$1),
+              createTextVNode("  Erase device logs")
+            ], 8, _hoisted_19$1),
+            createTextVNode("  "),
             createBaseVNode("button", {
               onClick: hardwareScan,
               type: "button",
@@ -18980,11 +18947,10 @@ const _sfc_main$C = {
                 role: "status",
                 "aria-hidden": "true",
                 hidden: !unref(global$1).disabled
-              }, null, 8, _hoisted_24$1),
-              createTextVNode("  Hardware scan ")
-            ], 8, _hoisted_23$1)
-          ]),
-          createBaseVNode("div", _hoisted_25$1, [
+              }, null, 8, _hoisted_22$1),
+              createTextVNode("  Hardware scan")
+            ], 8, _hoisted_21$1),
+            createTextVNode("  "),
             createBaseVNode("button", {
               onClick: _cache[0] || (_cache[0] = ($event) => showHelp.value = !showHelp.value),
               type: "button",
@@ -18996,12 +18962,12 @@ const _sfc_main$C = {
                 role: "status",
                 "aria-hidden": "true",
                 hidden: !unref(global$1).disabled
-              }, null, 8, _hoisted_27),
-              createTextVNode("  Toggle error help ")
-            ], 8, _hoisted_26$1)
-          ]),
-          unref(status).ispindel_config ? (openBlock(), createElementBlock("div", _hoisted_28, [
-            createBaseVNode("button", {
+              }, null, 8, _hoisted_24$1),
+              createTextVNode("  Toggle error help")
+            ], 8, _hoisted_23$1),
+            createTextVNode("  "),
+            unref(status).ispindel_config ? (openBlock(), createElementBlock("button", {
+              key: 0,
               onClick: removeLegacy,
               type: "button",
               class: "btn btn-secondary",
@@ -19012,19 +18978,19 @@ const _sfc_main$C = {
                 role: "status",
                 "aria-hidden": "true",
                 hidden: !unref(global$1).disabled
-              }, null, 8, _hoisted_30),
+              }, null, 8, _hoisted_26$1),
               createTextVNode("  Erase iSpindel config ")
-            ], 8, _hoisted_29)
-          ])) : createCommentVNode("", true)
+            ], 8, _hoisted_25$1)) : createCommentVNode("", true)
+          ])
         ]),
-        _hoisted_31,
-        createBaseVNode("div", _hoisted_32, [
-          createBaseVNode("div", _hoisted_33, [
+        _hoisted_27,
+        createBaseVNode("div", _hoisted_28, [
+          createBaseVNode("div", _hoisted_29, [
             createBaseVNode("pre", null, toDisplayString(logData.value), 1)
           ]),
-          _hoisted_34
+          _hoisted_30
         ]),
-        showHelp.value ? (openBlock(), createElementBlock("div", _hoisted_35, _hoisted_38)) : createCommentVNode("", true)
+        showHelp.value ? (openBlock(), createElementBlock("div", _hoisted_31, _hoisted_34)) : createCommentVNode("", true)
       ]);
     };
   }
@@ -19037,10 +19003,9 @@ const _hoisted_5$8 = { class: "row gy-2" };
 const _hoisted_6$7 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_7$7 = { class: "col-md-3" };
+const _hoisted_7$7 = { class: "col-md-12" };
 const _hoisted_8$7 = ["disabled"];
-const _hoisted_9$6 = { class: "col-md-3" };
-const _hoisted_10$6 = ["disabled"];
+const _hoisted_9$6 = ["disabled"];
 const maxLines = 50;
 const _sfc_main$B = {
   __name: "SerialView",
@@ -19097,15 +19062,14 @@ const _sfc_main$B = {
               type: "button",
               class: "btn btn-primary w-2",
               disabled: !isConnected.value
-            }, " Clear ", 8, _hoisted_8$7)
-          ]),
-          createBaseVNode("div", _hoisted_9$6, [
+            }, " Clear ", 8, _hoisted_8$7),
+            createTextVNode("  "),
             createBaseVNode("button", {
               onClick: connect,
               type: "button",
               class: "btn btn-secondary w-2",
               disabled: isConnected.value
-            }, " Connect ", 8, _hoisted_10$6)
+            }, " Connect ", 8, _hoisted_9$6)
           ])
         ])
       ]);
