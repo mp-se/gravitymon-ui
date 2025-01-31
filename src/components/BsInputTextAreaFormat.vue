@@ -45,6 +45,7 @@ const contextMenuOptions = ref([
   { label: 'Current angle/tilt, ${angle}', value: '${angle}' },
   { label: 'Current angle/tilt, ${tilt}', value: '${tilt}' },
 
+  { label: 'Temperature, ${temp}', value: '${temp}' },
   { label: 'Temperature (C), ${temp-c}', value: '${temp-c}' },
   { label: 'Temperature (F), ${temp-f}', value: '${temp-f}' },
   { label: 'Temperature Unit, ${temp-unit}', value: '${temp-unit}' },
