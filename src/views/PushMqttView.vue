@@ -113,8 +113,8 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Save
-          </button>&nbsp;
+            &nbsp;Save</button
+          >&nbsp;
 
           <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
             <span
@@ -142,12 +142,12 @@ const render = ref('')
 const { mqtt_format } = storeToRefs(config)
 
 watch(mqtt_format, () => {
-  if(status.platform == "esp8266") {
+  if (status.platform == 'esp8266') {
     var s = applyTemplate(status, config, config.mqtt_format)
-    if(s.length > 500)
-      global.messageWarning = "On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template."
-    else
-      global.messageWarning = ""
+    if (s.length > 500)
+      global.messageWarning =
+        'On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template.'
+    else global.messageWarning = ''
   }
 })
 

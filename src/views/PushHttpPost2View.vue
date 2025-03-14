@@ -124,8 +124,8 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Save
-          </button>&nbsp;
+            &nbsp;Save</button
+          >&nbsp;
 
           <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
             <span

@@ -140,8 +140,8 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Save
-          </button>&nbsp;
+            &nbsp;Save</button
+          >&nbsp;
 
           <button
             @click="restart()"
@@ -155,8 +155,8 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Restart device
-          </button>&nbsp;
+            &nbsp;Restart device</button
+          >&nbsp;
 
           <button
             @click="calibrate"
@@ -174,27 +174,27 @@
               v-if="badge.deviceGyroCalibratedBadge()"
               class="badge text-bg-danger rounded-circle"
               >1</span
+            ></button
+          >&nbsp;
+          <template v-if="status.ispindel_config">
+            <button
+              @click="ispindel"
+              type="button"
+              class="btn btn-secondary"
+              :disabled="global.disabled"
             >
-          </button>&nbsp;
-        <template v-if="status.ispindel_config">
-          <button
-            @click="ispindel"
-            type="button"
-            class="btn btn-secondary"
-            :disabled="global.disabled"
-          >
-            <span
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-              :hidden="!global.disabled"
-            ></span>
-            &nbsp;Import iSpindel config&nbsp;<span
-              v-if="badge.deviceMigrateIspindelBadge()"
-              class="badge text-bg-danger rounded-circle"
-              >1</span
-            >
-          </button>
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+                :hidden="!global.disabled"
+              ></span>
+              &nbsp;Import iSpindel config&nbsp;<span
+                v-if="badge.deviceMigrateIspindelBadge()"
+                class="badge text-bg-danger rounded-circle"
+                >1</span
+              >
+            </button>
           </template>
         </div>
       </div>
