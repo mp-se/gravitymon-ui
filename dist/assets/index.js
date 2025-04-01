@@ -7096,10 +7096,10 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return this.url;
     },
     uiVersion() {
-      return "2.1.0";
+      return "2.2.0";
     },
     uiBuild() {
-      return "..caccc3";
+      return "..c14f98";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -7407,7 +7407,7 @@ function applyTemplate(status2, config2, template) {
   s = s.replaceAll("${gravity-unit}", config2.gravity_format);
   try {
     return JSON.stringify(JSON.parse(s), null, 2);
-  } catch (e) {
+  } catch {
     logError("utils.applyTemplate()", "Not a valid json document, returning string");
   }
   return s;
@@ -7965,7 +7965,12 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
             this.getPushTestStatus((success2, data2) => {
               if (success2) {
                 if (data2.status) ;
-                else {
+                else if (!data2.success) {
+                  global$1.disabled = false;
+                  global$1.messageError = "Test failed with error code (" + data2.push_return_code + ")";
+                  callback(true);
+                  clearInterval(check);
+                } else if (data2.success) {
                   global$1.disabled = false;
                   if (!data2.push_enabled) {
                     global$1.messageWarning = "No endpoint is defined for this target. Cannot run test.";
