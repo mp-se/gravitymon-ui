@@ -98,7 +98,7 @@ app.post('/api/push', (req, res) => {
        push_format: "http_format|http_format2|http_format3|influxdb2_format|mqtt_format"
      }
    */
-  if(!req.body.hasOwnProperty("push_format")) {
+  if(!Object.prototype.hasOwnProperty.call(req.body, "push_format")) {
     res.sendStatus(422)
     return
   }  

@@ -580,13 +580,13 @@ export const useConfigStore = defineStore('config', {
               if (success) {
                 if (data.status) {
                   // test is still running, just wait for next check
-               } else if(!data.success){
+                } else if (!data.success) {
                   global.disabled = false
                   global.messageError =
-                  'Test failed with error code (' + data.push_return_code + ')'
+                    'Test failed with error code (' + data.push_return_code + ')'
                   callback(true)
                   clearInterval(check)
-                } else if(data.success){
+                } else if (data.success) {
                   global.disabled = false
                   if (!data.push_enabled) {
                     global.messageWarning =
