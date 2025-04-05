@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..c14f98";
+      return "..4cd6ef";
     },
     disabled32() {
       if (this.disabled) return true;
