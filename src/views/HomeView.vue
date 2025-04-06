@@ -168,7 +168,13 @@
 
         <div class="col-md-4">
           <BsCard header="Device" title="Platform">
-            <p class="text-center">{{ status.platform }}, {{ status.id }}, {{ status.hardware }}</p>
+            <p class="text-center">{{ status.platform }}, {{ status.hardware }} / {{ status.board }}</p>
+          </BsCard>
+        </div>
+
+        <div class="col-md-4">
+          <BsCard header="Device" title="ID">
+            <p class="text-center">{{ status.id }}</p>
           </BsCard>
         </div>
 

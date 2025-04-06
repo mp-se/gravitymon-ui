@@ -15,6 +15,7 @@ export const useStatusStore = defineStore('status', {
       battery: 0,
       sleep_mode: false,
       rssi: 0,
+      board: '',
       app_ver: '',
       app_build: '',
       mdns: '',
@@ -58,6 +59,7 @@ export const useStatusStore = defineStore('status', {
           this.sleep_mode = json.sleep_mode
           this.battery = json.battery
           this.rssi = json.rssi
+          this.board = json.board
           this.app_ver = json.app_ver
           this.app_build = json.app_build
           this.mdns = json.mdns
