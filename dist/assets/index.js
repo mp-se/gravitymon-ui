@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..4cd6ef";
+      return "..86128f";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -7129,6 +7129,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
       battery: 0,
       sleep_mode: false,
       rssi: 0,
+      board: "",
       app_ver: "",
       app_build: "",
       mdns: "",
@@ -7169,6 +7170,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.sleep_mode = json.sleep_mode;
         this.battery = json.battery;
         this.rssi = json.rssi;
+        this.board = json.board;
         this.app_ver = json.app_ver;
         this.app_build = json.app_build;
         this.mdns = json.mdns;
@@ -10114,8 +10116,10 @@ const _hoisted_31 = { class: "text-center" };
 const _hoisted_32 = { class: "col-md-4" };
 const _hoisted_33 = { class: "text-center" };
 const _hoisted_34 = { class: "col-md-4" };
-const _hoisted_35 = { class: "d-flex justify-content-center" };
-const _hoisted_36 = {
+const _hoisted_35 = { class: "text-center" };
+const _hoisted_36 = { class: "col-md-4" };
+const _hoisted_37 = { class: "d-flex justify-content-center" };
+const _hoisted_38 = {
   class: "form-check form-switch",
   style: { "height": "0.7rem" }
 };
@@ -10444,7 +10448,7 @@ const _sfc_main$X = {
                 title: "Platform"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_33, toDisplayString(unref(status).platform) + ", " + toDisplayString(unref(status).id) + ", " + toDisplayString(unref(status).hardware), 1)
+                  createBaseVNode("p", _hoisted_33, toDisplayString(unref(status).platform) + ", " + toDisplayString(unref(status).hardware) + " / " + toDisplayString(unref(status).board), 1)
                 ]),
                 _: 1
               })
@@ -10452,11 +10456,22 @@ const _sfc_main$X = {
             createBaseVNode("div", _hoisted_34, [
               createVNode(_component_BsCard, {
                 header: "Device",
+                title: "ID"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_35, toDisplayString(unref(status).id), 1)
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_36, [
+              createVNode(_component_BsCard, {
+                header: "Device",
                 title: "Force gravity mode"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("div", _hoisted_35, [
-                    createBaseVNode("div", _hoisted_36, [
+                  createBaseVNode("div", _hoisted_37, [
+                    createBaseVNode("div", _hoisted_38, [
                       withDirectives(createBaseVNode("input", {
                         "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => flag.value = $event),
                         class: "form-check-input",
