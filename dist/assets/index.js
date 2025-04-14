@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..7c7449";
+      return "..badfe9";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -18822,7 +18822,7 @@ const _sfc_main$E = {
           let text = e.target.result;
           try {
             const data = JSON.parse(text);
-            if (data.meta.software === "GravityMon" && data.meta.version === "2.0.0") {
+            if (data.meta.software === "GravityMon" && (data.meta.version === "2.0.0" || data.meta.version === "2.2.0")) {
               doRestore2(data.config);
             } else if (data.meta.software === "GravityMon") {
               doRestore1(data);
