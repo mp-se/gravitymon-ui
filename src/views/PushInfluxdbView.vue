@@ -134,7 +134,7 @@ const pushDisabled = computed(() => {
 
 const runTest = () => {
   const data = {
-    push_format: 'influxdb2_format'
+    push_format: 'influxdb2'
   }
 
   global.clearMessages()
