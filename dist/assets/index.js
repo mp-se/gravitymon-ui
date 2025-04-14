@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..86128f";
+      return "..7c7449";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -7514,34 +7514,33 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       http_post_header1: "",
       http_post_header2: "",
       http_post_int: 0,
-      http_post_format: "",
+      http_post_format_gravity: "",
       // Push - Http Post 2
       http_post2_target: "",
       http_post2_header1: "",
       http_post2_header2: "",
       http_post2_int: 0,
-      http_post2_format: "",
+      http_post2_format_gravity: "",
       // Push - Http Get
       http_get_target: "",
       http_get_header1: "",
       http_get_header2: "",
       http_get_int: 0,
-      http_get_format: "",
+      http_get_format_gravity: "",
       // Push - Influx
       influxdb2_target: "",
       influxdb2_org: "",
       influxdb2_bucket: "",
       influxdb2_token: "",
       influxdb2_int: 0,
-      influxdb2_format: "",
+      influxdb2_format_gravity: "",
       // Push - MQTT
       mqtt_target: "",
       mqtt_port: "",
       mqtt_user: "",
       mqtt_pass: "",
       mqtt_int: 0,
-      mqtt_format: "",
-      // mqtt_retain: false,
+      mqtt_format_gravity: "",
       // Push BLE
       ble_tilt_color: "",
       ble_format: 0,
@@ -7646,29 +7645,24 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         this.http_post_header1 = json.http_post_header1;
         this.http_post_header2 = json.http_post_header2;
         this.http_post_int = json.http_post_int;
-        this.http_post_format = json.http_post_format;
         this.http_post2_target = json.http_post2_target;
         this.http_post2_header1 = json.http_post2_header1;
         this.http_post2_header2 = json.http_post2_header2;
         this.http_post2_int = json.http_post2_int;
-        this.http_post2_format = json.http_post2_format;
         this.http_get_target = json.http_get_target;
         this.http_get_header1 = json.http_get_header1;
         this.http_get_header2 = json.http_get_header2;
         this.http_get_int = json.http_get_int;
-        this.http_get_format = json.http_get_format;
         this.influxdb2_target = json.influxdb2_target;
         this.influxdb2_org = json.influxdb2_org;
         this.influxdb2_bucket = json.influxdb2_bucket;
         this.influxdb2_token = json.influxdb2_token;
         this.influxdb2_int = json.influxdb2_int;
-        this.influxdb2_format = json.influxdb2_format;
         this.mqtt_target = json.mqtt_target;
         this.mqtt_port = json.mqtt_port;
         this.mqtt_user = json.mqtt_user;
         this.mqtt_pass = json.mqtt_pass;
         this.mqtt_int = json.mqtt_int;
-        this.mqtt_format = json.mqtt_format;
         this.ble_tilt_color = json.ble_tilt_color;
         this.ble_format = json.ble_format;
         this.gravity_formula = json.gravity_formula;
@@ -7699,12 +7693,12 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         signal: AbortSignal.timeout(global$1.fetchTimout)
       }).then((res) => res.json()).then((json) => {
         global$1.disabled = false;
-        this.http_post_format = decodeURIComponent(json.http_post_format);
-        this.http_post2_format = decodeURIComponent(json.http_post2_format);
-        this.http_get_format = decodeURIComponent(json.http_get_format);
-        this.influxdb2_format = decodeURIComponent(json.influxdb2_format);
-        this.mqtt_format = decodeURIComponent(json.mqtt_format);
-        this.mqtt_format = this.mqtt_format.replaceAll("|", "|\n");
+        this.http_post_format_gravity = decodeURIComponent(json.http_post_format_gravity);
+        this.http_post2_format_gravity = decodeURIComponent(json.http_post2_format_gravity);
+        this.http_get_format_gravity = decodeURIComponent(json.http_get_format_gravity);
+        this.influxdb2_format_gravity = decodeURIComponent(json.influxdb2_format_gravity);
+        this.mqtt_format_gravity = decodeURIComponent(json.mqtt_format_gravity);
+        this.mqtt_format_gravity = this.mqtt_format_gravity.replaceAll("|", "|\n");
         callback(true);
       }).catch((err) => {
         global$1.disabled = false;
@@ -7717,11 +7711,11 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       logInfo("configStore.sendConfig()", "Sending /api/config");
       this.convertTempToC();
       var data = getConfigChanges();
-      delete data.http_post_format;
-      delete data.http_post2_format;
-      delete data.http_get_format;
-      delete data.influxdb2_format;
-      delete data.mqtt_format;
+      delete data.http_post_format_gravity;
+      delete data.http_post2_format_gravity;
+      delete data.http_get_format_gravity;
+      delete data.influxdb2_format_gravity;
+      delete data.mqtt_format_gravity;
       if (JSON.stringify(data).length == 2) {
         logInfo("configStore.sendConfig()", "No config data to store, skipping step");
         global$1.disabled = false;
@@ -7761,25 +7755,25 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       var data2 = getConfigChanges();
       var data = {};
       var cnt = 0;
-      data = data2.http_post_format !== void 0 ? { http_post_format: encodeURIComponent(data2.http_post_format) } : {};
+      data = data2.http_post_format_gravity !== void 0 ? { http_post_format_gravity: encodeURIComponent(data2.http_post_format_gravity) } : {};
       this.sendOneFormat(data, (success) => {
         if (success) cnt += 1;
-        data = data2.http_post2_format !== void 0 ? { http_post2_format: encodeURIComponent(data2.http_post2_format) } : {};
+        data = data2.http_post2_format_gravity !== void 0 ? { http_post2_format_gravity: encodeURIComponent(data2.http_post2_format_gravity) } : {};
         this.sendOneFormat(data, (success2) => {
           if (success2) cnt += 1;
-          data = data2.http_get_format !== void 0 ? { http_get_format: encodeURIComponent(data2.http_get_format) } : {};
+          data = data2.http_get_format_gravity !== void 0 ? { http_get_format_gravity: encodeURIComponent(data2.http_get_format_gravity) } : {};
           this.sendOneFormat(data, (success3) => {
             if (success3) cnt += 1;
-            data = data2.influxdb2_format !== void 0 ? {
-              influxdb2_format: encodeURIComponent(data2.influxdb2_format)
+            data = data2.influxdb2_format_gravity !== void 0 ? {
+              influxdb2_format_gravity: encodeURIComponent(data2.influxdb2_format_gravity)
             } : {};
             this.sendOneFormat(data, (success4) => {
               if (success4) cnt += 1;
-              if (data2.mqtt_format !== void 0) {
-                data2.mqtt_format = data2.mqtt_format.replaceAll("\n", "");
-                data2.mqtt_format = data2.mqtt_format.replaceAll("\r", "");
+              if (data2.mqtt_format_gravity !== void 0) {
+                data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll("\n", "");
+                data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll("\r", "");
               }
-              data = data2.mqtt_format !== void 0 ? { mqtt_format: encodeURIComponent(data2.mqtt_format) } : {};
+              data = data2.mqtt_format_gravity !== void 0 ? { mqtt_format_gravity: encodeURIComponent(data2.mqtt_format_gravity) } : {};
               this.sendOneFormat(data, (success5) => {
                 if (success5) cnt += 1;
                 if (cnt == 5) callback(true);
@@ -17673,7 +17667,7 @@ const _sfc_main$L = {
     });
     const runTest = () => {
       const data = {
-        push_format: "http_post_format"
+        push_format: "http_post"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -17689,10 +17683,10 @@ const _sfc_main$L = {
       config.http_post_header2 = opt;
     };
     const httpFormatCallback = (opt) => {
-      config.http_post_format = decodeURIComponent(opt);
+      config.http_post_format_gravity = decodeURIComponent(opt);
     };
     const renderFormat = () => {
-      render.value = applyTemplate(status, config, config.http_post_format);
+      render.value = applyTemplate(status, config, config.http_post_format_gravity);
     };
     const save = () => {
       if (!validateCurrentForm()) return;
@@ -17789,8 +17783,8 @@ const _sfc_main$L = {
             ]),
             createBaseVNode("div", _hoisted_11$8, [
               createVNode(_component_BsInputTextAreaFormat, {
-                modelValue: unref(config).http_post_format,
-                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).http_post_format = $event),
+                modelValue: unref(config).http_post_format_gravity,
+                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).http_post_format_gravity = $event),
                 rows: "6",
                 label: "Data format",
                 help: "Format template used to create the data sent to the remote service",
@@ -17884,7 +17878,7 @@ const _sfc_main$K = {
     });
     const runTest = () => {
       const data = {
-        push_format: "http_post2_format"
+        push_format: "http_post2"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -17900,10 +17894,10 @@ const _sfc_main$K = {
       config.http_post2_header2 = opt;
     };
     const httpFormatCallback = (opt) => {
-      config.http_post2_format = decodeURIComponent(opt);
+      config.http_post2_format_gravity = decodeURIComponent(opt);
     };
     const renderFormat = () => {
-      render.value = applyTemplate(status, config, config.http_post2_format);
+      render.value = applyTemplate(status, config, config.http_post2_format_gravity);
     };
     const save = () => {
       if (!validateCurrentForm()) return;
@@ -18002,8 +17996,8 @@ const _sfc_main$K = {
           createBaseVNode("div", _hoisted_11$7, [
             createBaseVNode("div", _hoisted_12$6, [
               createVNode(_component_BsInputTextAreaFormat, {
-                modelValue: unref(config).http_post2_format,
-                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).http_post2_format = $event),
+                modelValue: unref(config).http_post2_format_gravity,
+                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).http_post2_format_gravity = $event),
                 rows: "6",
                 label: "Data format",
                 help: "Format template used to create the data sent to the remote service",
@@ -18095,7 +18089,7 @@ const _sfc_main$J = {
     });
     const runTest = () => {
       const data = {
-        push_format: "http_get_format"
+        push_format: "http_get"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -18111,10 +18105,10 @@ const _sfc_main$J = {
       config.http_get_header2 = opt;
     };
     const httpFormatCallback = (opt) => {
-      config.http_get_format = decodeURIComponent(opt);
+      config.http_get_format_gravity = decodeURIComponent(opt);
     };
     const renderFormat = () => {
-      var s = applyTemplate(status, config, config.http_get_format);
+      var s = applyTemplate(status, config, config.http_get_format_gravity);
       render.value = s.replaceAll("&", "&");
     };
     const save = () => {
@@ -18211,8 +18205,8 @@ const _sfc_main$J = {
             ]),
             createBaseVNode("div", _hoisted_10$8, [
               createVNode(_component_BsInputTextAreaFormat, {
-                modelValue: unref(config).http_get_format,
-                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).http_get_format = $event),
+                modelValue: unref(config).http_get_format_gravity,
+                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).http_get_format_gravity = $event),
                 rows: "6",
                 label: "Data format",
                 help: "Format template used to create the data sent to the remote service",
@@ -18303,17 +18297,17 @@ const _sfc_main$I = {
     });
     const runTest = () => {
       const data = {
-        push_format: "influxdb2_format"
+        push_format: "influxdb2"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
       });
     };
     const influxdb2FormatCallback = (opt) => {
-      config.influxdb2_format = decodeURIComponent(opt);
+      config.influxdb2_format_gravity = decodeURIComponent(opt);
     };
     const renderFormat = () => {
-      render.value = applyTemplate(status, config, config.influxdb2_format);
+      render.value = applyTemplate(status, config, config.influxdb2_format_gravity);
     };
     const save = () => {
       if (!validateCurrentForm()) return;
@@ -18392,8 +18386,8 @@ const _sfc_main$I = {
             ]),
             createBaseVNode("div", _hoisted_9$8, [
               createVNode(_component_BsInputTextAreaFormat, {
-                modelValue: unref(config).influxdb2_format,
-                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).influxdb2_format = $event),
+                modelValue: unref(config).influxdb2_format_gravity,
+                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).influxdb2_format_gravity = $event),
                 rows: "6",
                 label: "Data format",
                 help: "Format template used to create the data sent to the remote service",
@@ -18479,10 +18473,10 @@ const _sfc_main$H = {
   __name: "PushMqttView",
   setup(__props) {
     const render = ref("");
-    const { mqtt_format } = storeToRefs(config);
-    watch(mqtt_format, () => {
+    const { mqtt_format_gravity } = storeToRefs(config);
+    watch(mqtt_format_gravity, () => {
       if (status.platform == "esp8266") {
-        var s = applyTemplate(status, config, config.mqtt_format);
+        var s = applyTemplate(status, config, config.mqtt_format_gravity);
         if (s.length > 500)
           global$1.messageWarning = "On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template.";
         else global$1.messageWarning = "";
@@ -18493,18 +18487,18 @@ const _sfc_main$H = {
     });
     const runTest = () => {
       const data = {
-        push_format: "mqtt_format"
+        push_format: "mqtt"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
       });
     };
     const mqttFormatCallback = (opt) => {
-      config.mqtt_format = decodeURIComponent(opt);
-      config.mqtt_format = config.mqtt_format.replaceAll("|", "|\n");
+      config.mqtt_format_gravity = decodeURIComponent(opt);
+      config.mqtt_format_gravity = config.mqtt_format.replaceAll("|", "|\n");
     };
     const renderFormat = () => {
-      render.value = applyTemplate(status, config, config.mqtt_format);
+      render.value = applyTemplate(status, config, config.mqtt_format_gravity);
     };
     const save = () => {
       if (!validateCurrentForm()) return;
@@ -18583,8 +18577,8 @@ const _sfc_main$H = {
             ]),
             createBaseVNode("div", _hoisted_9$7, [
               createVNode(_component_BsInputTextAreaFormat, {
-                modelValue: unref(config).mqtt_format,
-                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).mqtt_format = $event),
+                modelValue: unref(config).mqtt_format_gravity,
+                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).mqtt_format_gravity = $event),
                 rows: "6",
                 label: "Data format",
                 help: "Format template used to create the data sent to the remote service",
@@ -18802,15 +18796,15 @@ const _sfc_main$E = {
     const progress = ref(0);
     function backup() {
       var backup2 = {
-        meta: { version: "2.0.0", software: "GravityMon", created: "" },
+        meta: { version: "2.2.0", software: "GravityMon", created: "" },
         config: JSON.parse(config.toJson())
       };
       backup2.meta.created = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
-      backup2.config.http_post_format = encodeURIComponent(backup2.config.http_post_format);
-      backup2.config.http_post2_format = encodeURIComponent(backup2.config.http_post2_format);
-      backup2.config.http_get_format = encodeURIComponent(backup2.config.http_get_format);
-      backup2.config.influxdb2_format = encodeURIComponent(backup2.config.influxdb2_format);
-      backup2.config.mqtt_format = encodeURIComponent(backup2.config.mqtt_format);
+      backup2.config.http_post_format_gravity = encodeURIComponent(backup2.config.http_post_format_gravity);
+      backup2.config.http_post2_format_gravity = encodeURIComponent(backup2.config.http_post2_format_gravity);
+      backup2.config.http_get_format_gravity = encodeURIComponent(backup2.config.http_get_format_gravity);
+      backup2.config.influxdb2_format_gravity = encodeURIComponent(backup2.config.influxdb2_format_gravity);
+      backup2.config.mqtt_format_gravity = encodeURIComponent(backup2.config.mqtt_format_gravity);
       var s = JSON.stringify(backup2, null, 2);
       var name = config.mdns + ".txt";
       download(s, "text/plain", name);
@@ -18933,17 +18927,22 @@ const _sfc_main$E = {
           config[newK] = json.config[k];
         }
       }
-      config.http_post_format = decodeURIComponent(json.format["http-1"]);
-      config.http_post2_format = decodeURIComponent(json.format["http-2"]);
-      config.http_get_format = decodeURIComponent(json.format["http-3"]);
-      config.influxdb2_format = decodeURIComponent(json.format["influxdb"]);
-      config.mqtt_format = decodeURIComponent(json.format["mqtt"]);
+      config.http_post_format_gravity = decodeURIComponent(json.format["http-1"]);
+      config.http_post2_format_gravity = decodeURIComponent(json.format["http-2"]);
+      config.http_get_format_gravity = decodeURIComponent(json.format["http-3"]);
+      config.influxdb2_format_gravity = decodeURIComponent(json.format["influxdb"]);
+      config.mqtt_format_gravity = decodeURIComponent(json.format["mqtt"]);
       getConfigChanges();
       config.saveAll();
     }
     function doRestore2(json) {
       for (var k in json) {
         if (k.endsWith("_format")) {
+          config[k] = decodeURIComponent(json[k]);
+        } else {
+          config[k + "_gravity"] = json[k];
+        }
+        if (k.endsWith("_format_gravity")) {
           config[k] = decodeURIComponent(json[k]);
         } else {
           config[k] = json[k];
@@ -20665,7 +20664,7 @@ const _sfc_main$s = {
         unref(global$1).initialized ? (openBlock(), createBlock(_component_router_view, { key: 2 })) : createCommentVNode("", true),
         unref(global$1).initialized ? (openBlock(), createBlock(_sfc_main$t, {
           key: 3,
-          text: "(c) 2021-2024 Magnus Persson"
+          text: "(c) 2021-2025 Magnus Persson"
         })) : createCommentVNode("", true)
       ], 64);
     };
