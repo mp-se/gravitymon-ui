@@ -114,7 +114,7 @@ function restore() {
       let text = e.target.result
       try {
         const data = JSON.parse(text)
-        if (data.meta.software === 'GravityMon' && data.meta.version === '2.0.0') {
+        if (data.meta.software === 'GravityMon' && (data.meta.version === '2.0.0' || data.meta.version === '2.2.0')) {
           doRestore2(data.config)
         } else if (data.meta.software === 'GravityMon') {
           doRestore1(data)
