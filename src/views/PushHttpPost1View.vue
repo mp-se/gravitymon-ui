@@ -81,7 +81,7 @@
         </div>
         <div class="col-md-9">
           <BsInputTextAreaFormat
-            v-model="config.http_post_format"
+            v-model="config.http_post_format_gravity"
             rows="6"
             label="Data format"
             help="Format template used to create the data sent to the remote service"
@@ -179,11 +179,11 @@ const httpHeaderH2Callback = (opt) => {
 }
 
 const httpFormatCallback = (opt) => {
-  config.http_post_format = decodeURIComponent(opt)
+  config.http_post_format_gravity = decodeURIComponent(opt)
 }
 
 const renderFormat = () => {
-  render.value = applyTemplate(status, config, config.http_post_format)
+  render.value = applyTemplate(status, config, config.http_post_format_gravity)
 }
 
 const save = () => {

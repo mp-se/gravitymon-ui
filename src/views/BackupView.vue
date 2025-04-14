@@ -81,7 +81,7 @@ const progress = ref(0)
 
 function backup() {
   var backup = {
-    meta: { version: '2.0.0', software: 'GravityMon', created: '' },
+    meta: { version: '2.2.0', software: 'GravityMon', created: '' },
     config: JSON.parse(config.toJson())
   }
 
@@ -89,11 +89,11 @@ function backup() {
 
   logDebug('BackupView.backup()', backup)
 
-  backup.config.http_post_format = encodeURIComponent(backup.config.http_post_format)
-  backup.config.http_post2_format = encodeURIComponent(backup.config.http_post2_format)
-  backup.config.http_get_format = encodeURIComponent(backup.config.http_get_format)
-  backup.config.influxdb2_format = encodeURIComponent(backup.config.influxdb2_format)
-  backup.config.mqtt_format = encodeURIComponent(backup.config.mqtt_format)
+  backup.config.http_post_format_gravity = encodeURIComponent(backup.config.http_post_format_gravity)
+  backup.config.http_post2_format_gravity = encodeURIComponent(backup.config.http_post2_format_gravity)
+  backup.config.http_get_format_gravity = encodeURIComponent(backup.config.http_get_format_gravity)
+  backup.config.influxdb2_format_gravity = encodeURIComponent(backup.config.influxdb2_format_gravity)
+  backup.config.mqtt_format_gravity = encodeURIComponent(backup.config.mqtt_format_gravity)
 
   var s = JSON.stringify(backup, null, 2)
   var name = config.mdns + '.txt'
@@ -245,11 +245,11 @@ function doRestore1(json) {
   /**
    * Convert the format part
    */
-  config.http_post_format = decodeURIComponent(json.format['http-1'])
-  config.http_post2_format = decodeURIComponent(json.format['http-2'])
-  config.http_get_format = decodeURIComponent(json.format['http-3'])
-  config.influxdb2_format = decodeURIComponent(json.format['influxdb'])
-  config.mqtt_format = decodeURIComponent(json.format['mqtt'])
+  config.http_post_format_gravity = decodeURIComponent(json.format['http-1'])
+  config.http_post2_format_gravity = decodeURIComponent(json.format['http-2'])
+  config.http_get_format_gravity = decodeURIComponent(json.format['http-3'])
+  config.influxdb2_format_gravity = decodeURIComponent(json.format['influxdb'])
+  config.mqtt_format_gravity = decodeURIComponent(json.format['mqtt'])
 
   getConfigChanges()
   config.saveAll()
@@ -258,6 +258,12 @@ function doRestore1(json) {
 function doRestore2(json) {
   for (var k in json) {
     if (k.endsWith('_format')) {
+      config[k] = decodeURIComponent(json[k])
+    } else {
+      config[k + "_gravity"] = json[k]
+    }
+
+    if (k.endsWith('_format_gravity')) {
       config[k] = decodeURIComponent(json[k])
     } else {
       config[k] = json[k]
