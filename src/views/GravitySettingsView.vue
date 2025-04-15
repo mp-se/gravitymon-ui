@@ -21,7 +21,7 @@
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.formula_calibration_temp"
-            :unit="'°' + config.temp_format"
+            :unit="'°' + config.temp_unit"
             label="Gravity calibration temp"
             min="0"
             max="100"

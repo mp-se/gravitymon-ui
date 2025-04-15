@@ -93,7 +93,7 @@
 
         <div class="col-md-4" v-if="status.self_check.temp_connected">
           <BsCard header="Measurement" color="info" title="Temperature">
-            <p class="text-center">{{ status.temp }} °{{ status.temp_format }}</p>
+            <p class="text-center">{{ status.temp }} °{{ status.temp_unit }}</p>
           </BsCard>
         </div>
 

@@ -86,7 +86,7 @@
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.temp_adjustment_value"
-            :unit="'°' + config.temp_format"
+            :unit="'°' + config.temp_unit"
             label="Temperature sensor adjustment"
             min="-10"
             max="10"

@@ -8,7 +8,7 @@ export var configData = {
   // Device configuration
   id: '7376ef',
   mdns: 'gravmon3',
-  temp_format: 'C',
+  temp_unit: 'C',
   // Hardware
   ota_url: 'https://www.gravitymon.com/firmware/',
   storage_sleep: true,
@@ -176,7 +176,7 @@ export var statusData = {
   temp: 12,
   sleep_interval: 300,
   battery: 3.81,
-  temp_format: 'C',
+  temp_unit: 'C',
   sleep_mode: false,
   rssi: -56,
   app_ver: '2.0.0',

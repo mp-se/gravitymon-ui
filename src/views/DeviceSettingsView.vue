@@ -29,7 +29,7 @@
 
         <div class="col-md-6">
           <BsInputRadio
-            v-model="config.temp_format"
+            v-model="config.temp_unit"
             :options="tempOptions"
             label="Temperature Format"
             width=""

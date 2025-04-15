@@ -146,7 +146,7 @@ export function applyTemplate(status, config, template) {
   var c = status.temp
   var f = status.temp
 
-  if (config.temp_format === 'C') {
+  if (config.temp_unit === 'C') {
     f = tempToF(status.temp)
   } else {
     c = tempToC(status.temp)
@@ -187,7 +187,7 @@ export function applyTemplate(status, config, template) {
   s = s.replaceAll('${sleep-interval}', config.sleep_interval)
   s = s.replaceAll('${token}', config.token)
   s = s.replaceAll('${token2}', config.token2)
-  s = s.replaceAll('${temp-unit}', config.temp_format)
+  s = s.replaceAll('${temp-unit}', config.temp_unit)
   s = s.replaceAll('${gravity-unit}', config.gravity_format)
 
   try {

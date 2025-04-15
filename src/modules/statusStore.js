@@ -10,7 +10,7 @@ export const useStatusStore = defineStore('status', {
       gravity: 0,
       gravity_format: '',
       temp: 0,
-      temp_format: '',
+      temp_unit: '',
       sleep_interval: 0,
       battery: 0,
       sleep_mode: false,
@@ -52,7 +52,7 @@ export const useStatusStore = defineStore('status', {
           logDebug('statusStore.load()', json)
           this.id = json.id
           this.angle = json.angle
-          this.temp_format = json.temp_format
+          this.temp_unit = json.temp_unit
           this.gravity = json.gravity
           this.gravity_format = json.gravity_format
           this.temp = json.temp
