@@ -89,7 +89,8 @@ const checkCode = () => {
 
   if (mqtt.value) {
     if (json.value) {
-      var arr = model.value.replaceAll('\n', '').split('|')
+      var input = model.value
+      var arr = input.replaceAll('\n', '').split('|')
 
       arr.forEach((value) => {
         const data = value.substring(value.indexOf(':') + 1)
