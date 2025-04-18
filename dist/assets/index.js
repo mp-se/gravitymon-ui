@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..f3e1d6";
+      return "..232b44";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -21773,7 +21773,8 @@ const _sfc_main$2 = /* @__PURE__ */ Object.assign({
       jsonError.value = "";
       if (mqtt.value) {
         if (json.value) {
-          var arr = model.value.replaceAll("\n", "").split("|");
+          var input = model.value;
+          var arr = input.replaceAll("\n", "").split("|");
           arr.forEach((value) => {
             const data = value.substring(value.indexOf(":") + 1);
             if (data.indexOf("{") >= 0 && data.indexOf("}") > 0) {
