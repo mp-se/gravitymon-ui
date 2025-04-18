@@ -102,6 +102,7 @@
             @click="renderFormat"
             v-model="render"
             :code="true"
+            :json="true"
             title="Format preview"
             button="Preview format"
             :disabled="pushDisabled"

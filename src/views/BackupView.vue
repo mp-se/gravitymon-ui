@@ -89,10 +89,16 @@ function backup() {
 
   logDebug('BackupView.backup()', backup)
 
-  backup.config.http_post_format_gravity = encodeURIComponent(backup.config.http_post_format_gravity)
-  backup.config.http_post2_format_gravity = encodeURIComponent(backup.config.http_post2_format_gravity)
+  backup.config.http_post_format_gravity = encodeURIComponent(
+    backup.config.http_post_format_gravity
+  )
+  backup.config.http_post2_format_gravity = encodeURIComponent(
+    backup.config.http_post2_format_gravity
+  )
   backup.config.http_get_format_gravity = encodeURIComponent(backup.config.http_get_format_gravity)
-  backup.config.influxdb2_format_gravity = encodeURIComponent(backup.config.influxdb2_format_gravity)
+  backup.config.influxdb2_format_gravity = encodeURIComponent(
+    backup.config.influxdb2_format_gravity
+  )
   backup.config.mqtt_format_gravity = encodeURIComponent(backup.config.mqtt_format_gravity)
 
   var s = JSON.stringify(backup, null, 2)
@@ -114,7 +120,10 @@ function restore() {
       let text = e.target.result
       try {
         const data = JSON.parse(text)
-        if (data.meta.software === 'GravityMon' && (data.meta.version === '2.0.0' || data.meta.version === '2.2.0')) {
+        if (
+          data.meta.software === 'GravityMon' &&
+          (data.meta.version === '2.0.0' || data.meta.version === '2.2.0')
+        ) {
           doRestore2(data.config)
         } else if (data.meta.software === 'GravityMon') {
           doRestore1(data)
@@ -260,7 +269,7 @@ function doRestore2(json) {
     if (k.endsWith('_format')) {
       config[k] = decodeURIComponent(json[k])
     } else {
-      config[k + "_gravity"] = json[k]
+      config[k + '_gravity'] = json[k]
     }
 
     if (k.endsWith('_format_gravity')) {

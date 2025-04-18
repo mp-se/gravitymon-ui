@@ -91,6 +91,8 @@
             @click="renderFormat"
             v-model="render"
             :code="true"
+            :json="true"
+            :mqtt="true"
             title="Format preview"
             button="Preview format"
             :disabled="pushDisabled"
@@ -166,7 +168,7 @@ const runTest = () => {
 
 const mqttFormatCallback = (opt) => {
   config.mqtt_format_gravity = decodeURIComponent(opt)
-  config.mqtt_format_gravity = config.mqtt_format.replaceAll('|', '|\n')
+  config.mqtt_format_gravity = config.mqtt_format_gravity.replaceAll('|', '|\n')
 }
 
 const renderFormat = () => {
