@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..232b44";
+      return "..0c9415";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -10461,7 +10461,7 @@ const _sfc_main$X = {
             createBaseVNode("div", _hoisted_36, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "Force gravity mode"
+                title: "Force config mode"
               }, {
                 default: withCtx(() => [
                   createBaseVNode("div", _hoisted_37, [
