@@ -20,6 +20,7 @@ export const useConfigStore = defineStore('config', {
       voltage_factor: 0,
       voltage_config: 0,
       gyro_temp: false,
+      gyro_swap_xy: false,
       battery_saving: false,
       tempsensor_resolution: 0,
       temp_adjustment_value: 0, // C or F
@@ -160,6 +161,7 @@ export const useConfigStore = defineStore('config', {
           this.voltage_factor = json.voltage_factor
           this.voltage_config = json.voltage_config
           this.gyro_temp = json.gyro_temp
+          this.gyro_swap_xy = json.gyro_swap_xy
           this.battery_saving = json.battery_saving
           this.tempsensor_resolution = json.tempsensor_resolution
           this.temp_adjustment_value = json.temp_adjustment_value

@@ -15,6 +15,7 @@ export var configData = {
   voltage_factor: 1.59,
   voltage_config: 4.15,
   gyro_temp: false,
+  gyro_swap_xy: false,
   battery_saving: true,
   tempsensor_resolution: 9,
   temp_adjustment_value: 0,
@@ -199,6 +200,9 @@ export var statusData = {
     battery_level: true,
     push_targets: true
   },
+  ble_supported: true,
+  // gyro_family: 'MPU6050',
+  gyro_family: 'ICM42670-p',
   wifi_setup: false
 }
 

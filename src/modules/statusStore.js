@@ -36,6 +36,8 @@ export const useStatusStore = defineStore('status', {
         battery_level: true,
         push_targets: true
       },
+      ble_supported: true,
+      gyro_family: '',      
       wifi_setup: false,
       connected: true
     }
@@ -76,6 +78,8 @@ export const useStatusStore = defineStore('status', {
           this.self_check.gravity_formula = json.self_check.gravity_formula
           this.self_check.battery_level = json.self_check.battery_level
           this.self_check.push_targets = json.self_check.push_targets
+          this.ble_supported = json.ble_supported 
+          this.gyro_family = json.gyro_family
           this.total_heap = json.total_heap
           this.free_heap = json.free_heap
           this.wifi_setup = json.wifi_setup

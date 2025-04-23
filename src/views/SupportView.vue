@@ -42,6 +42,8 @@
         <p>
           Platform:
           <span class="badge bg-secondary">{{ status.platform }}</span>
+          Gyro:
+          <span class="badge bg-secondary">{{ status.gyro_family }}</span>
           Firmware:
           <span class="badge bg-secondary">{{ status.app_ver }} ({{ status.app_build }})</span>
           Hardware:

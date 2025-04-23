@@ -83,7 +83,7 @@
             :disabled="disableDs18b20"
           ></BsInputRadio>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <BsInputNumber
             v-model="config.temp_adjustment_value"
             :unit="'°' + config.temp_unit"
@@ -96,7 +96,7 @@
             :disabled="global.disabled"
           ></BsInputNumber>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <BsInputSwitch
             v-model="config.gyro_temp"
             label="Gyro temperature"
@@ -104,15 +104,20 @@
             :disabled="global.disabled || config.gyro_disabled"
           ></BsInputSwitch>
         </div>
-        <div class="col-md-12">
-          <hr />
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <BsInputSwitch
             v-model="config.gyro_disabled"
             label="Disable gyro"
             help="If active then the device works as a temperature sensor and ALL gyro functions are disabled"
             :disabled="global.disabled"
+          ></BsInputSwitch>
+        </div>
+        <div class="col-md-4">
+          <BsInputSwitch
+            v-model="config.gyro_swap_xy"
+            label="Swap X and Y axis"
+            :disabled="global.disabled || config.gyro_disabled || status.gyro_family != 'ICM42670-p'"
+            help="Normally the X asis is used for tilt but some boards have a different orientation"
           ></BsInputSwitch>
         </div>
         <div class="col-md-6">

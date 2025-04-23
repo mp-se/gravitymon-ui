@@ -17431,7 +17431,10 @@ const _sfc_main$M = {
             pwrActive = 160;
             break;
           case "esp32":
-            pwrActive = 320;
+            if(status.hardware == 'FLOATY')
+              pwrActive = 330;
+            else
+              pwrActive = 320;
             break;
           case "esp32c3":
             pwrActive = 320;
@@ -17441,9 +17444,6 @@ const _sfc_main$M = {
             break;
           case "esp32s3":
             pwrActive = 300;
-            break;
-          case "esp32lite":
-            pwrActive = 330;
             break;
           default:
             logError("PushSettingsView.calculateBatteryLife()", "Unknown platform", status.platform);
@@ -17455,7 +17455,6 @@ const _sfc_main$M = {
           case "esp32":
           case "esp32c3":
           case "esp32s2":
-          case "esp32lite":
             pwrActive = 160;
             break;
           case "esp32s3":
