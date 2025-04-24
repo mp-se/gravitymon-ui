@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..00f7c2";
+      return "..301966";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -7156,7 +7156,14 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
       connected: true
     };
   },
-  getters: {},
+  getters: {
+    needsCalibration() {
+      return this.gyro_family == "MPU6050" || this.gyro_family == "MPU6500" ? true : false;
+    },
+    allowGyroSwapXY() {
+      return this.gyro_family != "MPU6050" && this.gyro_family != "MPU6500" ? true : false;
+    }
+  },
   actions: {
     load(callback) {
       logInfo("statusStore.load()", "Fetching /api/status");
@@ -9991,6 +9998,7 @@ function deviceMigrateIspindelBadge() {
   return status.ispindel_config ? 1 : 0;
 }
 function deviceGyroCalibratedBadge() {
+  if (!status.needsCalibration) return 0;
   return isGyroCalibrated() ? 0 : 1;
 }
 function deviceWifiBadge() {
@@ -10115,11 +10123,17 @@ const _hoisted_30 = { class: "col-md-4" };
 const _hoisted_31 = { class: "text-center" };
 const _hoisted_32 = { class: "col-md-4" };
 const _hoisted_33 = { class: "text-center" };
-const _hoisted_34 = { class: "col-md-4" };
-const _hoisted_35 = { class: "text-center" };
+const _hoisted_34 = { class: "badge bg-secondary" };
+const _hoisted_35 = { class: "badge bg-secondary" };
 const _hoisted_36 = { class: "col-md-4" };
-const _hoisted_37 = { class: "d-flex justify-content-center" };
-const _hoisted_38 = {
+const _hoisted_37 = { class: "text-center" };
+const _hoisted_38 = { class: "badge bg-secondary" };
+const _hoisted_39 = { class: "badge bg-secondary" };
+const _hoisted_40 = { class: "col-md-4" };
+const _hoisted_41 = { class: "text-center" };
+const _hoisted_42 = { class: "col-md-4" };
+const _hoisted_43 = { class: "d-flex justify-content-center" };
+const _hoisted_44 = {
   class: "form-check form-switch",
   style: { "height": "0.7rem" }
 };
@@ -10191,7 +10205,7 @@ const _sfc_main$X = {
       const _component_BsCard = resolveComponent("BsCard");
       const _component_router_link = resolveComponent("router-link");
       return openBlock(), createElementBlock("div", _hoisted_1$K, [
-        _cache[12] || (_cache[12] = createBaseVNode("p", null, null, -1)),
+        _cache[16] || (_cache[16] = createBaseVNode("p", null, null, -1)),
         unref(status) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
           !unref(status).self_check.push_targets ? (openBlock(), createBlock(_component_BsMessage, {
             key: 0,
@@ -10448,18 +10462,12 @@ const _sfc_main$X = {
                 title: "Platform"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_33, toDisplayString(unref(status).platform) + ", " + toDisplayString(unref(status).hardware) + ", " + toDisplayString(unref(status).board) + ", " + toDisplayString(unref(status).gyro_family), 1)
-                ]),
-                _: 1
-              })
-            ]),
-            createBaseVNode("div", _hoisted_34, [
-              createVNode(_component_BsCard, {
-                header: "Device",
-                title: "ID"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_35, toDisplayString(unref(status).id), 1)
+                  createBaseVNode("p", _hoisted_33, [
+                    _cache[12] || (_cache[12] = createTextVNode(" Platform: ")),
+                    createBaseVNode("span", _hoisted_34, toDisplayString(unref(status).platform), 1),
+                    _cache[13] || (_cache[13] = createTextVNode(" Variant: ")),
+                    createBaseVNode("span", _hoisted_35, toDisplayString(unref(status).hardware), 1)
+                  ])
                 ]),
                 _: 1
               })
@@ -10467,11 +10475,38 @@ const _sfc_main$X = {
             createBaseVNode("div", _hoisted_36, [
               createVNode(_component_BsCard, {
                 header: "Device",
+                title: "Hardware"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_37, [
+                    _cache[14] || (_cache[14] = createTextVNode(" Board: ")),
+                    createBaseVNode("span", _hoisted_38, toDisplayString(unref(status).board), 1),
+                    _cache[15] || (_cache[15] = createTextVNode(" Gyro: ")),
+                    createBaseVNode("span", _hoisted_39, toDisplayString(unref(status).gyro_family), 1)
+                  ])
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_40, [
+              createVNode(_component_BsCard, {
+                header: "Device",
+                title: "ID"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_41, toDisplayString(unref(status).id), 1)
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_42, [
+              createVNode(_component_BsCard, {
+                header: "Device",
                 title: "Force config mode"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("div", _hoisted_37, [
-                    createBaseVNode("div", _hoisted_38, [
+                  createBaseVNode("div", _hoisted_43, [
+                    createBaseVNode("div", _hoisted_44, [
                       withDirectives(createBaseVNode("input", {
                         "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => flag.value = $event),
                         class: "form-check-input",
@@ -10718,11 +10753,17 @@ const _hoisted_5$m = { class: "col-md-6" };
 const _hoisted_6$m = { class: "col-md-6" };
 const _hoisted_7$j = { class: "col-md-6" };
 const _hoisted_8$j = { class: "col-md-12" };
-const _hoisted_9$h = { class: "col-md-4" };
-const _hoisted_10$g = { class: "col-md-4" };
-const _hoisted_11$d = { class: "col-md-4" };
-const _hoisted_12$b = { class: "col-md-4" };
-const _hoisted_13$b = { class: "col-md-6" };
+const _hoisted_9$h = { class: "col-md-6" };
+const _hoisted_10$g = { class: "col-md-6" };
+const _hoisted_11$d = { class: "col-md-6" };
+const _hoisted_12$b = {
+  key: 1,
+  class: "col-md-6"
+};
+const _hoisted_13$b = {
+  key: 2,
+  class: "col-md-6"
+};
 const _hoisted_14$a = { class: "row gy-2" };
 const _hoisted_15$a = { class: "col-md-12" };
 const _hoisted_16$8 = ["disabled"];
@@ -10836,7 +10877,7 @@ const _sfc_main$V = {
         _cache[24] || (_cache[24] = createBaseVNode("p", null, null, -1)),
         _cache[25] || (_cache[25] = createBaseVNode("p", { class: "h3" }, "Device - Hardware", -1)),
         _cache[26] || (_cache[26] = createBaseVNode("hr", null, null, -1)),
-        !unref(isGyroCalibrated)() ? (openBlock(), createBlock(_component_BsMessage, {
+        !unref(isGyroCalibrated)() && unref(status).needsCalibration ? (openBlock(), createBlock(_component_BsMessage, {
           key: 0,
           dismissable: "true",
           message: "",
@@ -10970,16 +11011,16 @@ const _sfc_main$V = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_12$b, [
+            unref(status).allowGyroSwapXY ? (openBlock(), createElementBlock("div", _hoisted_12$b, [
               createVNode(_component_BsInputSwitch, {
                 modelValue: unref(config).gyro_swap_xy,
                 "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => unref(config).gyro_swap_xy = $event),
                 label: "Swap X and Y axis",
-                disabled: unref(global$1).disabled || unref(config).gyro_disabled || unref(status).gyro_family != "ICM42670-p",
-                help: "Normally the X asis is used for tilt but some boards have a different orientation"
+                disabled: unref(global$1).disabled || unref(config).gyro_disabled,
+                help: "Normally the X asis is used for tilt but some boards have a different orientation and use Y axis instead"
               }, null, 8, ["modelValue", "disabled"])
-            ]),
-            createBaseVNode("div", _hoisted_13$b, [
+            ])) : createCommentVNode("", true),
+            unref(status).needsCalibration ? (openBlock(), createElementBlock("div", _hoisted_13$b, [
               createVNode(_component_BsInputReadonly, {
                 modelValue: calibrationValues.value,
                 "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => calibrationValues.value = $event),
@@ -10987,7 +11028,7 @@ const _sfc_main$V = {
                 help: "Shows the current gyro calibraton values",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
-            ])
+            ])) : createCommentVNode("", true)
           ]),
           createBaseVNode("div", _hoisted_14$a, [
             _cache[23] || (_cache[23] = createBaseVNode("div", { class: "col-md-12" }, [
@@ -11007,7 +11048,7 @@ const _sfc_main$V = {
                 }, null, 8, _hoisted_17$6),
                 _cache[16] || (_cache[16] = createTextVNode("  Save"))
               ], 8, _hoisted_16$8),
-              _cache[20] || (_cache[20] = createTextVNode("  ")),
+              _cache[21] || (_cache[21] = createTextVNode("  ")),
               createBaseVNode("button", {
                 onClick: _cache[11] || (_cache[11] = ($event) => unref(restart)()),
                 type: "button",
@@ -11022,25 +11063,27 @@ const _sfc_main$V = {
                 }, null, 8, _hoisted_19$3),
                 _cache[17] || (_cache[17] = createTextVNode("  Restart device"))
               ], 8, _hoisted_18$5),
-              _cache[21] || (_cache[21] = createTextVNode("  ")),
-              createBaseVNode("button", {
-                onClick: calibrate,
-                type: "button",
-                class: "btn btn-secondary",
-                disabled: unref(global$1).disabled || !unref(status).self_check.gyro_connected
-              }, [
-                createBaseVNode("span", {
-                  class: "spinner-border spinner-border-sm",
-                  role: "status",
-                  "aria-hidden": "true",
-                  hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_21$2),
-                _cache[18] || (_cache[18] = createTextVNode("  Calibrate gyro ")),
-                deviceGyroCalibratedBadge() ? (openBlock(), createElementBlock("span", _hoisted_22$1, "1")) : createCommentVNode("", true)
-              ], 8, _hoisted_20$2),
               _cache[22] || (_cache[22] = createTextVNode("  ")),
+              unref(status).needsCalibration ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+                createBaseVNode("button", {
+                  onClick: calibrate,
+                  type: "button",
+                  class: "btn btn-secondary",
+                  disabled: unref(global$1).disabled || !unref(status).self_check.gyro_connected
+                }, [
+                  createBaseVNode("span", {
+                    class: "spinner-border spinner-border-sm",
+                    role: "status",
+                    "aria-hidden": "true",
+                    hidden: !unref(global$1).disabled
+                  }, null, 8, _hoisted_21$2),
+                  _cache[18] || (_cache[18] = createTextVNode("  Calibrate gyro ")),
+                  deviceGyroCalibratedBadge() ? (openBlock(), createElementBlock("span", _hoisted_22$1, "1")) : createCommentVNode("", true)
+                ], 8, _hoisted_20$2),
+                _cache[19] || (_cache[19] = createTextVNode("  "))
+              ], 64)) : createCommentVNode("", true),
               unref(status).ispindel_config ? (openBlock(), createElementBlock("button", {
-                key: 0,
+                key: 1,
                 onClick: ispindel,
                 type: "button",
                 class: "btn btn-secondary",
@@ -11052,7 +11095,7 @@ const _sfc_main$V = {
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_24),
-                _cache[19] || (_cache[19] = createTextVNode("  Import iSpindel config ")),
+                _cache[20] || (_cache[20] = createTextVNode("  Import iSpindel config ")),
                 deviceMigrateIspindelBadge() ? (openBlock(), createElementBlock("span", _hoisted_25, "1")) : createCommentVNode("", true)
               ], 8, _hoisted_23$1)) : createCommentVNode("", true)
             ])
@@ -17446,8 +17489,7 @@ const _sfc_main$M = {
           case "esp32":
             if (status.hardware == "FLOATY")
               pwrActive = 330;
-            else
-              pwrActive = 320;
+            else pwrActive = 320;
             break;
           case "esp32c3":
             pwrActive = 320;
