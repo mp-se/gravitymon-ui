@@ -4,7 +4,12 @@
     <p class="h3">Device - Hardware</p>
     <hr />
 
-    <BsMessage v-if="!isGyroCalibrated()" dismissable="true" message="" alert="warning">
+    <BsMessage
+      v-if="!isGyroCalibrated() && status.needsCalibration"
+      dismissable="true"
+      message=""
+      alert="warning"
+    >
       You need to calibrate the gyro at 90 degrees
     </BsMessage>
 
@@ -83,7 +88,7 @@
             :disabled="disableDs18b20"
           ></BsInputRadio>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <BsInputNumber
             v-model="config.temp_adjustment_value"
             :unit="'°' + config.temp_unit"
@@ -96,7 +101,7 @@
             :disabled="global.disabled"
           ></BsInputNumber>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <BsInputSwitch
             v-model="config.gyro_temp"
             label="Gyro temperature"
@@ -104,7 +109,7 @@
             :disabled="global.disabled || config.gyro_disabled"
           ></BsInputSwitch>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <BsInputSwitch
             v-model="config.gyro_disabled"
             label="Disable gyro"
@@ -112,15 +117,15 @@
             :disabled="global.disabled"
           ></BsInputSwitch>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6" v-if="status.allowGyroSwapXY">
           <BsInputSwitch
             v-model="config.gyro_swap_xy"
             label="Swap X and Y axis"
-            :disabled="global.disabled || config.gyro_disabled || status.gyro_family != 'ICM42670-p'"
-            help="Normally the X asis is used for tilt but some boards have a different orientation"
+            :disabled="global.disabled || config.gyro_disabled"
+            help="Normally the X asis is used for tilt but some boards have a different orientation and use Y axis instead"
           ></BsInputSwitch>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" v-if="status.needsCalibration">
           <BsInputReadonly
             v-model="calibrationValues"
             label="Gyro calibration"
@@ -163,24 +168,27 @@
             &nbsp;Restart device</button
           >&nbsp;
 
-          <button
-            @click="calibrate"
-            type="button"
-            class="btn btn-secondary"
-            :disabled="global.disabled || !status.self_check.gyro_connected"
-          >
-            <span
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-              :hidden="!global.disabled"
-            ></span>
-            &nbsp;Calibrate gyro&nbsp;<span
-              v-if="badge.deviceGyroCalibratedBadge()"
-              class="badge text-bg-danger rounded-circle"
-              >1</span
-            ></button
-          >&nbsp;
+          <template v-if="status.needsCalibration">
+            <button
+              @click="calibrate"
+              type="button"
+              class="btn btn-secondary"
+              :disabled="global.disabled || !status.self_check.gyro_connected"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+                :hidden="!global.disabled"
+              ></span>
+              &nbsp;Calibrate gyro&nbsp;<span
+                v-if="badge.deviceGyroCalibratedBadge()"
+                class="badge text-bg-danger rounded-circle"
+                >1</span
+              ></button
+            >&nbsp;
+          </template>
+
           <template v-if="status.ispindel_config">
             <button
               @click="ispindel"

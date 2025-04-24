@@ -180,6 +180,7 @@ export var statusData = {
   temp_unit: 'C',
   sleep_mode: false,
   rssi: -56,
+  board: 'D1 MINI',
   app_ver: '2.0.0',
   app_build: 'gitrev',
   mdns: 'gravmon',
@@ -201,8 +202,9 @@ export var statusData = {
     push_targets: true
   },
   ble_supported: true,
-  // gyro_family: 'MPU6050',
-  gyro_family: 'ICM42670-p',
+  gyro_family: 'MPU6050',
+  // gyro_family: 'MPU6500',
+  // gyro_family: 'ICM42670-p',
   wifi_setup: false
 }
 

@@ -37,12 +37,19 @@ export const useStatusStore = defineStore('status', {
         push_targets: true
       },
       ble_supported: true,
-      gyro_family: '',      
+      gyro_family: '',
       wifi_setup: false,
       connected: true
     }
   },
-  getters: {},
+  getters: {
+    needsCalibration() {
+      return this.gyro_family == 'MPU6050' || this.gyro_family == 'MPU6500' ? true : false
+    },
+    allowGyroSwapXY() {
+      return this.gyro_family != 'MPU6050' && this.gyro_family != 'MPU6500' ? true : false
+    }
+  },
   actions: {
     load(callback) {
       logInfo('statusStore.load()', 'Fetching /api/status')
@@ -78,7 +85,7 @@ export const useStatusStore = defineStore('status', {
           this.self_check.gravity_formula = json.self_check.gravity_formula
           this.self_check.battery_level = json.self_check.battery_level
           this.self_check.push_targets = json.self_check.push_targets
-          this.ble_supported = json.ble_supported 
+          this.ble_supported = json.ble_supported
           this.gyro_family = json.gyro_family
           this.total_heap = json.total_heap
           this.free_heap = json.free_heap

@@ -169,7 +169,17 @@
         <div class="col-md-4">
           <BsCard header="Device" title="Platform">
             <p class="text-center">
-              {{ status.platform }}, {{ status.hardware }}, {{ status.board }}, {{ status.gyro_family }}
+              Platform: <span class="badge bg-secondary">{{ status.platform }}</span> Variant:
+              <span class="badge bg-secondary">{{ status.hardware }}</span>
+            </p>
+          </BsCard>
+        </div>
+
+        <div class="col-md-4">
+          <BsCard header="Device" title="Hardware">
+            <p class="text-center">
+              Board: <span class="badge bg-secondary">{{ status.board }}</span> Gyro:
+              <span class="badge bg-secondary">{{ status.gyro_family }}</span>
             </p>
           </BsCard>
         </div>

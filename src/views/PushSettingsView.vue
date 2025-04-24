@@ -213,10 +213,9 @@ const calculateBatteryLife = () => {
         pwrActive = 160
         break
       case 'esp32':
-        if(status.hardware == 'FLOATY')
+        if (status.hardware == 'FLOATY')
           pwrActive = 330 // mA per hour (260-379 mA)
-        else
-          pwrActive = 320 // mA per hour (260-379 mA)
+        else pwrActive = 320 // mA per hour (260-379 mA)
         break
       case 'esp32c3':
         pwrActive = 320 // mA per hour (290-350 mA)

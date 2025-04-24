@@ -27,6 +27,8 @@ export function deviceMigrateIspindelBadge() {
 }
 
 export function deviceGyroCalibratedBadge() {
+  if (!status.needsCalibration) return 0
+
   return isGyroCalibrated() ? 0 : 1
 }
 
