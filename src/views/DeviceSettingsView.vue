@@ -85,6 +85,15 @@
             :disabled="global.disabled"
           ></BsInputRadio>
         </div>
+
+        <div class="col-md-6">
+          <BsInputSwitch
+            v-model="config.flash_logging"
+            label="Enable flash logging"
+            help="If disabled the average runtime feature is not available"
+            :disabled="global.disabled"
+          ></BsInputSwitch>
+        </div>        
       </div>
 
       <div class="row gy-2">

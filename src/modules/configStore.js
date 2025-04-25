@@ -88,7 +88,8 @@ export const useConfigStore = defineStore('config', {
       ignore_low_angles: false,
       gyro_calibration_data: [],
       dark_mode: false,
-      gyro_disabled: false
+      gyro_disabled: false,
+      flash_logging: true,
     }
   },
   actions: {
@@ -167,6 +168,7 @@ export const useConfigStore = defineStore('config', {
           this.temp_adjustment_value = json.temp_adjustment_value
           this.gyro_disabled = json.gyro_disabled
           this.voltage_pin = json.voltage_pin
+          this.flash_logging = json.flash_logging
           // Wifi
           this.wifi_portal_timeout = json.wifi_portal_timeout
           this.wifi_connect_timeout = json.wifi_connect_timeout
