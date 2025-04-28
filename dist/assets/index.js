@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..880b71";
+      return "..423436";
     },
     disabled32() {
       if (this.disabled) return true;
@@ -7122,7 +7122,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
       id: "",
       angle: 0,
       gravity: 0,
-      gravity_format: "",
+      gravity_unit: "",
       temp: 0,
       temp_unit: "",
       sleep_interval: 0,
@@ -7174,7 +7174,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.angle = json.angle;
         this.temp_unit = json.temp_unit;
         this.gravity = json.gravity;
-        this.gravity_format = json.gravity_format;
+        this.gravity_unit = json.gravity_unit;
         this.temp = json.temp;
         this.sleep_mode = json.sleep_mode;
         this.battery = json.battery;
@@ -7207,7 +7207,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.angle = (Math.round(this.angle * 100) / 100).toFixed(2);
         this.temp = (Math.round(this.temp * 100) / 100).toFixed(2);
         this.runtime_average = (Math.round(this.runtime_average * 100) / 100).toFixed(2);
-        if (this.gravity_format === "G")
+        if (this.gravity_unit === "G")
           this.gravity = (Math.round(this.gravity * 1e4) / 1e4).toFixed(4);
         else this.gravity = (Math.round(this.gravity * 100) / 100).toFixed(2);
         logInfo("statusStore.load()", "Fetching /api/status completed");
@@ -7394,7 +7394,7 @@ function applyTemplate(status2, config2, template) {
   s = s.replaceAll("${run-time}", status2.runtime_average);
   s = s.replaceAll("${corr-gravity}", status2.gravity);
   s = s.replaceAll("${battery}", status2.battery);
-  if (config2.gravity_format === "G") {
+  if (config2.gravity_unit === "G") {
     var sg = status2.gravity;
     s = s.replaceAll("${gravity}", sg);
     s = s.replaceAll("${gravity-sg}", sg);
@@ -7417,7 +7417,7 @@ function applyTemplate(status2, config2, template) {
   s = s.replaceAll("${token}", config2.token);
   s = s.replaceAll("${token2}", config2.token2);
   s = s.replaceAll("${temp-unit}", config2.temp_unit);
-  s = s.replaceAll("${gravity-unit}", config2.gravity_format);
+  s = s.replaceAll("${gravity-unit}", config2.gravity_unit);
   try {
     return JSON.stringify(JSON.parse(s), null, 2);
   } catch {
@@ -7491,7 +7491,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       id: "",
       mdns: "",
       temp_unit: "",
-      gravity_format: "",
+      gravity_unit: "",
       // Hardware
       ota_url: "",
       storage_sleep: false,
@@ -7628,7 +7628,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         this.id = json.id;
         this.mdns = json.mdns;
         this.temp_unit = json.temp_unit;
-        this.gravity_format = json.gravity_format;
+        this.gravity_unit = json.gravity_unit;
         this.ota_url = json.ota_url;
         this.storage_sleep = json.storage_sleep;
         this.voltage_factor = json.voltage_factor;
@@ -10244,7 +10244,7 @@ const _sfc_main$X = {
                 title: "Gravity"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_5$o, toDisplayString(unref(status).gravity) + " " + toDisplayString(unref(status).gravity_format === "G" ? " SG" : " P"), 1)
+                  createBaseVNode("p", _hoisted_5$o, toDisplayString(unref(status).gravity) + " " + toDisplayString(unref(status).gravity_unit === "G" ? " SG" : " P"), 1)
                 ]),
                 _: 1
               })
@@ -10652,8 +10652,8 @@ const _sfc_main$W = {
             ]),
             createBaseVNode("div", _hoisted_5$n, [
               createVNode(_component_BsInputRadio, {
-                modelValue: unref(config).gravity_format,
-                "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(config).gravity_format = $event),
+                modelValue: unref(config).gravity_unit,
+                "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(config).gravity_unit = $event),
                 options: gravityOptions.value,
                 label: "Gravity Format",
                 width: "",
@@ -11476,7 +11476,7 @@ function calculate(formula, tilt) {
     let f = applyValuesToFormula(formula, tilt);
     try {
       let g = eval(f);
-      return config.gravity_format === "P" ? gravityToPlato(g) : g;
+      return config.gravity_unit === "P" ? gravityToPlato(g) : g;
     } catch (err) {
       logError("formula.evaluateFormula()", err);
     }
@@ -11497,7 +11497,7 @@ function validateFormula(formula) {
     let f = applyValuesToFormula(formula, d.a);
     try {
       let g = eval(f);
-      if (config.gravity_format === "P") g = gravityToPlato(g);
+      if (config.gravity_unit === "P") g = gravityToPlato(g);
       if (Math.abs(g - d.g) > config.formula_max_deviation) {
         logDebug("formula.validateFormula()", "Formula rejected due to high deviation", d.g, g);
         result = false;
@@ -17234,7 +17234,7 @@ const _sfc_main$N = {
       for (let i2 = 0; i2 < config.formula_calculation_data.length; i2++) {
         x.push(config.formula_calculation_data[i2].a);
         y.push(
-          config.gravity_format == "P" ? gravityToSG(config.formula_calculation_data[i2].g) : config.formula_calculation_data[i2].g
+          config.gravity_unit == "P" ? gravityToSG(config.formula_calculation_data[i2].g) : config.formula_calculation_data[i2].g
         );
       }
       for (var i = 1; i < 5; i++) {
@@ -17357,7 +17357,7 @@ const _sfc_main$N = {
                     }, null, 8, _hoisted_12$9), [
                       [vModelText, unref(config).formula_calculation_data[index].g]
                     ]),
-                    createBaseVNode("span", _hoisted_13$9, toDisplayString(unref(config).gravity_format == "G" ? "SG" : "P"), 1)
+                    createBaseVNode("span", _hoisted_13$9, toDisplayString(unref(config).gravity_unit == "G" ? "SG" : "P"), 1)
                   ])
                 ])
               ], 64);
