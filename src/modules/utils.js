@@ -164,7 +164,7 @@ export function applyTemplate(status, config, template) {
   s = s.replaceAll('${corr-gravity}', status.gravity)
   s = s.replaceAll('${battery}', status.battery)
 
-  if (config.gravity_format === 'G') {
+  if (config.gravity_unit === 'G') {
     var sg = status.gravity
     s = s.replaceAll('${gravity}', sg)
     s = s.replaceAll('${gravity-sg}', sg)
@@ -188,7 +188,7 @@ export function applyTemplate(status, config, template) {
   s = s.replaceAll('${token}', config.token)
   s = s.replaceAll('${token2}', config.token2)
   s = s.replaceAll('${temp-unit}', config.temp_unit)
-  s = s.replaceAll('${gravity-unit}', config.gravity_format)
+  s = s.replaceAll('${gravity-unit}', config.gravity_unit)
 
   try {
     return JSON.stringify(JSON.parse(s), null, 2)

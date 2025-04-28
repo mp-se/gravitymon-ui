@@ -8,7 +8,7 @@ export const useStatusStore = defineStore('status', {
       id: '',
       angle: 0,
       gravity: 0,
-      gravity_format: '',
+      gravity_unit: '',
       temp: 0,
       temp_unit: '',
       sleep_interval: 0,
@@ -63,7 +63,7 @@ export const useStatusStore = defineStore('status', {
           this.angle = json.angle
           this.temp_unit = json.temp_unit
           this.gravity = json.gravity
-          this.gravity_format = json.gravity_format
+          this.gravity_unit = json.gravity_unit
           this.temp = json.temp
           this.sleep_mode = json.sleep_mode
           this.battery = json.battery
@@ -99,7 +99,7 @@ export const useStatusStore = defineStore('status', {
           this.temp = (Math.round(this.temp * 100) / 100).toFixed(2) // C or F
           this.runtime_average = (Math.round(this.runtime_average * 100) / 100).toFixed(2)
 
-          if (this.gravity_format === 'G')
+          if (this.gravity_unit === 'G')
             this.gravity = (Math.round(this.gravity * 10000) / 10000).toFixed(4)
           // SG
           else this.gravity = (Math.round(this.gravity * 100) / 100).toFixed(2) // Plato

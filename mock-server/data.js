@@ -76,7 +76,7 @@ export var configData = {
   gyro_disabled: false,
   voltage_pin: 35,
 /*
-  gravity_format: 'P',
+  gravity_unit: 'P',
   formula_calculation_data: [
     { a: 25.6, g: 2.0515 },
     { a: 27.4, g: 2.8147 },
@@ -99,7 +99,7 @@ export var configData = {
     { a: 0, g: 1 },
   ],
 */
-  gravity_format: 'G',
+gravity_unit: 'G',
   formula_calculation_data: [
     { a: 25.6, g: 1.008 },
     { a: 27.4, g: 1.011 },
@@ -122,7 +122,7 @@ export var configData = {
     { a: 0, g: 1 },
   ],
 /* 
-  gravity_format: 'G',
+  gravity_unit: 'G',
   formula_calculation_data: [
     { a: 25, g: 1.000 },
     { a: 30, g: 1.010 },
@@ -174,7 +174,7 @@ export var statusData = {
   id: '7376ef',
   angle: 22.4,
   gravity: 1.044,
-  gravity_format: 'G',
+  gravity_unit: 'G',
   temp: 12,
   sleep_interval: 300,
   battery: 3.81,

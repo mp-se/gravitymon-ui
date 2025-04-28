@@ -38,7 +38,7 @@
         </div>
         <div class="col-md-6">
           <BsInputRadio
-            v-model="config.gravity_format"
+            v-model="config.gravity_unit"
             :options="gravityOptions"
             label="Gravity Format"
             width=""

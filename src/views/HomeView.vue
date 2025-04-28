@@ -28,7 +28,7 @@
           <BsCard header="Measurement" color="info" title="Gravity">
             <p class="text-center">
               {{ status.gravity }}
-              {{ status.gravity_format === 'G' ? ' SG' : ' P' }}
+              {{ status.gravity_unit === 'G' ? ' SG' : ' P' }}
             </p>
           </BsCard>
         </div>

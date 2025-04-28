@@ -68,7 +68,7 @@
                 step=".0001"
                 :disabled="global.disabled || config.gyro_disabled"
               />
-              <span class="input-group-text">{{ config.gravity_format == 'G' ? 'SG' : 'P' }}</span>
+              <span class="input-group-text">{{ config.gravity_unit == 'G' ? 'SG' : 'P' }}</span>
             </div>
           </div>
         </template>
@@ -203,7 +203,7 @@ const createFormula = () => {
   for (let i = 0; i < config.formula_calculation_data.length; i++) {
     x.push(config.formula_calculation_data[i].a)
     y.push(
-      config.gravity_format == 'P'
+      config.gravity_unit == 'P'
         ? gravityToSG(config.formula_calculation_data[i].g)
         : config.formula_calculation_data[i].g
     )

@@ -17,7 +17,7 @@ export function calculate(formula, tilt) {
 
     try {
       let g = eval(f)
-      return config.gravity_format === 'P' ? gravityToPlato(g) : g
+      return config.gravity_unit === 'P' ? gravityToPlato(g) : g
     } catch (err) {
       logError('formula.evaluateFormula()', err)
     }
@@ -45,7 +45,7 @@ export function validateFormula(formula) {
 
     try {
       let g = eval(f)
-      if (config.gravity_format === 'P') g = gravityToPlato(g)
+      if (config.gravity_unit === 'P') g = gravityToPlato(g)
 
       if (Math.abs(g - d.g) > config.formula_max_deviation) {
         logDebug('formula.validateFormula()', 'Formula rejected due to high deviation', d.g, g)

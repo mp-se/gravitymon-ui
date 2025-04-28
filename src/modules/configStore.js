@@ -13,7 +13,7 @@ export const useConfigStore = defineStore('config', {
       id: '',
       mdns: '',
       temp_unit: '',
-      gravity_format: '',
+      gravity_unit: '',
       // Hardware
       ota_url: '',
       storage_sleep: false,
@@ -155,7 +155,7 @@ export const useConfigStore = defineStore('config', {
           // Device
           this.mdns = json.mdns
           this.temp_unit = json.temp_unit
-          this.gravity_format = json.gravity_format
+          this.gravity_unit = json.gravity_unit
           // Hardware
           this.ota_url = json.ota_url
           this.storage_sleep = json.storage_sleep
