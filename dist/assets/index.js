@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..4f1856";
+      return "..cb73ba";
     },
     isEsp8266() {
       return this.platform === "esp8266";
