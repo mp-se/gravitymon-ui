@@ -70,7 +70,7 @@
             <BsInputRadio
               v-model="config.voltage_pin"
               :options="voltagePinFloatyOptions"
-              label="Floaty Voltage PIN"
+              label="Voltage PIN (Floaty only)"
               help="Pin to be used for measuring voltage on floaty hardware"
               :disabled="global.disabled"
             ></BsInputRadio>
@@ -109,6 +109,14 @@
             :disabled="global.disabled || config.gyro_disabled"
           ></BsInputSwitch>
         </div>
+        <div class="col-md-6" v-if="!global.isEsp8266">
+          <BsInputSwitch
+            v-model="config.gyro_filter"
+            label="Filter gyro data (ESP32 Only)"
+            help="When active the gyro data will be filtered through a filter to remove noise ans spikes (Only for ESP32)"
+            :disabled="global.disabled || config.gyro_disabled"
+          ></BsInputSwitch>
+        </div>
         <div class="col-md-6">
           <BsInputSwitch
             v-model="config.gyro_disabled"
@@ -120,7 +128,7 @@
         <div class="col-md-6" v-if="status.allowGyroSwapXY">
           <BsInputSwitch
             v-model="config.gyro_swap_xy"
-            label="Swap X and Y axis"
+            label="Swap X and Y axis (ICM42670-p gyro only)"
             :disabled="global.disabled || config.gyro_disabled"
             help="Normally the X asis is used for tilt but some boards have a different orientation and use Y axis instead"
           ></BsInputSwitch>

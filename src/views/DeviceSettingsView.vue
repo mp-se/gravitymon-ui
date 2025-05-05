@@ -93,7 +93,7 @@
             help="If disabled the average runtime feature is not available"
             :disabled="global.disabled"
           ></BsInputSwitch>
-        </div>        
+        </div>
       </div>
 
       <div class="row gy-2">

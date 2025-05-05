@@ -21,6 +21,7 @@ export const useConfigStore = defineStore('config', {
       voltage_config: 0,
       gyro_temp: false,
       gyro_swap_xy: false,
+      gyro_filter: false,
       battery_saving: false,
       tempsensor_resolution: 0,
       temp_adjustment_value: 0, // C or F
@@ -89,7 +90,7 @@ export const useConfigStore = defineStore('config', {
       gyro_calibration_data: [],
       dark_mode: false,
       gyro_disabled: false,
-      flash_logging: true,
+      flash_logging: true
     }
   },
   actions: {
@@ -163,6 +164,7 @@ export const useConfigStore = defineStore('config', {
           this.voltage_config = json.voltage_config
           this.gyro_temp = json.gyro_temp
           this.gyro_swap_xy = json.gyro_swap_xy
+          this.gyro_filter = json.gyro_filter
           this.battery_saving = json.battery_saving
           this.tempsensor_resolution = json.tempsensor_resolution
           this.temp_adjustment_value = json.temp_adjustment_value
