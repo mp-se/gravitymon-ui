@@ -114,12 +114,6 @@
           </BsCard>
         </div>
 
-        <div class="col-md-4" v-if="config.flash_logging">
-          <BsCard header="Measurement" color="info" title="Average runtime">
-            <p class="text-center">{{ status.runtime_average }} s</p>
-          </BsCard>
-        </div>
-
         <div class="col-md-4">
           <BsCard header="Device" title="WIFI">
             <p class="text-center">{{ status.rssi }} dBm - {{ status.wifi_ssid }}</p>

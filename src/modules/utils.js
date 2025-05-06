@@ -160,7 +160,7 @@ export function applyTemplate(status, config, template) {
   s = s.replaceAll('${app-build}', status.app_build)
   s = s.replaceAll('${battery-percent}', 100)
   s = s.replaceAll('${rssi}', status.rssi)
-  s = s.replaceAll('${run-time}', status.runtime_average)
+  s = s.replaceAll('${run-time}', 5)
   s = s.replaceAll('${corr-gravity}', status.gravity)
   s = s.replaceAll('${battery}', status.battery)
 

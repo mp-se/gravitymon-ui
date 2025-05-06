@@ -20,7 +20,6 @@ export var configData = {
   battery_saving: true,
   tempsensor_resolution: 9,
   temp_adjustment_value: 0,
-  flash_logging: true,
   // Wifi
   wifi_scan_ap: true,
   wifi_portal_timeout: 120,
@@ -190,7 +189,6 @@ export var statusData = {
   platform: 'esp8266',
   hardware: 'ispindel',
   wifi_ssid: 'wifi',
-  runtime_average: 3.12,
   ispindel_config: false,
   total_heap: 1000,
   free_heap: 500,

@@ -23,7 +23,6 @@ export const useStatusStore = defineStore('status', {
       hardware: '',
       wifi_ssid: '',
       ip: '',
-      runtime_average: 0,
       total_heap: 0,
       free_heap: 0,
       ispindel_config: false,
@@ -76,7 +75,6 @@ export const useStatusStore = defineStore('status', {
           this.hardware = json.hardware
           this.wifi_ssid = json.wifi_ssid
           this.ip = json.ip
-          this.runtime_average = json.runtime_average
           this.ispindel_config = json.ispindel_config
           this.self_check.gyro_connected = json.self_check.gyro_connected
           this.self_check.gyro_moving = json.self_check.gyro_moving
@@ -97,7 +95,6 @@ export const useStatusStore = defineStore('status', {
           this.battery = (Math.round(this.battery * 100) / 100).toFixed(2)
           this.angle = (Math.round(this.angle * 100) / 100).toFixed(2)
           this.temp = (Math.round(this.temp * 100) / 100).toFixed(2) // C or F
-          this.runtime_average = (Math.round(this.runtime_average * 100) / 100).toFixed(2)
 
           if (this.gravity_unit === 'G')
             this.gravity = (Math.round(this.gravity * 10000) / 10000).toFixed(4)

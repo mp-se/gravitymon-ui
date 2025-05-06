@@ -187,7 +187,7 @@ const calculateBatteryLife = () => {
   var pwrActive = 160 // mA per hour (120-170 mA)
   var pwrSleep = 15 // mA per day (include all pheripials as well)
   var batt = 2200 // mA
-  var rt = status.runtime_average
+  var rt = 5 // Assume 10 seconds per run
   var ble = config.ble_format === 0 ? false : true
   var wifi =
     config.http_post_target.length +
