@@ -57,12 +57,12 @@ export const useGlobalStore = defineStore('global', {
       return import.meta.env.VITE_APP_BUILD
     },
     isEsp8266() {
-      return this.platform === 'esp8266'
+      return this.platform === 'ESP8266'
     },
     disabled32() {
       if (this.disabled) return true
 
-      if (this.platform !== 'esp8266') return false
+      if (this.platform !== 'ESP8266') return false
 
       return true
     }

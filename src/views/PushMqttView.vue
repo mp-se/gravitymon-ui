@@ -144,7 +144,7 @@ const render = ref('')
 const { mqtt_format_gravity } = storeToRefs(config)
 
 watch(mqtt_format_gravity, () => {
-  if (status.platform == 'esp8266') {
+  if (global.isEsp8266) {
     var s = applyTemplate(status, config, config.mqtt_format_gravity)
     if (s.length > 500)
       global.messageWarning =

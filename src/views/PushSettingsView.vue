@@ -209,21 +209,21 @@ const calculateBatteryLife = () => {
 
   if (wifi) {
     switch (status.platform) {
-      case 'esp8266':
+      case 'ESP8266':
         pwrActive = 160
         break
-      case 'esp32':
+      case 'ESP32':
         if (status.hardware == 'FLOATY')
           pwrActive = 330 // mA per hour (260-379 mA)
         else pwrActive = 320 // mA per hour (260-379 mA)
         break
-      case 'esp32c3':
+      case 'ESP32C3':
         pwrActive = 320 // mA per hour (290-350 mA)
         break
-      case 'esp32s2':
+      case 'ESP32S2':
         pwrActive = 280 // mA per hour (260-300 mA)
         break
-      case 'esp32s3':
+      case 'ESP32S3':
         pwrActive = 300 // mA per hour (285-355 mA)
         break
       default:
@@ -232,13 +232,13 @@ const calculateBatteryLife = () => {
     }
   } else {
     switch (status.platform) {
-      case 'esp8266':
-      case 'esp32':
-      case 'esp32c3':
-      case 'esp32s2':
+      case 'ESP8266':
+      case 'ESP32':
+      case 'ESP32C3':
+      case 'ESP32S2':
         pwrActive = 160
         break
-      case 'esp32s3':
+      case 'ESP32S3':
         pwrActive = 180
         break
       default:
