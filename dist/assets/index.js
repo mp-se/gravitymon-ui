@@ -7099,14 +7099,14 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..05acb2";
+      return "..8cd58b";
     },
     isEsp8266() {
-      return this.platform === "esp8266";
+      return this.platform === "ESP8266";
     },
     disabled32() {
       if (this.disabled) return true;
-      if (this.platform !== "esp8266") return false;
+      if (this.platform !== "ESP8266") return false;
       return true;
     }
   },
@@ -7185,7 +7185,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.app_ver = json.app_ver;
         this.app_build = json.app_build;
         this.mdns = json.mdns;
-        this.platform = json.platform;
+        this.platform = json.platform.toUpperCase();
         this.hardware = json.hardware;
         this.wifi_ssid = json.wifi_ssid;
         this.ip = json.ip;
@@ -17501,21 +17501,21 @@ const _sfc_main$M = {
       }
       if (wifi) {
         switch (status.platform) {
-          case "esp8266":
+          case "ESP8266":
             pwrActive = 160;
             break;
-          case "esp32":
+          case "ESP32":
             if (status.hardware == "FLOATY")
               pwrActive = 330;
             else pwrActive = 320;
             break;
-          case "esp32c3":
+          case "ESP32C3":
             pwrActive = 320;
             break;
-          case "esp32s2":
+          case "ESP32S2":
             pwrActive = 280;
             break;
-          case "esp32s3":
+          case "ESP32S3":
             pwrActive = 300;
             break;
           default:
@@ -17524,13 +17524,13 @@ const _sfc_main$M = {
         }
       } else {
         switch (status.platform) {
-          case "esp8266":
-          case "esp32":
-          case "esp32c3":
-          case "esp32s2":
+          case "ESP8266":
+          case "ESP32":
+          case "ESP32C3":
+          case "ESP32S2":
             pwrActive = 160;
             break;
-          case "esp32s3":
+          case "ESP32S3":
             pwrActive = 180;
             break;
           default:
@@ -18548,7 +18548,7 @@ const _sfc_main$H = {
     const render = ref("");
     const { mqtt_format_gravity } = storeToRefs(config);
     watch(mqtt_format_gravity, () => {
-      if (status.platform == "esp8266") {
+      if (global$1.isEsp8266) {
         var s = applyTemplate(status, config, config.mqtt_format_gravity);
         if (s.length > 500)
           global$1.messageWarning = "On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template.";
