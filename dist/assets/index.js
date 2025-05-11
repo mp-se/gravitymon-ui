@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..cb73ba";
+      return "..1ded10";
     },
     isEsp8266() {
       return this.platform === "esp8266";
@@ -7140,7 +7140,6 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
       hardware: "",
       wifi_ssid: "",
       ip: "",
-      runtime_average: 0,
       total_heap: 0,
       free_heap: 0,
       ispindel_config: false,
@@ -7190,7 +7189,6 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.hardware = json.hardware;
         this.wifi_ssid = json.wifi_ssid;
         this.ip = json.ip;
-        this.runtime_average = json.runtime_average;
         this.ispindel_config = json.ispindel_config;
         this.self_check.gyro_connected = json.self_check.gyro_connected;
         this.self_check.gyro_moving = json.self_check.gyro_moving;
@@ -7209,7 +7207,6 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.battery = (Math.round(this.battery * 100) / 100).toFixed(2);
         this.angle = (Math.round(this.angle * 100) / 100).toFixed(2);
         this.temp = (Math.round(this.temp * 100) / 100).toFixed(2);
-        this.runtime_average = (Math.round(this.runtime_average * 100) / 100).toFixed(2);
         if (this.gravity_unit === "G")
           this.gravity = (Math.round(this.gravity * 1e4) / 1e4).toFixed(4);
         else this.gravity = (Math.round(this.gravity * 100) / 100).toFixed(2);
@@ -7394,7 +7391,8 @@ function applyTemplate(status2, config2, template) {
   s = s.replaceAll("${app-build}", status2.app_build);
   s = s.replaceAll("${battery-percent}", 100);
   s = s.replaceAll("${rssi}", status2.rssi);
-  s = s.replaceAll("${run-time}", status2.runtime_average);
+  s = s.replaceAll("${velocity}", -12);
+  s = s.replaceAll("${run-time}", 5);
   s = s.replaceAll("${corr-gravity}", status2.gravity);
   s = s.replaceAll("${battery}", status2.battery);
   if (config2.gravity_unit === "G") {
@@ -7573,8 +7571,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       ignore_low_angles: false,
       gyro_calibration_data: [],
       dark_mode: false,
-      gyro_disabled: false,
-      flash_logging: true
+      gyro_disabled: false
     };
   },
   actions: {
@@ -7645,7 +7642,6 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         this.temp_adjustment_value = json.temp_adjustment_value;
         this.gyro_disabled = json.gyro_disabled;
         this.voltage_pin = json.voltage_pin;
-        this.flash_logging = json.flash_logging;
         this.wifi_portal_timeout = json.wifi_portal_timeout;
         this.wifi_connect_timeout = json.wifi_connect_timeout;
         this.wifi_ssid = json.wifi_ssid;
@@ -10104,7 +10100,7 @@ const _hoisted_16$a = {
   key: 6,
   class: "col-md-4"
 };
-const _hoisted_17$8 = {
+const _hoisted_17$7 = {
   key: 7,
   class: "col-md-4"
 };
@@ -10113,37 +10109,32 @@ const _hoisted_19$4 = {
   key: 8,
   class: "col-md-4"
 };
-const _hoisted_20$3 = {
-  key: 9,
-  class: "col-md-4"
-};
+const _hoisted_20$3 = { class: "col-md-4" };
 const _hoisted_21$3 = { class: "text-center" };
 const _hoisted_22$2 = { class: "col-md-4" };
 const _hoisted_23$2 = { class: "text-center" };
 const _hoisted_24$1 = { class: "col-md-4" };
 const _hoisted_25$1 = { class: "text-center" };
-const _hoisted_26$1 = { class: "col-md-4" };
-const _hoisted_27 = { class: "text-center" };
-const _hoisted_28 = {
-  key: 10,
+const _hoisted_26$1 = {
+  key: 9,
   class: "col-md-4"
 };
+const _hoisted_27 = { class: "text-center" };
+const _hoisted_28 = { class: "col-md-4" };
 const _hoisted_29 = { class: "text-center" };
 const _hoisted_30 = { class: "col-md-4" };
 const _hoisted_31 = { class: "text-center" };
-const _hoisted_32 = { class: "col-md-4" };
-const _hoisted_33 = { class: "text-center" };
-const _hoisted_34 = { class: "badge bg-secondary" };
-const _hoisted_35 = { class: "badge bg-secondary" };
-const _hoisted_36 = { class: "col-md-4" };
-const _hoisted_37 = { class: "text-center" };
-const _hoisted_38 = { class: "badge bg-secondary" };
-const _hoisted_39 = { class: "badge bg-secondary" };
+const _hoisted_32 = { class: "badge bg-secondary" };
+const _hoisted_33 = { class: "badge bg-secondary" };
+const _hoisted_34 = { class: "col-md-4" };
+const _hoisted_35 = { class: "text-center" };
+const _hoisted_36 = { class: "badge bg-secondary" };
+const _hoisted_37 = { class: "badge bg-secondary" };
+const _hoisted_38 = { class: "col-md-4" };
+const _hoisted_39 = { class: "text-center" };
 const _hoisted_40 = { class: "col-md-4" };
-const _hoisted_41 = { class: "text-center" };
-const _hoisted_42 = { class: "col-md-4" };
-const _hoisted_43 = { class: "d-flex justify-content-center" };
-const _hoisted_44 = {
+const _hoisted_41 = { class: "d-flex justify-content-center" };
+const _hoisted_42 = {
   class: "form-check form-switch",
   style: { "height": "0.7rem" }
 };
@@ -10367,7 +10358,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_17$8, [
+            unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_17$7, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
@@ -10392,25 +10383,24 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            unref(config).flash_logging ? (openBlock(), createElementBlock("div", _hoisted_20$3, [
-              createVNode(_component_BsCard, {
-                header: "Measurement",
-                color: "info",
-                title: "Average runtime"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_21$3, toDisplayString(unref(status).runtime_average) + " s", 1)
-                ]),
-                _: 1
-              })
-            ])) : createCommentVNode("", true),
-            createBaseVNode("div", _hoisted_22$2, [
+            createBaseVNode("div", _hoisted_20$3, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "WIFI"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_23$2, toDisplayString(unref(status).rssi) + " dBm - " + toDisplayString(unref(status).wifi_ssid), 1)
+                  createBaseVNode("p", _hoisted_21$3, toDisplayString(unref(status).rssi) + " dBm - " + toDisplayString(unref(status).wifi_ssid), 1)
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_22$2, [
+              createVNode(_component_BsCard, {
+                header: "Device",
+                title: "IP Address"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_23$2, toDisplayString(unref(status).ip), 1)
                 ]),
                 _: 1
               })
@@ -10418,32 +10408,21 @@ const _sfc_main$X = {
             createBaseVNode("div", _hoisted_24$1, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "IP Address"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_25$1, toDisplayString(unref(status).ip), 1)
-                ]),
-                _: 1
-              })
-            ]),
-            createBaseVNode("div", _hoisted_26$1, [
-              createVNode(_component_BsCard, {
-                header: "Device",
                 title: "Memory"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_27, " Free: " + toDisplayString(unref(status).free_heap) + " kb, Total: " + toDisplayString(unref(status).total_heap) + " kb ", 1)
+                  createBaseVNode("p", _hoisted_25$1, " Free: " + toDisplayString(unref(status).free_heap) + " kb, Total: " + toDisplayString(unref(status).total_heap) + " kb ", 1)
                 ]),
                 _: 1
               })
             ]),
-            newVersion.value.new ? (openBlock(), createElementBlock("div", _hoisted_28, [
+            newVersion.value.new ? (openBlock(), createElementBlock("div", _hoisted_26$1, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Upgrade available"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_29, [
+                  createBaseVNode("p", _hoisted_27, [
                     createTextVNode(toDisplayString(newVersion.value.ver) + " available on ", 1),
                     _cache[11] || (_cache[11] = createBaseVNode("a", {
                       class: "link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover",
@@ -10455,45 +10434,56 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            createBaseVNode("div", _hoisted_30, [
+            createBaseVNode("div", _hoisted_28, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Software version"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_31, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
+                  createBaseVNode("p", _hoisted_29, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
                 ]),
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_32, [
+            createBaseVNode("div", _hoisted_30, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Platform"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_33, [
+                  createBaseVNode("p", _hoisted_31, [
                     _cache[12] || (_cache[12] = createTextVNode(" Platform: ")),
-                    createBaseVNode("span", _hoisted_34, toDisplayString(unref(status).platform), 1),
+                    createBaseVNode("span", _hoisted_32, toDisplayString(unref(status).platform), 1),
                     _cache[13] || (_cache[13] = createTextVNode(" Variant: ")),
-                    createBaseVNode("span", _hoisted_35, toDisplayString(unref(status).hardware), 1)
+                    createBaseVNode("span", _hoisted_33, toDisplayString(unref(status).hardware), 1)
                   ])
                 ]),
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_36, [
+            createBaseVNode("div", _hoisted_34, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Hardware"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_37, [
+                  createBaseVNode("p", _hoisted_35, [
                     _cache[14] || (_cache[14] = createTextVNode(" Board: ")),
-                    createBaseVNode("span", _hoisted_38, toDisplayString(unref(status).board), 1),
+                    createBaseVNode("span", _hoisted_36, toDisplayString(unref(status).board), 1),
                     _cache[15] || (_cache[15] = createTextVNode(" Gyro: ")),
-                    createBaseVNode("span", _hoisted_39, toDisplayString(unref(status).gyro_family), 1)
+                    createBaseVNode("span", _hoisted_37, toDisplayString(unref(status).gyro_family), 1)
                   ])
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_38, [
+              createVNode(_component_BsCard, {
+                header: "Device",
+                title: "ID"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_39, toDisplayString(unref(status).id), 1)
                 ]),
                 _: 1
               })
@@ -10501,22 +10491,11 @@ const _sfc_main$X = {
             createBaseVNode("div", _hoisted_40, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "ID"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_41, toDisplayString(unref(status).id), 1)
-                ]),
-                _: 1
-              })
-            ]),
-            createBaseVNode("div", _hoisted_42, [
-              createVNode(_component_BsCard, {
-                header: "Device",
                 title: "Force config mode"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("div", _hoisted_43, [
-                    createBaseVNode("div", _hoisted_44, [
+                  createBaseVNode("div", _hoisted_41, [
+                    createBaseVNode("div", _hoisted_42, [
                       withDirectives(createBaseVNode("input", {
                         "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => flag.value = $event),
                         class: "form-check-input",
@@ -10545,15 +10524,14 @@ const _hoisted_5$n = { class: "col-md-6" };
 const _hoisted_6$n = { class: "col-md-9" };
 const _hoisted_7$k = { class: "col-md-3" };
 const _hoisted_8$k = { class: "col-md-6" };
-const _hoisted_9$i = { class: "col-md-6" };
-const _hoisted_10$h = { class: "row gy-2" };
-const _hoisted_11$e = { class: "col-md-12" };
-const _hoisted_12$c = ["disabled"];
-const _hoisted_13$c = ["hidden"];
-const _hoisted_14$b = ["disabled"];
-const _hoisted_15$b = ["hidden"];
-const _hoisted_16$9 = ["disabled"];
-const _hoisted_17$7 = ["hidden"];
+const _hoisted_9$i = { class: "row gy-2" };
+const _hoisted_10$h = { class: "col-md-12" };
+const _hoisted_11$e = ["disabled"];
+const _hoisted_12$c = ["hidden"];
+const _hoisted_13$c = ["disabled"];
+const _hoisted_14$b = ["hidden"];
+const _hoisted_15$b = ["disabled"];
+const _hoisted_16$9 = ["hidden"];
 const _sfc_main$W = {
   __name: "DeviceSettingsView",
   setup(__props) {
@@ -10608,18 +10586,17 @@ const _sfc_main$W = {
       const _component_BsInputText = resolveComponent("BsInputText");
       const _component_BsInputRadio = resolveComponent("BsInputRadio");
       const _component_BsDropdown = resolveComponent("BsDropdown");
-      const _component_BsInputSwitch = resolveComponent("BsInputSwitch");
       return openBlock(), createElementBlock("div", _hoisted_1$J, [
-        _cache[17] || (_cache[17] = createBaseVNode("p", null, null, -1)),
-        _cache[18] || (_cache[18] = createBaseVNode("p", { class: "h2" }, "Device - Settings", -1)),
-        _cache[19] || (_cache[19] = createBaseVNode("hr", null, null, -1)),
+        _cache[16] || (_cache[16] = createBaseVNode("p", null, null, -1)),
+        _cache[17] || (_cache[17] = createBaseVNode("p", { class: "h2" }, "Device - Settings", -1)),
+        _cache[18] || (_cache[18] = createBaseVNode("hr", null, null, -1)),
         unref(config).mdns === "" ? (openBlock(), createBlock(_component_BsMessage, {
           key: 0,
           dismissable: "true",
           message: "",
           alert: "warning"
         }, {
-          default: withCtx(() => _cache[7] || (_cache[7] = [
+          default: withCtx(() => _cache[6] || (_cache[6] = [
             createTextVNode(" You need to define a mdns name for the device ")
           ])),
           _: 1
@@ -10642,7 +10619,7 @@ const _sfc_main$W = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "badge", "disabled"])
             ]),
-            _cache[8] || (_cache[8] = createBaseVNode("div", { class: "col-md-12" }, [
+            _cache[7] || (_cache[7] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
             createBaseVNode("div", _hoisted_4$r, [
@@ -10665,7 +10642,7 @@ const _sfc_main$W = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
-            _cache[9] || (_cache[9] = createBaseVNode("div", { class: "col-md-12" }, [
+            _cache[8] || (_cache[8] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
             createBaseVNode("div", _hoisted_6$n, [
@@ -10688,7 +10665,7 @@ const _sfc_main$W = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["options", "disabled"])
             ]),
-            _cache[10] || (_cache[10] = createBaseVNode("div", { class: "col-md-12" }, [
+            _cache[9] || (_cache[9] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
             createBaseVNode("div", _hoisted_8$k, [
@@ -10700,22 +10677,13 @@ const _sfc_main$W = {
                 width: "",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
-            ]),
-            createBaseVNode("div", _hoisted_9$i, [
-              createVNode(_component_BsInputSwitch, {
-                modelValue: unref(config).flash_logging,
-                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).flash_logging = $event),
-                label: "Enable flash logging",
-                help: "If disabled the average runtime feature is not available",
-                disabled: unref(global$1).disabled
-              }, null, 8, ["modelValue", "disabled"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_10$h, [
-            _cache[16] || (_cache[16] = createBaseVNode("div", { class: "col-md-12" }, [
+          createBaseVNode("div", _hoisted_9$i, [
+            _cache[15] || (_cache[15] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
-            createBaseVNode("div", _hoisted_11$e, [
+            createBaseVNode("div", _hoisted_10$h, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -10726,12 +10694,12 @@ const _sfc_main$W = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_13$c),
-                _cache[11] || (_cache[11] = createTextVNode("  Save"))
-              ], 8, _hoisted_12$c),
-              _cache[14] || (_cache[14] = createTextVNode("  ")),
+                }, null, 8, _hoisted_12$c),
+                _cache[10] || (_cache[10] = createTextVNode("  Save"))
+              ], 8, _hoisted_11$e),
+              _cache[13] || (_cache[13] = createTextVNode("  ")),
               createBaseVNode("button", {
-                onClick: _cache[6] || (_cache[6] = ($event) => unref(restart)()),
+                onClick: _cache[5] || (_cache[5] = ($event) => unref(restart)()),
                 type: "button",
                 class: "btn btn-secondary",
                 disabled: unref(global$1).disabled
@@ -10741,10 +10709,10 @@ const _sfc_main$W = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_15$b),
-                _cache[12] || (_cache[12] = createTextVNode("  Restart device"))
-              ], 8, _hoisted_14$b),
-              _cache[15] || (_cache[15] = createTextVNode("  ")),
+                }, null, 8, _hoisted_14$b),
+                _cache[11] || (_cache[11] = createTextVNode("  Restart device"))
+              ], 8, _hoisted_13$c),
+              _cache[14] || (_cache[14] = createTextVNode("  ")),
               createBaseVNode("button", {
                 onClick: factory,
                 type: "button",
@@ -10756,9 +10724,9 @@ const _sfc_main$W = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_17$7),
-                _cache[13] || (_cache[13] = createTextVNode("  Restore factory defaults "))
-              ], 8, _hoisted_16$9)
+                }, null, 8, _hoisted_16$9),
+                _cache[12] || (_cache[12] = createTextVNode("  Restore factory defaults "))
+              ], 8, _hoisted_15$b)
             ])
           ])
         ], 32)
@@ -17505,7 +17473,7 @@ const _sfc_main$M = {
       var pwrActive = 160;
       var pwrSleep = 15;
       var batt = 2200;
-      var rt = status.runtime_average;
+      var rt = 5;
       var ble = config.ble_format === 0 ? false : true;
       var wifi = config.http_post_target.length + config.http_post2_target.length + config.http_get_target.length + config.influxdb2_target.length + config.mqtt_target.length > 0 ? true : false;
       if (!wifi && !ble) {
@@ -17554,7 +17522,6 @@ const _sfc_main$M = {
             break;
         }
       }
-      if (rt < 4) rt = 4;
       var powerPerDay = 24 * 3600 / (config.sleep_interval + rt) * (rt / 3600) * pwrActive + pwrSleep;
       var days = batt / powerPerDay;
       logDebug(
@@ -22061,7 +22028,8 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
       {
         label: "Corrected Gravity (Plato), ${corr-gravity-plato}",
         value: "${corr-gravity-plato}"
-      }
+      },
+      { label: "Gravity Velocity, ${velocity}", value: "${velocity}" }
     ]);
     function insertText(value) {
       if (value.length > 0) {
