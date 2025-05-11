@@ -72,7 +72,8 @@ const contextMenuOptions = ref([
   {
     label: 'Corrected Gravity (Plato), ${corr-gravity-plato}',
     value: '${corr-gravity-plato}'
-  }
+  },
+  { label: 'Gravity Velocity, ${velocity}', value: '${velocity}' },
 ])
 
 function insertText(value) {
