@@ -56,7 +56,7 @@
           <BsInputReadonly
             v-model="batteryLife"
             label="Estimated battery life"
-            help="Based on current settings and platform, this is the estimated battery life"
+            help="Estimated based on current platform, 2200mAh battery and 5 seconds runtime"
             :disabled="global.disabled"
           ></BsInputReadonly>
         </div>
