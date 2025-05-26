@@ -13,7 +13,7 @@
       </BsMessage>
 
       <BsMessage
-        v-if="!status.self_check.gyro_connected"
+        v-if="!status.self_check.gyro_connected && status.wifi_setup == false"
         dismissable="true"
         message=""
         alert="danger"
@@ -33,7 +33,10 @@
           </BsCard>
         </div>
 
-        <div class="col-md-4" v-if="!status.self_check.gravity_formula">
+        <div
+          class="col-md-4"
+          v-if="!status.self_check.gravity_formula && status.wifi_setup == false"
+        >
           <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
             <p class="text-center">
               Missing
@@ -77,7 +80,10 @@
             </p>
           </BsCard>
         </div>
-        <div class="col-md-4" v-if="!status.self_check.gyro_calibration">
+        <div
+          class="col-md-4"
+          v-if="!status.self_check.gyro_calibration && status.wifi_setup == false"
+        >
           <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
             <p class="text-center">
               Gyro has not been
@@ -97,7 +103,10 @@
           </BsCard>
         </div>
 
-        <div class="col-md-4" v-if="!status.self_check.temp_connected">
+        <div
+          class="col-md-4"
+          v-if="!status.self_check.temp_connected && status.wifi_setup == false"
+        >
           <BsCard header="Measurement" title="Error" :iserr="true" icon="bi-x-circle">
             <p class="text-center">No temperature sensor detected</p>
           </BsCard>
@@ -200,7 +209,7 @@
 
 <script setup>
 import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
-import { status, config, global } from '@/modules/pinia'
+import { status, global } from '@/modules/pinia'
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
 const polling = ref(null)
