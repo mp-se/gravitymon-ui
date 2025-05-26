@@ -11,16 +11,30 @@
       :disabled="config.use_wifi_direct"
     >
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
           <BsInputText
             v-model="config.http_post_target"
             type="url"
             maxlength="120"
             label="HTTP URL"
             help="URL to push target, use format http://servername.com/resource (Supports http and https)"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled" 
+            v-if="config.http_post_tcp === false" 
+          />
+
+          <BsInputText
+            v-model="config.http_post_target"
+            type="text"
+            maxlength="120"
+            label="Server"
+            help="IP and port to push target, use format server:port"
+            :disabled="pushDisabled" 
+            v-if="config.http_post_tcp === true" 
           />
         </div>
+        <div class="col-md-1">
+          <BsInputSwitch v-model="config.http_post_tcp" label="Use tcp"/>
+        </div>  
         <div class="col-md-3">
           <BsDropdown
             label="Predefined URLs"
@@ -28,6 +42,7 @@
             :options="httpPostUrlOptions"
             :callback="httpUrlCallback"
             :disabled="pushDisabled"
+            v-if="config.http_post_tcp === false" 
           />
         </div>
         <div class="col-md-9">
@@ -38,6 +53,7 @@
             label="HTTP Header #1"
             help=""
             :disabled="pushDisabled"
+            v-if="config.http_post_tcp === false" 
           />
         </div>
         <div class="col-md-3">
@@ -47,6 +63,7 @@
             :options="httpHeaderOptions"
             :callback="httpHeaderH1Callback"
             :disabled="pushDisabled"
+            v-if="config.http_post_tcp === false" 
           />
         </div>
         <div class="col-md-9">
@@ -57,6 +74,7 @@
             label="HTTP Header #2"
             help="Set a http headers, empty string is skipped, example: Content-Type: application/json"
             :disabled="pushDisabled"
+            v-if="config.http_post_tcp === false" 
           />
         </div>
         <div class="col-md-3">
@@ -66,6 +84,7 @@
             :options="httpHeaderOptions"
             :callback="httpHeaderH2Callback"
             :disabled="pushDisabled"
+            v-if="config.http_post_tcp === false" 
           />
         </div>
         <div class="col-md-6">
@@ -77,6 +96,7 @@
             width="4"
             help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
             :disabled="pushDisabled"
+            v-if="config.http_post_tcp === false" 
           />
         </div>
         <div class="col-md-9">
@@ -151,6 +171,7 @@ import {
   applyTemplate
 } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
+import BsInputSwitch from '@/components/BsInputSwitch.vue'
 
 const render = ref('')
 
@@ -187,9 +208,20 @@ const renderFormat = () => {
   render.value = applyTemplate(status, config, config.http_post_format_gravity)
 }
 
+const serverPortPattern = /^([a-zA-Z0-9.-]+|\d{1,3}(?:\.\d{1,3}){3}):\d{1,5}$/
+
+function validateServerPortFormat(value) {
+  return serverPortPattern.test(value)
+}
+
 const save = () => {
   if (!validateCurrentForm()) return
 
+  if (config.http_post_tcp && !validateServerPortFormat(config.http_post_target)) {
+    global.messageError = 'Server must be in format hostname:port or ip:port'
+    return
+  }
+  
   config.saveAll()
 }
 </script>

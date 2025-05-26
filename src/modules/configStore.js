@@ -47,6 +47,7 @@ export const useConfigStore = defineStore('config', {
       http_post_target: '',
       http_post_header1: '',
       http_post_header2: '',
+      http_post_tcp: false,
       http_post_int: 0,
       http_post_format_gravity: '',
       // Push - Http Post 2
@@ -191,6 +192,7 @@ export const useConfigStore = defineStore('config', {
           this.http_post_header1 = json.http_post_header1
           this.http_post_header2 = json.http_post_header2
           this.http_post_int = json.http_post_int
+          this.http_post_tcp = json.http_post_tcp
           // this.http_post_format_gravity = json.http_post_format_gravity
           // Push - Http Post 2
           this.http_post2_target = json.http_post2_target
