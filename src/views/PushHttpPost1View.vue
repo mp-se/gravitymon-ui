@@ -18,8 +18,8 @@
             maxlength="120"
             label="HTTP URL"
             help="URL to push target, use format http://servername.com/resource (Supports http and https)"
-            :disabled="pushDisabled" 
-            v-if="config.http_post_tcp === false" 
+            :disabled="pushDisabled"
+            v-if="config.http_post_tcp === false"
           />
 
           <BsInputText
@@ -28,13 +28,13 @@
             maxlength="120"
             label="Server"
             help="IP and port to push target, use format server:port"
-            :disabled="pushDisabled" 
-            v-if="config.http_post_tcp === true" 
+            :disabled="pushDisabled"
+            v-if="config.http_post_tcp === true"
           />
         </div>
         <div class="col-md-1">
-          <BsInputSwitch v-model="config.http_post_tcp" label="Use tcp"/>
-        </div>  
+          <BsInputSwitch v-model="config.http_post_tcp" label="Use tcp" />
+        </div>
         <div class="col-md-3">
           <BsDropdown
             label="Predefined URLs"
@@ -42,7 +42,7 @@
             :options="httpPostUrlOptions"
             :callback="httpUrlCallback"
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false" 
+            v-if="config.http_post_tcp === false"
           />
         </div>
         <div class="col-md-9">
@@ -53,7 +53,7 @@
             label="HTTP Header #1"
             help=""
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false" 
+            v-if="config.http_post_tcp === false"
           />
         </div>
         <div class="col-md-3">
@@ -63,7 +63,7 @@
             :options="httpHeaderOptions"
             :callback="httpHeaderH1Callback"
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false" 
+            v-if="config.http_post_tcp === false"
           />
         </div>
         <div class="col-md-9">
@@ -74,7 +74,7 @@
             label="HTTP Header #2"
             help="Set a http headers, empty string is skipped, example: Content-Type: application/json"
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false" 
+            v-if="config.http_post_tcp === false"
           />
         </div>
         <div class="col-md-3">
@@ -84,7 +84,7 @@
             :options="httpHeaderOptions"
             :callback="httpHeaderH2Callback"
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false" 
+            v-if="config.http_post_tcp === false"
           />
         </div>
         <div class="col-md-6">
@@ -96,7 +96,7 @@
             width="4"
             help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false" 
+            v-if="config.http_post_tcp === false"
           />
         </div>
         <div class="col-md-9">
@@ -221,7 +221,7 @@ const save = () => {
     global.messageError = 'Server must be in format hostname:port or ip:port'
     return
   }
-  
+
   config.saveAll()
 }
 </script>

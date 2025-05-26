@@ -77,7 +77,8 @@ export const httpGetFormatOptions = ref([
   },
   {
     label: 'GravityMon v2',
-    value: '%3Fname%3D%24%7Bmdns%7D%26id%3D%24%7Bid%7D%26token%3D%24%7Btoken2%7D%26interval%3D%24%7Bsleep%2Dinterval%7D%26temperature%3D%24%7Btemp%7D%26temp%2Dunits%3D%24%7Btemp%2Dunit%7D%26gravity%3D%24%7Bgravity%7D%26velocity%3D%24%7Bvelocity%7D%26angle%3D%24%7Bangle%7D%26battery%3D%24%7Bbattery%7D%26rssi%3D%24%7Brssi%7D%26corr%2Dgravity%3D%24%7Bcorr%2Dgravity%7D%26gravity%2Dunit%3D%24%7Bgravity%2Dunit%7D%26run%2Dtime%3D%24%7Brun%2Dtime%7D'
+    value:
+      '%3Fname%3D%24%7Bmdns%7D%26id%3D%24%7Bid%7D%26token%3D%24%7Btoken2%7D%26interval%3D%24%7Bsleep%2Dinterval%7D%26temperature%3D%24%7Btemp%7D%26temp%2Dunits%3D%24%7Btemp%2Dunit%7D%26gravity%3D%24%7Bgravity%7D%26velocity%3D%24%7Bvelocity%7D%26angle%3D%24%7Bangle%7D%26battery%3D%24%7Bbattery%7D%26rssi%3D%24%7Brssi%7D%26corr%2Dgravity%3D%24%7Bcorr%2Dgravity%7D%26gravity%2Dunit%3D%24%7Bgravity%2Dunit%7D%26run%2Dtime%3D%24%7Brun%2Dtime%7D'
   }
 ])
 
@@ -102,7 +103,8 @@ export const mqttFormatOptions = ref([
   },
   {
     label: 'Gravitymon v2 / iSpindel',
-    value: 'ispindel%2F%24%7Bmdns%7D%2Ftilt%3A%24%7Bangle%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemperature%3A%24%7Btemp%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemp%5Funits%3A%24%7Btemp%2Dunit%7D%7Cispindel%2F%24%7Bmdns%7D%2Fbattery%3A%24%7Bbattery%7D%7Cispindel%2F%24%7Bmdns%7D%2Fgravity%3A%24%7Bgravity%7D%7Cispindel%2F%24%7Bmdns%7D%2Fvelocity%3A%24%7Bvelocity%7D%7Cispindel%2F%24%7Bmdns%7D%2Finterval%3A%24%7Bsleep%2Dinterval%7D%7Cispindel%2F%24%7Bmdns%7D%2FRSSI%3A%24%7Brssi%7D%7C'
+    value:
+      'ispindel%2F%24%7Bmdns%7D%2Ftilt%3A%24%7Bangle%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemperature%3A%24%7Btemp%7D%7Cispindel%2F%24%7Bmdns%7D%2Ftemp%5Funits%3A%24%7Btemp%2Dunit%7D%7Cispindel%2F%24%7Bmdns%7D%2Fbattery%3A%24%7Bbattery%7D%7Cispindel%2F%24%7Bmdns%7D%2Fgravity%3A%24%7Bgravity%7D%7Cispindel%2F%24%7Bmdns%7D%2Fvelocity%3A%24%7Bvelocity%7D%7Cispindel%2F%24%7Bmdns%7D%2Finterval%3A%24%7Bsleep%2Dinterval%7D%7Cispindel%2F%24%7Bmdns%7D%2FRSSI%3A%24%7Brssi%7D%7C'
   },
   {
     label: 'HomeAssistant',

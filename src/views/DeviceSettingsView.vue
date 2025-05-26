@@ -85,7 +85,6 @@
             :disabled="global.disabled"
           ></BsInputRadio>
         </div>
-
       </div>
 
       <div class="row gy-2">
