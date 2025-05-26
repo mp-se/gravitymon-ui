@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..cb0f6a";
+      return "..a70ca7";
     },
     isEsp8266() {
       return this.platform === "ESP8266";
@@ -10237,7 +10237,7 @@ const _sfc_main$X = {
             ])),
             _: 1
           })) : createCommentVNode("", true),
-          !unref(status).self_check.gyro_connected ? (openBlock(), createBlock(_component_BsMessage, {
+          !unref(status).self_check.gyro_connected && unref(status).wifi_setup == false ? (openBlock(), createBlock(_component_BsMessage, {
             key: 1,
             dismissable: "true",
             message: "",
@@ -10263,7 +10263,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            !unref(status).self_check.gravity_formula ? (openBlock(), createElementBlock("div", _hoisted_6$o, [
+            !unref(status).self_check.gravity_formula && unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_6$o, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 title: "Error",
@@ -10326,7 +10326,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            !unref(status).self_check.gyro_calibration ? (openBlock(), createElementBlock("div", _hoisted_12$d, [
+            !unref(status).self_check.gyro_calibration && unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_12$d, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 title: "Error",
@@ -10363,7 +10363,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            !unref(status).self_check.temp_connected ? (openBlock(), createElementBlock("div", _hoisted_16$a, [
+            !unref(status).self_check.temp_connected && unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_16$a, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 title: "Error",
@@ -20717,7 +20717,7 @@ const _sfc_main$r = {
       const _component_router_link = resolveComponent("router-link");
       const _component_router_view = resolveComponent("router-view");
       return openBlock(), createElementBlock(Fragment, null, [
-        _cache[9] || (_cache[9] = createBaseVNode("dialog", {
+        _cache[10] || (_cache[10] = createBaseVNode("dialog", {
           id: "spinner",
           class: "loading"
         }, [
@@ -20752,7 +20752,7 @@ const _sfc_main$r = {
           brand: "GravityMon"
         }, null, 8, ["disabled"])) : createCommentVNode("", true),
         createBaseVNode("div", _hoisted_2$b, [
-          _cache[8] || (_cache[8] = createBaseVNode("div", null, [
+          _cache[9] || (_cache[9] = createBaseVNode("div", null, [
             createBaseVNode("p")
           ], -1)),
           !unref(status).connected ? (openBlock(), createBlock(_component_BsMessage, {
@@ -20806,37 +20806,47 @@ const _sfc_main$r = {
                 ])),
                 _: 1
               }),
-              _cache[2] || (_cache[2] = createTextVNode(" meny and select wifi. Restart device after settings are selected. "))
+              _cache[2] || (_cache[2] = createTextVNode(" meny and select wifi. Restart device after wifi is configured. "))
             ]),
             _: 1
           })) : createCommentVNode("", true),
-          unref(status).ispindel_config ? (openBlock(), createBlock(_component_BsMessage, {
+          unref(status).wifi_setup ? (openBlock(), createBlock(_component_BsMessage, {
             key: 6,
+            dismissable: false,
+            alert: "warning"
+          }, {
+            default: withCtx(() => _cache[3] || (_cache[3] = [
+              createTextVNode(" Sensors are not enabled when in wifi setup mode! ")
+            ])),
+            _: 1
+          })) : createCommentVNode("", true),
+          unref(status).ispindel_config ? (openBlock(), createBlock(_component_BsMessage, {
+            key: 7,
             dismissable: true,
             alert: "info"
           }, {
             default: withCtx(() => [
-              _cache[5] || (_cache[5] = createTextVNode(" iSpindel configuration found, ")),
+              _cache[6] || (_cache[6] = createTextVNode(" iSpindel configuration found, ")),
               createVNode(_component_router_link, {
                 class: "alert-link",
                 to: "/device/hardware"
               }, {
-                default: withCtx(() => _cache[3] || (_cache[3] = [
+                default: withCtx(() => _cache[4] || (_cache[4] = [
                   createTextVNode("import")
                 ])),
                 _: 1
               }),
-              _cache[6] || (_cache[6] = createTextVNode(" formula/gyro or ")),
+              _cache[7] || (_cache[7] = createTextVNode(" formula/gyro or ")),
               createVNode(_component_router_link, {
                 class: "alert-link",
                 to: "/other/support"
               }, {
-                default: withCtx(() => _cache[4] || (_cache[4] = [
+                default: withCtx(() => _cache[5] || (_cache[5] = [
                   createTextVNode("delete")
                 ])),
                 _: 1
               }),
-              _cache[7] || (_cache[7] = createTextVNode(" the configuration. "))
+              _cache[8] || (_cache[8] = createTextVNode(" the configuration. "))
             ]),
             _: 1
           })) : createCommentVNode("", true)
