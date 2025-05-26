@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..8cd58b";
+      return "..9d43b7";
     },
     isEsp8266() {
       return this.platform === "ESP8266";
@@ -17623,7 +17623,7 @@ const _sfc_main$M = {
                 modelValue: batteryLife.value,
                 "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => batteryLife.value = $event),
                 label: "Estimated battery life",
-                help: "Based on current settings and platform, this is the estimated battery life",
+                help: "Estimated based on current platform, 2200mAh battery and 5 seconds runtime",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
