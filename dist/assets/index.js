@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..8122f5";
+      return "..f91b8f";
     },
     isEsp8266() {
       return this.platform === "ESP8266";
@@ -10144,7 +10144,10 @@ const _hoisted_30 = { class: "col-md-4" };
 const _hoisted_31 = { class: "text-center" };
 const _hoisted_32 = { class: "badge bg-secondary" };
 const _hoisted_33 = { class: "badge bg-secondary" };
-const _hoisted_34 = { class: "col-md-4" };
+const _hoisted_34 = {
+  key: 10,
+  class: "col-md-4"
+};
 const _hoisted_35 = { class: "text-center" };
 const _hoisted_36 = { class: "badge bg-secondary" };
 const _hoisted_37 = { class: "badge bg-secondary" };
@@ -10479,7 +10482,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_34, [
+            unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_34, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Hardware"
@@ -10494,7 +10497,7 @@ const _sfc_main$X = {
                 ]),
                 _: 1
               })
-            ]),
+            ])) : createCommentVNode("", true),
             createBaseVNode("div", _hoisted_38, [
               createVNode(_component_BsCard, {
                 header: "Device",
@@ -19484,7 +19487,7 @@ const _sfc_main$B = {
               onClick: hardwareScan,
               type: "button",
               class: "btn btn-secondary",
-              disabled: unref(global$1).disabled
+              disabled: unref(global$1).disabled || unref(status).wifi_setup == true
             }, [
               createBaseVNode("span", {
                 class: "spinner-border spinner-border-sm",
