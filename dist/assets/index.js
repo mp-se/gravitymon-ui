@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..a70ca7";
+      return "..8122f5";
     },
     isEsp8266() {
       return this.platform === "ESP8266";
@@ -10251,7 +10251,7 @@ const _sfc_main$X = {
         ], 64)) : createCommentVNode("", true),
         unref(status) ? (openBlock(), createElementBlock("div", _hoisted_2$C, [
           createBaseVNode("div", _hoisted_3$w, [
-            unref(status).self_check.gravity_formula ? (openBlock(), createElementBlock("div", _hoisted_4$s, [
+            unref(status).self_check.gravity_formula && unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_4$s, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
@@ -10288,7 +10288,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            unref(status).self_check.gyro_calibration && unref(status).self_check.gyro_connected ? (openBlock(), createElementBlock("div", _hoisted_8$l, [
+            unref(status).self_check.gyro_calibration && unref(status).self_check.gyro_connected && unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_8$l, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
@@ -10306,7 +10306,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            unref(status).self_check.gyro_calibration && unref(status).self_check.gyro_connected ? (openBlock(), createElementBlock("div", _hoisted_10$i, [
+            unref(status).self_check.gyro_calibration && unref(status).self_check.gyro_connected && unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_10$i, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
@@ -10351,7 +10351,7 @@ const _sfc_main$X = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            unref(status).self_check.temp_connected ? (openBlock(), createElementBlock("div", _hoisted_14$c, [
+            unref(status).self_check.temp_connected && unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_14$c, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
@@ -11089,7 +11089,7 @@ const _sfc_main$V = {
                   onClick: calibrate,
                   type: "button",
                   class: "btn btn-secondary",
-                  disabled: unref(global$1).disabled || !unref(status).self_check.gyro_connected
+                  disabled: unref(global$1).disabled || !unref(status).self_check.gyro_connected || unref(status).wifi_setup
                 }, [
                   createBaseVNode("span", {
                     class: "spinner-border spinner-border-sm",
