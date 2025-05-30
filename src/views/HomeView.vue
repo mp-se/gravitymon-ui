@@ -178,7 +178,7 @@
           </BsCard>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" v-if="status.wifi_setup == false">
           <BsCard header="Device" title="Hardware">
             <p class="text-center">
               Board: <span class="badge bg-secondary">{{ status.board }}</span> Gyro:

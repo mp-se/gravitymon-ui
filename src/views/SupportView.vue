@@ -85,7 +85,7 @@
           @click="hardwareScan"
           type="button"
           class="btn btn-secondary"
-          :disabled="global.disabled"
+          :disabled="global.disabled || status.wifi_setup == true"
         >
           <span
             class="spinner-border spinner-border-sm"
