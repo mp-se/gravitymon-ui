@@ -181,7 +181,7 @@
               @click="calibrate"
               type="button"
               class="btn btn-secondary"
-              :disabled="global.disabled || !status.self_check.gyro_connected"
+              :disabled="global.disabled || !status.self_check.gyro_connected || status.wifi_setup"
             >
               <span
                 class="spinner-border spinner-border-sm"
