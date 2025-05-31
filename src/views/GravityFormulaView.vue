@@ -12,6 +12,37 @@
       Gyro is disbled so the device will only be able to measure temperature
     </BsMessage>
 
+    <div
+      class="col-md-12"
+      v-if="
+        status.self_check.gyro_calibration &&
+        status.self_check.gyro_connected &&
+        status.wifi_setup == false
+      "
+    >
+      <div class="alert alert-info">
+        <div class="row">
+          <div class="col-md-2">
+            <label class="form-label fs-6 fw-bold">Angle:</label>&nbsp;
+            <label class="form-label fs-6 ">{{ status.angle }}</label>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fs-6 fw-bold">Average angle:</label>&nbsp;
+            <label class="form-label fs-6 ">{{ angle.average }} ({{ angle.count }})</label>&nbsp;
+
+            <button
+              @click="clearAverage"
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              style="font-size: 0.7rem"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <form @submit.prevent="save" class="needs-validation" novalidate>
       <div class="row">
         <div class="col-md-10">
@@ -159,9 +190,9 @@
 </template>
 
 <script setup>
-import { nextTick, ref } from 'vue'
+import { nextTick, ref, onBeforeMount, onBeforeUnmount } from 'vue'
 import { validateCurrentForm } from '@/modules/utils'
-import { global, config } from '@/modules/pinia'
+import { global, status, config } from '@/modules/pinia'
 import GravityGraphFragment from '@/fragments/GravityGraphFragment.vue'
 import { logDebug } from '@/modules/logger'
 import * as badge from '@/modules/badge'
@@ -171,6 +202,9 @@ import FormulaTableFragment from '@/fragments/FormulaTableFragment.vue'
 import { PolynomialRegression } from 'ml-regression-polynomial'
 import { validateFormula } from '@/modules/formula'
 import { gravityToSG } from '@/modules/utils'
+
+const polling = ref(null)
+const angle = ref({ average: 0, sum: 0, count: 0 })
 
 const expressions = ref(null)
 const noDecimals = ref(8)
@@ -183,6 +217,35 @@ const formulaOutputOptions = ref([
   { label: 'Table', value: 2 },
   { label: 'Graph', value: 3 }
 ])
+
+function clearAverage() {
+  angle.value.sum = 0
+  angle.value.count = 0
+  angle.value.sum = 0
+}
+
+function refresh() {
+  status.load((success) => {
+    if (success) {
+      if (!status.self_check.gyro_moving) {
+        angle.value.sum += parseFloat(status.angle)
+        angle.value.count++
+        angle.value.average = (
+          Math.round((angle.value.sum / angle.value.count) * 100) / 100
+        ).toFixed(2)
+      }
+    }
+  })
+}
+
+onBeforeMount(() => {
+  refresh()
+  polling.value = setInterval(refresh, 4000)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(polling.value)
+})
 
 const formulaSelectCallback = (opt) => {
   config.gravity_formula = opt
