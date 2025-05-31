@@ -8,6 +8,7 @@ import HomeView from '@/views/HomeView.vue'
 import DeviceSettingsView from '@/views/DeviceSettingsView.vue'
 import DeviceHardwareView from '@/views/DeviceHardwareView.vue'
 import DeviceWifiView from '@/views/DeviceWifiView.vue'
+import DeviceWifi2View from '@/views/DeviceWifi2View.vue'
 import GravitySettingsView from '@/views/GravitySettingsView.vue'
 import GravityFormulaView from '@/views/GravityFormulaView.vue'
 import PushSettingsView from '@/views/PushSettingsView.vue'
@@ -45,6 +46,11 @@ const routes = [
     path: '/device/wifi',
     name: 'device-wifi',
     component: DeviceWifiView
+  },
+  {
+    path: '/device/wifi2',
+    name: 'device-wifi-manual',
+    component: DeviceWifi2View
   },
   {
     path: '/other/backup',
