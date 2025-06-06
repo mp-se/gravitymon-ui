@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..7ac589";
+      return "..533e61";
     },
     isEsp8266() {
       return this.platform === "ESP8266";
@@ -7258,6 +7258,22 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         callback(true);
       }).catch((err) => {
         logError("statusStore.setSleepMode()", err);
+        callback(false);
+      });
+    },
+    getGyro(callback) {
+      logInfo("statusStore.getGyro()", "Fetching /api/gyro");
+      fetch(global$1.baseURL + "api/gyro", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        signal: AbortSignal.timeout(global$1.fetchTimout)
+      }).then((res) => res.json()).then((json) => {
+        logInfo("statusStore.getGyro()", "Fetching /api/gyro completed", json);
+        callback(true, json);
+      }).catch((err) => {
+        logError("statusStore.getGyro()", err);
         callback(false);
       });
     }
@@ -10138,7 +10154,7 @@ const _hoisted_26$2 = {
   class: "col-md-4"
 };
 const _hoisted_27$1 = { class: "text-center" };
-const _hoisted_28$1 = { class: "col-md-4" };
+const _hoisted_28 = { class: "col-md-4" };
 const _hoisted_29 = { class: "text-center" };
 const _hoisted_30 = { class: "col-md-4" };
 const _hoisted_31 = { class: "text-center" };
@@ -10455,7 +10471,7 @@ const _sfc_main$Y = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            createBaseVNode("div", _hoisted_28$1, [
+            createBaseVNode("div", _hoisted_28, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Software version"
@@ -17370,30 +17386,29 @@ const _hoisted_2$v = {
 };
 const _hoisted_3$q = { class: "alert alert-info" };
 const _hoisted_4$m = { class: "row" };
-const _hoisted_5$i = { class: "col-md-2" };
+const _hoisted_5$i = { class: "col-md-6" };
 const _hoisted_6$i = { class: "form-label fs-6" };
-const _hoisted_7$g = { class: "col-md-4" };
-const _hoisted_8$g = { class: "form-label fs-6" };
-const _hoisted_9$e = { class: "row" };
-const _hoisted_10$d = { class: "col-md-10" };
-const _hoisted_11$a = { class: "col-md-2" };
-const _hoisted_12$9 = { class: "col-md-6" };
-const _hoisted_13$9 = { class: "input-group has-validation" };
-const _hoisted_14$8 = { class: "input-group-text" };
-const _hoisted_15$8 = ["onUpdate:modelValue", "disabled"];
-const _hoisted_16$7 = { class: "col-md-6" };
-const _hoisted_17$5 = { class: "input-group has-validation" };
-const _hoisted_18$4 = { class: "input-group-text" };
-const _hoisted_19$3 = ["onUpdate:modelValue", "disabled"];
-const _hoisted_20$1 = { class: "input-group-text" };
+const _hoisted_7$g = { class: "form-label fs-6" };
+const _hoisted_8$g = { class: "row" };
+const _hoisted_9$e = { class: "col-md-10" };
+const _hoisted_10$d = { class: "col-md-2" };
+const _hoisted_11$a = { class: "col-md-6" };
+const _hoisted_12$9 = { class: "input-group has-validation" };
+const _hoisted_13$9 = { class: "input-group-text" };
+const _hoisted_14$8 = ["onUpdate:modelValue", "disabled"];
+const _hoisted_15$8 = { class: "col-md-6" };
+const _hoisted_16$7 = { class: "input-group has-validation" };
+const _hoisted_17$5 = { class: "input-group-text" };
+const _hoisted_18$4 = ["onUpdate:modelValue", "disabled"];
+const _hoisted_19$3 = { class: "input-group-text" };
+const _hoisted_20$1 = { class: "col-md-6" };
 const _hoisted_21$1 = { class: "col-md-6" };
-const _hoisted_22$1 = { class: "col-md-6" };
-const _hoisted_23$1 = { class: "row gy-2" };
-const _hoisted_24 = { class: "col-md-12" };
-const _hoisted_25 = ["disabled"];
-const _hoisted_26 = ["hidden"];
-const _hoisted_27 = ["disabled"];
-const _hoisted_28 = {
+const _hoisted_22$1 = { class: "row gy-2" };
+const _hoisted_23$1 = { class: "col-md-12" };
+const _hoisted_24 = ["disabled"];
+const _hoisted_25 = ["hidden"];
+const _hoisted_26 = ["disabled"];
+const _hoisted_27 = {
   key: 0,
   class: "row"
 };
@@ -17419,10 +17434,10 @@ const _sfc_main$N = {
       angle.value.sum = 0;
     }
     function refresh() {
-      status.load((success) => {
+      status.getGyro((success, data) => {
         if (success) {
-          if (!status.self_check.gyro_moving) {
-            angle.value.sum += parseFloat(status.angle);
+          if (data.angle !== 0) {
+            angle.value.sum += parseFloat(data.angle);
             angle.value.count++;
             angle.value.average = (Math.round(angle.value.sum / angle.value.count * 100) / 100).toFixed(2);
           }
@@ -17431,7 +17446,7 @@ const _sfc_main$N = {
     }
     onBeforeMount(() => {
       refresh();
-      polling.value = setInterval(refresh, 4e3);
+      polling.value = setInterval(refresh, 2e3);
     });
     onBeforeUnmount(() => {
       clearInterval(polling.value);
@@ -17484,9 +17499,9 @@ const _sfc_main$N = {
       const _component_BsInputNumber = resolveComponent("BsInputNumber");
       const _component_BsInputRadio = resolveComponent("BsInputRadio");
       return openBlock(), createElementBlock("div", _hoisted_1$A, [
-        _cache[18] || (_cache[18] = createBaseVNode("p", null, null, -1)),
-        _cache[19] || (_cache[19] = createBaseVNode("p", { class: "h2" }, "Gravity - Formula", -1)),
-        _cache[20] || (_cache[20] = createBaseVNode("hr", null, null, -1)),
+        _cache[19] || (_cache[19] = createBaseVNode("p", null, null, -1)),
+        _cache[20] || (_cache[20] = createBaseVNode("p", { class: "h2" }, "Gravity - Formula", -1)),
+        _cache[21] || (_cache[21] = createBaseVNode("hr", null, null, -1)),
         unref(config).gravity_formula === "" ? (openBlock(), createBlock(_component_BsMessage, {
           key: 0,
           dismissable: "true",
@@ -17515,13 +17530,12 @@ const _sfc_main$N = {
               createBaseVNode("div", _hoisted_5$i, [
                 _cache[6] || (_cache[6] = createBaseVNode("label", { class: "form-label fs-6 fw-bold" }, "Angle:", -1)),
                 _cache[7] || (_cache[7] = createTextVNode("  ")),
-                createBaseVNode("label", _hoisted_6$i, toDisplayString(unref(status).angle), 1)
-              ]),
-              createBaseVNode("div", _hoisted_7$g, [
-                _cache[8] || (_cache[8] = createBaseVNode("label", { class: "form-label fs-6 fw-bold" }, "Average angle:", -1)),
-                _cache[9] || (_cache[9] = createTextVNode("  ")),
-                createBaseVNode("label", _hoisted_8$g, toDisplayString(angle.value.average) + " (" + toDisplayString(angle.value.count) + ")", 1),
+                createBaseVNode("label", _hoisted_6$i, toDisplayString(unref(status).angle), 1),
+                _cache[8] || (_cache[8] = createTextVNode("  ")),
+                _cache[9] || (_cache[9] = createBaseVNode("label", { class: "form-label fs-6 fw-bold" }, "Average angle:", -1)),
                 _cache[10] || (_cache[10] = createTextVNode("  ")),
+                createBaseVNode("label", _hoisted_7$g, toDisplayString(angle.value.average) + " (" + toDisplayString(angle.value.count) + ")", 1),
+                _cache[11] || (_cache[11] = createTextVNode("  ")),
                 createBaseVNode("button", {
                   onClick: clearAverage,
                   type: "button",
@@ -17537,8 +17551,8 @@ const _sfc_main$N = {
           class: "needs-validation",
           novalidate: ""
         }, [
-          createBaseVNode("div", _hoisted_9$e, [
-            createBaseVNode("div", _hoisted_10$d, [
+          createBaseVNode("div", _hoisted_8$g, [
+            createBaseVNode("div", _hoisted_9$e, [
               createVNode(_component_BsInputText, {
                 modelValue: unref(config).gravity_formula,
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(config).gravity_formula = $event),
@@ -17549,7 +17563,7 @@ const _sfc_main$N = {
                 disabled: unref(global$1).disabled || unref(config).gyro_disabled
               }, null, 8, ["modelValue", "badge", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_11$a, [
+            createBaseVNode("div", _hoisted_10$d, [
               createVNode(_component_BsDropdown, {
                 label: "Formulas",
                 button: "Formula",
@@ -17558,14 +17572,14 @@ const _sfc_main$N = {
                 disabled: formulaOptions.value.length == 0
               }, null, 8, ["options", "disabled"])
             ]),
-            _cache[12] || (_cache[12] = createBaseVNode("div", { class: "col-md-12" }, [
+            _cache[13] || (_cache[13] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("label", { class: "form-label fw-bold" }, "Data for gravity calculation (Angle and Gravity)")
             ], -1)),
             (openBlock(true), createElementBlock(Fragment, null, renderList(unref(config).formula_calculation_data, (data, index) => {
               return openBlock(), createElementBlock(Fragment, { key: index }, [
-                createBaseVNode("div", _hoisted_12$9, [
-                  createBaseVNode("div", _hoisted_13$9, [
-                    createBaseVNode("span", _hoisted_14$8, toDisplayString(index + 1), 1),
+                createBaseVNode("div", _hoisted_11$a, [
+                  createBaseVNode("div", _hoisted_12$9, [
+                    createBaseVNode("span", _hoisted_13$9, toDisplayString(index + 1), 1),
                     withDirectives(createBaseVNode("input", {
                       "onUpdate:modelValue": ($event) => unref(config).formula_calculation_data[index].a = $event,
                       class: "form-control w-2",
@@ -17574,15 +17588,15 @@ const _sfc_main$N = {
                       max: "90",
                       step: ".001",
                       disabled: unref(global$1).disabled || unref(config).gyro_disabled
-                    }, null, 8, _hoisted_15$8), [
+                    }, null, 8, _hoisted_14$8), [
                       [vModelText, unref(config).formula_calculation_data[index].a]
                     ]),
-                    _cache[11] || (_cache[11] = createBaseVNode("span", { class: "input-group-text" }, toDisplayString("°"), -1))
+                    _cache[12] || (_cache[12] = createBaseVNode("span", { class: "input-group-text" }, toDisplayString("°"), -1))
                   ])
                 ]),
-                createBaseVNode("div", _hoisted_16$7, [
-                  createBaseVNode("div", _hoisted_17$5, [
-                    createBaseVNode("span", _hoisted_18$4, toDisplayString(index + 1), 1),
+                createBaseVNode("div", _hoisted_15$8, [
+                  createBaseVNode("div", _hoisted_16$7, [
+                    createBaseVNode("span", _hoisted_17$5, toDisplayString(index + 1), 1),
                     withDirectives(createBaseVNode("input", {
                       "onUpdate:modelValue": ($event) => unref(config).formula_calculation_data[index].g = $event,
                       class: "form-control",
@@ -17591,16 +17605,16 @@ const _sfc_main$N = {
                       max: "30",
                       step: ".0001",
                       disabled: unref(global$1).disabled || unref(config).gyro_disabled
-                    }, null, 8, _hoisted_19$3), [
+                    }, null, 8, _hoisted_18$4), [
                       [vModelText, unref(config).formula_calculation_data[index].g]
                     ]),
-                    createBaseVNode("span", _hoisted_20$1, toDisplayString(unref(config).gravity_unit == "G" ? "SG" : "P"), 1)
+                    createBaseVNode("span", _hoisted_19$3, toDisplayString(unref(config).gravity_unit == "G" ? "SG" : "P"), 1)
                   ])
                 ])
               ], 64);
             }), 128)),
-            _cache[13] || (_cache[13] = createBaseVNode("div", { class: "form-text" }, " Enter the data that is used to create a new formula. The most optimal formula will be selected and also validated towards these values. ", -1)),
-            createBaseVNode("div", _hoisted_21$1, [
+            _cache[14] || (_cache[14] = createBaseVNode("div", { class: "form-text" }, " Enter the data that is used to create a new formula. The most optimal formula will be selected and also validated towards these values. ", -1)),
+            createBaseVNode("div", _hoisted_20$1, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).formula_max_deviation,
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(config).formula_max_deviation = $event),
@@ -17613,7 +17627,7 @@ const _sfc_main$N = {
                 disabled: unref(global$1).disabled || unref(config).gyro_disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_22$1, [
+            createBaseVNode("div", _hoisted_21$1, [
               createVNode(_component_BsInputNumber, {
                 modelValue: noDecimals.value,
                 "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => noDecimals.value = $event),
@@ -17627,9 +17641,9 @@ const _sfc_main$N = {
               }, null, 8, ["modelValue", "disabled"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_23$1, [
-            createBaseVNode("div", _hoisted_24, [
-              _cache[15] || (_cache[15] = createBaseVNode("p", null, null, -1)),
+          createBaseVNode("div", _hoisted_22$1, [
+            createBaseVNode("div", _hoisted_23$1, [
+              _cache[16] || (_cache[16] = createBaseVNode("p", null, null, -1)),
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -17640,20 +17654,20 @@ const _sfc_main$N = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_26),
-                _cache[14] || (_cache[14] = createTextVNode("  Save"))
-              ], 8, _hoisted_25),
-              _cache[16] || (_cache[16] = createTextVNode("  ")),
+                }, null, 8, _hoisted_25),
+                _cache[15] || (_cache[15] = createTextVNode("  Save"))
+              ], 8, _hoisted_24),
+              _cache[17] || (_cache[17] = createTextVNode("  ")),
               createBaseVNode("button", {
                 onClick: withModifiers(createFormula, ["prevent"]),
                 type: "button",
                 class: "btn btn-primary w-2",
                 disabled: unref(global$1).disabled || unref(config).gyro_disabled
-              }, " Create formula", 8, _hoisted_27),
-              _cache[17] || (_cache[17] = createTextVNode("  "))
+              }, " Create formula", 8, _hoisted_26),
+              _cache[18] || (_cache[18] = createTextVNode("  "))
             ])
           ]),
-          expressions.value != null ? (openBlock(), createElementBlock("div", _hoisted_28, [
+          expressions.value != null ? (openBlock(), createElementBlock("div", _hoisted_27, [
             createVNode(_component_BsInputRadio, {
               modelValue: formulaOutput.value,
               "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => formulaOutput.value = $event),
