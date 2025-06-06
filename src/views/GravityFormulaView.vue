@@ -22,11 +22,9 @@
     >
       <div class="alert alert-info">
         <div class="row">
-          <div class="col-md-2">
+          <div class="col-md-6">
             <label class="form-label fs-6 fw-bold">Angle:</label>&nbsp;
-            <label class="form-label fs-6 ">{{ status.angle }}</label>
-          </div>
-          <div class="col-md-4">
+            <label class="form-label fs-6 ">{{ status.angle }}</label>&nbsp;
             <label class="form-label fs-6 fw-bold">Average angle:</label>&nbsp;
             <label class="form-label fs-6 ">{{ angle.average }} ({{ angle.count }})</label>&nbsp;
 
@@ -225,10 +223,10 @@ function clearAverage() {
 }
 
 function refresh() {
-  status.load((success) => {
+  status.getGyro((success, data) => {
     if (success) {
-      if (!status.self_check.gyro_moving) {
-        angle.value.sum += parseFloat(status.angle)
+      if (data.angle !== 0) {
+        angle.value.sum += parseFloat(data.angle)
         angle.value.count++
         angle.value.average = (
           Math.round((angle.value.sum / angle.value.count) * 100) / 100
@@ -240,7 +238,7 @@ function refresh() {
 
 onBeforeMount(() => {
   refresh()
-  polling.value = setInterval(refresh, 4000)
+  polling.value = setInterval(refresh, 2000)
 })
 
 onBeforeUnmount(() => {

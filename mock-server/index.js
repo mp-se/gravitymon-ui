@@ -141,6 +141,23 @@ app.get('/api/push/status', (req, res) => {
   res.send(data)
 })
 
+app.get('/api/gyro', (req, res) => {
+  console.log('GET: /api/gyro')
+  /* 
+   * Description:    Return status of the current gyro. 
+   * Authentication: Required
+   * Limitation:     - 
+   * Note:           -
+   * Return:         200 OK
+   */
+  var data = {
+    angle: 45
+  }
+
+  res.type('application/json')
+  res.send(data)
+})
+
 app.get('/api/formula', (req, res) => {
   console.log('GET: /api/formula')
   /* 

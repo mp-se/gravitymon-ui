@@ -164,6 +164,25 @@ export const useStatusStore = defineStore('status', {
           logError('statusStore.setSleepMode()', err)
           callback(false)
         })
+    },
+    getGyro(callback) {
+      logInfo('statusStore.getGyro()', 'Fetching /api/gyro')
+      fetch(global.baseURL + 'api/gyro', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        signal: AbortSignal.timeout(global.fetchTimout)
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          logInfo('statusStore.getGyro()', 'Fetching /api/gyro completed', json)
+          callback(true, json)
+        })
+        .catch((err) => {
+          logError('statusStore.getGyro()', err)
+          callback(false)
+        })
     }
   }
 })
