@@ -7099,7 +7099,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.2.0";
     },
     uiBuild() {
-      return "..533e61";
+      return "..4be1fd";
     },
     isEsp8266() {
       return this.platform === "ESP8266";
@@ -18049,7 +18049,7 @@ const _sfc_main$K = {
     });
     const runTest = () => {
       const data = {
-        push_format: "http_post"
+        push_format: "http_post_format_gravity"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -18293,7 +18293,7 @@ const _sfc_main$J = {
     });
     const runTest = () => {
       const data = {
-        push_format: "http_post2"
+        push_format: "http_post2_format_gravity"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -18505,7 +18505,7 @@ const _sfc_main$I = {
     });
     const runTest = () => {
       const data = {
-        push_format: "http_get"
+        push_format: "http_get_format_gravity"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -18713,7 +18713,7 @@ const _sfc_main$H = {
     });
     const runTest = () => {
       const data = {
-        push_format: "influxdb2"
+        push_format: "influxdb2_format_gravity"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -18903,7 +18903,7 @@ const _sfc_main$G = {
     });
     const runTest = () => {
       const data = {
-        push_format: "mqtt"
+        push_format: "mqtt_format_gravity"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
