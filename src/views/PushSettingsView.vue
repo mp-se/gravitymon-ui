@@ -247,7 +247,7 @@ const calculateBatteryLife = () => {
     }
   }
 
-  if (rt < 4) rt = 4 // Assume that this takes at least 4 seconds to read sensors and do push.
+  // if (rt < 4) rt = 4 // Assume that this takes at least 4 seconds to read sensors and do push.
 
   // The deep sleep will consume approx 1mA per day.
   var powerPerDay =
