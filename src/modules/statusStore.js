@@ -42,12 +42,6 @@ export const useStatusStore = defineStore('status', {
     }
   },
   getters: {
-    needsCalibration() {
-      return this.gyro_family == 'MPU6050' || this.gyro_family == 'MPU6500' ? true : false
-    },
-    allowGyroSwapXY() {
-      return this.gyro_family != 'MPU6050' && this.gyro_family != 'MPU6500' ? true : false
-    }
   },
   actions: {
     load(callback) {
@@ -67,12 +61,12 @@ export const useStatusStore = defineStore('status', {
           this.sleep_mode = json.sleep_mode
           this.battery = json.battery
           this.rssi = json.rssi
-          this.board = json.board
+          this.board = json.board.toUpperCase()
           this.app_ver = json.app_ver
           this.app_build = json.app_build
           this.mdns = json.mdns
           this.platform = json.platform.toUpperCase()
-          this.hardware = json.hardware
+          this.hardware = json.hardware.toUpperCase()
           this.wifi_ssid = json.wifi_ssid
           this.ip = json.ip
           this.ispindel_config = json.ispindel_config
@@ -84,7 +78,7 @@ export const useStatusStore = defineStore('status', {
           this.self_check.battery_level = json.self_check.battery_level
           this.self_check.push_targets = json.self_check.push_targets
           this.ble_supported = json.ble_supported
-          this.gyro_family = json.gyro_family
+          this.gyro_family = json.gyro_family.toUpperCase()
           this.total_heap = json.total_heap
           this.free_heap = json.free_heap
           this.wifi_setup = json.wifi_setup

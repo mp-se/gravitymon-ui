@@ -66,6 +66,7 @@ export var configData = {
   ble_tilt_color: 'pink',
   ble_format: 1,
   // Gravity - Generic
+  gyro_type: 0,
   gravity_formula: '-0.0000047197506*tilt^2+0.0019926321*tilt+0.96079491',
   gravity_temp_adjustment: false,
   gyro_read_count: 50,
@@ -73,8 +74,6 @@ export var configData = {
   formula_max_deviation: 0.02,
   formula_calibration_temp: 20,
   ignore_low_angles: false,
-  gyro_disabled: false,
-  voltage_pin: 35,
 /*
   gravity_unit: 'P',
   formula_calculation_data: [

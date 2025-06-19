@@ -25,7 +25,6 @@ export const useConfigStore = defineStore('config', {
       battery_saving: false,
       tempsensor_resolution: 0,
       temp_adjustment_value: 0, // C or F
-      voltage_pin: 0,
       // Wifi
       wifi_portal_timeout: 0,
       wifi_connect_timeout: 0,
@@ -80,6 +79,7 @@ export const useConfigStore = defineStore('config', {
       ble_tilt_color: '',
       ble_format: 0,
       // Gravity formula
+      gyro_type: 0,
       gravity_formula: '',
       gravity_temp_adjustment: false,
       formula_calculation_data: [], // SG or P
@@ -89,8 +89,7 @@ export const useConfigStore = defineStore('config', {
       formula_calibration_temp: 0, // C or F
       ignore_low_angles: false,
       gyro_calibration_data: [],
-      dark_mode: false,
-      gyro_disabled: false
+      dark_mode: false
     }
   },
   actions: {
@@ -162,14 +161,13 @@ export const useConfigStore = defineStore('config', {
           this.storage_sleep = json.storage_sleep
           this.voltage_factor = json.voltage_factor
           this.voltage_config = json.voltage_config
+          this.gyro_type = json.gyro_type
           this.gyro_temp = json.gyro_temp
           this.gyro_swap_xy = json.gyro_swap_xy
           this.gyro_filter = json.gyro_filter
           this.battery_saving = json.battery_saving
           this.tempsensor_resolution = json.tempsensor_resolution
           this.temp_adjustment_value = json.temp_adjustment_value
-          this.gyro_disabled = json.gyro_disabled
-          this.voltage_pin = json.voltage_pin
           // Wifi
           this.wifi_portal_timeout = json.wifi_portal_timeout
           this.wifi_connect_timeout = json.wifi_connect_timeout

@@ -12,6 +12,15 @@
     >
     </BsMessage>
 
+    <BsMessage dismissable="true" message="" alert="info" v-if="!scanning">
+      If you have an hidden SSID then you can set it manually 
+      <router-link
+        class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+        to="/device/wifi2"
+        >here</router-link
+      >
+    </BsMessage>
+
     <BsMessage
       v-if="config.wifi_ssid === '' && config.wifi_ssid2 === ''"
       dismissable="true"

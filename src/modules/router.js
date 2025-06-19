@@ -7,6 +7,7 @@ import { global } from '@/modules/pinia'
 import HomeView from '@/views/HomeView.vue'
 import DeviceSettingsView from '@/views/DeviceSettingsView.vue'
 import DeviceHardwareView from '@/views/DeviceHardwareView.vue'
+import DeviceGyroView from '@/views/DeviceGyroView.vue'
 import DeviceWifiView from '@/views/DeviceWifiView.vue'
 import DeviceWifi2View from '@/views/DeviceWifi2View.vue'
 import GravitySettingsView from '@/views/GravitySettingsView.vue'
@@ -41,6 +42,11 @@ const routes = [
     path: '/device/hardware',
     name: 'device-hardware',
     component: DeviceHardwareView
+  },
+  {
+    path: '/device/gyro',
+    name: 'device-gyro',
+    component: DeviceGyroView
   },
   {
     path: '/device/wifi',
@@ -172,6 +178,11 @@ const items = ref([
         label: 'Hardware',
         badge: badge.deviceHardwareBadge,
         path: '/device/hardware'
+      },
+      {
+        label: 'Gyro',
+        badge: badge.deviceGyroBadge,
+        path: '/device/gyro'
       },
       {
         label: 'Wifi',

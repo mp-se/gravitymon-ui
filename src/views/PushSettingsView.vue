@@ -212,11 +212,6 @@ const calculateBatteryLife = () => {
       case 'ESP8266':
         pwrActive = 160
         break
-      case 'ESP32':
-        if (status.hardware == 'FLOATY')
-          pwrActive = 330 // mA per hour (260-379 mA)
-        else pwrActive = 320 // mA per hour (260-379 mA)
-        break
       case 'ESP32C3':
         pwrActive = 320 // mA per hour (290-350 mA)
         break
@@ -233,7 +228,6 @@ const calculateBatteryLife = () => {
   } else {
     switch (status.platform) {
       case 'ESP8266':
-      case 'ESP32':
       case 'ESP32C3':
       case 'ESP32S2':
         pwrActive = 160

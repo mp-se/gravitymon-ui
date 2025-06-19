@@ -7,7 +7,7 @@ import { isGyroCalibrated } from '@/modules/utils'
  * @returns number of items that needs attention
  */
 export function deviceBadge() {
-  return deviceSettingBadge() + deviceHardwareBadge() + deviceWifiBadge()
+  return deviceSettingBadge() + deviceHardwareBadge() + deviceGyroBadge() + deviceWifiBadge()
 }
 
 export function deviceSettingBadge() {
@@ -19,6 +19,10 @@ export function deviceMdnsBadge() {
 }
 
 export function deviceHardwareBadge() {
+  return 0
+}
+
+export function deviceGyroBadge() {
   return deviceGyroCalibratedBadge() + deviceMigrateIspindelBadge()
 }
 

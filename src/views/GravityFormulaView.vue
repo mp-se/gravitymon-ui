@@ -8,10 +8,6 @@
       You need to enter a formula in order to report gravity
     </BsMessage>
 
-    <BsMessage v-if="config.gyro_disabled" dismissable="true" message="" alert="warning">
-      Gyro is disbled so the device will only be able to measure temperature
-    </BsMessage>
-
     <div
       class="col-md-12"
       v-if="
@@ -24,9 +20,9 @@
         <div class="row">
           <div class="col-md-6">
             <label class="form-label fs-6 fw-bold">Angle:</label>&nbsp;
-            <label class="form-label fs-6 ">{{ status.angle }}</label>&nbsp;
-            <label class="form-label fs-6 fw-bold">Average angle:</label>&nbsp;
-            <label class="form-label fs-6 ">{{ angle.average }} ({{ angle.count }})</label>&nbsp;
+            <label class="form-label fs-6">{{ status.angle }}</label
+            >&nbsp; <label class="form-label fs-6 fw-bold">Average angle:</label>&nbsp;
+            <label class="form-label fs-6">{{ angle.average }} ({{ angle.count }})</label>&nbsp;
 
             <button
               @click="clearAverage"
@@ -50,7 +46,7 @@
             label="Gravity formula"
             help="Formula used to convert angle to gravity. If created outside Gravitymon the formula needs to be created for Specific Gravity!"
             :badge="badge.gravityFormulaBadge()"
-            :disabled="global.disabled || config.gyro_disabled"
+            :disabled="global.disabled"
           >
           </BsInputText>
         </div>
@@ -80,7 +76,7 @@
                 min="0"
                 max="90"
                 step=".001"
-                :disabled="global.disabled || config.gyro_disabled"
+                :disabled="global.disabled"
               />
               <span class="input-group-text">{{ '°' }}</span>
             </div>
@@ -95,7 +91,7 @@
                 min="0"
                 max="30"
                 step=".0001"
-                :disabled="global.disabled || config.gyro_disabled"
+                :disabled="global.disabled"
               />
               <span class="input-group-text">{{ config.gravity_unit == 'G' ? 'SG' : 'P' }}</span>
             </div>
@@ -116,7 +112,7 @@
             step=".0001"
             width="4"
             help="When validating the derived formula this is the maximum accepted deviation for the supplied values, use graph below to visually check where there are deviations"
-            :disabled="global.disabled || config.gyro_disabled"
+            :disabled="global.disabled"
           ></BsInputNumber>
         </div>
 
@@ -129,7 +125,7 @@
             step="1"
             width="4"
             help="How many decimals to try to limit in the formula"
-            :disabled="global.disabled || config.gyro_disabled"
+            :disabled="global.disabled"
           ></BsInputNumber>
         </div>
       </div>
@@ -154,7 +150,7 @@
             @click.prevent="createFormula"
             type="button"
             class="btn btn-primary w-2"
-            :disabled="global.disabled || config.gyro_disabled"
+            :disabled="global.disabled"
           >
             Create formula</button
           >&nbsp;
