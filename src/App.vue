@@ -20,7 +20,7 @@
     ></BsMessage>
   </div>
 
-  <BsMenuBar v-if="global.initialized" :disabled="global.disabled" brand="GravityMon" />
+  <BsMenuBar v-if="global.initialized" :disabled="global.disabled" brand="Gravitymon" />
 
   <div class="container">
     <div>
@@ -75,7 +75,7 @@
 
     <BsMessage v-if="status.ispindel_config" :dismissable="true" alert="info">
       iSpindel configuration found,
-      <router-link class="alert-link" to="/device/hardware">import</router-link>
+      <router-link class="alert-link" to="/device/gyro">import</router-link>
       formula/gyro or
       <router-link class="alert-link" to="/other/support">delete</router-link> the configuration.
     </BsMessage>

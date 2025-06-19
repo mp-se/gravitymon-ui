@@ -100,7 +100,7 @@
               Gyro has not been
               <router-link
                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                to="/device/hardware"
+                to="/device/gyro"
                 >calibrated</router-link
               >
               at 90 degrees
