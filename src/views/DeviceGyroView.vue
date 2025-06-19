@@ -5,7 +5,7 @@
     <hr />
 
     <BsMessage
-      v-if="!isGyroCalibrated() && config.gyro_type == 0"
+      v-if="!isGyroCalibrated() && config.gyro_type == 1"
       dismissable="true"
       message=""
       alert="warning"
@@ -42,7 +42,7 @@
           <BsInputSwitch
             v-model="config.gyro_swap_xy"
             label="Swap X and Y axis"
-            :disabled="global.disabled || config.gyro_type != 1"
+            :disabled="global.disabled || config.gyro_type != 2"
             help="Normally the X asis is used for tilt but some boards have a different orientation and use Y axis instead, applies to ICM42670-p"
           ></BsInputSwitch>
         </div>
@@ -92,7 +92,7 @@
             @click="calibrate"
             type="button"
             class="btn btn-secondary"
-            :disabled="global.disabled || !status.self_check.gyro_connected || status.wifi_setup || config.gyro_type == 1"
+            :disabled="global.disabled || !status.self_check.gyro_connected || status.wifi_setup || config.gyro_type == 2"
           >
             <span
               class="spinner-border spinner-border-sm"
@@ -142,12 +142,13 @@ import { logDebug, logError, logInfo } from '@/modules/logger'
 import { storeToRefs } from 'pinia'
 
 const gyroOptions = ref([
-  { label: 'MPU 6050/6500', value: 0 },
-  { label: 'ICM42670-p', value: 1 },
+  // value 0 is used internally at startup to check if gyro has been defined.
+  { label: 'MPU 6050/6500', value: 1 },
+  { label: 'ICM42670-p', value: 2 },
 ])
 
 const calibrationValues = computed(() => {
-  if(config.gyro_type == 0)
+  if(config.gyro_type == 1)
     return JSON.stringify(config.gyro_calibration_data)
 
   return "Calibration not needed for this gyro"
@@ -156,7 +157,7 @@ const calibrationValues = computed(() => {
 const { gyro_type } = storeToRefs(config)
 
 watch(gyro_type, () => {
-  if(config.gyro_type == 0)
+  if(config.gyro_type == 1)
     config.gyro_swap_xy = false
 })
 
