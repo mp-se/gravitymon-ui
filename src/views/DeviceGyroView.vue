@@ -34,8 +34,8 @@
           <BsInputSwitch
             v-model="config.gyro_filter"
             label="Filter gyro data"
-            help="When active the gyro data will be filtered through a filter to remove noise ans spikes (Only for ESP32)"
-            :disabled="global.disabled || !global.isEsp8266"
+            help="When active the gyro data will be filtered through a lowpass filter to remove noise ans spikes, applies to ESP32"
+            :disabled="global.disabled || global.isEsp8266"
           ></BsInputSwitch>
         </div>
         <div class="col-md-6">
