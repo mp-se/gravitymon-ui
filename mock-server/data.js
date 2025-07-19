@@ -20,6 +20,7 @@ export var configData = {
   battery_saving: true,
   tempsensor_resolution: 9,
   temp_adjustment_value: 0,
+  charging_pin_enabled: false,
   // Wifi
   wifi_scan_ap: true,
   wifi_portal_timeout: 120,

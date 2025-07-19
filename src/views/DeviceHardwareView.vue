@@ -51,6 +51,14 @@
             :disabled="global.disabled"
           ></BsInputSwitch>
         </div>
+        <div class="col-md-6" v-if="!global.isEsp8266">
+          <BsInputSwitch
+            v-model="config.charging_pin_enabled"
+            label="Charging Pin Mode"
+            help="If enabled and the device will go into sleep when charging power exceeds 2V on the defined pin and wakeup when power is lost."
+            :disabled="global.disabled"
+          ></BsInputSwitch>
+        </div>
         <div class="col-md-6">
           <BsInputSwitch
             v-model="config.battery_saving"

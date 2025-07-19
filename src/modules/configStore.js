@@ -25,6 +25,7 @@ export const useConfigStore = defineStore('config', {
       battery_saving: false,
       tempsensor_resolution: 0,
       temp_adjustment_value: 0, // C or F
+      charging_pin_enabled: false,
       // Wifi
       wifi_portal_timeout: 0,
       wifi_connect_timeout: 0,
@@ -168,6 +169,7 @@ export const useConfigStore = defineStore('config', {
           this.battery_saving = json.battery_saving
           this.tempsensor_resolution = json.tempsensor_resolution
           this.temp_adjustment_value = json.temp_adjustment_value
+          this.charging_pin_enabled = json.charging_pin_enabled
           // Wifi
           this.wifi_portal_timeout = json.wifi_portal_timeout
           this.wifi_connect_timeout = json.wifi_connect_timeout
