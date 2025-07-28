@@ -15,12 +15,7 @@ export const useStatusStore = defineStore('status', {
       battery: 0,
       sleep_mode: false,
       rssi: 0,
-      board: '',
-      app_ver: '',
-      app_build: '',
       mdns: '',
-      platform: '',
-      hardware: '',
       wifi_ssid: '',
       ip: '',
       total_heap: 0,
@@ -41,8 +36,7 @@ export const useStatusStore = defineStore('status', {
       connected: true
     }
   },
-  getters: {
-  },
+  getters: {},
   actions: {
     load(callback) {
       logInfo('statusStore.load()', 'Fetching /api/status')
@@ -61,12 +55,7 @@ export const useStatusStore = defineStore('status', {
           this.sleep_mode = json.sleep_mode
           this.battery = json.battery
           this.rssi = json.rssi
-          this.board = json.board.toUpperCase()
-          this.app_ver = json.app_ver
-          this.app_build = json.app_build
           this.mdns = json.mdns
-          this.platform = json.platform.toUpperCase()
-          this.hardware = json.hardware.toUpperCase()
           this.wifi_ssid = json.wifi_ssid
           this.ip = json.ip
           this.ispindel_config = json.ispindel_config

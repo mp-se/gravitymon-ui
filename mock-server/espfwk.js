@@ -5,7 +5,7 @@
  */
 
 import { createRequire } from 'module'
-import { configData, statusData } from './data.js'
+import { configData, featureData, statusData } from './data.js'
 const require = createRequire(import.meta.url)
 const multer = require('multer')
 const path = require('path')
@@ -144,10 +144,23 @@ export function registerEspFwk(app) {
      * Authentication: None
      * Limitation:     -
      * Note:           -
-     * Return:         200 OK, 401 Access Denied
+     * Return:         200 OK
      */
     res.type('application/json')
     res.send(statusData)
+  })
+
+  app.get('/api/feature', (req, res) => {
+    console.log('GET: /api/feature')
+    /*
+     * Description:    Return feature data as json document.
+     * Authentication: None
+     * Limitation:     -
+     * Note:           -
+     * Return:         200 OK
+     */
+    res.type('application/json')
+    res.send(featureData)
   })
 
   app.post('/api/config', (req, res) => {

@@ -4,7 +4,7 @@
     <p class="h3">Push - Bluetooth</p>
     <hr />
 
-    <template v-if="status.ble_supported">
+    <template v-if="global.feature.ble">
       <form @submit.prevent="save" class="needs-validation" novalidate>
         <div class="row">
           <div class="col-md-12">

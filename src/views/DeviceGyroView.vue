@@ -15,7 +15,6 @@
 
     <form @submit.prevent="save" class="needs-validation" novalidate>
       <div class="row">
-
         <div class="col-md-12">
           <BsInputRadio
             v-model="config.gyro_type"
@@ -35,7 +34,7 @@
             v-model="config.gyro_filter"
             label="Filter gyro data"
             help="When active the gyro data will be filtered through a lowpass filter to remove noise ans spikes, applies to ESP32"
-            :disabled="global.disabled || global.isEsp8266"
+            :disabled="global.disabled || !global.feature.filter"
           ></BsInputSwitch>
         </div>
         <div class="col-md-6">
@@ -92,7 +91,12 @@
             @click="calibrate"
             type="button"
             class="btn btn-secondary"
-            :disabled="global.disabled || !status.self_check.gyro_connected || status.wifi_setup || config.gyro_type == 2"
+            :disabled="
+              global.disabled ||
+              !status.self_check.gyro_connected ||
+              status.wifi_setup ||
+              config.gyro_type == 2
+            "
           >
             <span
               class="spinner-border spinner-border-sm"
@@ -144,21 +148,19 @@ import { storeToRefs } from 'pinia'
 const gyroOptions = ref([
   // value 0 is used internally at startup to check if gyro has been defined.
   { label: 'MPU 6050/6500', value: 1 },
-  { label: 'ICM42670-p', value: 2 },
+  { label: 'ICM42670-p', value: 2 }
 ])
 
 const calibrationValues = computed(() => {
-  if(config.gyro_type == 1)
-    return JSON.stringify(config.gyro_calibration_data)
+  if (config.gyro_type == 1) return JSON.stringify(config.gyro_calibration_data)
 
-  return "Calibration not needed for this gyro"
+  return 'Calibration not needed for this gyro'
 })
 
 const { gyro_type } = storeToRefs(config)
 
 watch(gyro_type, () => {
-  if(config.gyro_type == 1)
-    config.gyro_swap_xy = false
+  if (config.gyro_type == 1) config.gyro_swap_xy = false
 })
 
 const ispindel = () => {

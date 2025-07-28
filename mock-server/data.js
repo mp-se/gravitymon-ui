@@ -181,11 +181,7 @@ export var statusData = {
   temp_unit: 'C',
   sleep_mode: false,
   rssi: -56,
-  board: 'D1 MINI',
-  app_ver: '2.0.0',
-  app_build: 'gitrev',
   mdns: 'gravmon',
-  platform: 'esp32c3',
   // platform: 'esp8266',
   hardware: 'ispindel',
   wifi_ssid: 'wifi',
@@ -207,6 +203,20 @@ export var statusData = {
   // gyro_family: 'MPU6500',
   // gyro_family: 'ICM42670-p',
   wifi_setup: false
+}
+
+export var featureData = {
+  board: 'D1_MINI',
+  platform: 'esp32c3',
+  app_ver: '2.0.0',
+  app_build: 'gitrev',
+  hardware: 'ispindel',
+
+  // Feature flags
+  ble: true,
+  filter: true,
+  velocity: true,
+  charging: true, 
 }
 
 // EOF

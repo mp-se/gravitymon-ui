@@ -127,31 +127,37 @@ onMounted(() => {
       if (success) {
         global.id = data.token
 
-        status.load((success) => {
-          global.platform = status.platform
-
+        global.load((success) => {
           if (success) {
-            config.load((success) => {
+            status.load((success) => {
               if (success) {
-                config.loadFormat((success) => {
+                config.load((success) => {
                   if (success) {
-                    saveConfigState()
-                    global.initialized = true
+                    config.loadFormat((success) => {
+                      if (success) {
+                        saveConfigState()
+                        global.initialized = true
+                      } else {
+                        global.messageError =
+                          'Failed to load format templates from device, please try to reload page!'
+                      }
+                      hideSpinner()
+                    })
                   } else {
                     global.messageError =
-                      'Failed to load format templates from device, please try to reload page!'
+                      'Failed to load configuration data from device, please try to reload page!'
+                    hideSpinner()
                   }
-                  hideSpinner()
                 })
               } else {
                 global.messageError =
-                  'Failed to load configuration data from device, please try to reload page!'
+                  'Failed to load status from device, please try to reload page!'
                 hideSpinner()
               }
             })
           } else {
-            global.messageError = 'Failed to load status from device, please try to reload page!'
-            hideSpinner()
+            global.messageError =
+              'Failed to load feature flags from device, please try to reload page!'
           }
         })
       } else {

@@ -1,11 +1,24 @@
 import { defineStore } from 'pinia'
-import { logInfo, logDebug } from '@/modules/logger'
+import { logInfo, logDebug, logError } from '@/modules/logger'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
     return {
       id: '',
       platform: '',
+
+      board: '',
+      app_ver: '',
+      app_build: '',
+      hardware: '',
+
+      feature: {
+        ble: false,
+        velocity: false,
+        filter: false,
+        charging: false
+      },
+
       initialized: false,
       disabled: false,
       configChanged: false,
@@ -73,6 +86,33 @@ export const useGlobalStore = defineStore('global', {
       this.messageWarning = ''
       this.messageSuccess = ''
       this.messageInfo = ''
+    },
+    load(callback) {
+      logInfo('globalStore.load()', 'Fetching /api/feature')
+      fetch(this.baseURL + 'api/feature', {
+        signal: AbortSignal.timeout(this.fetchTimout)
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          logDebug('globalStore.load()', json)
+          this.board = json.board.toUpperCase()
+          this.app_ver = json.app_ver
+          this.app_build = json.app_build
+          this.platform = json.platform.toUpperCase()
+          this.hardware = json.hardware.toUpperCase()
+
+          this.feature.ble = json.ble
+          this.feature.velocity = json.velocity
+          this.feature.filter = json.filter
+          this.feature.charging = json.charging
+
+          logInfo('globalStore.load()', 'Fetching /api/feature completed')
+          callback(true)
+        })
+        .catch((err) => {
+          logError('globalStore.load()', err)
+          callback(false)
+        })
     }
   }
 })

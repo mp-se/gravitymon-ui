@@ -9,11 +9,11 @@
         <div style="col-md-12">
           <p>
             Selet the firmware file that matches your device. Platform:
-            <span class="badge bg-secondary">{{ status.platform }}</span>
+            <span class="badge bg-secondary">{{ global.platform }}</span>
             , Version:
-            <span class="badge bg-secondary">{{ status.app_ver }}</span> ({{ status.app_build }}) ,
+            <span class="badge bg-secondary">{{ global.app_ver }}</span> ({{ global.app_build }}) ,
             Hardware:
-            <span class="badge bg-secondary">{{ status.hardware }}</span>
+            <span class="badge bg-secondary">{{ global.hardware }}</span>
           </p>
         </div>
 

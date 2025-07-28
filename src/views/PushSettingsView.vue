@@ -74,7 +74,7 @@
             :disabled="global.disabled"
           />
         </div>
-        <div v-if="status.platform === 'esp8266'" class="col-md-6">
+        <div v-if="global.platform === 'esp8266'" class="col-md-6">
           <BsInputSwitch
             v-model="config.skip_ssl_on_test"
             label="Skip SSL post in config mode"
@@ -208,7 +208,7 @@ const calculateBatteryLife = () => {
   }
 
   if (wifi) {
-    switch (status.platform) {
+    switch (global.platform) {
       case 'ESP8266':
         pwrActive = 160
         break
@@ -222,11 +222,11 @@ const calculateBatteryLife = () => {
         pwrActive = 300 // mA per hour (285-355 mA)
         break
       default:
-        logError('PushSettingsView.calculateBatteryLife()', 'Unknown platform', status.platform)
+        logError('PushSettingsView.calculateBatteryLife()', 'Unknown platform', global.platform)
         break
     }
   } else {
-    switch (status.platform) {
+    switch (global.platform) {
       case 'ESP8266':
       case 'ESP32C3':
       case 'ESP32S2':
@@ -236,7 +236,7 @@ const calculateBatteryLife = () => {
         pwrActive = 180
         break
       default:
-        logError('PushSettingsView.calculateBatteryLife()', 'Unknown platform', status.platform)
+        logError('PushSettingsView.calculateBatteryLife()', 'Unknown platform', global.platform)
         break
     }
   }
@@ -250,7 +250,7 @@ const calculateBatteryLife = () => {
 
   logDebug(
     'PushSettingsView.calculateBatteryLife()',
-    'Estimated power per hour = ' + pwrActive.toString() + 'mA on platform = ' + status.platform
+    'Estimated power per hour = ' + pwrActive.toString() + 'mA on platform = ' + global.platform
   )
   logDebug('PushSettingsView.calculateBatteryLife()', 'Estimated number of days = ' + days)
 

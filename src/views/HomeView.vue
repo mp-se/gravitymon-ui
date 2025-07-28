@@ -173,7 +173,7 @@
         <div class="col-md-4">
           <BsCard header="Device" title="Software version">
             <p class="text-center">
-              Firmware: {{ status.app_ver }} ({{ status.app_build }}) UI: {{ global.uiVersion }} ({{
+              Firmware: {{ global.app_ver }} ({{ global.app_build }}) UI: {{ global.uiVersion }} ({{
                 global.uiBuild
               }})
             </p>
@@ -183,8 +183,8 @@
         <div class="col-md-4">
           <BsCard header="Device" title="Platform">
             <p class="text-center">
-              Platform: <span class="badge bg-secondary">{{ status.platform }}</span> Variant:
-              <span class="badge bg-secondary">{{ status.hardware }}</span>
+              Platform: <span class="badge bg-secondary">{{ global.platform }}</span> Variant:
+              <span class="badge bg-secondary">{{ global.hardware }}</span>
             </p>
           </BsCard>
         </div>
@@ -192,7 +192,7 @@
         <div class="col-md-4" v-if="status.wifi_setup == false">
           <BsCard header="Device" title="Hardware">
             <p class="text-center">
-              Board: <span class="badge bg-secondary">{{ status.board }}</span> Gyro:
+              Board: <span class="badge bg-secondary">{{ global.board }}</span> Gyro:
               <span class="badge bg-secondary">{{ status.gyro_family }}</span>
             </p>
           </BsCard>
@@ -287,7 +287,7 @@ onBeforeUnmount(() => {
 })
 
 function checkForNewGravMonVersion(json) {
-  var current = status.app_ver
+  var current = global.app_ver
   var latest = json.version
 
   const newVer = latest.split('.')
