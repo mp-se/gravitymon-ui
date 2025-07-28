@@ -61,7 +61,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { global, status } from '@/modules/pinia'
+import { global } from '@/modules/pinia'
 import { logDebug, logError } from '@/modules/logger'
 
 const progress = ref(0)

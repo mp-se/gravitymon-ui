@@ -65,7 +65,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { validateCurrentForm } from '@/modules/utils'
-import { global, config, status } from '@/modules/pinia'
+import { global, config } from '@/modules/pinia'
 
 const bleTiltColorOptions = ref([
   { label: 'red', value: 'red' },
