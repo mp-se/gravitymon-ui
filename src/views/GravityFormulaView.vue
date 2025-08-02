@@ -20,7 +20,7 @@
         <div class="row">
           <div class="col-md-6">
             <label class="form-label fs-6 fw-bold">Angle:</label>&nbsp;
-            <label class="form-label fs-6">{{ status.angle }}</label
+            <label class="form-label fs-6">{{ angle.last }}</label
             >&nbsp; <label class="form-label fs-6 fw-bold">Average angle:</label>&nbsp;
             <label class="form-label fs-6">{{ angle.average }} ({{ angle.count }})</label>&nbsp;
 
@@ -198,7 +198,7 @@ import { validateFormula } from '@/modules/formula'
 import { gravityToSG } from '@/modules/utils'
 
 const polling = ref(null)
-const angle = ref({ average: 0, sum: 0, count: 0 })
+const angle = ref({ last: 0, average: 0, sum: 0, count: 0 })
 
 const expressions = ref(null)
 const noDecimals = ref(8)
@@ -213,15 +213,17 @@ const formulaOutputOptions = ref([
 ])
 
 function clearAverage() {
+  angle.value.last = 0
   angle.value.sum = 0
   angle.value.count = 0
-  angle.value.sum = 0
+  angle.value.average = 0
 }
 
 function refresh() {
   status.getGyro((success, data) => {
     if (success) {
       if (data.angle !== 0) {
+        angle.value.last = Math.round((parseFloat(data.angle)*100)/100).toFixed(2)
         angle.value.sum += parseFloat(data.angle)
         angle.value.count++
         angle.value.average = (
