@@ -7064,6 +7064,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       app_ver: "",
       app_build: "",
       hardware: "",
+      firmware_file: "",
       feature: {
         ble: false,
         velocity: false,
@@ -7109,7 +7110,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.3.0-beta";
     },
     uiBuild() {
-      return "..f080d1";
+      return "..65c1a7";
     },
     isEsp8266() {
       return this.platform === "ESP8266";
@@ -7137,6 +7138,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
         this.app_build = json.app_build;
         this.platform = json.platform.toUpperCase();
         this.hardware = json.hardware.toUpperCase();
+        this.firmware_file = json.firmware_file.toLowerCase();
         this.feature.ble = json.ble;
         this.feature.velocity = json.velocity;
         this.feature.filter = json.filter;
@@ -10137,7 +10139,7 @@ const _hoisted_10$k = {
   class: "col-md-4"
 };
 const _hoisted_11$h = { class: "text-center" };
-const _hoisted_12$f = {
+const _hoisted_12$g = {
   key: 4,
   class: "col-md-4"
 };
@@ -10362,7 +10364,7 @@ const _sfc_main$Z = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            !unref(status).self_check.gyro_calibration && unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_12$f, [
+            !unref(status).self_check.gyro_calibration && unref(status).wifi_setup == false ? (openBlock(), createElementBlock("div", _hoisted_12$g, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 title: "Error",
@@ -10581,7 +10583,7 @@ const _hoisted_8$m = { class: "col-md-6" };
 const _hoisted_9$k = { class: "row gy-2" };
 const _hoisted_10$j = { class: "col-md-12" };
 const _hoisted_11$g = ["disabled"];
-const _hoisted_12$e = ["hidden"];
+const _hoisted_12$f = ["hidden"];
 const _hoisted_13$e = ["disabled"];
 const _hoisted_14$d = ["hidden"];
 const _hoisted_15$d = ["disabled"];
@@ -10748,7 +10750,7 @@ const _sfc_main$Y = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_12$e),
+                }, null, 8, _hoisted_12$f),
                 _cache[10] || (_cache[10] = createTextVNode("  Save"))
               ], 8, _hoisted_11$g),
               _cache[13] || (_cache[13] = createTextVNode("  ")),
@@ -10802,7 +10804,7 @@ const _hoisted_8$l = { class: "col-md-12" };
 const _hoisted_9$j = { class: "col-md-6" };
 const _hoisted_10$i = { class: "row gy-2" };
 const _hoisted_11$f = { class: "col-md-12" };
-const _hoisted_12$d = ["disabled"];
+const _hoisted_12$e = ["disabled"];
 const _hoisted_13$d = ["hidden"];
 const _hoisted_14$c = ["disabled"];
 const _hoisted_15$c = ["hidden"];
@@ -10956,7 +10958,7 @@ const _sfc_main$X = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_13$d),
                 _cache[11] || (_cache[11] = createTextVNode("  Save"))
-              ], 8, _hoisted_12$d),
+              ], 8, _hoisted_12$e),
               _cache[13] || (_cache[13] = createTextVNode("  ")),
               createBaseVNode("button", {
                 onClick: _cache[7] || (_cache[7] = ($event) => unref(restart)()),
@@ -10991,7 +10993,7 @@ const _hoisted_8$k = { class: "col-md-12" };
 const _hoisted_9$i = ["disabled"];
 const _hoisted_10$h = ["hidden"];
 const _hoisted_11$e = ["disabled"];
-const _hoisted_12$c = ["hidden"];
+const _hoisted_12$d = ["hidden"];
 const _hoisted_13$c = ["disabled"];
 const _hoisted_14$b = ["hidden"];
 const _hoisted_15$b = {
@@ -11179,7 +11181,7 @@ const _sfc_main$W = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_12$c),
+                }, null, 8, _hoisted_12$d),
                 _cache[8] || (_cache[8] = createTextVNode("  Restart device"))
               ], 8, _hoisted_11$e),
               _cache[12] || (_cache[12] = createTextVNode("  ")),
@@ -11233,7 +11235,7 @@ const _hoisted_8$j = { class: "col-md-6" };
 const _hoisted_9$h = { class: "col-md-6" };
 const _hoisted_10$g = { class: "row gy-2" };
 const _hoisted_11$d = { class: "col-md-12" };
-const _hoisted_12$b = ["disabled"];
+const _hoisted_12$c = ["disabled"];
 const _hoisted_13$b = ["hidden"];
 const _hoisted_14$a = ["disabled"];
 const _hoisted_15$a = ["hidden"];
@@ -11434,7 +11436,7 @@ const _sfc_main$V = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_13$b),
                 _cache[12] || (_cache[12] = createTextVNode("  Save"))
-              ], 8, _hoisted_12$b),
+              ], 8, _hoisted_12$c),
               _cache[14] || (_cache[14] = createTextVNode("  ")),
               createBaseVNode("button", {
                 onClick: _cache[7] || (_cache[7] = ($event) => unref(restart)()),
@@ -11468,7 +11470,7 @@ const _hoisted_8$i = { class: "col-md-6" };
 const _hoisted_9$g = { class: "col-md-6" };
 const _hoisted_10$f = { class: "row gy-2" };
 const _hoisted_11$c = { class: "col-md-12" };
-const _hoisted_12$a = ["disabled"];
+const _hoisted_12$b = ["disabled"];
 const _hoisted_13$a = ["hidden"];
 const _hoisted_14$9 = ["disabled"];
 const _hoisted_15$9 = ["hidden"];
@@ -11606,7 +11608,7 @@ const _sfc_main$U = {
                   hidden: !unref(global$1).disabled
                 }, null, 8, _hoisted_13$a),
                 _cache[10] || (_cache[10] = createTextVNode("  Save"))
-              ], 8, _hoisted_12$a),
+              ], 8, _hoisted_12$b),
               _cache[12] || (_cache[12] = createTextVNode("  ")),
               createBaseVNode("button", {
                 onClick: _cache[7] || (_cache[7] = ($event) => unref(restart)()),
@@ -17480,7 +17482,7 @@ const _hoisted_8$g = { class: "row" };
 const _hoisted_9$e = { class: "col-md-10" };
 const _hoisted_10$d = { class: "col-md-2" };
 const _hoisted_11$a = { class: "col-md-6" };
-const _hoisted_12$9 = { class: "input-group has-validation" };
+const _hoisted_12$a = { class: "input-group has-validation" };
 const _hoisted_13$9 = { class: "input-group-text" };
 const _hoisted_14$8 = ["onUpdate:modelValue", "disabled"];
 const _hoisted_15$8 = { class: "col-md-6" };
@@ -17654,7 +17656,7 @@ const _sfc_main$N = {
             (openBlock(true), createElementBlock(Fragment, null, renderList(unref(config).formula_calculation_data, (data, index) => {
               return openBlock(), createElementBlock(Fragment, { key: index }, [
                 createBaseVNode("div", _hoisted_11$a, [
-                  createBaseVNode("div", _hoisted_12$9, [
+                  createBaseVNode("div", _hoisted_12$a, [
                     createBaseVNode("span", _hoisted_13$9, toDisplayString(index + 1), 1),
                     withDirectives(createBaseVNode("input", {
                       "onUpdate:modelValue": ($event) => unref(config).formula_calculation_data[index].a = $event,
@@ -17784,7 +17786,7 @@ const _hoisted_8$f = {
 const _hoisted_9$d = { class: "col-md-6" };
 const _hoisted_10$c = { class: "col-md-6" };
 const _hoisted_11$9 = { class: "col-md-6" };
-const _hoisted_12$8 = { class: "row gy-2" };
+const _hoisted_12$9 = { class: "row gy-2" };
 const _hoisted_13$8 = { class: "col-md-3" };
 const _hoisted_14$7 = ["disabled"];
 const _hoisted_15$7 = ["hidden"];
@@ -18005,7 +18007,7 @@ const _sfc_main$M = {
               }, null, 8, ["modelValue", "disabled"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_12$8, [
+          createBaseVNode("div", _hoisted_12$9, [
             _cache[14] || (_cache[14] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
@@ -18102,7 +18104,7 @@ const _hoisted_8$e = { class: "col-md-3" };
 const _hoisted_9$c = { class: "col-md-9" };
 const _hoisted_10$b = { class: "col-md-3" };
 const _hoisted_11$8 = { class: "col-md-6" };
-const _hoisted_12$7 = { class: "col-md-9" };
+const _hoisted_12$8 = { class: "col-md-9" };
 const _hoisted_13$7 = { class: "col-md-3" };
 const _hoisted_14$6 = { class: "row gy-2" };
 const _hoisted_15$6 = { class: "col-md-12" };
@@ -18265,7 +18267,7 @@ const _sfc_main$K = {
                 disabled: pushDisabled.value
               }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
             ]),
-            createBaseVNode("div", _hoisted_12$7, [
+            createBaseVNode("div", _hoisted_12$8, [
               createVNode(_component_BsInputTextAreaFormat, {
                 modelValue: unref(config).http_post_format_gravity,
                 "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(config).http_post_format_gravity = $event),
@@ -18346,7 +18348,7 @@ const _hoisted_8$d = { class: "col-md-9" };
 const _hoisted_9$b = { class: "col-md-3" };
 const _hoisted_10$a = { class: "col-md-6" };
 const _hoisted_11$7 = { class: "row" };
-const _hoisted_12$6 = { class: "col-md-9" };
+const _hoisted_12$7 = { class: "col-md-9" };
 const _hoisted_13$6 = { class: "col-md-3" };
 const _hoisted_14$5 = { class: "row gy-2" };
 const _hoisted_15$5 = { class: "col-md-12" };
@@ -18479,7 +18481,7 @@ const _sfc_main$J = {
             ])
           ]),
           createBaseVNode("div", _hoisted_11$7, [
-            createBaseVNode("div", _hoisted_12$6, [
+            createBaseVNode("div", _hoisted_12$7, [
               createVNode(_component_BsInputTextAreaFormat, {
                 modelValue: unref(config).http_post2_format_gravity,
                 "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).http_post2_format_gravity = $event),
@@ -18560,7 +18562,7 @@ const _hoisted_8$c = { class: "col-md-3" };
 const _hoisted_9$a = { class: "col-md-6" };
 const _hoisted_10$9 = { class: "col-md-9" };
 const _hoisted_11$6 = { class: "col-md-3" };
-const _hoisted_12$5 = { class: "row gy-2" };
+const _hoisted_12$6 = { class: "row gy-2" };
 const _hoisted_13$5 = { class: "col-md-12" };
 const _hoisted_14$4 = ["disabled"];
 const _hoisted_15$4 = ["hidden"];
@@ -18718,7 +18720,7 @@ const _sfc_main$I = {
               }, null, 8, ["modelValue", "disabled"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_12$5, [
+          createBaseVNode("div", _hoisted_12$6, [
             _cache[9] || (_cache[9] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
@@ -18769,7 +18771,7 @@ const _hoisted_8$b = { class: "col-md-6" };
 const _hoisted_9$9 = { class: "col-md-9" };
 const _hoisted_10$8 = { class: "col-md-3 gy-2" };
 const _hoisted_11$5 = { class: "row gy-2" };
-const _hoisted_12$4 = { class: "col-sm-12" };
+const _hoisted_12$5 = { class: "col-sm-12" };
 const _hoisted_13$4 = ["disabled"];
 const _hoisted_14$3 = ["hidden"];
 const _hoisted_15$3 = ["disabled"];
@@ -18903,7 +18905,7 @@ const _sfc_main$H = {
             _cache[10] || (_cache[10] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
-            createBaseVNode("div", _hoisted_12$4, [
+            createBaseVNode("div", _hoisted_12$5, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -18950,7 +18952,7 @@ const _hoisted_8$a = { class: "col-md-6" };
 const _hoisted_9$8 = { class: "col-md-9" };
 const _hoisted_10$7 = { class: "col-md-3" };
 const _hoisted_11$4 = { class: "row gy-2" };
-const _hoisted_12$3 = { class: "col-md-12" };
+const _hoisted_12$4 = { class: "col-md-12" };
 const _hoisted_13$3 = ["disabled"];
 const _hoisted_14$2 = ["hidden"];
 const _hoisted_15$2 = ["disabled"];
@@ -19096,7 +19098,7 @@ const _sfc_main$G = {
             _cache[10] || (_cache[10] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
-            createBaseVNode("div", _hoisted_12$3, [
+            createBaseVNode("div", _hoisted_12$4, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -19520,11 +19522,12 @@ const _hoisted_3$h = { style: {} };
 const _hoisted_4$d = { class: "badge bg-secondary" };
 const _hoisted_5$9 = { class: "badge bg-secondary" };
 const _hoisted_6$9 = { class: "badge bg-secondary" };
-const _hoisted_7$7 = { class: "col-md-12" };
-const _hoisted_8$7 = { class: "col-md-3" };
-const _hoisted_9$5 = ["disabled"];
-const _hoisted_10$5 = ["hidden"];
-const _hoisted_11$3 = {
+const _hoisted_7$7 = { class: "badge bg-secondary" };
+const _hoisted_8$7 = { class: "col-md-12" };
+const _hoisted_9$5 = { class: "col-md-3" };
+const _hoisted_10$5 = ["disabled"];
+const _hoisted_11$3 = ["hidden"];
+const _hoisted_12$3 = {
   key: 0,
   class: "col-md-12"
 };
@@ -19589,9 +19592,9 @@ const _sfc_main$C = {
       const _component_BsFileUpload = resolveComponent("BsFileUpload");
       const _component_BsProgress = resolveComponent("BsProgress");
       return openBlock(), createElementBlock("div", _hoisted_1$p, [
-        _cache[5] || (_cache[5] = createBaseVNode("p", null, null, -1)),
-        _cache[6] || (_cache[6] = createBaseVNode("p", { class: "h3" }, "Firmware Upload", -1)),
-        _cache[7] || (_cache[7] = createBaseVNode("hr", null, null, -1)),
+        _cache[6] || (_cache[6] = createBaseVNode("p", null, null, -1)),
+        _cache[7] || (_cache[7] = createBaseVNode("p", { class: "h3" }, "Firmware Upload", -1)),
+        _cache[8] || (_cache[8] = createBaseVNode("hr", null, null, -1)),
         createBaseVNode("div", _hoisted_2$l, [
           createBaseVNode("form", {
             onSubmit: withModifiers(upload, ["prevent"])
@@ -19603,10 +19606,12 @@ const _sfc_main$C = {
                 _cache[1] || (_cache[1] = createTextVNode(" , Version: ")),
                 createBaseVNode("span", _hoisted_5$9, toDisplayString(unref(global$1).app_ver), 1),
                 createTextVNode(" (" + toDisplayString(unref(global$1).app_build) + ") , Hardware: ", 1),
-                createBaseVNode("span", _hoisted_6$9, toDisplayString(unref(global$1).hardware), 1)
+                createBaseVNode("span", _hoisted_6$9, toDisplayString(unref(global$1).hardware), 1),
+                _cache[2] || (_cache[2] = createTextVNode(" , Filename: ")),
+                createBaseVNode("span", _hoisted_7$7, toDisplayString(unref(global$1).firmware_file), 1)
               ])
             ]),
-            createBaseVNode("div", _hoisted_7$7, [
+            createBaseVNode("div", _hoisted_8$7, [
               createVNode(_component_BsFileUpload, {
                 name: "upload",
                 id: "upload",
@@ -19616,8 +19621,8 @@ const _sfc_main$C = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["disabled"])
             ]),
-            createBaseVNode("div", _hoisted_8$7, [
-              _cache[3] || (_cache[3] = createBaseVNode("p", null, null, -1)),
+            createBaseVNode("div", _hoisted_9$5, [
+              _cache[4] || (_cache[4] = createBaseVNode("p", null, null, -1)),
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary",
@@ -19632,12 +19637,12 @@ const _sfc_main$C = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_10$5),
-                _cache[2] || (_cache[2] = createTextVNode("  Flash firmware "))
-              ], 8, _hoisted_9$5)
+                }, null, 8, _hoisted_11$3),
+                _cache[3] || (_cache[3] = createTextVNode("  Flash firmware "))
+              ], 8, _hoisted_10$5)
             ]),
-            progress.value > 0 ? (openBlock(), createElementBlock("div", _hoisted_11$3, [
-              _cache[4] || (_cache[4] = createBaseVNode("p", null, null, -1)),
+            progress.value > 0 ? (openBlock(), createElementBlock("div", _hoisted_12$3, [
+              _cache[5] || (_cache[5] = createBaseVNode("p", null, null, -1)),
               createVNode(_component_BsProgress, { progress: progress.value }, null, 8, ["progress"])
             ])) : createCommentVNode("", true)
           ], 32)
