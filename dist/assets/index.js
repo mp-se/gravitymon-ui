@@ -7110,7 +7110,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.3.0-beta";
     },
     uiBuild() {
-      return "..65c1a7";
+      return "..8880d9";
     },
     isEsp8266() {
       return this.platform === "ESP8266";
@@ -17505,7 +17505,7 @@ const _sfc_main$N = {
   __name: "GravityFormulaView",
   setup(__props) {
     const polling = ref(null);
-    const angle = ref({ average: 0, sum: 0, count: 0 });
+    const angle = ref({ last: 0, average: 0, sum: 0, count: 0 });
     const expressions = ref(null);
     const noDecimals = ref(8);
     const formulaOptions = ref([]);
@@ -17518,14 +17518,16 @@ const _sfc_main$N = {
       { label: "Graph", value: 3 }
     ]);
     function clearAverage() {
+      angle.value.last = 0;
       angle.value.sum = 0;
       angle.value.count = 0;
-      angle.value.sum = 0;
+      angle.value.average = 0;
     }
     function refresh() {
       status.getGyro((success, data) => {
         if (success) {
           if (data.angle !== 0) {
+            angle.value.last = Math.round(parseFloat(data.angle) * 100 / 100).toFixed(2);
             angle.value.sum += parseFloat(data.angle);
             angle.value.count++;
             angle.value.average = (Math.round(angle.value.sum / angle.value.count * 100) / 100).toFixed(2);
@@ -17608,7 +17610,7 @@ const _sfc_main$N = {
               createBaseVNode("div", _hoisted_5$i, [
                 _cache[5] || (_cache[5] = createBaseVNode("label", { class: "form-label fs-6 fw-bold" }, "Angle:", -1)),
                 _cache[6] || (_cache[6] = createTextVNode("  ")),
-                createBaseVNode("label", _hoisted_6$i, toDisplayString(unref(status).angle), 1),
+                createBaseVNode("label", _hoisted_6$i, toDisplayString(angle.value.last), 1),
                 _cache[7] || (_cache[7] = createTextVNode("  ")),
                 _cache[8] || (_cache[8] = createBaseVNode("label", { class: "form-label fs-6 fw-bold" }, "Average angle:", -1)),
                 _cache[9] || (_cache[9] = createTextVNode("  ")),
