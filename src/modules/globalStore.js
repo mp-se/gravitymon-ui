@@ -11,6 +11,7 @@ export const useGlobalStore = defineStore('global', {
       app_ver: '',
       app_build: '',
       hardware: '',
+      firmware_file: '',
 
       feature: {
         ble: false,
@@ -100,6 +101,7 @@ export const useGlobalStore = defineStore('global', {
           this.app_build = json.app_build
           this.platform = json.platform.toUpperCase()
           this.hardware = json.hardware.toUpperCase()
+          this.firmware_file = json.firmware_file.toLowerCase()
 
           this.feature.ble = json.ble
           this.feature.velocity = json.velocity
