@@ -7110,7 +7110,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "2.3.0-beta";
     },
     uiBuild() {
-      return "..8880d9";
+      return "..8fb31a";
     },
     isEsp8266() {
       return this.platform === "ESP8266";
@@ -19167,7 +19167,9 @@ const _sfc_main$F = {
       { label: "Tilt PRO iBeacon", value: 2 },
       { label: "Gravitymon iBeacon", value: 5 },
       // { label: 'Gravitymon Service', value: 3 },
-      { label: "Gravitymon Eddystone", value: 4 }
+      { label: "Gravitymon Eddystone", value: 4 },
+      { label: "RAPT v1", value: 6 },
+      { label: "RAPT v2", value: 7 }
     ]);
     const tilt2 = computed(() => {
       if (global$1.disabled32) return global$1.disabled32;
