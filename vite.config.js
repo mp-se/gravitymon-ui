@@ -35,8 +35,16 @@ export default defineConfig({
     cssCodeSplit: false,
     sourcemap: false,
     target: 'es2015',
+    chunkSizeWarningLimit: 1000, // Disable chunk size warning (default is 500kB)
     rollupOptions: {
       treeshake: true,
+      onwarn(warning, warn) {
+        // Suppress eval warnings for formula calculations
+        if (warning.code === 'EVAL' && warning.id?.includes('formula.js')) {
+          return
+        }
+        warn(warning)
+      },
       output: {
         inlineDynamicImports: true,
         entryFileNames: `assets/[name].js`,
