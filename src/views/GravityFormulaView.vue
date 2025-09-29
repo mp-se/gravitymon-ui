@@ -223,7 +223,7 @@ function refresh() {
   status.getGyro((success, data) => {
     if (success) {
       if (data.angle !== 0) {
-        angle.value.last = Math.round((parseFloat(data.angle)*100)/100).toFixed(2)
+        angle.value.last = Math.round((parseFloat(data.angle) * 100) / 100).toFixed(2)
         angle.value.sum += parseFloat(data.angle)
         angle.value.count++
         angle.value.average = (

@@ -56,13 +56,19 @@
       <div class="col">
         <p>
           Bluetooth:
-          <span class="badge bg-secondary">{{ global.feature.ble ? 'Enabled' : 'Disabled' }}</span> 
+          <span class="badge bg-secondary">{{ global.feature.ble ? 'Enabled' : 'Disabled' }}</span>
           Filter:
-          <span class="badge bg-secondary">{{ global.feature.filter ? 'Enabled' : 'Disabled' }}</span> 
+          <span class="badge bg-secondary">{{
+            global.feature.filter ? 'Enabled' : 'Disabled'
+          }}</span>
           Velocity:
-          <span class="badge bg-secondary">{{ global.feature.velocity ? 'Enabled' : 'Disabled' }}</span> 
+          <span class="badge bg-secondary">{{
+            global.feature.velocity ? 'Enabled' : 'Disabled'
+          }}</span>
           Charging:
-          <span class="badge bg-secondary">{{ global.feature.charging ? 'Enabled' : 'Disabled' }}</span> 
+          <span class="badge bg-secondary">{{
+            global.feature.charging ? 'Enabled' : 'Disabled'
+          }}</span>
         </p>
       </div>
     </div>

@@ -31,13 +31,35 @@ export default defineConfig({
     __VUE_PROD_DEVTOOLS__: false
   },
   build: {
-    minify: 'esbuild',
+    minify: 'terser',
     cssCodeSplit: false,
     sourcemap: false,
     target: 'es2015',
     chunkSizeWarningLimit: 1000, // Disable chunk size warning (default is 500kB)
+    terserOptions: {
+      compress: {
+        drop_console: false, // Keep console for debugging
+        drop_debugger: true,
+        passes: 2,
+        unsafe: false, // Disable unsafe optimizations that might break code
+        unsafe_comps: false,
+        unsafe_Function: false,
+        unsafe_math: false,
+        unsafe_methods: false,
+        unsafe_proto: false,
+        unsafe_regexp: false,
+        unsafe_undefined: false,
+        side_effects: false
+      },
+      mangle: {
+        properties: false // Disable property mangling to avoid breaking Vue
+      },
+      format: {
+        comments: false
+      }
+    },
     rollupOptions: {
-      treeshake: true,
+      treeshake: true, // Use default tree-shaking instead of aggressive preset
       onwarn(warning, warn) {
         // Suppress eval warnings for formula calculations
         if (warning.code === 'EVAL' && warning.id?.includes('formula.js')) {

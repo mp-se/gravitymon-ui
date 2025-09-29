@@ -12,9 +12,7 @@
             <span class="badge bg-secondary">{{ global.platform }}</span>
             , Version:
             <span class="badge bg-secondary">{{ global.app_ver }}</span> ({{ global.app_build }}) ,
-            Hardware:
-            <span class="badge bg-secondary">{{ global.hardware }}</span> ,
-            Filename:
+            Hardware: <span class="badge bg-secondary">{{ global.hardware }}</span> , Filename:
             <span class="badge bg-secondary">{{ global.firmware_file }}</span>
           </p>
         </div>
