@@ -87,7 +87,34 @@ export default {
         'invalid-feedback',
         
         // Link utilities
-        /^link(-.*)?$/
+        /^link(-.*)?$/,
+        
+        // Additional classes found in codebase
+        'btn-close',
+        'vr', // Vertical rule
+        'align-center',
+        'align-items-center', 
+        /^mx-.*$/,
+        /^my-.*$/,
+        'overflow-hidden',
+        'btn-outline-info',
+        'btn-sm',
+        'navbar-toggler',
+        'navbar-toggler-icon',
+        'navbar-brand',
+        'navbar-collapse',
+        'navbar-nav',
+        'nav-item',
+        'nav-link',
+        'dropdown-toggle',
+        'dropdown-menu',
+        'dropdown-item',
+        /^h-\d+$/,
+        /^alert-dismissible$/,
+        
+        // Dynamically generated classes from components
+        /^bg-.*-subtle$/,
+        /^text-bg-.*$/
       ],
       // Standard extraction to catch more classes
       defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
