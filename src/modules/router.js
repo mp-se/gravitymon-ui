@@ -4,7 +4,9 @@ import { validateCurrentForm } from '@/modules/utils'
 import * as badge from '@/modules/badge'
 import { global } from '@/modules/pinia'
 
+// Direct imports for all views (better for ESP32 single-bundle deployment)
 import HomeView from '@/views/HomeView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 import DeviceSettingsView from '@/views/DeviceSettingsView.vue'
 import DeviceHardwareView from '@/views/DeviceHardwareView.vue'
 import DeviceGyroView from '@/views/DeviceGyroView.vue'
@@ -25,7 +27,6 @@ import FirmwareView from '@/views/FirmwareView.vue'
 import SupportView from '@/views/SupportView.vue'
 import SerialView from '@/views/SerialView.vue'
 import ToolsView from '@/views/ToolsView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
 
 const routes = [
   {
