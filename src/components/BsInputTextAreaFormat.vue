@@ -101,7 +101,10 @@ const openContextMenu = (event) => {
  */
 const model = defineModel({
   type: String,
-  default: ''
+  default: '',
+  validator: (value) => {
+    return typeof value === 'string'
+  }
 })
 
 /**
@@ -125,7 +128,13 @@ const help = defineModel('help', {
  */
 const width = defineModel('width', {
   type: [String, Number],
-  default: undefined
+  default: undefined,
+  validator: (value) => {
+    if (value === undefined || value === null) return true
+    if (typeof value === 'number') return value > 0 && value <= 12
+    if (typeof value === 'string') return /^(\d|1[0-2])$|^(sm|md|lg|xl|xxl)-(\d|1[0-2])$/.test(value)
+    return false
+  }
 })
 
 /**

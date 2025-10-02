@@ -54,7 +54,10 @@ defineOptions({
  */
 const callback = defineModel('callback', {
   type: Function,
-  default: () => {}
+  default: undefined,
+  validator: (value) => {
+    return value === undefined || typeof value === 'function'
+  }
 })
 
 /**
@@ -62,7 +65,10 @@ const callback = defineModel('callback', {
  */
 const message = defineModel('message', {
   type: String,
-  default: 'Are you sure?'
+  default: 'Are you sure?',
+  validator: (value) => {
+    return typeof value === 'string' && value.trim().length > 0
+  }
 })
 
 /**
@@ -70,7 +76,10 @@ const message = defineModel('message', {
  */
 const id = defineModel('id', {
   type: String,
-  default: 'confirm-modal'
+  default: 'confirm-modal',
+  validator: (value) => {
+    return typeof value === 'string' && /^[a-zA-Z][a-zA-Z0-9-_]*$/.test(value)
+  }
 })
 
 /**
@@ -78,6 +87,9 @@ const id = defineModel('id', {
  */
 const title = defineModel('title', {
   type: String,
-  default: 'Confirm Action'
+  default: 'Confirm Action',
+  validator: (value) => {
+    return typeof value === 'string' && value.trim().length > 0
+  }
 })
 </script>

@@ -163,7 +163,10 @@ const disabled = defineModel('disabled', {
  */
 const brand = defineModel('brand', {
   type: String,
-  default: 'Brand'
+  default: 'Brand',
+  validator: (value) => {
+    return typeof value === 'string' && value.trim().length > 0
+  }
 })
 
 /**
