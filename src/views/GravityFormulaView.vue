@@ -184,7 +184,7 @@
 </template>
 
 <script setup>
-import { nextTick, ref, onBeforeMount, onBeforeUnmount } from 'vue'
+import { nextTick, ref, onBeforeMount } from 'vue'
 import { validateCurrentForm } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
 import GravityGraphFragment from '@/fragments/GravityGraphFragment.vue'
@@ -196,7 +196,9 @@ import FormulaTableFragment from '@/fragments/FormulaTableFragment.vue'
 import { PolynomialRegression } from 'ml-regression-polynomial'
 import { validateFormula } from '@/modules/formula'
 import { gravityToSG } from '@/modules/utils'
+import { useTimers } from '@/composables/useTimers'
 
+const { createInterval } = useTimers()
 const polling = ref(null)
 const angle = ref({ last: 0, average: 0, sum: 0, count: 0 })
 
@@ -236,11 +238,7 @@ function refresh() {
 
 onBeforeMount(() => {
   refresh()
-  polling.value = setInterval(refresh, 2000)
-})
-
-onBeforeUnmount(() => {
-  clearInterval(polling.value)
+  polling.value = createInterval(refresh, 2000)
 })
 
 const formulaSelectCallback = (opt) => {
@@ -295,10 +293,10 @@ const forceRerender = async () => {
   renderComponent.value = true
 }
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
   forceRerender()
 }
 </script>

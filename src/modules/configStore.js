@@ -323,6 +323,12 @@ export const useConfigStore = defineStore('config', {
           global.disabled = false
         })
     },
+    // Async wrapper for sendConfig
+    sendConfigAsync() {
+      return new Promise((resolve) => {
+        this.sendConfig(resolve)
+      })
+    },
     sendFormat(callback) {
       global.disabled = true
       logInfo('configStore.sendFormat()', 'Sending /api/format')
@@ -378,6 +384,12 @@ export const useConfigStore = defineStore('config', {
             })
           })
         })
+      })
+    },
+    // Async wrapper for sendFormat
+    sendFormatAsync() {
+      return new Promise((resolve) => {
+        this.sendFormat(resolve)
       })
     },
     sendOneFormat(data, callback) {
@@ -533,25 +545,31 @@ export const useConfigStore = defineStore('config', {
           callback(false, null)
         })
     },
-    saveAll() {
+    async saveAll() {
       global.clearMessages()
       global.disabled = true
-      this.sendConfig((success) => {
-        if (!success) {
-          global.disabled = false
+      
+      try {
+        const configSuccess = await this.sendConfigAsync()
+        if (!configSuccess) {
           global.messageError = 'Failed to store configuration to device'
-        } else {
-          this.sendFormat((success) => {
-            global.disabled = false
-            if (!success) {
-              global.messageError = 'Failed to store format to device'
-            } else {
-              global.messageSuccess = 'Configuration has been saved to device'
-              saveConfigState()
-            }
-          })
+          return
         }
-      })
+        
+        const formatSuccess = await this.sendFormatAsync()
+        if (!formatSuccess) {
+          global.messageError = 'Failed to store format to device'
+          return
+        }
+        
+        global.messageSuccess = 'Configuration has been saved to device'
+        saveConfigState()
+      } catch (error) {
+        logError('configStore.saveAll()', error)
+        global.messageError = 'Failed to save configuration'
+      } finally {
+        global.disabled = false
+      }
     },
     sendFilesystemRequest(data, callback) {
       global.disabled = true
@@ -575,110 +593,226 @@ export const useConfigStore = defineStore('config', {
           callback(false, '')
         })
     },
-    runPushTest(data, callback) {
+    async runPushTest(data, callback) {
       global.disabled = true
-      this.sendPushTest(data, (success) => {
-        if (success) {
-          var check = setInterval(() => {
-            this.getPushTestStatus((success, data) => {
-              if (success) {
-                if (data.status) {
-                  // test is still running, just wait for next check
-                } else if (!data.success) {
-                  global.disabled = false
-                  global.messageError =
-                    'Test failed with error code (' + data.push_return_code + ')'
-                  callback(true)
-                  clearInterval(check)
-                } else if (data.success) {
-                  global.disabled = false
-                  if (!data.push_enabled) {
-                    global.messageWarning =
-                      'No endpoint is defined for this target. Cannot run test.'
-                  } else if (!data.success && data.push_return_code > 0) {
-                    global.messageError =
-                      'Test failed with error code (' + getErrorString(data.push_return_code) + ')'
-                  } else if (!data.success && data.push_return_code == 0) {
-                    global.messageError =
-                      'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
-                  } else {
-                    global.messageSuccess = 'Test was successful'
-                  }
-
-                  callback(true)
-                  clearInterval(check)
-                }
-              } else {
-                global.disabled = false
-                global.messageError = 'Failed to get push test status'
-                callback(false)
-                clearInterval(check)
-              }
-            })
-          }, 2000)
-        } else {
+      
+      try {
+        const success = await this.sendPushTestAsync(data)
+        if (!success) {
           global.messageError = 'Failed to start push test'
-          global.disabled = false
           callback(false)
+          return
         }
+        
+        // Poll for test completion
+        const result = await this.pollPushTestStatus()
+        callback(result.success)
+        
+      } catch (error) {
+        logError('configStore.runPushTest()', error)
+        global.messageError = 'Push test failed unexpectedly'
+        callback(false)
+      } finally {
+        global.disabled = false
+      }
+    },
+    
+    // Helper method for polling push test status
+    async pollPushTestStatus() {
+      return new Promise((resolve) => {
+        const check = setInterval(async () => {
+          try {
+            const { success, data } = await this.getPushTestStatusAsync()
+            if (!success) {
+              global.messageError = 'Failed to get push test status'
+              clearInterval(check)
+              resolve({ success: false })
+              return
+            }
+            
+            if (data.status) {
+              // test is still running, continue polling
+              return
+            }
+            
+            clearInterval(check)
+            
+            if (!data.success) {
+              global.messageError = 'Test failed with error code (' + data.push_return_code + ')'
+              resolve({ success: true }) // callback with true because API call succeeded
+            } else {
+              if (!data.push_enabled) {
+                global.messageWarning = 'No endpoint is defined for this target. Cannot run test.'
+              } else if (!data.success && data.push_return_code > 0) {
+                global.messageError = 'Test failed with error code (' + getErrorString(data.push_return_code) + ')'
+              } else if (!data.success && data.push_return_code == 0) {
+                global.messageError = 'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
+              } else {
+                global.messageSuccess = 'Test was successful'
+              }
+              resolve({ success: true })
+            }
+          } catch (error) {
+            logError('configStore.pollPushTestStatus()', error)
+            global.messageError = 'Failed to poll push test status'
+            clearInterval(check)
+            resolve({ success: false })
+          }
+        }, 2000)
       })
     },
-    runWifiScan(callback) {
+    
+    // Async wrapper for sendPushTest
+    sendPushTestAsync(data) {
+      return new Promise((resolve) => {
+        this.sendPushTest(data, resolve)
+      })
+    },
+    
+    // Async wrapper for getPushTestStatus
+    getPushTestStatusAsync() {
+      return new Promise((resolve) => {
+        this.getPushTestStatus((success, data) => {
+          resolve({ success, data })
+        })
+      })
+    },
+    async runWifiScan(callback) {
       global.disabled = true
-      this.sendWifiScan((success) => {
-        if (success) {
-          var check = setInterval(() => {
-            this.getWifiScanStatus((success, data) => {
-              if (success) {
-                if (data.status) {
-                  // test is still running, just wait for next check
-                } else {
-                  global.disabled = false
-                  callback(data.success, data)
-                  clearInterval(check)
-                }
-              } else {
-                global.disabled = false
-                global.messageError = 'Failed to get wifi scan status'
-                callback(false)
-                clearInterval(check)
-              }
-            })
-          }, 2000)
-        } else {
-          global.disabled = false
+      
+      try {
+        const success = await this.sendWifiScanAsync()
+        if (!success) {
           global.messageError = 'Failed to start wifi scan'
           callback(false)
+          return
         }
+        
+        const result = await this.pollWifiScanStatus()
+        callback(result.success, result.data)
+        
+      } catch (error) {
+        logError('configStore.runWifiScan()', error)
+        global.messageError = 'Wifi scan failed unexpectedly'
+        callback(false)
+      } finally {
+        global.disabled = false
+      }
+    },
+    
+    // Helper method for polling wifi scan status
+    async pollWifiScanStatus() {
+      return new Promise((resolve) => {
+        const check = setInterval(async () => {
+          try {
+            const { success, data } = await this.getWifiScanStatusAsync()
+            if (!success) {
+              global.messageError = 'Failed to get wifi scan status'
+              clearInterval(check)
+              resolve({ success: false, data: null })
+              return
+            }
+            
+            if (data.status) {
+              // scan is still running, continue polling
+              return
+            }
+            
+            clearInterval(check)
+            resolve({ success: data.success, data })
+            
+          } catch (error) {
+            logError('configStore.pollWifiScanStatus()', error)
+            global.messageError = 'Failed to poll wifi scan status'
+            clearInterval(check)
+            resolve({ success: false, data: null })
+          }
+        }, 2000)
       })
     },
-    runHardwareScan(callback) {
+    
+    // Async wrapper for sendWifiScan
+    sendWifiScanAsync() {
+      return new Promise((resolve) => {
+        this.sendWifiScan(resolve)
+      })
+    },
+    
+    // Async wrapper for getWifiScanStatus
+    getWifiScanStatusAsync() {
+      return new Promise((resolve) => {
+        this.getWifiScanStatus((success, data) => {
+          resolve({ success, data })
+        })
+      })
+    },
+    async runHardwareScan(callback) {
       global.disabled = true
-      this.sendHardwareScan((success) => {
-        if (success) {
-          var check = setInterval(() => {
-            this.getHardwareScanStatus((success, data) => {
-              if (success) {
-                if (data.status) {
-                  // test is still running, just wait for next check
-                } else {
-                  global.disabled = false
-                  callback(data.success, data)
-                  clearInterval(check)
-                }
-              } else {
-                global.disabled = false
-                global.messageError = 'Failed to get hardware scan status'
-                callback(false)
-                clearInterval(check)
-              }
-            })
-          }, 2000)
-        } else {
-          global.disabled = false
+      
+      try {
+        const success = await this.sendHardwareScanAsync()
+        if (!success) {
           global.messageError = 'Failed to start hardware scan'
           callback(false)
+          return
         }
+        
+        const result = await this.pollHardwareScanStatus()
+        callback(result.success, result.data)
+        
+      } catch (error) {
+        logError('configStore.runHardwareScan()', error)
+        global.messageError = 'Hardware scan failed unexpectedly'
+        callback(false)
+      } finally {
+        global.disabled = false
+      }
+    },
+    
+    // Helper method for polling hardware scan status
+    async pollHardwareScanStatus() {
+      return new Promise((resolve) => {
+        const check = setInterval(async () => {
+          try {
+            const { success, data } = await this.getHardwareScanStatusAsync()
+            if (!success) {
+              global.messageError = 'Failed to get hardware scan status'
+              clearInterval(check)
+              resolve({ success: false, data: null })
+              return
+            }
+            
+            if (data.status) {
+              // scan is still running, continue polling
+              return
+            }
+            
+            clearInterval(check)
+            resolve({ success: data.success, data })
+            
+          } catch (error) {
+            logError('configStore.pollHardwareScanStatus()', error)
+            global.messageError = 'Failed to poll hardware scan status'
+            clearInterval(check)
+            resolve({ success: false, data: null })
+          }
+        }, 2000)
+      })
+    },
+    
+    // Async wrapper for sendHardwareScan
+    sendHardwareScanAsync() {
+      return new Promise((resolve) => {
+        this.sendHardwareScan(resolve)
+      })
+    },
+    
+    // Async wrapper for getHardwareScanStatus
+    getHardwareScanStatusAsync() {
+      return new Promise((resolve) => {
+        this.getHardwareScanStatus((success, data) => {
+          resolve({ success, data })
+        })
       })
     }
   }

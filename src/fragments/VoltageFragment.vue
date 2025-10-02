@@ -86,8 +86,8 @@ const calculateFactor = () => {
         logDebug('VoltageFragment.calculateFactor()', success, status.battery)
         global.messageInfo = 'New factor applied, check if the current battery reading is correct'
         global.disabled = false
-      }, 1000)
-    })
+      })
+    }, 1000)
   })
 }
 </script>

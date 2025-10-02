@@ -153,6 +153,7 @@ import {
   applyTemplate
 } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
+import { logError } from '@/modules/logger'
 
 const render = ref('')
 
@@ -160,13 +161,18 @@ const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct
 })
 
-const runTest = () => {
-  const data = {
-    push_format: 'http_post2_format_gravity'
-  }
+const runTest = async () => {
+  try {
+    const data = {
+      push_format: 'http_post2_format_gravity'
+    }
 
-  global.clearMessages()
-  config.runPushTest(data, () => {})
+    global.clearMessages()
+    await config.runPushTest(data)
+  } catch (error) {
+    logError('PushHttpPost2View.runTest()', error)
+    global.messageError = 'Failed to start push test'
+  }
 }
 
 const httpUrlCallback = (opt) => {

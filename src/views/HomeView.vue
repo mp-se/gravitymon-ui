@@ -219,9 +219,14 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeMount } from 'vue'
 import { status, global } from '@/modules/pinia'
 import { logDebug, logError, logInfo } from '@/modules/logger'
+import { useTimers } from '@/composables/useTimers'
+import { useFetch } from '@/composables/useFetch'
+
+const { createInterval, createTimeout } = useTimers()
+const { managedFetch } = useFetch()
 
 const polling = ref(null)
 const flag = ref(false)
@@ -252,38 +257,38 @@ function refresh() {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
   flag.value = status.sleep_mode
 
-  setTimeout(() => {
-    logInfo('HomeView.onMounted()', 'Checking for new sw')
-    fetch('https://www.gravitymon.com/firmware/version.json', {
-      signal: AbortSignal.timeout(10000)
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        logDebug('HomeView.onMounted()', json)
-        if (checkForNewGravMonVersion(json)) {
-          newVersion.value.new = true
-          newVersion.value.ver = json.version
-          logInfo('HomeView.onMounted()', 'Newer version found')
-        }
+  createTimeout(async () => {
+    try {
+      logInfo('HomeView.onMounted()', 'Checking for new sw')
+      const response = await managedFetch('https://www.gravitymon.com/firmware/version.json')
+      
+      if (!response) {
+        // Request was aborted
+        return
+      }
+      
+      const json = await response.json()
+      
+      logDebug('HomeView.onMounted()', json)
+      if (checkForNewGravMonVersion(json)) {
+        newVersion.value.new = true
+        newVersion.value.ver = json.version
+        logInfo('HomeView.onMounted()', 'Newer version found')
+      }
 
-        logInfo('HomeView.onMounted()', 'Fetching latest gravtmon version completed')
-      })
-      .catch((err) => {
-        logError('HomeView.onMounted()', err)
-      })
+      logInfo('HomeView.onMounted()', 'Fetching latest gravtmon version completed')
+    } catch (err) {
+      logError('HomeView.onMounted()', err)
+    }
   }, 500)
 })
 
 onBeforeMount(() => {
   refresh()
-  polling.value = setInterval(refresh, 4000)
-})
-
-onBeforeUnmount(() => {
-  clearInterval(polling.value)
+  polling.value = createInterval(refresh, 4000)
 })
 
 function checkForNewGravMonVersion(json) {

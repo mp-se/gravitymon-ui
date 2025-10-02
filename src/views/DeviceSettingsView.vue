@@ -172,31 +172,42 @@ const otaCallback = (opt) => {
   config.ota_url = opt
 }
 
-const factory = () => {
+const factory = async () => {
   global.clearMessages()
   logInfo('DeviceSettingsView.factory()', 'Sending /api/factory')
   global.disabled = true
-  fetch(global.baseURL + 'api/factory', {
-    headers: { Authorization: global.token },
-    signal: AbortSignal.timeout(global.fetchTimout)
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.success == true) {
-        global.messageSuccess = json.message
-        setTimeout(() => {
+  
+  try {
+    const response = await fetch(global.baseURL + 'api/factory', {
+      headers: { Authorization: global.token },
+      signal: AbortSignal.timeout(global.fetchTimout)
+    })
+    const json = await response.json()
+    
+    if (json.success == true) {
+      global.messageSuccess = json.message
+      const reloadTimeout = setTimeout(() => {
+        try {
           location.reload(true)
-        }, 2000)
-      } else {
-        global.messageFailed = json.message
-        global.disabled = false
-      }
-    })
-    .catch((err) => {
-      logError('DeviceSettingsView.factory()', err)
-      global.messageError = 'Failed to do factory restore'
-      global.disabled = false
-    })
+        } catch (error) {
+          logError('DeviceSettingsView.factory.reload()', error)
+          window.location.reload()
+        }
+      }, 2000)
+      
+      // Clean up timeout on component unmount
+      window.addEventListener('beforeunload', () => {
+        clearTimeout(reloadTimeout)
+      }, { once: true })
+    } else {
+      global.messageFailed = json.message
+    }
+  } catch (err) {
+    logError('DeviceSettingsView.factory()', err)
+    global.messageError = 'Failed to do factory restore'
+  } finally {
+    global.disabled = false
+  }
 }
 
 const saveSettings = () => {

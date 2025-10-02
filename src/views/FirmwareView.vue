@@ -116,10 +116,23 @@ function upload() {
         global.messageSuccess =
           'File upload completed, waiting for device to restart before doing refresh!'
         global.messageFailed = ''
+        
+        // Use a more reliable redirect with timeout cleanup
+        const redirectTimeout = setTimeout(() => {
+          try {
+            location.href = location.href.replace('/other/firmware', '')
+          } catch (error) {
+            logError('FirmwareView.redirect()', error)
+            // Fallback redirect
+            window.location.reload()
+          }
+        }, 10000)
+        
+        // Clean up timeout on page unload
+        window.addEventListener('beforeunload', () => {
+          clearTimeout(redirectTimeout)
+        }, { once: true })
       }
-      setTimeout(() => {
-        location.href = location.href.replace('/other/firmware', '')
-      }, 10000)
     }
 
     // The update only seams to work when loaded from the device (i.e. when CORS is not used)

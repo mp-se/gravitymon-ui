@@ -105,16 +105,27 @@ function backup() {
   global.messageSuccess = 'Backup file created and downloaded as: ' + name
 }
 
-function restore() {
+async function restore() {
   const fileElement = document.getElementById('upload')
+  
+  // Validate file element exists
+  if (!fileElement) {
+    global.messageError = 'Upload element not found'
+    return
+  }
 
   if (fileElement.files.length === 0) {
     global.messageFailed = 'You need to select one file to restore configuration from'
-  } else {
-    global.disabled = true
-    logDebug('BackupView.restore()', 'Selected file: ' + fileElement.files[0].name)
-    const reader = new FileReader()
-    reader.addEventListener('load', function (e) {
+    return
+  }
+  
+  global.disabled = true
+  logDebug('BackupView.restore()', 'Selected file: ' + fileElement.files[0].name)
+  
+  const reader = new FileReader()
+  const file = fileElement.files[0]
+  
+  reader.addEventListener('load', async function (e) {
       let text = e.target.result
       try {
         const data = JSON.parse(text)
@@ -122,19 +133,27 @@ function restore() {
           data.meta.software === 'GravityMon' &&
           (data.meta.version === '2.0.0' || data.meta.version === '2.2.0')
         ) {
-          doRestore2(data.config)
+          await doRestore2(data.config)
         } else if (data.meta.software === 'GravityMon') {
-          doRestore1(data)
+          await doRestore1(data)
         } else {
           global.messageFailed = 'Unknown format, unable to process'
         }
       } catch (error) {
         logError('BackupView.restore()', error)
         global.messageFailed = 'Unable to parse configuration file for GravityMon.'
+      } finally {
+        global.disabled = false
       }
     })
-    reader.readAsText(fileElement.files[0])
-  }
+    
+    reader.addEventListener('error', () => {
+      logError('BackupView.restore()', 'File reading failed')
+      global.messageError = 'Failed to read the backup file'
+      global.disabled = false
+    })
+    
+    reader.readAsText(file)
 }
 
 function download(content, mimeType, filename) {
@@ -144,9 +163,12 @@ function download(content, mimeType, filename) {
   a.setAttribute('href', url)
   a.setAttribute('download', filename)
   a.click()
+  
+  // Clean up the object URL to prevent memory leaks
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-function doRestore1(json) {
+async function doRestore1(json) {
   /**
    * Convert the advanced
    */
@@ -262,7 +284,7 @@ function doRestore1(json) {
   config.saveAll()
 }
 
-function doRestore2(json) {
+async function doRestore2(json) {
   for (const k in json) {
     if (k.endsWith('_format')) {
       config[k] = decodeURIComponent(json[k])

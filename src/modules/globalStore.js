@@ -88,33 +88,41 @@ export const useGlobalStore = defineStore('global', {
       this.messageSuccess = ''
       this.messageInfo = ''
     },
-    load(callback) {
-      logInfo('globalStore.load()', 'Fetching /api/feature')
-      fetch(this.baseURL + 'api/feature', {
-        signal: AbortSignal.timeout(this.fetchTimout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('globalStore.load()', json)
-          this.board = json.board.toUpperCase()
-          this.app_ver = json.app_ver
-          this.app_build = json.app_build
-          this.platform = json.platform.toUpperCase()
-          this.hardware = json.hardware.toUpperCase()
-          this.firmware_file = json.firmware_file.toLowerCase()
-
-          this.feature.ble = json.ble
-          this.feature.velocity = json.velocity
-          this.feature.filter = json.filter
-          this.feature.charging = json.charging
-
-          logInfo('globalStore.load()', 'Fetching /api/feature completed')
-          callback(true)
+    async load(callback) {
+      try {
+        logInfo('globalStore.load()', 'Fetching /api/feature')
+        const response = await fetch(this.baseURL + 'api/feature', {
+          signal: AbortSignal.timeout(this.fetchTimout)
         })
-        .catch((err) => {
-          logError('globalStore.load()', err)
-          callback(false)
-        })
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        }
+        
+        const json = await response.json()
+        logDebug('globalStore.load()', json)
+        
+        this.board = json.board.toUpperCase()
+        this.app_ver = json.app_ver
+        this.app_build = json.app_build
+        this.platform = json.platform.toUpperCase()
+        this.hardware = json.hardware.toUpperCase()
+        this.firmware_file = json.firmware_file.toLowerCase()
+
+        this.feature.ble = json.ble
+        this.feature.velocity = json.velocity
+        this.feature.filter = json.filter
+        this.feature.charging = json.charging
+
+        logInfo('globalStore.load()', 'Fetching /api/feature completed')
+        if (callback) callback(true)
+        return true
+        
+      } catch (err) {
+        logError('globalStore.load()', err)
+        if (callback) callback(false)
+        return false
+      }
     }
   }
 })

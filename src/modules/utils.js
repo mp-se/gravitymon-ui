@@ -266,31 +266,51 @@ export function isGyroCalibrated() {
   return true
 }
 
-export function restart() {
+export async function restart() {
   global.clearMessages()
   global.disabled = true
-  fetch(global.baseURL + 'api/restart', {
-    headers: { Authorization: global.token },
-    signal: AbortSignal.timeout(global.fetchTimout)
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      logDebug('utils.restart()', json)
-      if (json.status == true) {
-        global.messageSuccess =
-          json.message + ' Redirecting to http://' + config.mdns + '.local in 8 seconds.'
-        logInfo('utils.restart()', 'Scheduling refresh of UI')
-        setTimeout(() => {
-          location.href = 'http://' + config.mdns + '.local'
-        }, 8000)
-      } else {
-        global.messageError = json.message
-        global.disabled = false
-      }
+  
+  const abortController = new AbortController()
+  let redirectTimeout = null
+  
+  try {
+    const response = await fetch(global.baseURL + 'api/restart', {
+      headers: { Authorization: global.token },
+      signal: abortController.signal
     })
-    .catch((err) => {
+    const json = await response.json()
+    
+    logDebug('utils.restart()', json)
+    if (json.status == true) {
+      global.messageSuccess =
+        json.message + ' Redirecting to http://' + config.mdns + '.local in 8 seconds.'
+      logInfo('utils.restart()', 'Scheduling refresh of UI')
+      
+      redirectTimeout = setTimeout(() => {
+        try {
+          location.href = 'http://' + config.mdns + '.local'
+        } catch (error) {
+          logError('utils.restart.redirect()', error)
+          // Fallback to current location
+          window.location.reload()
+        }
+      }, 8000)
+      
+      // Clean up on page unload
+      window.addEventListener('beforeunload', () => {
+        if (redirectTimeout) clearTimeout(redirectTimeout)
+        abortController.abort()
+      }, { once: true })
+      
+    } else {
+      global.messageError = json.message
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') {
       logError('utils.restart()', err)
       global.messageError = 'Failed to do restart'
-      global.disabled = false
-    })
+    }
+  } finally {
+    global.disabled = false
+  }
 }

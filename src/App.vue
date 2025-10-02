@@ -88,10 +88,13 @@
 <script setup>
 import BsMenuBar from './components/BsMenuBar.vue'
 import BsFooter from './components/BsFooter.vue'
-import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref } from 'vue'
+import { onMounted, watch, onBeforeMount, ref } from 'vue'
 import { global, status, config, saveConfigState } from './modules/pinia'
 import { storeToRefs } from 'pinia'
+import { useTimers } from '@/composables/useTimers'
+import { logError } from '@/modules/logger'
 
+const { createInterval } = useTimers()
 const polling = ref(null)
 
 const { disabled } = storeToRefs(global)
@@ -113,60 +116,70 @@ function ping() {
 }
 
 onBeforeMount(() => {
-  polling.value = setInterval(ping, 7000)
+  polling.value = createInterval(ping, 7000)
 })
 
-onBeforeUnmount(() => {
-  clearInterval(polling.value)
-})
-
-onMounted(() => {
+onMounted(async () => {
   if (!global.initialized) {
-    showSpinner()
-    status.auth((success, data) => {
-      if (success) {
-        global.id = data.token
-
-        global.load((success) => {
-          if (success) {
-            status.load((success) => {
-              if (success) {
-                config.load((success) => {
-                  if (success) {
-                    config.loadFormat((success) => {
-                      if (success) {
-                        saveConfigState()
-                        global.initialized = true
-                      } else {
-                        global.messageError =
-                          'Failed to load format templates from device, please try to reload page!'
-                      }
-                      hideSpinner()
-                    })
-                  } else {
-                    global.messageError =
-                      'Failed to load configuration data from device, please try to reload page!'
-                    hideSpinner()
-                  }
-                })
-              } else {
-                global.messageError =
-                  'Failed to load status from device, please try to reload page!'
-                hideSpinner()
-              }
-            })
-          } else {
-            global.messageError =
-              'Failed to load feature flags from device, please try to reload page!'
-          }
-        })
-      } else {
-        global.messageError = 'Failed to authenticate with device, please try to reload page!'
-        hideSpinner()
-      }
-    })
+    await initializeApp()
   }
 })
+
+async function initializeApp() {
+  try {
+    showSpinner()
+    
+    // Step 1: Authenticate with device
+    const authResult = await status.auth()
+    if (!authResult.success) {
+      global.messageError = 'Failed to authenticate with device, please try to reload page!'
+      return
+    }
+    global.id = authResult.data.token
+
+    // Step 2: Load feature flags
+    const globalSuccess = await global.load()
+    if (!globalSuccess) {
+      global.messageError = 'Failed to load feature flags from device, please try to reload page!'
+      return
+    }
+
+    // Step 3: Load device status
+    const statusSuccess = await status.load()
+    if (!statusSuccess) {
+      global.messageError = 'Failed to load status from device, please try to reload page!'
+      return
+    }
+
+    // Step 4: Load configuration
+    const configSuccess = await new Promise(resolve => {
+      config.load(resolve)
+    })
+    if (!configSuccess) {
+      global.messageError = 'Failed to load configuration data from device, please try to reload page!'
+      return
+    }
+
+    // Step 5: Load format templates
+    const formatSuccess = await new Promise(resolve => {
+      config.loadFormat(resolve)
+    })
+    if (!formatSuccess) {
+      global.messageError = 'Failed to load format templates from device, please try to reload page!'
+      return
+    }
+
+    // Success! Initialize the app
+    saveConfigState()
+    global.initialized = true
+    
+  } catch (error) {
+    logError('App.initializeApp()', error)
+    global.messageError = `Initialization failed: ${error.message}`
+  } finally {
+    hideSpinner()
+  }
+}
 
 function showSpinner() {
   document.querySelector('#spinner').showModal()
