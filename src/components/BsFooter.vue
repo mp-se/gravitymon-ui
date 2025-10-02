@@ -19,5 +19,8 @@
 /**
  * Text to show in the footer (required).
  */
-const text = defineModel('text')
+const text = defineModel('text', {
+  type: String,
+  default: 'Footer Text'
+})
 </script>

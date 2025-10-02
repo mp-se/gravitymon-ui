@@ -48,22 +48,28 @@ import { ref, onMounted } from 'vue'
 import { config } from '@/modules/pinia'
 import { calculate } from '@/modules/formula'
 
-const expressions = defineModel('expressions') // Hold results from regression library
+/**
+ * Hold results from regression library.
+ */
+const expressions = defineModel('expressions', {
+  type: Array,
+  default: () => []
+}) // Hold results from regression library
 const data = ref([])
 const maxDeviation = ref({ o1: 0, o2: 0, o3: 0, o4: 0 })
 
 onMounted(() => {
   config.formula_calculation_data.forEach((d) => {
     if (d.a > 0) {
-      var o1 = calculate(expressions.value['1'], d.a)
-      var o2 = calculate(expressions.value['2'], d.a)
-      var o3 = calculate(expressions.value['3'], d.a)
-      var o4 = calculate(expressions.value['4'], d.a)
+      const o1 = calculate(expressions.value['1'], d.a)
+      const o2 = calculate(expressions.value['2'], d.a)
+      const o3 = calculate(expressions.value['3'], d.a)
+      const o4 = calculate(expressions.value['4'], d.a)
 
-      var o1d = Math.abs(o1 - d.g)
-      var o2d = Math.abs(o2 - d.g)
-      var o3d = Math.abs(o3 - d.g)
-      var o4d = Math.abs(o4 - d.g)
+      const o1d = Math.abs(o1 - d.g)
+      const o2d = Math.abs(o2 - d.g)
+      const o3d = Math.abs(o3 - d.g)
+      const o4d = Math.abs(o4 - d.g)
 
       data.value.push({
         a: Number(d.a).toFixed(3),

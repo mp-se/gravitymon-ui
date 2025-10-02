@@ -222,7 +222,7 @@ const logData = ref('')
 const showHelp = ref(false)
 
 function fetchLog(file, callback) {
-  var data = {
+  const data = {
     command: 'get',
     file: file
   }
@@ -230,7 +230,7 @@ function fetchLog(file, callback) {
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
       logDebug('SupportView.fetchLog()', 'Fetching ' + file + ' completed')
-      var list = text.split('\n')
+      const list = text.split('\n')
       list.forEach(function (item) {
         if (item.length) logData.value = item + '\n' + logData.value
       })
@@ -242,7 +242,7 @@ function fetchLog(file, callback) {
 }
 
 function removeLog(file, callback) {
-  var data = {
+  const data = {
     command: 'del',
     file: file
   }

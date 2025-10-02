@@ -287,8 +287,8 @@ onBeforeUnmount(() => {
 })
 
 function checkForNewGravMonVersion(json) {
-  var current = global.app_ver
-  var latest = json.version
+  const current = global.app_ver
+  const latest = json.version
 
   const newVer = latest.split('.')
   const curVer = current.split('.')

@@ -28,6 +28,12 @@
 import { ref } from 'vue'
 import BsInputReadonly from '@/components/BsInputReadonly.vue'
 
-const expressions = defineModel('expressions') // Hold results from regression library
+/**
+ * Hold results from regression library.
+ */
+const expressions = defineModel('expressions', {
+  type: Array,
+  default: () => []
+}) // Hold results from regression library
 const rejected = ref('Formula rejected')
 </script>

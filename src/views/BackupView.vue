@@ -75,17 +75,15 @@
 <script setup>
 import { ref } from 'vue'
 import { global, config, getConfigChanges } from '@/modules/pinia'
-import { logDebug } from '@/modules/logger'
+import { logDebug, logError } from '@/modules/logger'
 
 const progress = ref(0)
 
 function backup() {
-  var backup = {
-    meta: { version: '2.2.0', software: 'GravityMon', created: '' },
+  let backup = {
+    meta: { version: '2.2.0', software: 'GravityMon', created: new Date().toISOString().slice(0, 10) },
     config: JSON.parse(config.toJson())
   }
-
-  backup.meta.created = new Date().toISOString().slice(0, 10)
 
   logDebug('BackupView.backup()', backup)
 
@@ -101,8 +99,8 @@ function backup() {
   )
   backup.config.mqtt_format_gravity = encodeURIComponent(backup.config.mqtt_format_gravity)
 
-  var s = JSON.stringify(backup, null, 2)
-  var name = config.mdns + '.txt'
+  const s = JSON.stringify(backup, null, 2)
+  const name = config.mdns + '.txt'
   download(s, 'text/plain', name)
   global.messageSuccess = 'Backup file created and downloaded as: ' + name
 }
@@ -131,7 +129,7 @@ function restore() {
           global.messageFailed = 'Unknown format, unable to process'
         }
       } catch (error) {
-        console.error(error)
+        logError('BackupView.restore()', error)
         global.messageFailed = 'Unable to parse configuration file for GravityMon.'
       }
     })
@@ -156,8 +154,8 @@ function doRestore1(json) {
 
   delete json.advanced['id']
 
-  for (var k in json.advanced) {
-    var newK = k.replaceAll('-', '_')
+  for (const k in json.advanced) {
+    let newK = k.replaceAll('-', '_')
 
     if (newK === 'int_http1') newK = 'http_post_int'
     if (newK === 'int_http2') newK = 'http_post2_int'
@@ -184,8 +182,8 @@ function doRestore1(json) {
   delete json.config['wifi-ssid2']
   delete json.config['wifi-pass2']
 
-  for (k in json.config) {
-    newK = k.replaceAll('-', '_')
+  for (const k in json.config) {
+    let newK = k.replaceAll('-', '_')
 
     if (newK === 'ble') newK = 'ble_tilt_color'
 
@@ -265,7 +263,7 @@ function doRestore1(json) {
 }
 
 function doRestore2(json) {
-  for (var k in json) {
+  for (const k in json) {
     if (k.endsWith('_format')) {
       config[k] = decodeURIComponent(json[k])
     } else {

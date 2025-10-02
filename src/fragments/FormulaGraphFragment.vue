@@ -30,7 +30,13 @@ import { evaluateFormula } from '@/modules/formula'
 
 const chart = ref(null)
 
-const expressions = defineModel('expressions') // Hold results from regression library
+/**
+ * Hold results from regression library.
+ */
+const expressions = defineModel('expressions', {
+  type: Array,
+  default: () => []
+}) // Hold results from regression library
 
 const chartDataForm = ref([])
 const chartDataOrder1 = ref([])

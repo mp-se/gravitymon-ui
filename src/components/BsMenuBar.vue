@@ -151,14 +151,20 @@ import { items } from '@/modules/router'
  */
 
 /**
- * Ref that steers if this component is enabled or not (required)
+ * Ref that steers if this component is enabled or not (required).
  */
-const disabled = defineModel('disabled')
+const disabled = defineModel('disabled', {
+  type: Boolean,
+  default: false
+})
 
 /**
- * Ref that contains the brand name
+ * Ref that contains the brand name.
  */
-const brand = defineModel('brand')
+const brand = defineModel('brand', {
+  type: String,
+  default: 'Brand'
+})
 
 /**
  * Darkmode ref is imported from the config store (required).
@@ -173,7 +179,7 @@ watch(dark_mode, () => {
   setMode()
 })
 
-function setMode() {
+const setMode = () => {
   if (config.dark_mode) {
     document.documentElement.setAttribute('data-bs-theme', 'dark')
   } else {

@@ -164,14 +164,14 @@ watch(gyro_type, () => {
 })
 
 const ispindel = () => {
-  var data = {
+  const data = {
     command: 'get',
     file: '/config.json'
   }
 
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
-      var json = JSON.parse(text)
+      const json = JSON.parse(text)
       logDebug('DeviceHardwareView.ispindel()', json)
 
       config.gyro_calibration_data.ax = json.Offset[0]

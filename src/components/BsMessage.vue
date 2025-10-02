@@ -29,10 +29,10 @@
 </template>
 
 <script setup>
-import IconXCircle from './IconXCircle.vue'
-import IconCheckCircle from './IconCheckCircle.vue'
-import IconInfoCircle from './IconInfoCircle.vue'
-import IconExclamationTriangle from './IconExclamationTriangle.vue'
+import IconXCircle from '@/components/IconXCircle.vue'
+import IconCheckCircle from '@/components/IconCheckCircle.vue'
+import IconInfoCircle from '@/components/IconInfoCircle.vue'
+import IconExclamationTriangle from '@/components/IconExclamationTriangle.vue'
 
 /**
  * 2024-05-28 Bootstrap VueJS wrapper, Magnus Persson
@@ -47,21 +47,37 @@ defineOptions({
 /**
  * Text message to show in alert (required).
  */
-const message = defineModel('message')
+const message = defineModel('message', {
+  type: String,
+  default: ''
+})
+
 /**
  * If set to 'true' then the message can be closed by the user (optional).
  */
-const dismissable = defineModel('dismissable')
+const dismissable = defineModel('dismissable', {
+  type: [Boolean, String],
+  default: false
+})
+
 /**
  * The type of the alert (Danger|Success|Warning|Info) (required).
  */
-const alert = defineModel('alert')
+const alert = defineModel('alert', {
+  type: String,
+  default: 'info',
+  validator: (value) => ['danger', 'success', 'warning', 'info'].includes(value.toLowerCase())
+})
+
 /**
  * Function to call when close button is used (optional).
  */
-const close = defineModel('close')
+const close = defineModel('close', {
+  type: Function,
+  default: () => {}
+})
 
-function classNames() {
+const classNames = () => {
   const cn = dismissable.value
     ? 'alert alert-' + alert.value + ' align-items-center alert-dismissible fade show'
     : 'alert alert-' + alert.value + ' align-items-center'

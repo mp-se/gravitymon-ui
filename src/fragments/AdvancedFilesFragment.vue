@@ -10,6 +10,7 @@
           accept=""
           help="Choose a file to upload to the file system"
           :disabled="global.disabled"
+          @change="onFileChange"
         >
         </BsFileUpload>
       </div>
@@ -22,7 +23,7 @@
           value="upload"
           data-bs-toggle="tooltip"
           title="Update the device with the selected firmware"
-          :disabled="global.disabled"
+          :disabled="global.disabled || !hasFileSelected"
         >
           <span
             class="spinner-border spinner-border-sm"
@@ -96,6 +97,7 @@ import { logDebug, logError } from '@/modules/logger'
 
 const fileData = ref(null)
 const filesDelete = ref([])
+const hasFileSelected = ref(false)
 
 const confirmDeleteMessage = ref(null)
 const confirmDeleteFile = ref(null)
@@ -109,7 +111,7 @@ const confirmDeleteCallback = (result) => {
 
     fileData.value = null
 
-    var data = {
+    const data = {
       command: 'del',
       file: confirmDeleteFile.value
     }
@@ -134,14 +136,14 @@ const listFilesDelete = () => {
 
   filesDelete.value = []
 
-  var data = {
+  const data = {
     command: 'dir'
   }
 
   config.sendFilesystemRequest(data, (success, text) => {
     if (success) {
-      var json = JSON.parse(text)
-      for (var f in json.files) {
+      const json = JSON.parse(text)
+      for (const f in json.files) {
         filesDelete.value.push(json.files[f].file)
       }
     }
@@ -151,6 +153,10 @@ const listFilesDelete = () => {
 }
 
 const progress = ref(0)
+
+const onFileChange = (event) => {
+  hasFileSelected.value = event.target.files.length > 0
+}
 
 function upload() {
   const fileElement = document.getElementById('upload')

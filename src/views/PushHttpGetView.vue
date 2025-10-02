@@ -178,7 +178,7 @@ const httpFormatCallback = (opt) => {
 }
 
 const renderFormat = () => {
-  var s = applyTemplate(status, config, config.http_get_format_gravity)
+  const s = applyTemplate(status, config, config.http_get_format_gravity)
   render.value = s.replaceAll('&', '&')
 }
 

@@ -175,7 +175,7 @@ onMounted(() => {
 })
 
 const createSleepLabel = () => {
-  var s = Math.floor(sleep_interval.value / 60) + ' min ' + (sleep_interval.value % 60) + ' sec'
+  const s = Math.floor(sleep_interval.value / 60) + ' min ' + (sleep_interval.value % 60) + ' sec'
   sleepLabel.value = '(' + s + ')'
 }
 
@@ -184,12 +184,12 @@ const calculateBatteryLife = () => {
   // MPU-6050 consumes 4mA
   // DS18B20 consumes 1mA
   // For this estimation we use an average of 160mA
-  var pwrActive = 160 // mA per hour (120-170 mA)
-  var pwrSleep = 15 // mA per day (include all pheripials as well)
-  var batt = 2200 // mA
-  var rt = 5 // Assume 10 seconds per run
-  var ble = config.ble_format === 0 ? false : true
-  var wifi =
+  let pwrActive = 160 // mA per hour (120-170 mA)
+  const pwrSleep = 15 // mA per day (include all pheripials as well)
+  const batt = 2200 // mA
+  const rt = 5 // Assume 10 seconds per run
+  const ble = config.ble_format === 0 ? false : true
+  const wifi =
     config.http_post_target.length +
       config.http_post2_target.length +
       config.http_get_target.length +
@@ -244,9 +244,9 @@ const calculateBatteryLife = () => {
   // if (rt < 4) rt = 4 // Assume that this takes at least 4 seconds to read sensors and do push.
 
   // The deep sleep will consume approx 1mA per day.
-  var powerPerDay =
+  const powerPerDay =
     ((24 * 3600) / (config.sleep_interval + rt)) * (rt / 3600) * pwrActive + pwrSleep
-  var days = batt / powerPerDay
+  const days = batt / powerPerDay
 
   logDebug(
     'PushSettingsView.calculateBatteryLife()',

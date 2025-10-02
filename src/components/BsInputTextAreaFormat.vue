@@ -76,21 +76,21 @@ const contextMenuOptions = ref([
   { label: 'Gravity Velocity, ${velocity}', value: '${velocity}' }
 ])
 
-function insertText(value) {
+const insertText = (value) => {
   if (value.length > 0) {
-    var obj = document.getElementById('textArea')
+    const obj = document.getElementById('textArea')
     model.value =
       obj.value.substring(0, obj.selectionStart) +
       value +
       obj.value.substring(obj.selectionEnd, obj.value.length)
   }
 
-  var menu = document.getElementById('contextMenu')
+  const menu = document.getElementById('contextMenu')
   menu.style.display = 'none'
 }
 
 const openContextMenu = (event) => {
-  var menu = document.getElementById('contextMenu')
+  const menu = document.getElementById('contextMenu')
   menu.style.display = 'block'
   menu.style.left = event.pageX + 'px'
   menu.style.top = event.pageY + 'px'
@@ -99,21 +99,40 @@ const openContextMenu = (event) => {
 /**
  * This is the v-model field that will be used to bind the component to (required).
  */
-const model = defineModel()
+const model = defineModel({
+  type: String,
+  default: ''
+})
+
 /**
  * This text is shown above the form component (optional).
  */
-const label = defineModel('label')
+const label = defineModel('label', {
+  type: String,
+  default: undefined
+})
+
 /**
  * Help text is shown below the field to provide user help with input (optional).
  */
-const help = defineModel('help')
+const help = defineModel('help', {
+  type: String,
+  default: undefined
+})
+
 /**
  * Specify the width to force a specific size (optional).
  */
-const width = defineModel('width')
+const width = defineModel('width', {
+  type: [String, Number],
+  default: undefined
+})
+
 /**
  * Specify if an badge should be shown to guide the user (optional).
  */
-const badge = defineModel('badge')
+const badge = defineModel('badge', {
+  type: Boolean,
+  default: false
+})
 </script>

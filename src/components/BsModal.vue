@@ -56,25 +56,44 @@ defineOptions({
 })
 
 /**
- * Ref to fetch data from (required)
+ * Ref to fetch data from (required).
  */
-const model = defineModel()
+const model = defineModel({
+  type: [String, Object, Array],
+  default: ''
+})
+
 /**
- * Text on button that activates the modal (required)
+ * Text on button that activates the modal (required).
  */
-const button = defineModel('button')
+const button = defineModel('button', {
+  type: String,
+  default: 'Open Modal'
+})
+
 /**
  * Modal title (required).
  */
-const title = defineModel('title')
+const title = defineModel('title', {
+  type: String,
+  default: 'Modal'
+})
+
 /**
  * If json errors should be detected (optional).
  */
-const json = defineModel('json')
+const json = defineModel('json', {
+  type: Boolean,
+  default: false
+})
+
 /**
  * Force mqtt format (optional).
  */
-const mqtt = defineModel('mqtt')
+const mqtt = defineModel('mqtt', {
+  type: Boolean,
+  default: false
+})
 
 const format = (s) => {
   if (mqtt.value) return s
@@ -89,8 +108,8 @@ const checkCode = () => {
 
   if (mqtt.value) {
     if (json.value) {
-      var input = model.value
-      var arr = input.replaceAll('\n', '').split('|')
+      const input = model.value
+      const arr = input.replaceAll('\n', '').split('|')
 
       arr.forEach((value) => {
         const data = value.substring(value.indexOf(':') + 1)

@@ -26,17 +26,32 @@ defineOptions({
 /**
  * This text is shown above the form component (optional).
  */
-const label = defineModel('label')
+const label = defineModel('label', {
+  type: String,
+  default: undefined
+})
+
 /**
  * Help text is shown below the field to provide user help with input (optional).
  */
-const help = defineModel('help')
+const help = defineModel('help', {
+  type: String,
+  default: undefined
+})
+
 /**
  * Specify the width to force a specific size (optional).
  */
-const width = defineModel('width')
+const width = defineModel('width', {
+  type: [String, Number],
+  default: undefined
+})
+
 /**
  * Specify if an badge should be shown to guide the user (optional).
  */
-const badge = defineModel('badge')
+const badge = defineModel('badge', {
+  type: Boolean,
+  default: false
+})
 </script>

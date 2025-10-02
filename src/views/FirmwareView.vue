@@ -23,8 +23,9 @@
             id="upload"
             label="Select firmware file"
             accept=".bin"
-            help="Choose the firmware file that will be used to update the device"
+            help="Choose the firmware file (.bin) that will be used to update the device. The upload button will be enabled once a file is selected."
             :disabled="global.disabled"
+            @change="onFileChange"
           >
           </BsFileUpload>
         </div>
@@ -37,8 +38,8 @@
             id="upload-btn"
             value="upload"
             data-bs-toggle="tooltip"
-            title="Update the device with the selected firmware"
-            :disabled="global.disabled"
+            :title="!hasFileSelected ? 'Please select a firmware file first' : 'Update the device with the selected firmware'"
+            :disabled="global.disabled || !hasFileSelected"
           >
             <span
               class="spinner-border spinner-border-sm"
@@ -65,6 +66,12 @@ import { global } from '@/modules/pinia'
 import { logDebug, logError } from '@/modules/logger'
 
 const progress = ref(0)
+const hasFileSelected = ref(false)
+
+const onFileChange = (event) => {
+  const fileElement = event.target
+  hasFileSelected.value = fileElement.files && fileElement.files.length > 0
+}
 
 function upload() {
   const fileElement = document.getElementById('upload')
@@ -73,6 +80,12 @@ function upload() {
     logError('FirmwareView.upload()', e.type)
     global.messageFailed = 'File upload failed!'
     global.disabled = false
+    // Reset file input and selection state
+    const fileElement = document.getElementById('upload')
+    if (fileElement) {
+      fileElement.value = ''
+      hasFileSelected.value = false
+    }
   }
 
   if (fileElement.files.length === 0) {

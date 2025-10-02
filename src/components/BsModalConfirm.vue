@@ -50,19 +50,34 @@ defineOptions({
 })
 
 /**
- * Ref to callback where true/false will be a parameter (required)
+ * Ref to callback where true/false will be a parameter (required).
  */
-const callback = defineModel('callback')
+const callback = defineModel('callback', {
+  type: Function,
+  default: () => {}
+})
+
 /**
- * Ref to dialog message (required)
+ * Ref to dialog message (required).
  */
-const message = defineModel('message')
+const message = defineModel('message', {
+  type: String,
+  default: 'Are you sure?'
+})
+
 /**
- * Ref to dialog id (required)
+ * Ref to dialog id (required).
  */
-const id = defineModel('id')
+const id = defineModel('id', {
+  type: String,
+  default: 'confirm-modal'
+})
+
 /**
  * Modal title (required).
  */
-const title = defineModel('title')
+const title = defineModel('title', {
+  type: String,
+  default: 'Confirm Action'
+})
 </script>

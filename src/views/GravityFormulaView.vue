@@ -271,7 +271,7 @@ const createFormula = () => {
   for (var i = 1; i < 5; i++) {
     const regression = new PolynomialRegression(x, y, i)
 
-    var f = regression.toString(noDecimals.value)
+    let f = regression.toString(noDecimals.value)
 
     f = f.replaceAll(' ', '')
     f = f.replaceAll('f(x)=', '')

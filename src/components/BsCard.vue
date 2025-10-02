@@ -25,27 +25,50 @@ defineOptions({
   inheritAttrs: false
 })
 /**
- * Text to be displayed in the header of the Card (required)
+ * Text to be displayed in the header of the Card (required).
  */
-const header = defineModel('header')
+const header = defineModel('header', {
+  type: String,
+  default: 'Card Header'
+})
+
 /**
  * Title shown in the top of the card body (required).
  */
-const title = defineModel('title')
-/**
- * If defined an icon will be shown left of the title (required).
- */
-const icon = defineModel('icon')
-/**
- * If set the header will be in red
- */
-const iserr = defineModel('iserr')
-/**
- * Color for the header (if not error)
- */
-const headerColor = defineModel('color')
+const title = defineModel('title', {
+  type: String,
+  default: 'Card Title'
+})
 
-function headerStyle() {
+/**
+ * If defined an icon will be shown left of the title (optional).
+ */
+const icon = defineModel('icon', {
+  type: [Object, String],
+  default: undefined
+})
+
+/**
+ * If set the header will be in red.
+ */
+const iserr = defineModel('iserr', {
+  type: Boolean,
+  default: false
+})
+
+/**
+ * Color for the header (if not error).
+ */
+const headerColor = defineModel('color', {
+  type: String,
+  default: 'primary',
+  validator: (value) => {
+    const validColors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']
+    return validColors.includes(value)
+  }
+})
+
+const headerStyle = () => {
   if (iserr.value !== undefined && iserr.value) return 'card-header bg-danger-subtle'
 
   if (headerColor.value === undefined) return 'card-header bg-primary-subtle'

@@ -159,12 +159,12 @@ export function tempToC(f) {
 }
 
 export function applyTemplate(status, config, template) {
-  var s = template
+  let s = template
 
   s = s.replaceAll('${temp}', status.temp)
 
-  var c = status.temp
-  var f = status.temp
+  let c = status.temp
+  let f = status.temp
 
   if (config.temp_unit === 'C') {
     f = tempToF(status.temp)
@@ -186,19 +186,19 @@ export function applyTemplate(status, config, template) {
   s = s.replaceAll('${battery}', status.battery)
 
   if (config.gravity_unit === 'G') {
-    var sg = status.gravity
+    const sg = status.gravity
     s = s.replaceAll('${gravity}', sg)
     s = s.replaceAll('${gravity-sg}', sg)
     s = s.replaceAll('${corr-gravity-sg}', sg)
-    var plato = 259 - (259 - sg)
+    const plato = 259 - (259 - sg)
     s = s.replaceAll('${gravity-plato}', plato)
     s = s.replaceAll('${corr-gravity-plato}', plato)
   } else {
-    plato = status.gravity
+    const plato = status.gravity
     s = s.replaceAll('${gravity}', plato)
     s = s.replaceAll('${gravity-plato}', plato)
     s = s.replaceAll('${corr-gravity-plato}', plato)
-    sg = 259 / (259 - plato)
+    const sg = 259 / (259 - plato)
     s = s.replaceAll('${gravity-sg}', sg)
     s = s.replaceAll('${corr-gravity-sg}', sg)
   }
@@ -261,7 +261,7 @@ export function getErrorString(code) {
 }
 
 export function isGyroCalibrated() {
-  var g = config.gyro_calibration_data
+  const g = config.gyro_calibration_data
   if (g.ax + g.ay + g.az + g.gx + g.gy + g.gz == 0) return false
   return true
 }

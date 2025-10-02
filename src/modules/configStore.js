@@ -115,9 +115,9 @@ export const useConfigStore = defineStore('config', {
     },
     toJson() {
       logInfo('configStore.toJSON()')
-      var dest = {}
+      const dest = {}
 
-      for (var key in this.$state) {
+      for (const key in this.$state) {
         if (!key.startsWith('$')) {
           if (key === 'gyro_calibration_data') {
             dest[key] = []
@@ -279,7 +279,7 @@ export const useConfigStore = defineStore('config', {
 
       this.convertTempToC() // Device use C internally
 
-      var data = getConfigChanges()
+      const data = getConfigChanges()
       delete data.http_post_format_gravity
       delete data.http_post2_format_gravity
       delete data.http_get_format_gravity
@@ -327,9 +327,9 @@ export const useConfigStore = defineStore('config', {
       global.disabled = true
       logInfo('configStore.sendFormat()', 'Sending /api/format')
 
-      var data2 = getConfigChanges()
-      var data = {}
-      var cnt = 0
+      const data2 = getConfigChanges()
+      let data = {}
+      let cnt = 0
 
       logDebug('configStore.sendFormat()', data)
 
