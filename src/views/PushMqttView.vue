@@ -157,13 +157,13 @@ const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct
 })
 
-const runTest = () => {
+const runTest = async () => {
   const data = {
     push_format: 'mqtt_format_gravity'
   }
 
   global.clearMessages()
-  config.runPushTest(data, () => {})
+  await config.runPushTest(data)
 }
 
 const mqttFormatCallback = (opt) => {

@@ -39,6 +39,7 @@
             label="Select backup file"
             accept=".txt"
             :disabled="global.disabled"
+            @change="onFileChange"
           >
           </BsFileUpload>
         </div>
@@ -51,7 +52,7 @@
             value="upload"
             data-bs-toggle="tooltip"
             title="Upload the configuration to the device"
-            :disabled="global.disabled"
+            :disabled="global.disabled || !fileSelected"
           >
             <span
               class="spinner-border spinner-border-sm"
@@ -78,6 +79,12 @@ import { global, config, getConfigChanges } from '@/modules/pinia'
 import { logDebug, logError } from '@/modules/logger'
 
 const progress = ref(0)
+const fileSelected = ref(false)
+
+function onFileChange(event) {
+  const files = event.target.files
+  fileSelected.value = files && files.length > 0
+}
 
 function backup() {
   let backup = {
@@ -144,6 +151,9 @@ async function restore() {
         global.messageFailed = 'Unable to parse configuration file for GravityMon.'
       } finally {
         global.disabled = false
+        // Reset file selection after operation
+        fileSelected.value = false
+        fileElement.value = ''
       }
     })
     
@@ -151,6 +161,9 @@ async function restore() {
       logError('BackupView.restore()', 'File reading failed')
       global.messageError = 'Failed to read the backup file'
       global.disabled = false
+      // Reset file selection after error
+      fileSelected.value = false
+      fileElement.value = ''
     })
     
     reader.readAsText(file)
