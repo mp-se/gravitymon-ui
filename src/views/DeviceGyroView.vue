@@ -197,7 +197,7 @@ const calibrate = async () => {
     logInfo('DeviceHardwareView.calibrate()', 'Sending /api/calibrate')
     const response = await fetch(global.baseURL + 'api/calibrate', {
       headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimout)
+      signal: AbortSignal.timeout(global.fetchTimeout)
     })
     
     if (response.status != 200) {
@@ -210,7 +210,7 @@ const calibrate = async () => {
     
     const statusResponse = await fetch(global.baseURL + 'api/calibrate/status', {
       headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimout)
+      signal: AbortSignal.timeout(global.fetchTimeout)
     })
     
     logDebug('DeviceHardwareView.calibrate()', statusResponse)

@@ -180,7 +180,7 @@ const factory = async () => {
   try {
     const response = await fetch(global.baseURL + 'api/factory', {
       headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimout)
+      signal: AbortSignal.timeout(global.fetchTimeout)
     })
     const json = await response.json()
     

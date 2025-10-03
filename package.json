@@ -1,5 +1,5 @@
 {
-  "name": "Gravitymon",
+  "name": "gravitymon-ui",
   "version": "2.3.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "mock": "./node_modules/nodemon/bin/nodemon.js mock-server/index.js"
   },
   "dependencies": {
-    "@mp-se/espframework-ui-components": "file:../espframework-ui-components",
+    "@mp-se/espframework-ui-components": "git+https://github.com/mp-se/espframework-ui-components.git",
     "bootstrap": "^5.3.3",
     "json-parse-even-better-errors": "^4.0.0",
     "ml-regression-polynomial": "^3.0.1",

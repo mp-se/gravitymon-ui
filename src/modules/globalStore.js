@@ -29,7 +29,7 @@ export const useGlobalStore = defineStore('global', {
       messageSuccess: '',
       messageInfo: '',
 
-      fetchTimout: 8000,
+      fetchTimeout: 8000,
       url: undefined
     }
   },
@@ -92,7 +92,7 @@ export const useGlobalStore = defineStore('global', {
       try {
         logInfo('globalStore.load()', 'Fetching /api/feature')
         const response = await fetch(this.baseURL + 'api/feature', {
-          signal: AbortSignal.timeout(this.fetchTimout)
+          signal: AbortSignal.timeout(this.fetchTimeout)
         })
         
         if (!response.ok) {

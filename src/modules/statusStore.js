@@ -42,7 +42,7 @@ export const useStatusStore = defineStore('status', {
       try {
         logInfo('statusStore.load()', 'Fetching /api/status')
         const response = await fetch(global.baseURL + 'api/status', {
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         if (!response.ok) {
@@ -114,7 +114,7 @@ export const useStatusStore = defineStore('status', {
           headers: {
             Authorization: 'Basic ' + base
           },
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         if (!response.ok) {
@@ -138,7 +138,7 @@ export const useStatusStore = defineStore('status', {
         // logInfo("statusStore.ping()", "Fetching /api/ping")
         const response = await fetch(global.baseURL + 'api/ping', {
           method: 'GET',
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         if (!response.ok) {
@@ -165,7 +165,7 @@ export const useStatusStore = defineStore('status', {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ sleep_mode: flag }),
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         if (!response.ok) {
@@ -192,7 +192,7 @@ export const useStatusStore = defineStore('status', {
           headers: {
             'Content-Type': 'application/json'
           },
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         if (!response.ok) {

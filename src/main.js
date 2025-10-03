@@ -43,13 +43,14 @@ import {
   IconCheckCircle,
   IconXCircle,
   IconExclamationTriangle,
-  IconInfoCircle,
-  // Fragment Components (only the 4 requested)
-  AdvancedFilesFragment,
-  EnableCorsFragment,
-  ListFilesFragment,
-  VoltageFragment
+  IconInfoCircle
 } from '@mp-se/espframework-ui-components'
+
+// Import local fragments
+import AdvancedFilesFragment from '@/fragments/AdvancedFileFragment.vue'
+import EnableCorsFragment from '@/fragments/EnableCorsFragment.vue'
+import ListFilesFragment from '@/fragments/ListFilesFragment.vue'
+import VoltageFragment from '@/fragments/VoltageFragment.vue'
 
 // Import Bootstrap CSS and JS first, then library CSS to allow overrides
 import 'bootstrap/dist/css/bootstrap.css'
