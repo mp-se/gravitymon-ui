@@ -81,7 +81,7 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;View device logs</button
         >&nbsp;
@@ -96,7 +96,7 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;Erase device logs</button
         >&nbsp;
@@ -111,7 +111,7 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;Hardware scan</button
         >&nbsp;
@@ -126,7 +126,7 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;Toggle error help</button
         >&nbsp;
@@ -142,7 +142,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Erase iSpindel config
           </button>

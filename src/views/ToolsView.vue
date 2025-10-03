@@ -30,7 +30,7 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;Enable Advanced
         </button>

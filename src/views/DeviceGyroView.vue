@@ -67,7 +67,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Save</button
           >&nbsp;
@@ -82,7 +82,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Restart device</button
           >&nbsp;
@@ -102,7 +102,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Calibrate gyro&nbsp;<span
               v-if="badge.deviceGyroCalibratedBadge()"
@@ -122,7 +122,7 @@
                 class="spinner-border spinner-border-sm"
                 role="status"
                 aria-hidden="true"
-                :hidden="!global.disabled"
+                v-show="global.disabled"
               ></span>
               &nbsp;Import iSpindel config&nbsp;<span
                 v-if="badge.deviceMigrateIspindelBadge()"
