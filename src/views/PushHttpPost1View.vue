@@ -3,13 +3,13 @@
     <p></p>
     <p class="h3">Push - HTTP Post #1</p>
     <hr />
-
+ 
     <form
       @submit.prevent="save"
       class="needs-validation"
       novalidate
       :disabled="config.use_wifi_direct"
-    >
+    >   
       <div class="row">
         <div class="col-md-8">
           <BsInputText

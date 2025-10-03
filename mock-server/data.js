@@ -40,6 +40,7 @@ export var configData = {
   http_post_header1: 'Auth: Basic T7IF9DD9fF3RDddE=',
   http_post_header2: '',
   http_post_int: 1,
+  http_post_tcp: false,
   // Push - Http Post 2
   http_post2_target: 'http://post2.home.arpa/ispindel',
   http_post2_header1: '',
