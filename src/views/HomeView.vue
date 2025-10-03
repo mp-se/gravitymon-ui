@@ -221,7 +221,7 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeMount } from 'vue'
 import { status, global } from '@/modules/pinia'
-import { logDebug, logError, logInfo } from '@/modules/logger'
+import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 import { useTimers, useFetch } from '@mp-se/espframework-ui-components'
 
 const { createInterval, createTimeout } = useTimers()

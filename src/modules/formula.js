@@ -1,5 +1,5 @@
 import { config } from '@/modules/pinia'
-import { logError, logDebug } from '@/modules/logger'
+import { logError, logDebug } from '@mp-se/espframework-ui-components'
 import { gravityToPlato } from '@/modules/utils'
 
 function applyValuesToFormula(formula, tilt) {

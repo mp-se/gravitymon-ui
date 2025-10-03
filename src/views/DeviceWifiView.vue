@@ -158,7 +158,7 @@ import { validateCurrentForm, restart } from '@/modules/utils'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { onMounted, ref } from 'vue'
-import { logDebug } from '@/modules/logger'
+import { logDebug } from '@mp-se/espframework-ui-components'
 
 const scanning = ref(false)
 const networks = ref([])

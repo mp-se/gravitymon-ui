@@ -91,7 +91,7 @@ import { onMounted, watch, onBeforeMount, ref } from 'vue'
 import { global, status, config, saveConfigState } from './modules/pinia'
 import { storeToRefs } from 'pinia'
 import { useTimers } from '@mp-se/espframework-ui-components'
-import { logError } from '@/modules/logger'
+import { logError } from '@mp-se/espframework-ui-components'
 
 const { createInterval } = useTimers()
 const polling = ref(null)

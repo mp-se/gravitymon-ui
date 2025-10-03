@@ -125,7 +125,7 @@
 import { ref, computed } from 'vue'
 import { validateCurrentForm, applyTemplate, influxdb2FormatOptions } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
-import { logError } from '@/modules/logger'
+import { logError } from '@mp-se/espframework-ui-components'
 
 const render = ref('')
 

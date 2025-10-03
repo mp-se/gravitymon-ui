@@ -171,7 +171,7 @@ import {
   applyTemplate
 } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
-import { logError } from '@/modules/logger'
+import { logError } from '@mp-se/espframework-ui-components'
 // BsInputSwitch is now globally registered from ESP Framework UI Components library
 
 const render = ref('')

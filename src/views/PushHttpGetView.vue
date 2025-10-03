@@ -145,7 +145,7 @@ import {
   applyTemplate
 } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
-import { logError } from '@/modules/logger'
+import { logError } from '@mp-se/espframework-ui-components'
 
 const render = ref('')
 

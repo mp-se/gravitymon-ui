@@ -146,7 +146,7 @@ import { ref } from 'vue'
 import { validateCurrentForm, restart } from '@/modules/utils'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
-import { logError, logInfo } from '@/modules/logger'
+import { logError, logInfo } from '@mp-se/espframework-ui-components'
 
 const otaOptions = ref([
   { label: '-blank-', value: '' },

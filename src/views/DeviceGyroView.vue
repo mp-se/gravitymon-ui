@@ -142,7 +142,7 @@ import { ref, computed, watch } from 'vue'
 import { isGyroCalibrated, validateCurrentForm, restart } from '@/modules/utils'
 import { global, config, status } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
-import { logDebug, logError, logInfo } from '@/modules/logger'
+import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 import { storeToRefs } from 'pinia'
 
 const gyroOptions = ref([

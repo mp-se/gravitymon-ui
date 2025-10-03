@@ -22,7 +22,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { config } from '@/modules/pinia'
-import { logError } from '@/modules/logger'
+import { logError } from '@mp-se/espframework-ui-components'
 import { evaluateFormula } from '@/modules/formula'
 
 const chart = ref(null)

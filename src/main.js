@@ -9,12 +9,6 @@ app.use(piniaInstance)
 import router from './modules/router.js'
 app.use(router)
 
-// Set up logger integration for ESP Framework UI Components
-import * as logger from './modules/logger.js'
-if (typeof window !== 'undefined') {
-  window.espLogger = logger
-}
-
 // Import all components from the ESP Framework UI Components library
 import {
   // Bootstrap Components
