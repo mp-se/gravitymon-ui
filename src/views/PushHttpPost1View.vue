@@ -172,7 +172,7 @@ import {
 } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
 import { logError } from '@/modules/logger'
-import BsInputSwitch from '@/components/BsInputSwitch.vue'
+// BsInputSwitch is now globally registered from ESP Framework UI Components library
 
 const render = ref('')
 

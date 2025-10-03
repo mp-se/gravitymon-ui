@@ -67,9 +67,17 @@ export default defineConfig({
     },
     rollupOptions: {
       treeshake: true, // Use default tree-shaking instead of aggressive preset
+      external: [
+        'json-parse-even-better-errors',
+        'pinia'
+      ],
       onwarn(warning, warn) {
         // Suppress eval warnings for formula calculations
         if (warning.code === 'EVAL' && warning.id?.includes('formula.js')) {
+          return
+        }
+        // Suppress warnings for externalized dependencies
+        if (warning.code === 'UNRESOLVED_IMPORT') {
           return
         }
         warn(warning)

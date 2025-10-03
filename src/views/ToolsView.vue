@@ -51,10 +51,7 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
-import VoltageFragment from '@/fragments/VoltageFragment.vue'
-import ListFilesFragment from '@/fragments/ListFilesFragment.vue'
-import AdvancedFilesFragment from '@/fragments/AdvancedFilesFragment.vue'
-import EnableCorsFragment from '@/fragments/EnableCorsFragment.vue'
+// Fragment components are now imported globally from the ESP Framework UI Components library
 
 const hideAdvanced = ref(true)
 

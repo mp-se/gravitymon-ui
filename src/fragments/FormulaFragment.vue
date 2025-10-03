@@ -26,7 +26,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import BsInputReadonly from '@/components/BsInputReadonly.vue'
+// BsInputReadonly is now globally registered from ESP Framework UI Components library
 
 /**
  * Hold results from regression library.
