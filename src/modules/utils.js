@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { config, global } from '@/modules/pinia'
-import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
+import { logDebug, logError, logInfo, tempToF, tempToC } from '@mp-se/espframework-ui-components'
 
 export const httpHeaderOptions = ref([
   { label: 'JSON data', value: 'Content-Type: application/json' },
@@ -138,25 +138,7 @@ export function validateCurrentForm() {
   return valid
 }
 
-export function roundVal(val, decimals) {
-  return parseFloat(Number(val).toFixed(decimals))
-}
-
-export function gravityToPlato(sg) {
-  return 135.997 * sg * sg * sg - 630.272 * sg * sg + 1111.14 * sg - 616.868
-}
-
-export function gravityToSG(p) {
-  return 1 + p / (258.6 - 227.1 * (p / 258.2))
-}
-
-export function tempToF(c) {
-  return c * 1.8 + 32.0
-}
-
-export function tempToC(f) {
-  return (f - 32.0) / 1.8
-}
+// Note: roundVal, gravityToPlato, gravityToSG, tempToF, tempToC now imported from @mp-se/espframework-ui-components
 
 export function applyTemplate(status, config, template) {
   let s = template
@@ -220,28 +202,7 @@ export function applyTemplate(status, config, template) {
   return s
 }
 
-export function isValidJson(s) {
-  try {
-    JSON.stringify(JSON.parse(s))
-    return true
-  } catch (e) {
-    logDebug('utils.isValidJson()', e)
-  }
-
-  return false
-}
-
-export function isValidFormData(s) {
-  if (s.startsWith('?')) return true
-
-  return false
-}
-
-export function isValidMqttData(s) {
-  if (s.indexOf('|') >= 0) return true
-
-  return false
-}
+// Note: isValidJson, isValidFormData, isValidMqttData now imported from @mp-se/espframework-ui-components
 
 export function getErrorString(code) {
   switch (code) {
