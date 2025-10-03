@@ -82,7 +82,10 @@ const options = defineModel('options', {
  */
 const button = defineModel('button', {
   type: String,
-  default: 'Select'
+  default: 'Select',
+  validator: (value) => {
+    return typeof value === 'string' && value.trim().length > 0
+  }
 })
 
 /**
@@ -90,7 +93,10 @@ const button = defineModel('button', {
  */
 const callback = defineModel('callback', {
   type: Function,
-  default: () => {}
+  default: () => {},
+  validator: (value) => {
+    return typeof value === 'function'
+  }
 })
 
 /**

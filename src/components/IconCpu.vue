@@ -23,7 +23,11 @@ defineOptions({
  */
 const width = defineModel('width', {
   type: [String, Number],
-  default: 16
+  default: 16,
+  validator: (value) => {
+    const num = Number(value)
+    return !isNaN(num) && num > 0
+  }
 })
 
 /**
@@ -31,6 +35,10 @@ const width = defineModel('width', {
  */
 const height = defineModel('height', {
   type: [String, Number],
-  default: 16
+  default: 16,
+  validator: (value) => {
+    const num = Number(value)
+    return !isNaN(num) && num > 0
+  }
 })
 </script>

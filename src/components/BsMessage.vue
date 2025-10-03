@@ -49,7 +49,10 @@ defineOptions({
  */
 const message = defineModel('message', {
   type: String,
-  default: ''
+  default: 'Message',
+  validator: (value) => {
+    return typeof value === 'string'
+  }
 })
 
 /**
@@ -57,7 +60,12 @@ const message = defineModel('message', {
  */
 const dismissable = defineModel('dismissable', {
   type: [Boolean, String],
-  default: false
+  default: false,
+  validator: (value) => {
+    if (typeof value === 'boolean') return true
+    if (typeof value === 'string') return ['true', 'false'].includes(value.toLowerCase())
+    return false
+  }
 })
 
 /**
@@ -74,7 +82,10 @@ const alert = defineModel('alert', {
  */
 const close = defineModel('close', {
   type: Function,
-  default: () => {}
+  default: () => {},
+  validator: (value) => {
+    return typeof value === 'function'
+  }
 })
 
 const classNames = () => {
