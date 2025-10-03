@@ -222,8 +222,7 @@
 import { ref, watch, onMounted, onBeforeMount } from 'vue'
 import { status, global } from '@/modules/pinia'
 import { logDebug, logError, logInfo } from '@/modules/logger'
-import { useTimers } from '@/composables/useTimers'
-import { useFetch } from '@/composables/useFetch'
+import { useTimers, useFetch } from '@mp-se/espframework-ui-components'
 
 const { createInterval, createTimeout } = useTimers()
 const { managedFetch } = useFetch()

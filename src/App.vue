@@ -90,7 +90,7 @@
 import { onMounted, watch, onBeforeMount, ref } from 'vue'
 import { global, status, config, saveConfigState } from './modules/pinia'
 import { storeToRefs } from 'pinia'
-import { useTimers } from '@/composables/useTimers'
+import { useTimers } from '@mp-se/espframework-ui-components'
 import { logError } from '@/modules/logger'
 
 const { createInterval } = useTimers()
