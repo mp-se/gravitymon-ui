@@ -20,7 +20,15 @@
     ></BsMessage>
   </div>
 
-  <BsMenuBar v-if="global.initialized" :disabled="global.disabled" brand="Gravitymon" />
+  <BsMenuBar 
+    v-if="global.initialized" 
+    :disabled="global.disabled" 
+    brand="Gravitymon" 
+    :menu-items="items"
+    :dark-mode="config.dark_mode"
+    :mdns="config.mdns"
+    @update:dark-mode="config.dark_mode = $event"
+  />
 
   <div class="container">
     <div>
@@ -92,6 +100,7 @@ import { global, status, config, saveConfigState } from './modules/pinia'
 import { storeToRefs } from 'pinia'
 import { useTimers } from '@mp-se/espframework-ui-components'
 import { logError } from '@mp-se/espframework-ui-components'
+import { items } from './modules/router'
 
 const { createInterval } = useTimers()
 const polling = ref(null)
@@ -109,6 +118,12 @@ watch(disabled, () => {
   if (global.disabled) document.body.style.cursor = 'wait'
   else document.body.style.cursor = 'default'
 })
+
+// Debug: Watch dark mode changes
+watch(() => config.dark_mode, (newValue) => {
+  console.log('Dark mode changed to:', newValue)
+  console.log('data-bs-theme attribute:', document.documentElement.getAttribute('data-bs-theme'))
+}, { immediate: true })
 
 function ping() {
   status.ping()

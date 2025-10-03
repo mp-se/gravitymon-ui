@@ -51,7 +51,9 @@ import {
   VoltageFragment
 } from '@mp-se/espframework-ui-components'
 
-// Import the component library CSS
+// Import Bootstrap CSS and JS first, then library CSS to allow overrides
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/js/bootstrap.bundle.js'
 import '@mp-se/espframework-ui-components/dist/style.css'
 
 // Register Bootstrap components
@@ -95,9 +97,4 @@ app.component('EnableCorsFragment', EnableCorsFragment)
 app.component('ListFilesFragment', ListFilesFragment)
 app.component('VoltageFragment', VoltageFragment)
 
-import 'bootstrap/dist/css/bootstrap.css'
-
 app.mount('#app')
-
-//import '@popperjs/core/dist/umd/popper.min.js'
-import 'bootstrap/dist/js/bootstrap.bundle.js'

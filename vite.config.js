@@ -68,8 +68,7 @@ export default defineConfig({
     rollupOptions: {
       treeshake: true, // Use default tree-shaking instead of aggressive preset
       external: [
-        'json-parse-even-better-errors',
-        'pinia'
+        'json-parse-even-better-errors'
       ],
       onwarn(warning, warn) {
         // Suppress eval warnings for formula calculations
