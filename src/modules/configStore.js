@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { global, saveConfigState, getConfigChanges } from '@/modules/pinia'
 import { getErrorString } from '@/modules/utils'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
-import { tempToC, tempToF, roundVal } from '@/modules/utils'
+import { tempToC, tempToF, roundVal } from "@mp-se/espframework-ui-components"
 
 // TODO: Add option to do NTP sync (will add a few seconds)
 

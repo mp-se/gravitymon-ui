@@ -195,7 +195,7 @@ import FormulaGraphFragment from '@/fragments/FormulaGraphFragment.vue'
 import FormulaTableFragment from '@/fragments/FormulaTableFragment.vue'
 import { PolynomialRegression } from 'ml-regression-polynomial'
 import { validateFormula } from '@/modules/formula'
-import { gravityToSG } from '@/modules/utils'
+import { gravityToSG } from "@mp-se/espframework-ui-components"
 import { useTimers } from '@mp-se/espframework-ui-components'
 
 const { createInterval } = useTimers()

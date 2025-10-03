@@ -1,6 +1,6 @@
 import { config } from '@/modules/pinia'
 import { logError, logDebug } from '@mp-se/espframework-ui-components'
-import { gravityToPlato } from '@/modules/utils'
+import { gravityToPlato } from "@mp-se/espframework-ui-components"
 
 function applyValuesToFormula(formula, tilt) {
   let angle = tilt.toFixed(3)
