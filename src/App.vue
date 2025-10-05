@@ -14,7 +14,6 @@
   <div v-if="!global.initialized" class="container text-center">
     <BsMessage
       message="Initalizing GravityMon Web interface"
-      class="h2"
       :dismissable="false"
       alert="info"
     ></BsMessage>
@@ -28,7 +27,7 @@
     :dark-mode="config.dark_mode"
     :mdns="config.mdns"
     :config-changed="global.configChanged"
-    @update:dark-mode="config.dark_mode = $event"
+    @update:dark-mode="handleDarkModeUpdate"
   />
 
   <div class="container">
@@ -38,7 +37,6 @@
     <BsMessage
       v-if="!status.connected"
       message="No response from device, has it gone into sleep model? No need to refresh the page, just turn on the device again"
-      class="h2"
       :dismissable="false"
       alert="danger"
     ></BsMessage>
@@ -120,12 +118,6 @@ watch(disabled, () => {
   else document.body.style.cursor = 'default'
 })
 
-// Debug: Watch dark mode changes
-watch(() => config.dark_mode, (newValue) => {
-  console.log('Dark mode changed to:', newValue)
-  console.log('data-bs-theme attribute:', document.documentElement.getAttribute('data-bs-theme'))
-}, { immediate: true })
-
 function ping() {
   status.ping()
 }
@@ -193,6 +185,20 @@ async function initializeApp() {
     global.messageError = `Initialization failed: ${error.message}`
   } finally {
     hideSpinner()
+  }
+}
+
+// Handle dark mode changes
+const handleDarkModeUpdate = (newValue) => {
+  // update the store value
+  config.dark_mode = newValue
+  // fallback: ensure the attribute is set on the document root so Bootstrap theme rules apply
+  try {
+    const root = document.documentElement
+    if (newValue) root.setAttribute('data-bs-theme', 'dark')
+    else root.setAttribute('data-bs-theme', 'light')
+  } catch (e) {
+    console.error('Failed to set data-bs-theme on documentElement', e)
   }
 }
 
