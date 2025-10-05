@@ -207,8 +207,8 @@
         <div class="col-md-4">
           <BsCard header="Device" title="Force config mode">
             <div class="d-flex justify-content-center">
-              <div class="form-check form-switch" style="height: 0.7rem">
-                <input v-model="flag" class="form-check-input" type="checkbox" role="switch" />
+              <div class="form-check form-switch">
+                <input v-model="flag" class="form-check-input p-2" type="checkbox" role="switch" style="transform: scale(1.5); transform-origin: left center; display: inline-block;"/>
               </div>
             </div>
           </BsCard>

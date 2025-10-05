@@ -9,7 +9,8 @@ export default {
         './src/**/*.{vue,js,ts,jsx,tsx}',
         './src/**/*.html'
       ],
-      safelist: [
+      safelist: {
+        standard: [
         // Bootstrap Layout
         /^container(-fluid)?$/,
         /^row$/,
@@ -19,7 +20,10 @@ export default {
         // Bootstrap Components
         /^btn(-.*)?$/,
         /^badge(-.*)?$/,
-        /^spinner(-.*)?$/,
+  /^spinner(-.*)?$/,
+  'spinner-border',
+  'spinner-border-sm',
+  'visually-hidden',
         /^form(-.*)?$/,
         /^input(-.*)?$/,
         /^select(-.*)?$/,
@@ -134,7 +138,12 @@ export default {
         // Dynamically generated classes from components
         /^bg-.*-subtle$/,
         /^text-bg-.*$/
-      ],
+        ],
+        keyframes: [
+          'spinner-border',
+          'spinner-grow'
+        ]
+      },
       // Standard extraction to catch more classes
       defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
       // Remove unused CSS variables and keyframes

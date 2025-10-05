@@ -91,6 +91,7 @@
             @click="calibrate"
             type="button"
             class="btn btn-secondary"
+            v-show="config.gyro_type == 1"
             :disabled="
               global.disabled ||
               !status.self_check.gyro_connected ||

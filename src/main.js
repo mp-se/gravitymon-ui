@@ -55,7 +55,7 @@ import VoltageFragment from '@/fragments/VoltageFragment.vue'
 // Import Bootstrap CSS and JS first, then library CSS to allow overrides
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle.js'
-import '@mp-se/espframework-ui-components/dist/style.css'
+// import '@mp-se/espframework-ui-components/dist/style.css'
 
 // Register Bootstrap components
 app.component('BsMessage', BsMessage)

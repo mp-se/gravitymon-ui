@@ -27,6 +27,7 @@
     :menu-items="items"
     :dark-mode="config.dark_mode"
     :mdns="config.mdns"
+    :config-changed="global.configChanged"
     @update:dark-mode="config.dark_mode = $event"
   />
 
