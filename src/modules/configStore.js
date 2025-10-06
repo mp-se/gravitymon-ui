@@ -395,45 +395,23 @@ export const useConfigStore = defineStore('config', {
     async restart() {
       global.clearMessages()
       global.disabled = true
-      let redirectTimeout = null
-
       try {
-        const json = await http.getJson('api/restart')
-
-        logDebug('configStore.restart()', json)
-        if (json.status == true) {
+        const res = await http.restart(this.mdns, { redirectDelayMs: 8000 })
+        if (res.success && res.json && res.json.status === true) {
           global.messageSuccess =
-            json.message + ' Redirecting to http://' + this.mdns + '.local in 8 seconds.'
-          logInfo('configStore.restart()', 'Scheduling refresh of UI')
-
-          redirectTimeout = setTimeout(() => {
-            try {
-              location.href = 'http://' + this.mdns + '.local'
-            } catch (error) {
-              logError('configStore.restart.redirect()', error)
-              // Fallback to current location
-              window.location.reload()
-            }
-          }, 8000)
-
-          // Clean up on page unload
-          window.addEventListener(
-            'beforeunload',
-            () => {
-              if (redirectTimeout) clearTimeout(redirectTimeout)
-            },
-            { once: true }
-          )
+            (res.json.message || '') +
+            ' Redirecting to http://' +
+            this.mdns +
+            '.local in 8 seconds.'
+          logInfo('configStore.restart()', 'Restart requested, redirect scheduled')
+        } else if (res.success && res.json) {
+          global.messageError = res.json.message || 'Failed to restart device'
         } else {
-          global.messageError = json.message
+          global.messageError = 'Failed to request restart'
         }
       } catch (err) {
         logError('configStore.restart()', err)
-        if (err.name === 'AbortError') {
-          global.messageError = 'Restart request timed out'
-        } else {
-          global.messageError = 'Failed to do restart'
-        }
+        global.messageError = 'Failed to do restart'
       } finally {
         global.disabled = false
       }
