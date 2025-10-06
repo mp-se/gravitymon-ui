@@ -147,7 +147,7 @@ import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logError, logInfo } from '@mp-se/espframework-ui-components'
-import { sharedHttpClient as http } from '@/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
 
 const otaOptions = ref([
   { label: '-blank-', value: '' },

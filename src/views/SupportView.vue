@@ -216,7 +216,7 @@
 <script setup>
 import { ref } from 'vue'
 import { status, config, global } from '@/modules/pinia'
-import { sharedHttpClient as http } from '@/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
 import { logDebug } from '@mp-se/espframework-ui-components'
 
 const logData = ref('')

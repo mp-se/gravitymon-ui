@@ -50,7 +50,7 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
-import { sharedHttpClient as http } from '@/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
 import { isValidJson, isValidFormData, isValidMqttData } from '@mp-se/espframework-ui-components'
 
 const filesystemUsage = ref(null)

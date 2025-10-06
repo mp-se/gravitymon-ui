@@ -23,7 +23,7 @@
 <script setup>
 import { global } from '@/modules/pinia'
 import { logInfo, logError } from '@mp-se/espframework-ui-components'
-import { sharedHttpClient as http } from '@/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
 
 const enableCors = async () => {
   try {

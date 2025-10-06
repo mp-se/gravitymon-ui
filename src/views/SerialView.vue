@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { sharedHttpClient as http } from '@/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
 
 const socket = ref(null)
 const serial = ref('')

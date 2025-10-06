@@ -93,7 +93,7 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
-import { sharedHttpClient as http } from '@/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
 import { logDebug, logError } from '@mp-se/espframework-ui-components'
 
 const fileData = ref(null)

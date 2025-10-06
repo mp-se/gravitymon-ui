@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { sharedHttpClient as http } from '@/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 
 // Removed the previous http client instantiation

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { logInfo, logDebug, logError } from '@mp-se/espframework-ui-components'
-import { sharedHttpClient as http } from '@/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
