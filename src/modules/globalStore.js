@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { logInfo, logDebug, logError } from '@mp-se/espframework-ui-components'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
     return {
-      id: '',
       platform: '',
 
       board: '',
@@ -27,10 +27,7 @@ export const useGlobalStore = defineStore('global', {
       messageError: '',
       messageWarning: '',
       messageSuccess: '',
-      messageInfo: '',
-
-      fetchTimeout: 8000,
-      url: undefined
+      messageInfo: ''
     }
   },
   getters: {
@@ -46,22 +43,7 @@ export const useGlobalStore = defineStore('global', {
     isInfo() {
       return this.messageInfo != '' ? true : false
     },
-    token() {
-      return 'Bearer ' + this.id
-    },
-    baseURL() {
-      if (this.url !== undefined) return this.url
-
-      if (import.meta.env.VITE_APP_HOST === undefined) {
-        logInfo('configStore:baseURL()', 'Using base URL from env', window.location.href)
-        this.url = window.location.href
-      } else {
-        logInfo('configStore:baseURL()', 'Using base URL from env', import.meta.env.VITE_APP_HOST)
-        this.url = import.meta.env.VITE_APP_HOST
-      }
-
-      return this.url
-    },
+    // token and baseURL are now owned by the sharedHttpClient
     uiVersion() {
       logDebug('globalStore.uiVersion()', import.meta.env.VITE_APP_VERSION)
       return import.meta.env.VITE_APP_VERSION
@@ -88,20 +70,12 @@ export const useGlobalStore = defineStore('global', {
       this.messageSuccess = ''
       this.messageInfo = ''
     },
-    async load(callback) {
+    async load() {
       try {
         logInfo('globalStore.load()', 'Fetching /api/feature')
-        const response = await fetch(this.baseURL + 'api/feature', {
-          signal: AbortSignal.timeout(this.fetchTimeout)
-        })
-        
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-        }
-        
-        const json = await response.json()
+        const json = await http.getJson('api/feature')
         logDebug('globalStore.load()', json)
-        
+
         this.board = json.board.toUpperCase()
         this.app_ver = json.app_ver
         this.app_build = json.app_build
@@ -115,12 +89,9 @@ export const useGlobalStore = defineStore('global', {
         this.feature.charging = json.charging
 
         logInfo('globalStore.load()', 'Fetching /api/feature completed')
-        if (callback) callback(true)
         return true
-        
       } catch (err) {
         logError('globalStore.load()', err)
-        if (callback) callback(false)
         return false
       }
     }

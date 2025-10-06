@@ -108,7 +108,7 @@
           >&nbsp;
 
           <button
-            @click="restart()"
+            @click.prevent="config.restart()"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -129,7 +129,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { validateCurrentForm, restart } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config, status } from '@/modules/pinia'
 
 const tempsensorResolutionOptions = ref([

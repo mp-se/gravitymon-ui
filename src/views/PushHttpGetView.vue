@@ -138,12 +138,12 @@
 <script setup>
 import { ref, computed } from 'vue'
 import {
-  validateCurrentForm,
   httpHeaderOptions,
   httpGetUrlOptions,
   httpGetFormatOptions,
   applyTemplate
 } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, status, config } from '@/modules/pinia'
 import { logError } from '@mp-se/espframework-ui-components'
 

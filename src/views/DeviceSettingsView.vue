@@ -107,7 +107,7 @@
           >&nbsp;
 
           <button
-            @click="restart()"
+            @click.prevent="config.restart()"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -143,10 +143,11 @@
 
 <script setup>
 import { ref } from 'vue'
-import { validateCurrentForm, restart } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logError, logInfo } from '@mp-se/espframework-ui-components'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 
 const otaOptions = ref([
   { label: '-blank-', value: '' },
@@ -176,14 +177,10 @@ const factory = async () => {
   global.clearMessages()
   logInfo('DeviceSettingsView.factory()', 'Sending /api/factory')
   global.disabled = true
-  
+
   try {
-    const response = await fetch(global.baseURL + 'api/factory', {
-      headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimeout)
-    })
-    const json = await response.json()
-    
+    const json = await http.getJson('api/factory')
+
     if (json.success == true) {
       global.messageSuccess = json.message
       const reloadTimeout = setTimeout(() => {
@@ -194,11 +191,15 @@ const factory = async () => {
           window.location.reload()
         }
       }, 2000)
-      
+
       // Clean up timeout on component unmount
-      window.addEventListener('beforeunload', () => {
-        clearTimeout(reloadTimeout)
-      }, { once: true })
+      window.addEventListener(
+        'beforeunload',
+        () => {
+          clearTimeout(reloadTimeout)
+        },
+        { once: true }
+      )
     } else {
       global.messageFailed = json.message
     }

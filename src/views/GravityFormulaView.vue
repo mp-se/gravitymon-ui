@@ -185,7 +185,7 @@
 
 <script setup>
 import { nextTick, ref, onBeforeMount } from 'vue'
-import { validateCurrentForm } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, status, config } from '@/modules/pinia'
 import GravityGraphFragment from '@/fragments/GravityGraphFragment.vue'
 import { logDebug } from '@mp-se/espframework-ui-components'
@@ -195,7 +195,7 @@ import FormulaGraphFragment from '@/fragments/FormulaGraphFragment.vue'
 import FormulaTableFragment from '@/fragments/FormulaTableFragment.vue'
 import { PolynomialRegression } from 'ml-regression-polynomial'
 import { validateFormula } from '@/modules/formula'
-import { gravityToSG } from "@mp-se/espframework-ui-components"
+import { gravityToSG } from '@mp-se/espframework-ui-components'
 import { useTimers } from '@mp-se/espframework-ui-components'
 
 const { createInterval } = useTimers()

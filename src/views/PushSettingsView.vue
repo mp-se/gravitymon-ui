@@ -149,7 +149,7 @@
 
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import { validateCurrentForm } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 import { storeToRefs } from 'pinia'
 import { logDebug, logError } from '@mp-se/espframework-ui-components'

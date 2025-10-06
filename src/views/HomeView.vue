@@ -208,7 +208,17 @@
           <BsCard header="Device" title="Force config mode">
             <div class="d-flex justify-content-center">
               <div class="form-check form-switch">
-                <input v-model="flag" class="form-check-input p-2" type="checkbox" role="switch" style="transform: scale(1.5); transform-origin: left center; display: inline-block;"/>
+                <input
+                  v-model="flag"
+                  class="form-check-input p-2"
+                  type="checkbox"
+                  role="switch"
+                  style="
+                    transform: scale(1.5);
+                    transform-origin: left center;
+                    display: inline-block;
+                  "
+                />
               </div>
             </div>
           </BsCard>
@@ -220,7 +230,7 @@
 
 <script setup>
 import { ref, watch, onMounted, onBeforeMount } from 'vue'
-import { status, global } from '@/modules/pinia'
+import { status, global, config } from '@/modules/pinia'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 import { useTimers, useFetch } from '@mp-se/espframework-ui-components'
 
@@ -233,7 +243,11 @@ const angle = ref({ average: 0, sum: 0, count: 0 })
 const newVersion = ref({ new: false, ver: '' })
 
 watch(flag, async () => {
-  status.setSleepMode(flag.value, () => {})
+  try {
+    await config.setSleepMode(flag.value)
+  } catch (err) {
+    logError('HomeView.setSleepMode()', err)
+  }
 })
 
 function clearAverage() {
@@ -242,18 +256,17 @@ function clearAverage() {
   angle.value.sum = 0
 }
 
-function refresh() {
-  status.load((success) => {
-    if (success) {
-      if (!status.self_check.gyro_moving) {
-        angle.value.sum += parseFloat(status.angle)
-        angle.value.count++
-        angle.value.average = (
-          Math.round((angle.value.sum / angle.value.count) * 100) / 100
-        ).toFixed(2)
-      }
+async function refresh() {
+  const success = await status.load()
+  if (success) {
+    if (!status.self_check.gyro_moving) {
+      angle.value.sum += parseFloat(status.angle)
+      angle.value.count++
+      angle.value.average = (Math.round((angle.value.sum / angle.value.count) * 100) / 100).toFixed(
+        2
+      )
     }
-  })
+  }
 }
 
 onMounted(async () => {
@@ -263,14 +276,14 @@ onMounted(async () => {
     try {
       logInfo('HomeView.onMounted()', 'Checking for new sw')
       const response = await managedFetch('https://www.gravitymon.com/firmware/version.json')
-      
+
       if (!response) {
         // Request was aborted
         return
       }
-      
+
       const json = await response.json()
-      
+
       logDebug('HomeView.onMounted()', json)
       if (checkForNewGravMonVersion(json)) {
         newVersion.value.new = true

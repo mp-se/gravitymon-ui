@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { config, global } from '@/modules/pinia'
-import { logDebug, logError, logInfo, tempToF, tempToC } from '@mp-se/espframework-ui-components'
+import { logError, tempToF, tempToC } from '@mp-se/espframework-ui-components'
+export { validateCurrentForm } from '@mp-se/espframework-ui-components'
 
 export const httpHeaderOptions = ref([
   { label: 'JSON data', value: 'Content-Type: application/json' },
@@ -125,21 +126,6 @@ export const mqttFormatOptions = ref([
 
 export const httpGetUrlOptions = ref([{ label: '-blank-', value: '' }])
 
-export function validateCurrentForm() {
-  let valid = true
-  const forms = document.querySelectorAll('.needs-validation')
-
-  Array.from(forms).forEach((form) => {
-    if (!form.checkValidity()) valid = false
-
-    form.classList.add('was-validated')
-  })
-
-  return valid
-}
-
-// Note: roundVal, gravityToPlato, gravityToSG, tempToF, tempToC now imported from @mp-se/espframework-ui-components
-
 export function applyTemplate(status, config, template) {
   let s = template
 
@@ -202,76 +188,8 @@ export function applyTemplate(status, config, template) {
   return s
 }
 
-// Note: isValidJson, isValidFormData, isValidMqttData now imported from @mp-se/espframework-ui-components
-
-export function getErrorString(code) {
-  switch (code) {
-    case -100:
-      return 'Skipped since SSL is used'
-    case 200:
-      return 'Success (200)'
-    case 401:
-      return 'Access denied (401)'
-    case 404:
-      return 'Endpoint not found (404)'
-    case 422:
-      return 'Paylod cannot be parsed, check format and http headers'
-  }
-
-  return ''
-}
-
 export function isGyroCalibrated() {
   const g = config.gyro_calibration_data
   if (g.ax + g.ay + g.az + g.gx + g.gy + g.gz == 0) return false
   return true
-}
-
-export async function restart() {
-  global.clearMessages()
-  global.disabled = true
-  
-  const abortController = new AbortController()
-  let redirectTimeout = null
-  
-  try {
-    const response = await fetch(global.baseURL + 'api/restart', {
-      headers: { Authorization: global.token },
-      signal: abortController.signal
-    })
-    const json = await response.json()
-    
-    logDebug('utils.restart()', json)
-    if (json.status == true) {
-      global.messageSuccess =
-        json.message + ' Redirecting to http://' + config.mdns + '.local in 8 seconds.'
-      logInfo('utils.restart()', 'Scheduling refresh of UI')
-      
-      redirectTimeout = setTimeout(() => {
-        try {
-          location.href = 'http://' + config.mdns + '.local'
-        } catch (error) {
-          logError('utils.restart.redirect()', error)
-          // Fallback to current location
-          window.location.reload()
-        }
-      }, 8000)
-      
-      // Clean up on page unload
-      window.addEventListener('beforeunload', () => {
-        if (redirectTimeout) clearTimeout(redirectTimeout)
-        abortController.abort()
-      }, { once: true })
-      
-    } else {
-      global.messageError = json.message
-    }
-  } catch (err) {
-    if (err.name !== 'AbortError') {
-      logError('utils.restart()', err)
-      global.messageError = 'Failed to do restart'
-    }
-  } finally {
-    global.disabled = false
-  }
 }

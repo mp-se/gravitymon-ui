@@ -73,7 +73,7 @@
           >&nbsp;
 
           <button
-            @click="restart()"
+            @click.prevent="config.restart()"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -140,11 +140,13 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { isGyroCalibrated, validateCurrentForm, restart } from '@/modules/utils'
+import { isGyroCalibrated } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config, status } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 import { storeToRefs } from 'pinia'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 
 const gyroOptions = ref([
   // value 0 is used internally at startup to check if gyro has been defined.
@@ -170,9 +172,11 @@ const ispindel = () => {
     file: '/config.json'
   }
 
-  config.sendFilesystemRequest(data, (success, text) => {
-    if (success) {
-      const json = JSON.parse(text)
+  ;(async () => {
+    global.disabled = true
+    const res = await http.filesystemRequest(data)
+    if (res && res.success) {
+      const json = JSON.parse(res.text)
       logDebug('DeviceHardwareView.ispindel()', json)
 
       config.gyro_calibration_data.ax = json.Offset[0]
@@ -188,49 +192,40 @@ const ispindel = () => {
         'Imported gyro calibration data and formula from old configuration. Please save!'
     }
     global.disabled = false
-  })
+  })()
 }
 
 const calibrate = async () => {
   global.disabled = true
-  
+
   try {
     logInfo('DeviceHardwareView.calibrate()', 'Sending /api/calibrate')
-    const response = await fetch(global.baseURL + 'api/calibrate', {
-      headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimeout)
-    })
-    
-    if (response.status != 200) {
+    const response = await http.request('api/calibrate')
+
+    if (!response.ok) {
       global.messageError = 'Failed to calibrate device'
       return
     }
-    
+
     // Wait for calibration to complete
-    await new Promise(resolve => setTimeout(resolve, 4000))
-    
-    const statusResponse = await fetch(global.baseURL + 'api/calibrate/status', {
-      headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimeout)
-    })
-    
-    logDebug('DeviceHardwareView.calibrate()', statusResponse)
-    if (statusResponse.status != 200 || statusResponse.success == true) {
+    await new Promise((resolve) => setTimeout(resolve, 4000))
+
+    const statusJson = await http.getJson('api/calibrate/status')
+
+    logDebug('DeviceHardwareView.calibrate()', statusJson)
+    if (!statusJson || statusJson.success === true) {
       global.messageError = 'Failed to get calibrate status'
       return
     }
-    
+
     // Reload configuration after calibration
-    const configLoaded = await new Promise((resolve) => {
-      config.load(resolve)
-    })
-    
+    const configLoaded = await config.load()
+
     if (configLoaded) {
       global.messageSuccess = 'Gyro calibrated'
     } else {
       global.messageError = 'Failed to load configuration'
     }
-    
   } catch (err) {
     logError('DeviceHardwareView.calibrate()', err)
     if (err.name === 'TimeoutError') {

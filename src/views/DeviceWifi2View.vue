@@ -117,7 +117,7 @@
           >&nbsp;
 
           <button
-            @click="restart()"
+            @click.prevent="config.restart()"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -137,7 +137,7 @@
 </template>
 
 <script setup>
-import { validateCurrentForm, restart } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 

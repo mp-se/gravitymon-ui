@@ -38,7 +38,11 @@
             id="upload-btn"
             value="upload"
             data-bs-toggle="tooltip"
-            :title="!hasFileSelected ? 'Please select a firmware file first' : 'Update the device with the selected firmware'"
+            :title="
+              !hasFileSelected
+                ? 'Please select a firmware file first'
+                : 'Update the device with the selected firmware'
+            "
             :disabled="global.disabled || !hasFileSelected"
           >
             <span
@@ -63,6 +67,7 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 import { logDebug, logError } from '@mp-se/espframework-ui-components'
 
 const progress = ref(0)
@@ -116,7 +121,7 @@ function upload() {
         global.messageSuccess =
           'File upload completed, waiting for device to restart before doing refresh!'
         global.messageFailed = ''
-        
+
         // Use a more reliable redirect with timeout cleanup
         const redirectTimeout = setTimeout(() => {
           try {
@@ -127,11 +132,15 @@ function upload() {
             window.location.reload()
           }
         }, 10000)
-        
+
         // Clean up timeout on page unload
-        window.addEventListener('beforeunload', () => {
-          clearTimeout(redirectTimeout)
-        }, { once: true })
+        window.addEventListener(
+          'beforeunload',
+          () => {
+            clearTimeout(redirectTimeout)
+          },
+          { once: true }
+        )
       }
     }
 
@@ -151,8 +160,8 @@ function upload() {
 
     fileData.append('file', fileElement.files[0])
 
-    xhr.open('POST', global.baseURL + 'api/firmware')
-    xhr.setRequestHeader('Authorization', global.token)
+    xhr.open('POST', http.baseURL + 'api/firmware')
+    xhr.setRequestHeader('Authorization', http.token)
     xhr.send(fileData)
   }
 }

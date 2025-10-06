@@ -64,7 +64,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { validateCurrentForm } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 
 const bleTiltColorOptions = ref([

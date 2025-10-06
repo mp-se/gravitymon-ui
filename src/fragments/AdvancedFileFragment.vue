@@ -92,7 +92,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import { global, config } from '@/modules/pinia'
+import { global } from '@/modules/pinia'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 import { logDebug, logError } from '@mp-se/espframework-ui-components'
 
 const fileData = ref(null)
@@ -116,11 +117,11 @@ const confirmDeleteCallback = (result) => {
       file: confirmDeleteFile.value
     }
 
-    config.sendFilesystemRequest(data, (success, text) => {
-      logDebug('AdancedFilesFragment.confirmDeleteCallback()', success), text
+    ;(async () => {
+      await http.filesystemRequest(data)
       filesDelete.value = []
       global.disabled = false
-    })
+    })()
   }
 }
 
@@ -140,16 +141,17 @@ const listFilesDelete = () => {
     command: 'dir'
   }
 
-  config.sendFilesystemRequest(data, (success, text) => {
-    if (success) {
-      const json = JSON.parse(text)
+  ;(async () => {
+    const res = await http.filesystemRequest(data)
+    if (res && res.success) {
+      const json = JSON.parse(res.text)
       for (const f in json.files) {
         filesDelete.value.push(json.files[f].file)
       }
     }
 
     global.disabled = false
-  })
+  })()
 }
 
 const progress = ref(0)
@@ -219,8 +221,9 @@ function upload() {
 
     fileData.append('file', fileElement.files[0])
 
-    xhr.open('POST', global.baseURL + 'api/filesystem/upload')
-    xhr.setRequestHeader('Authorization', global.token)
+    // Use shared http client for base URL / token ownership (no fallback)
+    xhr.open('POST', http.baseURL + 'api/filesystem/upload')
+    xhr.setRequestHeader('Authorization', http.token)
     xhr.send(fileData)
   }
 }

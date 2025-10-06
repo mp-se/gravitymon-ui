@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import { global, saveConfigState, getConfigChanges } from '@/modules/pinia'
-import { getErrorString } from '@/modules/utils'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
-import { tempToC, tempToF, roundVal } from "@mp-se/espframework-ui-components"
-
-// TODO: Add option to do NTP sync (will add a few seconds)
+import { tempToC, tempToF, roundVal } from '@mp-se/espframework-ui-components'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 
 export const useConfigStore = defineStore('config', {
   state: () => {
@@ -140,140 +138,128 @@ export const useConfigStore = defineStore('config', {
       logInfo('configStore.toJSON()', dest)
       return JSON.stringify(dest, null, 2)
     },
-    load(callback) {
+    async load() {
       global.disabled = true
       logInfo('configStore.load()', 'Fetching /api/config')
-      fetch(global.baseURL + 'api/config', {
-        method: 'GET',
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.load()', json)
-          global.disabled = false
-          this.id = json.id
-          // Device
-          this.mdns = json.mdns
-          this.temp_unit = json.temp_unit
-          this.gravity_unit = json.gravity_unit
-          // Hardware
-          this.ota_url = json.ota_url
-          this.storage_sleep = json.storage_sleep
-          this.voltage_factor = json.voltage_factor
-          this.voltage_config = json.voltage_config
-          this.gyro_type = json.gyro_type
-          this.gyro_temp = json.gyro_temp
-          this.gyro_swap_xy = json.gyro_swap_xy
-          this.gyro_filter = json.gyro_filter
-          this.battery_saving = json.battery_saving
-          this.tempsensor_resolution = json.tempsensor_resolution
-          this.temp_adjustment_value = json.temp_adjustment_value
-          this.charging_pin_enabled = json.charging_pin_enabled
-          // Wifi
-          this.wifi_portal_timeout = json.wifi_portal_timeout
-          this.wifi_connect_timeout = json.wifi_connect_timeout
-          this.wifi_ssid = json.wifi_ssid
-          this.wifi_ssid2 = json.wifi_ssid2
-          this.wifi_pass = json.wifi_pass
-          this.wifi_pass2 = json.wifi_pass2
-          this.wifi_direct_ssid = json.wifi_direct_ssid
-          this.wifi_direct_pass = json.wifi_direct_pass
-          this.use_wifi_direct = json.use_wifi_direct
-          this.wifi_scan_ap = json.wifi_scan_ap
-          // Push - Generic
-          this.token = json.token
-          this.token2 = json.token2
-          this.sleep_interval = json.sleep_interval
-          this.push_timeout = json.push_timeout
-          this.skip_ssl_on_test = json.skip_ssl_on_test
-          // Push - Http Post 1
-          this.http_post_target = json.http_post_target
-          this.http_post_header1 = json.http_post_header1
-          this.http_post_header2 = json.http_post_header2
-          this.http_post_int = json.http_post_int
-          this.http_post_tcp = json.http_post_tcp
-          // this.http_post_format_gravity = json.http_post_format_gravity
-          // Push - Http Post 2
-          this.http_post2_target = json.http_post2_target
-          this.http_post2_header1 = json.http_post2_header1
-          this.http_post2_header2 = json.http_post2_header2
-          this.http_post2_int = json.http_post2_int
-          // this.http_post2_format_gravity = json.http_post2_format_gravity
-          // Push - Http Get
-          this.http_get_target = json.http_get_target
-          this.http_get_header1 = json.http_get_header1
-          this.http_get_header2 = json.http_get_header2
-          this.http_get_int = json.http_get_int
-          // this.http_get_format_gravity = json.http_get_format_gravity
-          // Push - Influx
-          this.influxdb2_target = json.influxdb2_target
-          this.influxdb2_org = json.influxdb2_org
-          this.influxdb2_bucket = json.influxdb2_bucket
-          this.influxdb2_token = json.influxdb2_token
-          this.influxdb2_int = json.influxdb2_int
-          // this.influxdb2_format_gravity = json.influxdb2_format_gravity
-          // Push - MQTT
-          this.mqtt_target = json.mqtt_target
-          this.mqtt_port = json.mqtt_port
-          this.mqtt_user = json.mqtt_user
-          this.mqtt_pass = json.mqtt_pass
-          this.mqtt_int = json.mqtt_int
-          // this.mqtt_format_gravity = json.mqtt_format_gravity
-          // Push BLE
-          this.ble_tilt_color = json.ble_tilt_color
-          this.ble_format = json.ble_format
-          // Gravity formula
-          this.gravity_formula = json.gravity_formula
-          this.gravity_temp_adjustment = json.gravity_temp_adjustment
-          this.gyro_read_count = json.gyro_read_count
-          this.gyro_moving_threashold = json.gyro_moving_threashold
-          this.formula_max_deviation = json.formula_max_deviation
-          this.formula_calibration_temp = json.formula_calibration_temp
-          this.ignore_low_angles = json.ignore_low_angles
-          this.formula_calculation_data = json.formula_calculation_data
-          this.gyro_calibration_data = json.gyro_calibration_data
-          this.dark_mode = json.dark_mode
+      try {
+        const json = await http.getJson('api/config')
+        logDebug('configStore.load()', json)
+        global.disabled = false
+        this.id = json.id
+        // Device
+        this.mdns = json.mdns
+        this.temp_unit = json.temp_unit
+        this.gravity_unit = json.gravity_unit
+        // Hardware
+        this.ota_url = json.ota_url
+        this.storage_sleep = json.storage_sleep
+        this.voltage_factor = json.voltage_factor
+        this.voltage_config = json.voltage_config
+        this.gyro_type = json.gyro_type
+        this.gyro_temp = json.gyro_temp
+        this.gyro_swap_xy = json.gyro_swap_xy
+        this.gyro_filter = json.gyro_filter
+        this.battery_saving = json.battery_saving
+        this.tempsensor_resolution = json.tempsensor_resolution
+        this.temp_adjustment_value = json.temp_adjustment_value
+        this.charging_pin_enabled = json.charging_pin_enabled
+        // Wifi
+        this.wifi_portal_timeout = json.wifi_portal_timeout
+        this.wifi_connect_timeout = json.wifi_connect_timeout
+        this.wifi_ssid = json.wifi_ssid
+        this.wifi_ssid2 = json.wifi_ssid2
+        this.wifi_pass = json.wifi_pass
+        this.wifi_pass2 = json.wifi_pass2
+        this.wifi_direct_ssid = json.wifi_direct_ssid
+        this.wifi_direct_pass = json.wifi_direct_pass
+        this.use_wifi_direct = json.use_wifi_direct
+        this.wifi_scan_ap = json.wifi_scan_ap
+        // Push - Generic
+        this.token = json.token
+        this.token2 = json.token2
+        this.sleep_interval = json.sleep_interval
+        this.push_timeout = json.push_timeout
+        this.skip_ssl_on_test = json.skip_ssl_on_test
+        // Push - Http Post 1
+        this.http_post_target = json.http_post_target
+        this.http_post_header1 = json.http_post_header1
+        this.http_post_header2 = json.http_post_header2
+        this.http_post_int = json.http_post_int
+        this.http_post_tcp = json.http_post_tcp
+        // this.http_post_format_gravity = json.http_post_format_gravity
+        // Push - Http Post 2
+        this.http_post2_target = json.http_post2_target
+        this.http_post2_header1 = json.http_post2_header1
+        this.http_post2_header2 = json.http_post2_header2
+        this.http_post2_int = json.http_post2_int
+        // this.http_post2_format_gravity = json.http_post2_format_gravity
+        // Push - Http Get
+        this.http_get_target = json.http_get_target
+        this.http_get_header1 = json.http_get_header1
+        this.http_get_header2 = json.http_get_header2
+        this.http_get_int = json.http_get_int
+        // this.http_get_format_gravity = json.http_get_format_gravity
+        // Push - Influx
+        this.influxdb2_target = json.influxdb2_target
+        this.influxdb2_org = json.influxdb2_org
+        this.influxdb2_bucket = json.influxdb2_bucket
+        this.influxdb2_token = json.influxdb2_token
+        this.influxdb2_int = json.influxdb2_int
+        // this.influxdb2_format_gravity = json.influxdb2_format_gravity
+        // Push - MQTT
+        this.mqtt_target = json.mqtt_target
+        this.mqtt_port = json.mqtt_port
+        this.mqtt_user = json.mqtt_user
+        this.mqtt_pass = json.mqtt_pass
+        this.mqtt_int = json.mqtt_int
+        // this.mqtt_format_gravity = json.mqtt_format_gravity
+        // Push BLE
+        this.ble_tilt_color = json.ble_tilt_color
+        this.ble_format = json.ble_format
+        // Gravity formula
+        this.gravity_formula = json.gravity_formula
+        this.gravity_temp_adjustment = json.gravity_temp_adjustment
+        this.gyro_read_count = json.gyro_read_count
+        this.gyro_moving_threashold = json.gyro_moving_threashold
+        this.formula_max_deviation = json.formula_max_deviation
+        this.formula_calibration_temp = json.formula_calibration_temp
+        this.ignore_low_angles = json.ignore_low_angles
+        this.formula_calculation_data = json.formula_calculation_data
+        this.gyro_calibration_data = json.gyro_calibration_data
+        this.dark_mode = json.dark_mode
 
-          this.internal_temp_unit = 'C'
-          this.convertTemp()
-          callback(true)
-        })
-        .catch((err) => {
-          global.disabled = false
-          logError('configStore.load()', err)
-          callback(false)
-        })
+        this.internal_temp_unit = 'C'
+        this.convertTemp()
+        return true
+      } catch (err) {
+        global.disabled = false
+        logError('configStore.load()', err)
+        return false
+      }
     },
-    loadFormat(callback) {
+    async loadFormat() {
       global.disabled = true
       logInfo('configStore.loadFormat()', 'Fetching /api/format')
-      fetch(global.baseURL + 'api/format', {
-        method: 'GET',
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.loadFormat()', json)
-          global.disabled = false
-          this.http_post_format_gravity = decodeURIComponent(json.http_post_format_gravity)
-          this.http_post2_format_gravity = decodeURIComponent(json.http_post2_format_gravity)
-          this.http_get_format_gravity = decodeURIComponent(json.http_get_format_gravity)
-          this.influxdb2_format_gravity = decodeURIComponent(json.influxdb2_format_gravity)
-          this.mqtt_format_gravity = decodeURIComponent(json.mqtt_format_gravity)
+      try {
+        const json = await http.getJson('api/format')
+        logDebug('configStore.loadFormat()', json)
+        global.disabled = false
+        this.http_post_format_gravity = decodeURIComponent(json.http_post_format_gravity)
+        this.http_post2_format_gravity = decodeURIComponent(json.http_post2_format_gravity)
+        this.http_get_format_gravity = decodeURIComponent(json.http_get_format_gravity)
+        this.influxdb2_format_gravity = decodeURIComponent(json.influxdb2_format_gravity)
+        this.mqtt_format_gravity = decodeURIComponent(json.mqtt_format_gravity)
 
-          // Add linebreaks so the editor shows the data correctly
-          this.mqtt_format_gravity = this.mqtt_format_gravity.replaceAll('|', '|\n')
-          callback(true)
-        })
-        .catch((err) => {
-          global.disabled = false
-          logError('configStore.loadFormat()', err)
-          callback(false)
-        })
+        // Add linebreaks so the editor shows the data correctly
+        this.mqtt_format_gravity = this.mqtt_format_gravity.replaceAll('|', '|\n')
+        return true
+      } catch (err) {
+        global.disabled = false
+        logError('configStore.loadFormat()', err)
+        return false
+      }
     },
-    sendConfig(callback) {
+    async sendConfig() {
       global.disabled = true
       logInfo('configStore.sendConfig()', 'Sending /api/config')
 
@@ -291,45 +277,23 @@ export const useConfigStore = defineStore('config', {
         logInfo('configStore.sendConfig()', 'No config data to store, skipping step')
         global.disabled = false
         this.convertTemp()
-        callback(true)
-        return
+        return true
       }
 
-      fetch(global.baseURL + 'api/config', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: global.token
-        },
-        body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          global.disabled = false
-          if (res.status != 200) {
-            logError('configStore.sendConfig()', 'Sending /api/config failed', res.status)
-            this.convertTemp()
-            callback(false)
-          } else {
-            logInfo('configStore.sendConfig()', 'Sending /api/config completed')
-            this.convertTemp()
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendConfig()', err)
-          this.convertTemp()
-          callback(false)
-          global.disabled = false
-        })
+      try {
+        await http.postJson('api/config', data)
+        global.disabled = false
+        logInfo('configStore.sendConfig()', 'Sending /api/config completed')
+        this.convertTemp()
+        return true
+      } catch (err) {
+        logError('configStore.sendConfig()', err)
+        this.convertTemp()
+        global.disabled = false
+        return false
+      }
     },
-    // Async wrapper for sendConfig
-    sendConfigAsync() {
-      return new Promise((resolve) => {
-        this.sendConfig(resolve)
-      })
-    },
-    sendFormat(callback) {
+    async sendFormat() {
       global.disabled = true
       logInfo('configStore.sendFormat()', 'Sending /api/format')
 
@@ -338,230 +302,219 @@ export const useConfigStore = defineStore('config', {
       let cnt = 0
 
       logDebug('configStore.sendFormat()', data)
+      try {
+        data =
+          data2.http_post_format_gravity !== undefined
+            ? { http_post_format_gravity: encodeURIComponent(data2.http_post_format_gravity) }
+            : {}
+        if (await this.sendOneFormat(data)) cnt += 1
 
-      data =
-        data2.http_post_format_gravity !== undefined
-          ? { http_post_format_gravity: encodeURIComponent(data2.http_post_format_gravity) }
-          : {}
-      this.sendOneFormat(data, (success) => {
-        if (success) cnt += 1
         data =
           data2.http_post2_format_gravity !== undefined
             ? { http_post2_format_gravity: encodeURIComponent(data2.http_post2_format_gravity) }
             : {}
-        this.sendOneFormat(data, (success) => {
-          if (success) cnt += 1
-          data =
-            data2.http_get_format_gravity !== undefined
-              ? { http_get_format_gravity: encodeURIComponent(data2.http_get_format_gravity) }
-              : {}
-          this.sendOneFormat(data, (success) => {
-            if (success) cnt += 1
-            data =
-              data2.influxdb2_format_gravity !== undefined
-                ? {
-                    influxdb2_format_gravity: encodeURIComponent(data2.influxdb2_format_gravity)
-                  }
-                : {}
-            this.sendOneFormat(data, (success) => {
-              if (success) cnt += 1
+        if (await this.sendOneFormat(data)) cnt += 1
 
-              if (data2.mqtt_format_gravity !== undefined) {
-                data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll('\n', '')
-                data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll('\r', '')
-              }
+        data =
+          data2.http_get_format_gravity !== undefined
+            ? { http_get_format_gravity: encodeURIComponent(data2.http_get_format_gravity) }
+            : {}
+        if (await this.sendOneFormat(data)) cnt += 1
 
-              data =
-                data2.mqtt_format_gravity !== undefined
-                  ? { mqtt_format_gravity: encodeURIComponent(data2.mqtt_format_gravity) }
-                  : {}
-              this.sendOneFormat(data, (success) => {
-                if (success) cnt += 1
+        data =
+          data2.influxdb2_format_gravity !== undefined
+            ? { influxdb2_format_gravity: encodeURIComponent(data2.influxdb2_format_gravity) }
+            : {}
+        if (await this.sendOneFormat(data)) cnt += 1
 
-                if (cnt == 5) callback(true)
-                else callback(false)
-              })
-            })
-          })
-        })
-      })
+        if (data2.mqtt_format_gravity !== undefined) {
+          data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll('\n', '')
+          data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll('\r', '')
+        }
+
+        data =
+          data2.mqtt_format_gravity !== undefined
+            ? { mqtt_format_gravity: encodeURIComponent(data2.mqtt_format_gravity) }
+            : {}
+        if (await this.sendOneFormat(data)) cnt += 1
+
+        return cnt == 5
+      } finally {
+        // ensure disabled is cleared by callers as appropriate
+        global.disabled = false
+      }
     },
-    // Async wrapper for sendFormat
-    sendFormatAsync() {
-      return new Promise((resolve) => {
-        this.sendFormat(resolve)
-      })
-    },
-    sendOneFormat(data, callback) {
+    // sendFormat is async; no wrapper required
+    async sendOneFormat(data) {
       logInfo('configStore.sendOneFormat()', 'Sending /api/format')
 
       if (JSON.stringify(data).length == 2) {
         logInfo('configStore.sendOneFormat()', 'No format data to store, skipping step')
-        callback(true)
-        return
+        return true
       }
 
-      fetch(global.baseURL + 'api/format', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: global.token
-        },
-        body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          global.disabled = false
-          if (res.status != 200) {
-            logError('configStore.sendOneFormat()', 'Sending /api/format failed')
-            callback(false)
-          } else {
-            logInfo('configStore.sendOneFormat()', 'Sending /api/format completed')
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendOneFormat()', err)
-          callback(false)
-        })
+      try {
+        await http.postJson('api/format', data)
+        global.disabled = false
+        logInfo('configStore.sendOneFormat()', 'Sending /api/format completed')
+        return true
+      } catch (err) {
+        logError('configStore.sendOneFormat()', err)
+        return false
+      }
     },
-    sendPushTest(data, callback) {
+    async sendPushTest(data) {
       global.disabled = true
       logInfo('configStore.sendPushTest()', 'Sending /api/push')
-      fetch(global.baseURL + 'api/push', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: global.token
-        },
-        body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          if (res.status != 200) {
-            logError('configStore.sendPushTest()', 'Sending /api/push failed')
-            callback(false)
-          } else {
-            logInfo('configStore.sendPushTest()', 'Sending /api/push completed')
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendPushTest()', err)
-          callback(false)
-        })
+      try {
+        await http.postJson('api/push', data)
+        return true
+      } catch (err) {
+        logError('configStore.sendPushTest()', err)
+        return false
+      }
     },
-    getPushTestStatus(callback) {
+
+    async setSleepMode(flag) {
+      try {
+        logInfo('configStore.setSleepMode()', 'Sending /api/sleepmode')
+        const response = await http.request('api/sleepmode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sleep_mode: flag })
+        })
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        await response.json()
+        logInfo('configStore.setSleepMode()', 'Sending /api/sleepmode completed')
+        return true
+      } catch (err) {
+        logError('configStore.setSleepMode()', err)
+        return false
+      }
+    },
+    async restart() {
+      global.clearMessages()
+      global.disabled = true
+      let redirectTimeout = null
+
+      try {
+        const json = await http.getJson('api/restart')
+
+        logDebug('configStore.restart()', json)
+        if (json.status == true) {
+          global.messageSuccess =
+            json.message + ' Redirecting to http://' + this.mdns + '.local in 8 seconds.'
+          logInfo('configStore.restart()', 'Scheduling refresh of UI')
+
+          redirectTimeout = setTimeout(() => {
+            try {
+              location.href = 'http://' + this.mdns + '.local'
+            } catch (error) {
+              logError('configStore.restart.redirect()', error)
+              // Fallback to current location
+              window.location.reload()
+            }
+          }, 8000)
+
+          // Clean up on page unload
+          window.addEventListener(
+            'beforeunload',
+            () => {
+              if (redirectTimeout) clearTimeout(redirectTimeout)
+            },
+            { once: true }
+          )
+        } else {
+          global.messageError = json.message
+        }
+      } catch (err) {
+        logError('configStore.restart()', err)
+        if (err.name === 'AbortError') {
+          global.messageError = 'Restart request timed out'
+        } else {
+          global.messageError = 'Failed to do restart'
+        }
+      } finally {
+        global.disabled = false
+      }
+    },
+    async getPushTestStatus() {
       logInfo('configStore.getPushTest()', 'Fetching /api/push/status')
-      fetch(global.baseURL + 'api/push/status', {
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.getPushTest()', json)
-          logInfo('configStore.getPushTest()', 'Fetching /api/push/status completed')
-          callback(true, json)
-        })
-        .catch((err) => {
-          logError('configStore.getPushTest()', err)
-          callback(false, null)
-        })
+      try {
+        const json = await http.getJson('api/push/status')
+        logDebug('configStore.getPushTest()', json)
+        logInfo('configStore.getPushTest()', 'Fetching /api/push/status completed')
+        return { success: true, data: json }
+      } catch (err) {
+        logError('configStore.getPushTest()', err)
+        return { success: false, data: null }
+      }
     },
-    sendWifiScan(callback) {
+    async sendWifiScan() {
       global.disabled = true
       logInfo('configStore.sendWifiScan()', 'Sending /api/wifi')
-      fetch(global.baseURL + 'api/wifi', {
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          if (res.status != 200) {
-            logError('configStore.sendWifiScan()', 'Sending /api/wifi failed')
-            callback(false)
-          } else {
-            logInfo('configStore.sendWifiScan()', 'Sending /api/wifi completed')
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendWifiScan()', err)
-          callback(false)
-        })
+      try {
+        await http.request('api/wifi')
+        logInfo('configStore.sendWifiScan()', 'Sending /api/wifi completed')
+        return true
+      } catch (err) {
+        logError('configStore.sendWifiScan()', err)
+        return false
+      }
     },
-    getWifiScanStatus(callback) {
+    async getWifiScanStatus() {
       logInfo('configStore.getWifiScanStatus()', 'Fetching /api/wifi/status')
-      fetch(global.baseURL + 'api/wifi/status', {
-        method: 'GET',
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.getWifiScanStatus()', json)
-          logInfo('configStore.getWifiScanStatus()', 'Fetching /api/wifi/status completed')
-          callback(true, json)
-        })
-        .catch((err) => {
-          logError('configStore.getWifiScanStatus()', err)
-          callback(false, null)
-        })
+      try {
+        const json = await http.getJson('api/wifi/status')
+        logDebug('configStore.getWifiScanStatus()', json)
+        logInfo('configStore.getWifiScanStatus()', 'Fetching /api/wifi/status completed')
+        return { success: true, data: json }
+      } catch (err) {
+        logError('configStore.getWifiScanStatus()', err)
+        return { success: false, data: null }
+      }
     },
-    sendHardwareScan(callback) {
+    async sendHardwareScan() {
       global.disabled = true
       logInfo('configStore.sendHardwareScan()', 'Sending /api/hardware')
-      fetch(global.baseURL + 'api/hardware', {
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          if (res.status != 200) {
-            logError('configStore.sendHardwareScan()', 'Sending /api/hardware failed')
-            callback(false)
-          } else {
-            logInfo('configStore.sendHardwareScan()', 'Sending /api/hardware completed')
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendHardwareScan()', err)
-          callback(false)
-        })
+      try {
+        await http.request('api/hardware')
+        logInfo('configStore.sendHardwareScan()', 'Sending /api/hardware completed')
+        return true
+      } catch (err) {
+        logError('configStore.sendHardwareScan()', err)
+        return false
+      }
     },
-    getHardwareScanStatus(callback) {
+    async getHardwareScanStatus() {
       logInfo('configStore.getHardwareScanStatus()', 'Fetching /api/hardware/status')
-      fetch(global.baseURL + 'api/hardware/status', {
-        method: 'GET',
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.getHardwareScanStatus()', json)
-          logInfo('configStore.getHardwareScanStatus()', 'Fetching /api/hardware/status completed')
-          callback(true, json)
-        })
-        .catch((err) => {
-          logError('configStore.getHardwareScanStatus()', err)
-          callback(false, null)
-        })
+      try {
+        const json = await http.getJson('api/hardware/status')
+        logDebug('configStore.getHardwareScanStatus()', json)
+        logInfo('configStore.getHardwareScanStatus()', 'Fetching /api/hardware/status completed')
+        return { success: true, data: json }
+      } catch (err) {
+        logError('configStore.getHardwareScanStatus()', err)
+        return { success: false, data: null }
+      }
     },
     async saveAll() {
       global.clearMessages()
       global.disabled = true
-      
+
       try {
-        const configSuccess = await this.sendConfigAsync()
+        const configSuccess = await this.sendConfig()
         if (!configSuccess) {
           global.messageError = 'Failed to store configuration to device'
           return
         }
-        
-        const formatSuccess = await this.sendFormatAsync()
+
+        const formatSuccess = await this.sendFormat()
         if (!formatSuccess) {
           global.messageError = 'Failed to store format to device'
           return
         }
-        
+
         global.messageSuccess = 'Configuration has been saved to device'
         saveConfigState()
       } catch (error) {
@@ -571,79 +524,54 @@ export const useConfigStore = defineStore('config', {
         global.disabled = false
       }
     },
-    sendFilesystemRequest(data, callback) {
-      global.disabled = true
-      logInfo('configStore.sendFilesystemRequest()', 'Sending /api/filesystem')
-      fetch(global.baseURL + 'api/filesystem', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: global.token
-        },
-        body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.text())
-        .then((text) => {
-          logDebug('configStore.sendFilesystemRequest()', text)
-          callback(true, text)
-        })
-        .catch((err) => {
-          logError('configStore.sendFilesystemRequest()', err)
-          callback(false, '')
-        })
-    },
+    // filesystemRequest moved to sharedHttpClient.filesystemRequest(data)
     async runPushTest(data) {
       global.disabled = true
       logInfo('configStore.runPushTest()', 'Starting push test')
-      
+
       try {
-        const pushStarted = await new Promise((resolve) => {
-          this.sendPushTest(data, resolve)
-        })
-        
+        const pushStarted = await this.sendPushTest(data)
         if (!pushStarted) {
           global.messageError = 'Failed to start push test'
           return false
         }
-        
+
         // Poll for test completion
-        const result = await new Promise((resolve) => {
-          const check = setInterval(() => {
-            this.getPushTestStatus((statusSuccess, data) => {
-              if (!statusSuccess) {
-                global.messageError = 'Failed to get push test status'
-                clearInterval(check)
-                resolve(false)
-                return
-              }
-              
-              if (data.status) {
-                // test is still running, continue polling
-                return
-              }
-              
-              clearInterval(check)
-              
-              if (!data.success) {
-                global.messageError = 'Test failed with error code (' + data.push_return_code + ')'
-                resolve(true) // return true because API call succeeded
+        const result = await (async () => {
+          while (true) {
+            const statusRes = await this.getPushTestStatus()
+            if (!statusRes.success) {
+              global.messageError = 'Failed to get push test status'
+              return false
+            }
+
+            const d = statusRes.data
+            if (d.status) {
+              // still running
+              await new Promise((r) => setTimeout(r, 2000))
+              continue
+            }
+
+            if (!d.success) {
+              global.messageError = 'Test failed with error code (' + d.push_return_code + ')'
+              return true
+            } else {
+              if (!d.push_enabled) {
+                global.messageWarning = 'No endpoint is defined for this target. Cannot run test.'
+              } else if (!d.success && d.push_return_code > 0) {
+                global.messageError =
+                  'Test failed with error code (' + http.getErrorString(d.push_return_code) + ')'
+              } else if (!d.success && d.push_return_code == 0) {
+                global.messageError =
+                  'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
               } else {
-                if (!data.push_enabled) {
-                  global.messageWarning = 'No endpoint is defined for this target. Cannot run test.'
-                } else if (!data.success && data.push_return_code > 0) {
-                  global.messageError = 'Test failed with error code (' + getErrorString(data.push_return_code) + ')'
-                } else if (!data.success && data.push_return_code == 0) {
-                  global.messageError = 'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
-                } else {
-                  global.messageSuccess = 'Test was successful'
-                }
-                resolve(true)
+                global.messageSuccess = 'Test was successful'
               }
-            })
-          }, 2000)
-        })
-        
+              return true
+            }
+          }
+        })()
+
         return result
       } catch (error) {
         logError('configStore.runPushTest()', error)
@@ -654,77 +582,66 @@ export const useConfigStore = defineStore('config', {
       }
     },
 
-    runWifiScan(callback) {
+    async runWifiScan() {
       global.disabled = true
       logInfo('configStore.runWifiScan()', 'Starting wifi scan')
-      
-      this.sendWifiScan((success) => {
-        if (!success) {
+
+      try {
+        const started = await this.sendWifiScan()
+        if (!started) {
           global.messageError = 'Failed to start wifi scan'
-          global.disabled = false
-          if (callback) callback(false)
-          return
+          return { success: false }
         }
-        
-        // Poll for scan completion
-        const check = setInterval(() => {
-          this.getWifiScanStatus((statusSuccess, data) => {
-            if (!statusSuccess) {
-              global.messageError = 'Failed to get wifi scan status'
-              global.disabled = false
-              clearInterval(check)
-              if (callback) callback(false)
-              return
-            }
-            
-            if (data.status) {
-              // scan is still running, continue polling
-              return
-            }
-            
-            clearInterval(check)
-            global.disabled = false
-            if (callback) callback(data.success, data)
-          })
-        }, 2000)
-      })
+
+        while (true) {
+          const statusRes = await this.getWifiScanStatus()
+          if (!statusRes.success) {
+            global.messageError = 'Failed to get wifi scan status'
+            return { success: false }
+          }
+
+          if (statusRes.data.status) {
+            await new Promise((r) => setTimeout(r, 2000))
+            continue
+          }
+
+          global.disabled = false
+          return { success: statusRes.data.success, data: statusRes.data }
+        }
+      } finally {
+        global.disabled = false
+      }
     },
 
-    runHardwareScan(callback) {
+    async runHardwareScan() {
       global.disabled = true
       logInfo('configStore.runHardwareScan()', 'Starting hardware scan')
-      
-      this.sendHardwareScan((success) => {
-        if (!success) {
-          global.messageError = 'Failed to start hardware scan'
-          global.disabled = false
-          if (callback) callback(false)
-          return
-        }
-        
-        // Poll for scan completion
-        const check = setInterval(() => {
-          this.getHardwareScanStatus((statusSuccess, data) => {
-            if (!statusSuccess) {
-              global.messageError = 'Failed to get hardware scan status'
-              global.disabled = false
-              clearInterval(check)
-              if (callback) callback(false)
-              return
-            }
-            
-            if (data.status) {
-              // scan is still running, continue polling
-              return
-            }
-            
-            clearInterval(check)
-            global.disabled = false
-            if (callback) callback(data.success, data)
-          })
-        }, 2000)
-      })
-    },
 
+      try {
+        const started = await this.sendHardwareScan()
+        if (!started) {
+          global.messageError = 'Failed to start hardware scan'
+          return { success: false }
+        }
+
+        while (true) {
+          const statusRes = await this.getHardwareScanStatus()
+          if (!statusRes.success) {
+            global.messageError = 'Failed to get hardware scan status'
+            return { success: false }
+          }
+
+          if (statusRes.data.status) {
+            await new Promise((r) => setTimeout(r, 2000))
+            continue
+          }
+
+          global.disabled = false
+          return { success: statusRes.data.success, data: statusRes.data }
+        }
+      } finally {
+        global.disabled = false
+      }
+    }
   }
 })

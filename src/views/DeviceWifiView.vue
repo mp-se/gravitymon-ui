@@ -134,7 +134,7 @@
           >&nbsp;
 
           <button
-            @click="restart()"
+            @click.prevent="config.restart()"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -154,7 +154,7 @@
 </template>
 
 <script setup>
-import { validateCurrentForm, restart } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { onMounted, ref } from 'vue'
@@ -173,30 +173,30 @@ function wifiName(label, rssi, encr) {
   return l
 }
 
-onMounted(() => {
+onMounted(async () => {
   scanning.value = true
-  config.runWifiScan((success, data) => {
-    if (success) {
-      networks.value = [{ label: '-blank-', value: '', rssi: 0, encryption: 0, channel: 0 }]
-      for (var n in data.networks) {
-        var d = data.networks[n]
-        var o = {
-          label: wifiName(d.wifi_ssid, d.rssi, d.encryption),
-          value: d.wifi_ssid,
-          rssi: d.rssi,
-          encryption: data.networks[n].encryption,
-          channel: d.channel
-        }
-
-        var f = networks.value.filter((obj) => {
-          return obj.value === d.wifi_ssid
-        })
-        logDebug('DeviceWifiView.onMounted()', 'result:', f, d.wifi_ssid)
-        if (f.length === 0) networks.value.push(o)
+  const res = await config.runWifiScan()
+  if (res && res.success) {
+    const data = res.data
+    networks.value = [{ label: '-blank-', value: '', rssi: 0, encryption: 0, channel: 0 }]
+    for (var n in data.networks) {
+      var d = data.networks[n]
+      var o = {
+        label: wifiName(d.wifi_ssid, d.rssi, d.encryption),
+        value: d.wifi_ssid,
+        rssi: d.rssi,
+        encryption: data.networks[n].encryption,
+        channel: d.channel
       }
-      scanning.value = false
+
+      var f = networks.value.filter((obj) => {
+        return obj.value === d.wifi_ssid
+      })
+      logDebug('DeviceWifiView.onMounted()', 'result:', f, d.wifi_ssid)
+      if (f.length === 0) networks.value.push(o)
     }
-  })
+  }
+  scanning.value = false
 })
 
 const save = () => {

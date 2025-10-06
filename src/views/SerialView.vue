@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { global } from '@/modules/pinia'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 
 const socket = ref(null)
 const serial = ref('')
@@ -55,7 +55,7 @@ const connected = computed(() => {
 
 function connect() {
   serial.value = 'Attempting to connect to websocket\n'
-  var host = global.baseURL.replaceAll('http://', 'ws://')
+  var host = http.baseURL.replaceAll('http://', 'ws://')
   socket.value = new WebSocket(host + 'serialws')
 
   socket.value.onopen = function () {

@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { validateCurrentForm } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import * as badge from '@/modules/badge'
 import { global } from '@/modules/pinia'
 

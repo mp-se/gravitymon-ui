@@ -216,89 +216,70 @@
 <script setup>
 import { ref } from 'vue'
 import { status, config, global } from '@/modules/pinia'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 import { logDebug } from '@mp-se/espframework-ui-components'
 
 const logData = ref('')
 const showHelp = ref(false)
 
-function fetchLog(file, callback) {
-  const data = {
-    command: 'get',
-    file: file
+async function fetchLog(file) {
+  const data = { command: 'get', file }
+  const res = await http.filesystemRequest(data)
+  if (res.success) {
+    logDebug('SupportView.fetchLog()', 'Fetching ' + file + ' completed')
+    const list = res.text.split('\n')
+    list.forEach(function (item) {
+      if (item.length) logData.value = item + '\n' + logData.value
+    })
+    return true
   }
-
-  config.sendFilesystemRequest(data, (success, text) => {
-    if (success) {
-      logDebug('SupportView.fetchLog()', 'Fetching ' + file + ' completed')
-      const list = text.split('\n')
-      list.forEach(function (item) {
-        if (item.length) logData.value = item + '\n' + logData.value
-      })
-      callback(true)
-    } else {
-      callback(false)
-    }
-  })
+  return false
 }
 
-function removeLog(file, callback) {
-  const data = {
-    command: 'del',
-    file: file
-  }
-
-  config.sendFilesystemRequest(data, (success) => {
-    callback(success)
-  })
+async function removeLog(file) {
+  const res = await http.filesystemRequest({ command: 'del', file })
+  return res.success
 }
 
-function viewLogs() {
+async function viewLogs() {
   global.clearMessages()
   global.disabled = true
   logData.value = ''
-
-  fetchLog('/error2.log', () => {
-    fetchLog('/error.log', () => {
-      global.disabled = false
-    })
-  })
+  await fetchLog('/error2.log')
+  await fetchLog('/error.log')
+  global.disabled = false
 }
 
-function removeLogs() {
+async function removeLogs() {
   global.clearMessages()
   global.disabled = true
   logData.value = ''
-
-  removeLog('/error2.log', () => {
-    removeLog('/error.log', () => {
-      global.messageSuccess = 'Requested logs to be deleted'
-      global.disabled = false
-    })
-  })
+  const r1 = await removeLog('/error2.log')
+  const r2 = await removeLog('/error.log')
+  if (r1 && r2) global.messageSuccess = 'Log files are deleted'
+  global.disabled = false
 }
 
-function removeLegacy() {
+async function removeLegacy() {
   global.clearMessages()
   global.disabled = true
   logData.value = ''
-
-  removeLog('/config.json', () => {
-    removeLog('/gravitymon.json', () => {
-      global.messageSuccess = 'Requested old configuration files to be deleted'
-      global.disabled = false
-    })
-  })
+  const r1 = await removeLog('/config.json')
+  const r2 = await removeLog('/gravitymon.json')
+  if (r1 && r2) global.messageSuccess = 'Old configuration files are deleted'
+  global.disabled = false
 }
 
 function hardwareScan() {
   global.clearMessages()
   global.disabled = true
   logData.value = ''
-
-  config.runHardwareScan((success, data) => {
-    if (success) {
-      logData.value = data
+  ;(async () => {
+    const res = await config.runHardwareScan()
+    if (res && res.success) {
+      logData.value = res.data
     }
-  })
+    global.disabled = false
+  })()
 }
 </script>

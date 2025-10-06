@@ -19,10 +19,10 @@
     ></BsMessage>
   </div>
 
-  <BsMenuBar 
-    v-if="global.initialized" 
-    :disabled="global.disabled" 
-    brand="Gravitymon" 
+  <BsMenuBar
+    v-if="global.initialized"
+    :disabled="global.disabled"
+    brand="Gravitymon"
     :menu-items="items"
     :dark-mode="config.dark_mode"
     :mdns="config.mdns"
@@ -96,6 +96,7 @@
 // BsMenuBar and BsFooter are now imported globally from the ESP Framework UI Components library
 import { onMounted, watch, onBeforeMount, ref } from 'vue'
 import { global, status, config, saveConfigState } from './modules/pinia'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 import { storeToRefs } from 'pinia'
 import { useTimers } from '@mp-se/espframework-ui-components'
 import { logError } from '@mp-se/espframework-ui-components'
@@ -119,7 +120,10 @@ watch(disabled, () => {
 })
 
 function ping() {
-  status.ping()
+  ;(async () => {
+    const ok = await http.ping()
+    status.connected = ok
+  })()
 }
 
 onBeforeMount(() => {
@@ -135,14 +139,14 @@ onMounted(async () => {
 async function initializeApp() {
   try {
     showSpinner()
-    
-    // Step 1: Authenticate with device
-    const authResult = await status.auth()
-    if (!authResult.success) {
+
+    // Step 1: Authenticate with device (http client owns token)
+    const base = btoa('gravitymon:password')
+    const authOk = await http.auth(base)
+    if (!authOk) {
       global.messageError = 'Failed to authenticate with device, please try to reload page!'
       return
     }
-    global.id = authResult.data.token
 
     // Step 2: Load feature flags
     const globalSuccess = await global.load()
@@ -159,27 +163,24 @@ async function initializeApp() {
     }
 
     // Step 4: Load configuration
-    const configSuccess = await new Promise(resolve => {
-      config.load(resolve)
-    })
+    const configSuccess = await config.load()
     if (!configSuccess) {
-      global.messageError = 'Failed to load configuration data from device, please try to reload page!'
+      global.messageError =
+        'Failed to load configuration data from device, please try to reload page!'
       return
     }
 
     // Step 5: Load format templates
-    const formatSuccess = await new Promise(resolve => {
-      config.loadFormat(resolve)
-    })
+    const formatSuccess = await config.loadFormat()
     if (!formatSuccess) {
-      global.messageError = 'Failed to load format templates from device, please try to reload page!'
+      global.messageError =
+        'Failed to load format templates from device, please try to reload page!'
       return
     }
 
     // Success! Initialize the app
     saveConfigState()
     global.initialized = true
-    
   } catch (error) {
     logError('App.initializeApp()', error)
     global.messageError = `Initialization failed: ${error.message}`
@@ -187,6 +188,14 @@ async function initializeApp() {
     hideSpinner()
   }
 }
+
+// Watch for changes to config.dark_mode and call handleDarkModeUpdate
+watch(
+  () => config.dark_mode,
+  (newValue) => {
+    handleDarkModeUpdate(newValue)
+  }
+)
 
 // Handle dark mode changes
 const handleDarkModeUpdate = (newValue) => {

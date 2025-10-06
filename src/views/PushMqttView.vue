@@ -135,7 +135,8 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { validateCurrentForm, applyTemplate, mqttFormatOptions } from '@/modules/utils'
+import { applyTemplate, mqttFormatOptions } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, status, config } from '@/modules/pinia'
 import { storeToRefs } from 'pinia'
 

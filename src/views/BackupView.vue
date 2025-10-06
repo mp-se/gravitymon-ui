@@ -88,7 +88,11 @@ function onFileChange(event) {
 
 function backup() {
   let backup = {
-    meta: { version: '2.2.0', software: 'GravityMon', created: new Date().toISOString().slice(0, 10) },
+    meta: {
+      version: '2.2.0',
+      software: 'GravityMon',
+      created: new Date().toISOString().slice(0, 10)
+    },
     config: JSON.parse(config.toJson())
   }
 
@@ -114,7 +118,7 @@ function backup() {
 
 async function restore() {
   const fileElement = document.getElementById('upload')
-  
+
   // Validate file element exists
   if (!fileElement) {
     global.messageError = 'Upload element not found'
@@ -125,48 +129,48 @@ async function restore() {
     global.messageFailed = 'You need to select one file to restore configuration from'
     return
   }
-  
+
   global.disabled = true
   logDebug('BackupView.restore()', 'Selected file: ' + fileElement.files[0].name)
-  
+
   const reader = new FileReader()
   const file = fileElement.files[0]
-  
+
   reader.addEventListener('load', async function (e) {
-      let text = e.target.result
-      try {
-        const data = JSON.parse(text)
-        if (
-          data.meta.software === 'GravityMon' &&
-          (data.meta.version === '2.0.0' || data.meta.version === '2.2.0')
-        ) {
-          await doRestore2(data.config)
-        } else if (data.meta.software === 'GravityMon') {
-          await doRestore1(data)
-        } else {
-          global.messageFailed = 'Unknown format, unable to process'
-        }
-      } catch (error) {
-        logError('BackupView.restore()', error)
-        global.messageFailed = 'Unable to parse configuration file for GravityMon.'
-      } finally {
-        global.disabled = false
-        // Reset file selection after operation
-        fileSelected.value = false
-        fileElement.value = ''
+    let text = e.target.result
+    try {
+      const data = JSON.parse(text)
+      if (
+        data.meta.software === 'GravityMon' &&
+        (data.meta.version === '2.0.0' || data.meta.version === '2.2.0')
+      ) {
+        await doRestore2(data.config)
+      } else if (data.meta.software === 'GravityMon') {
+        await doRestore1(data)
+      } else {
+        global.messageFailed = 'Unknown format, unable to process'
       }
-    })
-    
-    reader.addEventListener('error', () => {
-      logError('BackupView.restore()', 'File reading failed')
-      global.messageError = 'Failed to read the backup file'
+    } catch (error) {
+      logError('BackupView.restore()', error)
+      global.messageFailed = 'Unable to parse configuration file for GravityMon.'
+    } finally {
       global.disabled = false
-      // Reset file selection after error
+      // Reset file selection after operation
       fileSelected.value = false
       fileElement.value = ''
-    })
-    
-    reader.readAsText(file)
+    }
+  })
+
+  reader.addEventListener('error', () => {
+    logError('BackupView.restore()', 'File reading failed')
+    global.messageError = 'Failed to read the backup file'
+    global.disabled = false
+    // Reset file selection after error
+    fileSelected.value = false
+    fileElement.value = ''
+  })
+
+  reader.readAsText(file)
 }
 
 function download(content, mimeType, filename) {
@@ -176,7 +180,7 @@ function download(content, mimeType, filename) {
   a.setAttribute('href', url)
   a.setAttribute('download', filename)
   a.click()
-  
+
   // Clean up the object URL to prevent memory leaks
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }

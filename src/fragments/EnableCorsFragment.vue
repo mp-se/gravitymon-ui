@@ -23,6 +23,7 @@
 <script setup>
 import { global } from '@/modules/pinia'
 import { logInfo, logError } from '@mp-se/espframework-ui-components'
+import { sharedHttpClient as http } from '@/modules/httpClient'
 
 const enableCors = async () => {
   try {
@@ -33,22 +34,13 @@ const enableCors = async () => {
       cors_allowed: true
     }
 
-    const response = await fetch(global.baseURL + 'api/config', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: global.token
-      },
-      body: JSON.stringify(data),
-      signal: AbortSignal.timeout(global.fetchTimeout)
-    })
-
-    if (response.status !== 200) {
-      logError('EnableCorsFragment.enableCors()', 'Sending /api/config failed', response.status)
-      global.messageError = 'Failed to enable CORS.'
-    } else {
+    try {
+      await http.postJson('api/config', data)
       logInfo('EnableCorsFragment.enableCors()', 'Sending /api/config completed')
-      global.messageSuccess = 'CORS enabled in configuration, reboot to take effect.'
+      global.messageSuccess = 'CORS enabled in configuration, please reboot to take effect.'
+    } catch (err) {
+      logError('EnableCorsFragment.enableCors()', 'Sending /api/config failed', err)
+      global.messageError = 'Failed to enable CORS.'
     }
   } catch (err) {
     logError('EnableCorsFragment.enableCors()', 'Error enabling CORS:', err)
