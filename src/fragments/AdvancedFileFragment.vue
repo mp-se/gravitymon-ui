@@ -93,7 +93,7 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
-import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { logDebug, logError } from '@mp-se/espframework-ui-components'
 
 const fileData = ref(null)
@@ -160,71 +160,40 @@ const onFileChange = (event) => {
   hasFileSelected.value = event.target.files.length > 0
 }
 
-function upload() {
+async function upload() {
   const fileElement = document.getElementById('upload')
-
-  function errorAction(e) {
-    logError('AdancedFilesFragment.upload()', e.type)
-    global.messageFailed = 'File upload failed!'
-    global.disabled = false
-  }
 
   if (fileElement.files.length === 0) {
     global.messageFailed = 'You need to select one file with firmware to upload'
-  } else {
-    global.disabled = true
-    logDebug('AdancedFilesFragment.upload()', 'Selected file: ' + fileElement.files[0].name)
+    return
+  }
 
-    const xhr = new XMLHttpRequest()
-    xhr.timeout = 40000 // 40 s
-    progress.value = 0
+  global.disabled = true
+  logDebug('AdancedFilesFragment.upload()', 'Selected file: ' + fileElement.files[0].name)
 
-    xhr.onabort = function (e) {
-      errorAction(e)
-    }
-    xhr.onerror = function (e) {
-      errorAction(e)
-    }
-    xhr.ontimeout = function (e) {
-      errorAction(e)
-    }
+  progress.value = 0
 
-    xhr.onloadstart = function () {}
-
-    xhr.onloadend = function () {
-      progress.value = 100
-      if (xhr.status == 200) {
-        global.messageSuccess = 'File upload completed!'
-        global.messageFailed = ''
+  try {
+    const res = await http.uploadFile('api/filesystem/upload', fileElement.files[0], {
+      timeoutMs: 40000,
+      onProgress: (e) => {
+        if (e.lengthComputable) progress.value = Math.round((e.loaded / e.total) * 100)
       }
+    })
 
-      global.disabled = false
-      filesDelete.value = []
+    progress.value = 100
+    if (res && res.success) {
+      global.messageSuccess = 'File upload completed!'
+      global.messageFailed = ''
+    } else {
+      global.messageFailed = `File upload failed: ${res && res.status}`
     }
-
-    // The update only seams to work when loaded from the device (i.e. when CORS is not used)
-    xhr.upload.addEventListener(
-      'progress',
-      (e) => {
-        progress.value = (e.loaded / e.total) * 100
-      },
-      false
-    )
-
-    const fileData = new FormData()
-    fileData.onprogress = function (e) {
-      logDebug(
-        'AdancedFilesFragment.upload()',
-        'progress2: ' + e.loaded + ',' + e.total + ',' + xhr.status
-      )
-    }
-
-    fileData.append('file', fileElement.files[0])
-
-    // Use shared http client for base URL / token ownership (no fallback)
-    xhr.open('POST', http.baseURL + 'api/filesystem/upload')
-    xhr.setRequestHeader('Authorization', http.token)
-    xhr.send(fileData)
+  } catch (err) {
+    logError('AdancedFilesFragment.upload()', err)
+    global.messageFailed = 'File upload failed!'
+  } finally {
+    global.disabled = false
+    filesDelete.value = []
   }
 }
 </script>

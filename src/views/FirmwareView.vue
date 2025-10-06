@@ -67,7 +67,7 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
-import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { logDebug, logError } from '@mp-se/espframework-ui-components'
 
 const progress = ref(0)
@@ -78,20 +78,8 @@ const onFileChange = (event) => {
   hasFileSelected.value = fileElement.files && fileElement.files.length > 0
 }
 
-function upload() {
+async function upload() {
   const fileElement = document.getElementById('upload')
-
-  function errorAction(e) {
-    logError('FirmwareView.upload()', e.type)
-    global.messageFailed = 'File upload failed!'
-    global.disabled = false
-    // Reset file input and selection state
-    const fileElement = document.getElementById('upload')
-    if (fileElement) {
-      fileElement.value = ''
-      hasFileSelected.value = false
-    }
-  }
 
   if (fileElement.files.length === 0) {
     global.messageFailed = 'You need to select one file with firmware to upload'
@@ -99,25 +87,19 @@ function upload() {
     global.disabled = true
     logDebug('FirmwareView.upload()', 'Selected file: ' + fileElement.files[0].name)
 
-    const xhr = new XMLHttpRequest()
-    xhr.timeout = 1000 * 180 // 180 s
     progress.value = 0
 
-    xhr.onabort = function (e) {
-      errorAction(e)
-    }
-    xhr.onerror = function (e) {
-      errorAction(e)
-    }
-    xhr.ontimeout = function (e) {
-      errorAction(e)
-    }
-
-    xhr.onloadstart = function () {}
-
-    xhr.onloadend = function () {
+    try {
+      const res = await http.uploadFile('api/firmware', fileElement.files[0], {
+        timeoutMs: 180000,
+        onProgress: (ev) => {
+          if (ev.lengthComputable) {
+            progress.value = Math.round((ev.loaded / ev.total) * 100)
+          }
+        }
+      })
       progress.value = 100
-      if (xhr.status == 200) {
+      if (res.success) {
         global.messageSuccess =
           'File upload completed, waiting for device to restart before doing refresh!'
         global.messageFailed = ''
@@ -141,28 +123,14 @@ function upload() {
           },
           { once: true }
         )
+      } else {
+        global.messageFailed = `Upload failed: ${res.status}`
       }
+    } catch (err) {
+      global.messageFailed = `Upload error: ${err.message || err}`
+    } finally {
+      global.disabled = false
     }
-
-    // The update only seams to work when loaded from the device (i.e. when CORS is not used)
-    xhr.upload.addEventListener(
-      'progress',
-      (e) => {
-        progress.value = (e.loaded / e.total) * 100
-      },
-      false
-    )
-
-    const fileData = new FormData()
-    fileData.onprogress = function (e) {
-      logDebug('FirmwareView.upload()', 'progress2: ' + e.loaded + ',' + e.total + ',' + xhr.status)
-    }
-
-    fileData.append('file', fileElement.files[0])
-
-    xhr.open('POST', http.baseURL + 'api/firmware')
-    xhr.setRequestHeader('Authorization', http.token)
-    xhr.send(fileData)
   }
 }
 </script>

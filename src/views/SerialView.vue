@@ -30,9 +30,10 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 
 const socket = ref(null)
+let socketCloser = null
 const serial = ref('')
 const maxLines = 50
 
@@ -41,7 +42,20 @@ function clear() {
 }
 
 onUnmounted(() => {
-  if (socket.value) socket.value.close()
+  if (typeof socketCloser === 'function') {
+    try {
+      socketCloser()
+    } catch {
+      // ignore
+    }
+    socketCloser = null
+  } else if (socket.value) {
+    try {
+      socket.value.close()
+    } catch {
+      // ignore
+    }
+  }
   socket.value = null
 })
 
@@ -55,28 +69,32 @@ const connected = computed(() => {
 
 function connect() {
   serial.value = 'Attempting to connect to websocket\n'
-  var host = http.baseURL.replaceAll('http://', 'ws://')
-  socket.value = new WebSocket(host + 'serialws')
+  const ws = http.createWebSocket('serialws', {
+    onOpen() {
+      serial.value += 'Websocket established\n'
+    },
+    onMessage(event) {
+      var list = serial.value.split('\n')
 
-  socket.value.onopen = function () {
-    serial.value += 'Websocket established\n'
-  }
+      while (list.length > maxLines) {
+        list.shift()
+      }
 
-  socket.value.onmessage = function (event) {
-    var list = serial.value.split('\n')
+      serial.value = list.join('\n')
+      serial.value += event.data
+    },
+    onClose() {
+      serial.value += 'Socket closed\n'
+      socket.value = null
+    },
+    onError(err) {
+      serial.value += 'Websocket error: ' + (err && err.message ? err.message : err) + '\n'
+    },
+    autoReconnect: true
+  })
 
-    while (list.length > maxLines) {
-      list.shift()
-    }
-
-    serial.value = list.join('\n')
-    serial.value += event.data
-  }
-
-  socket.value.onclose = function () {
-    serial.value += 'Socket closed\n'
-    socket.value = null
-  }
+  socketCloser = ws.close
+  socket.value = ws.socketGetter()
 }
 
 onMounted(() => {

@@ -96,7 +96,7 @@
 // BsMenuBar and BsFooter are now imported globally from the ESP Framework UI Components library
 import { onMounted, watch, onBeforeMount, ref } from 'vue'
 import { global, status, config, saveConfigState } from './modules/pinia'
-import { sharedHttpClient as http } from '@mp-se/espframework-ui-components/src/modules/httpClient'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { storeToRefs } from 'pinia'
 import { useTimers } from '@mp-se/espframework-ui-components'
 import { logError } from '@mp-se/espframework-ui-components'
