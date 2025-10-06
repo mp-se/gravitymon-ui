@@ -100,11 +100,11 @@ const listFilesView = () => {
       filesystemUsage.value = (json.used / json.total) * 100
       filesystemUsageText.value =
         'Total space ' +
-        json.total / 1024 +
+        new Number(json.total / 1024).toFixed(1) +
         'kb, Free space ' +
-        json.free / 1024 +
+        new Number(json.free / 1024).toFixed(1) +
         'kb, Used space ' +
-        json.used / 1024 +
+        new Number(json.used / 1024).toFixed(1) +
         'kb'
 
       for (var f in json.files) {

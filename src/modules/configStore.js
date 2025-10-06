@@ -344,7 +344,6 @@ export const useConfigStore = defineStore('config', {
         global.disabled = false
       }
     },
-    // sendFormat is async; no wrapper required
     async sendOneFormat(data) {
       logInfo('configStore.sendOneFormat()', 'Sending /api/format')
 
@@ -502,7 +501,6 @@ export const useConfigStore = defineStore('config', {
         global.disabled = false
       }
     },
-    // filesystemRequest moved to sharedHttpClient.filesystemRequest(data)
     async runPushTest(data) {
       global.disabled = true
       logInfo('configStore.runPushTest()', 'Starting push test')
