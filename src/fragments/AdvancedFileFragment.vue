@@ -164,7 +164,7 @@ async function upload() {
   const fileElement = document.getElementById('upload')
 
   if (fileElement.files.length === 0) {
-    global.messageFailed = 'You need to select one file with firmware to upload'
+    global.messageError = 'You need to select one file with firmware to upload'
     return
   }
 
@@ -184,13 +184,13 @@ async function upload() {
     progress.value = 100
     if (res && res.success) {
       global.messageSuccess = 'File upload completed!'
-      global.messageFailed = ''
+      global.messageError = ''
     } else {
-      global.messageFailed = `File upload failed: ${res && res.status}`
+      global.messageError = `File upload failed: ${res && res.status}`
     }
   } catch (err) {
     logError('AdancedFilesFragment.upload()', err)
-    global.messageFailed = 'File upload failed!'
+    global.messageError = 'File upload failed!'
   } finally {
     global.disabled = false
     filesDelete.value = []

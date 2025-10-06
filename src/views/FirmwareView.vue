@@ -82,7 +82,7 @@ async function upload() {
   const fileElement = document.getElementById('upload')
 
   if (fileElement.files.length === 0) {
-    global.messageFailed = 'You need to select one file with firmware to upload'
+    global.messageError = 'You need to select one file with firmware to upload'
   } else {
     global.disabled = true
     logDebug('FirmwareView.upload()', 'Selected file: ' + fileElement.files[0].name)
@@ -102,7 +102,7 @@ async function upload() {
       if (res.success) {
         global.messageSuccess =
           'File upload completed, waiting for device to restart before doing refresh!'
-        global.messageFailed = ''
+        global.messageError = ''
 
         // Use a more reliable redirect with timeout cleanup
         const redirectTimeout = setTimeout(() => {
@@ -124,10 +124,10 @@ async function upload() {
           { once: true }
         )
       } else {
-        global.messageFailed = `Upload failed: ${res.status}`
+        global.messageError = `Upload failed: ${res.status}`
       }
     } catch (err) {
-      global.messageFailed = `Upload error: ${err.message || err}`
+      global.messageError = `Upload error: ${err.message || err}`
     } finally {
       global.disabled = false
     }

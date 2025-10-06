@@ -126,7 +126,7 @@ async function restore() {
   }
 
   if (fileElement.files.length === 0) {
-    global.messageFailed = 'You need to select one file to restore configuration from'
+  global.messageError = 'You need to select one file to restore configuration from'
     return
   }
 
@@ -148,11 +148,11 @@ async function restore() {
       } else if (data.meta.software === 'GravityMon') {
         await doRestore1(data)
       } else {
-        global.messageFailed = 'Unknown format, unable to process'
+  global.messageError = 'Unknown format, unable to process'
       }
     } catch (error) {
       logError('BackupView.restore()', error)
-      global.messageFailed = 'Unable to parse configuration file for GravityMon.'
+  global.messageError = 'Unable to parse configuration file for GravityMon.'
     } finally {
       global.disabled = false
       // Reset file selection after operation
