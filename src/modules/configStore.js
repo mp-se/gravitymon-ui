@@ -340,7 +340,6 @@ export const useConfigStore = defineStore('config', {
 
         return cnt == 5
       } finally {
-        // ensure disabled is cleared by callers as appropriate
         global.disabled = false
       }
     },
@@ -384,7 +383,6 @@ export const useConfigStore = defineStore('config', {
         })
         if (!response.ok) {
           logError('configStore.setSleepMode()', `HTTP ${response.status}: ${response.statusText}`)
-          // Make sure callers receive a consistent boolean instead of an exception
           return false
         }
 

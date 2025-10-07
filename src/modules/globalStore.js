@@ -43,7 +43,6 @@ export const useGlobalStore = defineStore('global', {
     isInfo() {
       return this.messageInfo != '' ? true : false
     },
-    // token and baseURL are now owned by the sharedHttpClient
     uiVersion() {
       logDebug('globalStore.uiVersion()', import.meta.env.VITE_APP_VERSION)
       return import.meta.env.VITE_APP_VERSION
