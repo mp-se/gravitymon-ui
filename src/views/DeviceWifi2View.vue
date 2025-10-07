@@ -86,7 +86,7 @@
           >
           </BsInputNumber>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" v-if="global.ui.enableScanForStrongestAp">
           <BsInputSwitch
             v-model="config.wifi_scan_ap"
             label="Scan for strongest AP"

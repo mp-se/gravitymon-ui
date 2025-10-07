@@ -12,14 +12,16 @@
     >
     </BsMessage>
 
-    <BsMessage dismissable="true" message="" alert="info" v-if="!scanning">
-      If you have an hidden SSID then you can set it manually
-      <router-link
-        class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-        to="/device/wifi2"
-        >here</router-link
-      >
-    </BsMessage>
+    <template v-if="global.ui.enableManualWifiEntry && !scanning">
+      <BsMessage dismissable="true" message="" alert="info">
+        If you have an hidden SSID then you can set it manually
+        <router-link
+          class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+          to="/device/wifi2"
+          >here</router-link
+        >
+      </BsMessage>
+    </template>
 
     <BsMessage
       v-if="config.wifi_ssid === '' && config.wifi_ssid2 === ''"
@@ -103,7 +105,7 @@
           >
           </BsInputNumber>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" v-if="global.ui.enableScanForStrongestAp">
           <BsInputSwitch
             v-model="config.wifi_scan_ap"
             label="Scan for strongest AP"

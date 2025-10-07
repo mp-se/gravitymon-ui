@@ -13,6 +13,12 @@ export const useGlobalStore = defineStore('global', {
       hardware: '',
       firmware_file: '',
 
+      ui: {
+        enableVoltageFragment: true,
+        enableManualWifiEntry: true,
+        enableScanForStrongestAp: true,
+      },
+
       feature: {
         ble: false,
         velocity: false,

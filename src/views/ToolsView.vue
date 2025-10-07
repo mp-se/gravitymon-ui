@@ -4,12 +4,14 @@
     <p class="h3">Tools</p>
     <hr />
 
-    <VoltageFragment></VoltageFragment>
+    <template v-if="global.ui.enableVoltageFragment">
+      <VoltageFragment></VoltageFragment>
 
-    <div class="row gy-4">
-      <p></p>
-      <hr />
-    </div>
+      <div class="row gy-4">
+        <p></p>
+        <hr />
+      </div>
+    </template>
 
     <ListFilesFragment></ListFilesFragment>
 
