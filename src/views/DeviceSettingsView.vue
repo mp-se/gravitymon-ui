@@ -201,7 +201,7 @@ const factory = async () => {
         { once: true }
       )
     } else {
-        global.messageError = json.message
+      global.messageError = json.message
     }
   } catch (err) {
     logError('DeviceSettingsView.factory()', err)

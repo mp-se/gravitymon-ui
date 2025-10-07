@@ -382,7 +382,12 @@ export const useConfigStore = defineStore('config', {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ sleep_mode: flag })
         })
-        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        if (!response.ok) {
+          logError('configStore.setSleepMode()', `HTTP ${response.status}: ${response.statusText}`)
+          // Make sure callers receive a consistent boolean instead of an exception
+          return false
+        }
+
         await response.json()
         logInfo('configStore.setSleepMode()', 'Sending /api/sleepmode completed')
         return true
