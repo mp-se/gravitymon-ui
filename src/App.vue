@@ -93,7 +93,6 @@
 </template>
 
 <script setup>
-// BsMenuBar and BsFooter are now imported globally from the ESP Framework UI Components library
 import { onMounted, watch, onBeforeMount, ref } from 'vue'
 import { global, status, config, saveConfigState } from './modules/pinia'
 import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'

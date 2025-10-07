@@ -2,8 +2,6 @@ import { defineStore } from 'pinia'
 import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 
-// Removed the previous http client instantiation
-
 export const useStatusStore = defineStore('status', {
   state: () => ({
     id: '',
@@ -37,7 +35,6 @@ export const useStatusStore = defineStore('status', {
     connected: true
   }),
   actions: {
-    // Helper to update store state from API JSON
     updateFromJson(json) {
       logDebug('statusStore.updateFromJson()', json)
       this.id = json.id

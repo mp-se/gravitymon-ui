@@ -104,7 +104,7 @@ const confirmDeleteMessage = ref(null)
 const confirmDeleteFile = ref(null)
 
 const confirmDeleteCallback = (result) => {
-  logDebug('AdancedFilesFragment.confirmDeleteCallback()', result)
+  logDebug('AdvancedFilesFragment.confirmDeleteCallback()', result)
 
   if (result) {
     global.disabled = true
@@ -169,7 +169,7 @@ async function upload() {
   }
 
   global.disabled = true
-  logDebug('AdancedFilesFragment.upload()', 'Selected file: ' + fileElement.files[0].name)
+  logDebug('AdvancedFilesFragment.upload()', 'Selected file: ' + fileElement.files[0].name)
 
   progress.value = 0
 
@@ -189,7 +189,7 @@ async function upload() {
       global.messageError = `File upload failed: ${res && res.status}`
     }
   } catch (err) {
-    logError('AdancedFilesFragment.upload()', err)
+    logError('AdvancedFilesFragment.upload()', err)
     global.messageError = 'File upload failed!'
   } finally {
     global.disabled = false

@@ -1,7 +1,6 @@
 import { ref } from 'vue'
 import { config, global } from '@/modules/pinia'
 import { logError, tempToF, tempToC } from '@mp-se/espframework-ui-components'
-export { validateCurrentForm } from '@mp-se/espframework-ui-components'
 
 export const httpHeaderOptions = ref([
   { label: 'JSON data', value: 'Content-Type: application/json' },

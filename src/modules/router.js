@@ -4,7 +4,6 @@ import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import * as badge from '@/modules/badge'
 import { global } from '@/modules/pinia'
 
-// Direct imports for all views (better for ESP32 single-bundle deployment)
 import HomeView from '@/views/HomeView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import DeviceSettingsView from '@/views/DeviceSettingsView.vue'

@@ -164,12 +164,12 @@
 <script setup>
 import { ref, computed } from 'vue'
 import {
-  validateCurrentForm,
   httpHeaderOptions,
   httpPostUrlOptions,
   httpPostFormatOptions,
   applyTemplate
 } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, status, config } from '@/modules/pinia'
 import { logError } from '@mp-se/espframework-ui-components'
 // BsInputSwitch is now globally registered from ESP Framework UI Components library

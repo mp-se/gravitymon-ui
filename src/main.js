@@ -47,7 +47,7 @@ import {
 } from '@mp-se/espframework-ui-components'
 
 // Import local fragments
-import AdvancedFilesFragment from '@/fragments/AdvancedFileFragment.vue'
+import AdvancedFilesFragment from '@/fragments/AdvancedFilesFragment.vue'
 import EnableCorsFragment from '@/fragments/EnableCorsFragment.vue'
 import ListFilesFragment from '@/fragments/ListFilesFragment.vue'
 import VoltageFragment from '@/fragments/VoltageFragment.vue'
@@ -91,8 +91,6 @@ app.component('IconCheckCircle', IconCheckCircle)
 app.component('IconXCircle', IconXCircle)
 app.component('IconExclamationTriangle', IconExclamationTriangle)
 app.component('IconInfoCircle', IconInfoCircle)
-
-// Register Fragment components (ESP Framework specific)
 app.component('AdvancedFilesFragment', AdvancedFilesFragment)
 app.component('EnableCorsFragment', EnableCorsFragment)
 app.component('ListFilesFragment', ListFilesFragment)
