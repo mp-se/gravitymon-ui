@@ -200,39 +200,54 @@ const calibrate = async () => {
 
   try {
     logInfo('DeviceHardwareView.calibrate()', 'Sending /api/calibrate')
-    const response = await http.request('api/calibrate')
+    const started = await http.request('api/calibrate')
 
-    if (!response.ok) {
-      global.messageError = 'Failed to calibrate device'
-      return
+    if (!started || (started.ok === false)) {
+      global.messageError = 'Failed to start calibration'
+      return false
     }
 
-    // Wait for calibration to complete
-    await new Promise((resolve) => setTimeout(resolve, 4000))
+    // Poll for calibration completion similar to config.runPushTest
+    const result = await (async () => {
+      while (true) {
+        const statusRes = await http.getJson('api/calibrate/status')
+        if (!statusRes) {
+          global.messageError = 'Failed to get calibrate status'
+          return false
+        }
 
-    const statusJson = await http.getJson('api/calibrate/status')
+        // statusRes.status == true means still running
+        if (statusRes.status) {
+          await new Promise((r) => setTimeout(r, 2000))
+          continue
+        }
 
-    logDebug('DeviceHardwareView.calibrate()', statusJson)
-    if (!statusJson || statusJson.success === true) {
-      global.messageError = 'Failed to get calibrate status'
-      return
+        // Calibration completed, check success flag
+        if (!statusRes.success) {
+          global.messageError =
+            'Calibration failed with code (' + (statusRes.calibrate_return_code || 'unknown') + ')'
+          return false
+        }
+
+        return true
+      }
+    })()
+
+    if (result) {
+      // Reload configuration after successful calibration
+      const configLoaded = await config.load()
+      if (configLoaded) {
+        global.messageSuccess = 'Gyro calibrated'
+      } else {
+        global.messageError = 'Failed to load configuration'
+      }
     }
 
-    // Reload configuration after calibration
-    const configLoaded = await config.load()
-
-    if (configLoaded) {
-      global.messageSuccess = 'Gyro calibrated'
-    } else {
-      global.messageError = 'Failed to load configuration'
-    }
+    return result
   } catch (err) {
     logError('DeviceHardwareView.calibrate()', err)
-    if (err.name === 'TimeoutError') {
-      global.messageError = 'Calibration request timed out'
-    } else {
-      global.messageError = 'Failed to calibrate device'
-    }
+    global.messageError = 'Calibration failed unexpectedly'
+    return false
   } finally {
     global.disabled = false
   }
