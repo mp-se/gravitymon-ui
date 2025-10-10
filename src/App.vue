@@ -98,7 +98,7 @@ import { global, status, config, saveConfigState } from './modules/pinia'
 import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { storeToRefs } from 'pinia'
 import { useTimers } from '@mp-se/espframework-ui-components'
-import { logError } from '@mp-se/espframework-ui-components'
+import { logError, logInfo } from '@mp-se/espframework-ui-components'
 import { items } from './modules/router'
 
 const { createInterval } = useTimers()
@@ -179,6 +179,7 @@ async function initializeApp() {
 
     // Success! Initialize the app
     saveConfigState()
+    handleDarkModeUpdate(config.dark_mode)
     global.initialized = true
   } catch (error) {
     logError('App.initializeApp()', error)
@@ -198,6 +199,9 @@ watch(
 
 // Handle dark mode changes
 const handleDarkModeUpdate = (newValue) => {
+
+  logInfo('App.handleDarkModeUpdate()', 'Updating dark mode settings', newValue)
+
   // update the store value
   config.dark_mode = newValue
   // fallback: ensure the attribute is set on the document root so Bootstrap theme rules apply
@@ -206,7 +210,7 @@ const handleDarkModeUpdate = (newValue) => {
     if (newValue) root.setAttribute('data-bs-theme', 'dark')
     else root.setAttribute('data-bs-theme', 'light')
   } catch (e) {
-    console.error('Failed to set data-bs-theme on documentElement', e)
+    logError('App.handleDarkModeUpdate()', 'Failed to set data-bs-theme on documentElement', e)
   }
 }
 
