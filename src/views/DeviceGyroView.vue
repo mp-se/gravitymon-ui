@@ -202,7 +202,7 @@ const calibrate = async () => {
     logInfo('DeviceHardwareView.calibrate()', 'Sending /api/calibrate')
     const started = await http.request('api/calibrate')
 
-    if (!started || (started.ok === false)) {
+    if (!started || started.ok === false) {
       global.messageError = 'Failed to start calibration'
       return false
     }

@@ -91,6 +91,8 @@ app.component('IconCheckCircle', IconCheckCircle)
 app.component('IconXCircle', IconXCircle)
 app.component('IconExclamationTriangle', IconExclamationTriangle)
 app.component('IconInfoCircle', IconInfoCircle)
+
+// Register retained local fragment components if needed
 app.component('AdvancedFilesFragment', AdvancedFilesFragment)
 app.component('EnableCorsFragment', EnableCorsFragment)
 app.component('ListFilesFragment', ListFilesFragment)

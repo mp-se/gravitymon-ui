@@ -199,7 +199,6 @@ watch(
 
 // Handle dark mode changes
 const handleDarkModeUpdate = (newValue) => {
-
   logInfo('App.handleDarkModeUpdate()', 'Updating dark mode settings', newValue)
 
   // update the store value
