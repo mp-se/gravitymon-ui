@@ -5,6 +5,7 @@
  */
 
 import { createRequire } from 'module'
+import { Buffer } from 'buffer'
 import { configData, featureData, statusData } from './data.js'
 const require = createRequire(import.meta.url)
 const multer = require('multer')
@@ -14,6 +15,18 @@ const upload = multer({ dest: './' })
 var wifiScanRunning = false
 
 export function registerEspFwk(app) {
+  // Helper function to validate Bearer token
+  function validateBearerToken(req) {
+    const authHeader = req.headers['authorization'] || req.headers['authorization']
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7)
+      console.log('Bearer token for validation:', token)
+      return token === statusData.id
+    }
+    console.log('No or invalid Bearer token', authHeader)
+    return false
+  }
+
   app.get('/', function (req, res) {
     console.log('GET: /')
     const options = {
@@ -70,17 +83,33 @@ export function registerEspFwk(app) {
     console.log('GET: /api/auth')
     /* 
      * Description:    Perform device authentication and receive access token
-     * Authentication: No
+     * Authentication: Yes, user and password
      * Limitation:     - 
      * Return:         200 OK, 401 Access Denied
-     * Request body:
-       {
-         push_format: "http_format|http_format2|http_format3|influxdb2_format|mqtt_format"
-       }
+     * Request body:   None
      */
     var data = { token: statusData.id }
 
     console.log(req.headers['authorization'])
+
+    // Decode and print authentication header (Basic auth only)
+    const authHeader = req.headers['authorization'] || req.headers['Authorization']
+    if (authHeader) {
+      if (authHeader.startsWith('Basic ')) {
+        const base64 = authHeader.substring(6)
+        try {
+          const decoded = Buffer.from(base64, 'base64').toString()
+          console.log('Basic auth decoded:', decoded)
+        } catch (e) {
+          console.log('Failed to decode Basic auth:', e.message)
+        }
+      } else {
+        console.log('Unsupported auth scheme:', authHeader.split(' ')[0])
+      }
+    } else {
+      console.log('No Authorization header')
+    }
+
     res.send(data)
   })
 
@@ -94,6 +123,13 @@ export function registerEspFwk(app) {
      * Note:           -
      * Return:         200 OK, 401 Access Denied
      */
+
+    // Verify Bearer token
+    if (!validateBearerToken(req)) {
+      res.status(401).send('Access Denied')
+      return
+    }
+
     res.type('application/json')
     res.send(configData)
   })
