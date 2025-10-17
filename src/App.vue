@@ -98,7 +98,7 @@ import { global, status, config, saveConfigState } from './modules/pinia'
 import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { storeToRefs } from 'pinia'
 import { useTimers } from '@mp-se/espframework-ui-components'
-import { logError, logInfo } from '@mp-se/espframework-ui-components'
+import { logError, logInfo, version } from '@mp-se/espframework-ui-components'
 import { items } from './modules/router'
 
 const { createInterval } = useTimers()
@@ -130,6 +130,8 @@ onBeforeMount(() => {
 })
 
 onMounted(async () => {
+  logInfo('App.onMounted()', `Using espframework version ${version}`)
+
   if (!global.initialized) {
     await initializeApp()
   }
