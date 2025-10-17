@@ -176,8 +176,8 @@ async function upload() {
   try {
     const res = await http.uploadFile('api/filesystem/upload', fileElement.files[0], {
       timeoutMs: 40000,
-      onProgress: (e) => {
-        if (e.lengthComputable) progress.value = Math.round((e.loaded / e.total) * 100)
+      onProgress: (percent) => {
+        progress.value = Math.round(percent)
       }
     })
 

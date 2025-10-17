@@ -99,10 +99,9 @@ async function upload() {
     try {
       const res = await http.uploadFile('api/firmware', fileElement.files[0], {
         timeoutMs: 180000,
-        onProgress: (ev) => {
-          if (ev.lengthComputable) {
-            progress.value = Math.round((ev.loaded / ev.total) * 100)
-          }
+        onProgress: (percent) => {
+          logDebug('FirmwareView.upload()', 'Upload progress: ' + Math.round(percent) + '%')
+          progress.value = Math.round(percent)
         }
       })
       progress.value = 100
