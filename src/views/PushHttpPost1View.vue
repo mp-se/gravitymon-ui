@@ -220,7 +220,7 @@ function validateServerPortFormat(value) {
   return serverPortPattern.test(value)
 }
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
   if (config.http_post_tcp && !validateServerPortFormat(config.http_post_target)) {
@@ -228,6 +228,6 @@ const save = () => {
     return
   }
 
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

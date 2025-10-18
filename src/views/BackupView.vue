@@ -298,7 +298,7 @@ async function doRestore1(json) {
   config.mqtt_format_gravity = decodeURIComponent(json.format['mqtt'])
 
   getConfigChanges()
-  config.saveAll()
+  await config.saveAll()
 }
 
 async function doRestore2(json) {
@@ -317,6 +317,6 @@ async function doRestore2(json) {
   }
 
   getConfigChanges()
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

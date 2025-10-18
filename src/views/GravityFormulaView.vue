@@ -221,23 +221,22 @@ function clearAverage() {
   angle.value.average = 0
 }
 
-function refresh() {
-  status.getGyro((success, data) => {
-    if (success) {
-      if (data.angle !== 0) {
-        angle.value.last = Math.round((parseFloat(data.angle) * 100) / 100).toFixed(2)
-        angle.value.sum += parseFloat(data.angle)
-        angle.value.count++
-        angle.value.average = (
-          Math.round((angle.value.sum / angle.value.count) * 100) / 100
-        ).toFixed(2)
-      }
+async function refresh() {
+  const result = await status.getGyro()
+  if (result.success) {
+    if (result.data.angle !== 0) {
+      angle.value.last = Math.round((parseFloat(result.data.angle) * 100) / 100).toFixed(2)
+      angle.value.sum += parseFloat(result.data.angle)
+      angle.value.count++
+      angle.value.average = (
+        Math.round((angle.value.sum / angle.value.count) * 100) / 100
+      ).toFixed(2)
     }
-  })
+  }
 }
 
-onBeforeMount(() => {
-  refresh()
+onBeforeMount(async () => {
+  await refresh()
   polling.value = createInterval(refresh, 2000)
 })
 
