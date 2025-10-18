@@ -158,10 +158,10 @@ const { sleep_interval } = storeToRefs(config)
 const batteryLife = ref('')
 const sleepLabel = ref('')
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
 }
 
 watch(sleep_interval, () => {

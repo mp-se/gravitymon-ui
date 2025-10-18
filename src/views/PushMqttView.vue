@@ -176,9 +176,9 @@ const renderFormat = () => {
   render.value = applyTemplate(status, config, config.mqtt_format_gravity)
 }
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

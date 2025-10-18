@@ -91,9 +91,9 @@ const calTempAdj = computed(() => {
   return !config.gravity_temp_adjustment || global.disabled
 })
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

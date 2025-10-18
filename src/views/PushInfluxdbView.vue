@@ -156,9 +156,9 @@ const renderFormat = () => {
   render.value = applyTemplate(status, config, config.influxdb2_format_gravity)
 }
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

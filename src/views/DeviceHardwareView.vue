@@ -108,7 +108,7 @@
           >&nbsp;
 
           <button
-            @click.prevent="config.restart()"
+            @click.prevent="restart"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -147,10 +147,14 @@ const voltage = computed(() => {
   return status.battery + ' V'
 })
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
   global.clearMessages()
-  config.saveAll()
+  await config.saveAll()
+}
+
+const restart = async () => {
+  await config.restart()
 }
 </script>

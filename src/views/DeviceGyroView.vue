@@ -73,7 +73,7 @@
           >&nbsp;
 
           <button
-            @click.prevent="config.restart()"
+            @click.prevent="restart"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -258,5 +258,9 @@ const save = async () => {
 
   global.clearMessages()
   await config.saveAll()
+}
+
+const restart = async () => {
+  await config.restart()
 }
 </script>

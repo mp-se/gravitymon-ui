@@ -107,7 +107,7 @@
           >&nbsp;
 
           <button
-            @click.prevent="config.restart()"
+            @click.prevent="restart"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -211,9 +211,13 @@ const factory = async () => {
   }
 }
 
-const saveSettings = () => {
+const restart = async () => {
+  await config.restart()
+}
+
+const saveSettings = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

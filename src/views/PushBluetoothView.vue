@@ -97,7 +97,7 @@ const tilt = computed(() => {
   return true
 })
 
-const save = () => {
+const save = async () => {
   if ((config.ble_format == 1 || config.ble_format == 2) && config.ble_tilt_color == '') {
     config.ble_tilt_color = 'red'
   }
@@ -105,6 +105,6 @@ const save = () => {
   if (!validateCurrentForm()) return
 
   global.clearMessages()
-  config.saveAll()
+  await config.saveAll()
 }
 </script>
