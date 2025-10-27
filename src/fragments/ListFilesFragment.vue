@@ -110,7 +110,7 @@ const fetchSecureDiskFile = async (fileName) => {
   }
 }
 
-const rainbowColors = ['#FF0000', '#FF7F00', '#00FF00', '#0000FF', '#4B0082', '#9400D3']
+const rainbowColors = ['#FF0000', '#FF7F00', '#006400', '#0000FF', '#4B0082', '#9400D3']
 
 function formatFileSize(bytes) {
   const kb = bytes / 1024
