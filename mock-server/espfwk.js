@@ -81,10 +81,10 @@ export function registerEspFwk(app) {
 
   app.get('/api/auth', (req, res) => {
     console.log('GET: /api/auth')
-    /* 
+    /*
      * Description:    Perform device authentication and receive access token
      * Authentication: Yes, user and password
-     * Limitation:     - 
+     * Limitation:     -
      * Return:         200 OK, 401 Access Denied
      * Request body:   None
      */
@@ -297,7 +297,11 @@ export function registerEspFwk(app) {
           { file: '/error.log', size: 10 },
           { file: '/error2.log', size: 10 },
           { file: '/config.json', size: 10 },
-          { file: '/gravitymon.json', size: 10 }
+          { file: '/gravitymon.json', size: 10 },
+          { file: '/data.csv', size: 10 },
+          { file: '/mqtt.tpl', size: 10 },
+          { file: '/formdata.tpl', size: 10 },
+          { file: '/bin.dat', size: 10 }
         ]
       }
       res.type('application/json')
@@ -314,11 +318,11 @@ export function registerEspFwk(app) {
       if (req.body.file == '/error.log') {
         setTimeout(() => {
           res.send('Log entry 5\nLog entry 4\nLog entry 3\nLog entry 2\nLog entry 1\n')
-        }, 1000)
+        }, 200)
       } else if (req.body.file == '/error2.log') {
         setTimeout(() => {
           res.send('Log entry 9\nLog entry 8\nLog entry 7\nLog entry 6\n')
-        }, 1000)
+        }, 500)
       } else if (req.body.file == '/config.json') {
         var ispindel = {
           Name: '',
@@ -421,6 +425,18 @@ export function registerEspFwk(app) {
           platform: 'esp32s3'
         }
         res.send(gravmon)
+      } else if (req.body.file == '/data.csv') {
+        var csv = 'data,data2,data3,data4,data5,data6,data7,data8,data9,data0\ndata,data2,data3,data4,data5,data6,data7,data8,data9,data0\ndata,data2,data3,data4,data5,data6,data7,data8,data9,data0\ndata,data2,data3,data4,data5,data6,data7,data8,data9,data0\n'
+        res.send(csv)
+      } else if (req.body.file == '/mqtt.tpl') {
+        var mqtt = 'ispindel/${mdns}/tilt:${angle}|ispindel/${mdns}/temperature:${temp}|ispindel/${mdns}/temp_units:${temp-unit}|ispindel/${mdns}/battery:${battery}|ispindel/${mdns}/gravity:${gravity}|ispindel/${mdns}/interval:${sleep-interval}|ispindel/${mdns}/RSSI:${rssi}|'
+        res.send(mqtt)
+      } else if (req.body.file == '/formdata.tpl') {
+        var formdata = '?value=data&value2=data2&value3=data3&value4=data4'
+        res.send(formdata)
+      } else if (req.body.file == '/bin.dat') {
+        var bin = Buffer.from([0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x00, 0x01, 0x02, 0x03, 0xFF,0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x00, 0x01, 0x02, 0x03, 0xFF,0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x00, 0x01, 0x02, 0x03, 0xFF,0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x00, 0x01, 0x02, 0x03, 0xFF,0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x00, 0x01, 0x02, 0x03, 0xFF])
+        res.send(bin)
       }
       return
     }
