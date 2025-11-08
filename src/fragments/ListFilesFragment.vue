@@ -42,7 +42,9 @@
   </div>
 
   <div v-if="fileData !== null" class="col-md-12">
-    <h6>File contents{{ dataType ? ', format: ' + dataType : '' }}</h6>
+    <h6>
+      File contents{{ dataType ? ', format: ' + dataType : '' }}, size {{ fileDataSize }} bytes
+    </h6>
     <pre class="border p-2" v-html="fileData"></pre>
   </div>
 </template>
@@ -68,6 +70,7 @@ const filesystemUsage = ref(null)
 const filesystemUsageText = ref(null)
 const filesView = ref([])
 const fileData = ref(null)
+const fileDataSize = ref(0)
 const dataType = ref('')
 
 // Computed properties for dynamic defaults based on type
@@ -97,9 +100,9 @@ const sendSecureDiskRequest = async (data) => {
 const fetchSecureDiskFile = async (fileName) => {
   global.disabled = true
   try {
-    const resp = await http.request('sd' + fileName, { 
+    const resp = await http.request('sd' + fileName, {
       method: 'GET',
-      timeoutMs: HTTP_TIMEOUT_MS 
+      timeoutMs: HTTP_TIMEOUT_MS
     })
     const text = await resp.text()
     global.disabled = false
@@ -129,28 +132,43 @@ function formatFileSize(bytes) {
 function colorizeCsv(text) {
   // Normalize line endings to handle both \r\n (Windows) and \r (old Mac) properly
   const normalizedText = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
-  return normalizedText.split('\n').map(line => {
-    if (!line.trim()) return line
-    return line.split(',').map((cell, index) => `<span style="color: ${rainbowColors[index % rainbowColors.length]}">${cell}</span>`).join(',')
-  }).join('\n')
+  return normalizedText
+    .split('\n')
+    .map((line) => {
+      if (!line.trim()) return line
+      return line
+        .split(',')
+        .map(
+          (cell, index) =>
+            `<span style="color: ${rainbowColors[index % rainbowColors.length]}">${cell}</span>`
+        )
+        .join(',')
+    })
+    .join('\n')
 }
 
 function colorizeFormData(text) {
-  return text.split('&').map(pair => {
-    if (!pair.trim()) return pair
-    const [key, ...valueParts] = pair.split('=')
-    const value = valueParts.join('=')
-    return `<span style="color: blue">${key}</span>=<span style="color: green">${value}</span>`
-  }).join('&\n')
+  return text
+    .split('&')
+    .map((pair) => {
+      if (!pair.trim()) return pair
+      const [key, ...valueParts] = pair.split('=')
+      const value = valueParts.join('=')
+      return `<span style="color: blue">${key}</span>=<span style="color: green">${value}</span>`
+    })
+    .join('&\n')
 }
 
 function colorizeMqtt(text) {
-  return text.split('|').map(pair => {
-    if (!pair.trim()) return pair
-    const [before, ...afterParts] = pair.split(':')
-    const after = afterParts.join(':')
-    return `<span style="color: purple">${before}</span>:<span style="color: orange">${after}</span>`
-  }).join('|\n')
+  return text
+    .split('|')
+    .map((pair) => {
+      if (!pair.trim()) return pair
+      const [before, ...afterParts] = pair.split(':')
+      const after = afterParts.join(':')
+      return `<span style="color: purple">${before}</span>:<span style="color: orange">${after}</span>`
+    })
+    .join('|\n')
 }
 
 function colorizeJson(obj, indent = 0) {
@@ -161,13 +179,18 @@ function colorizeJson(obj, indent = 0) {
   if (obj === null) return `<span style="color: gray">null</span>`
   if (Array.isArray(obj)) {
     if (obj.length === 0) return '[]'
-    const items = obj.map(item => `${indentStr}  ${colorizeJson(item, indent + 1)}`).join(',\n')
+    const items = obj.map((item) => `${indentStr}  ${colorizeJson(item, indent + 1)}`).join(',\n')
     return `[\n${items}\n${indentStr}]`
   }
   if (typeof obj === 'object') {
     const entries = Object.keys(obj)
     if (entries.length === 0) return '{}'
-    const props = entries.map(key => `${indentStr}  <span style="color: purple">"${key}"</span>: ${colorizeJson(obj[key], indent + 1)}`).join(',\n')
+    const props = entries
+      .map(
+        (key) =>
+          `${indentStr}  <span style="color: purple">"${key}"</span>: ${colorizeJson(obj[key], indent + 1)}`
+      )
+      .join(',\n')
     return `{\n${props}\n${indentStr}}`
   }
   return obj
@@ -185,13 +208,13 @@ function isBinary(text) {
 
 function toHex(text) {
   // Convert to hex, replacing � (from invalid UTF-8) with FF for correct binary representation
-  const hexes = Array.from(text).map(c => {
+  const hexes = Array.from(text).map((c) => {
     if (c === '\uFFFD') return 'FF'
     return c.charCodeAt(0).toString(16).padStart(2, '0').toUpperCase()
   })
-  const asciiChars = Array.from(text).map(c => {
+  const asciiChars = Array.from(text).map((c) => {
     const code = c.charCodeAt(0)
-    return (code >= 32 && code <= 126) ? c : '.'
+    return code >= 32 && code <= 126 ? c : '.'
   })
   const hexWidth = 20 * 3 - 1 // 59 chars for full 20 bytes: XX XX ... XX
   const lines = []
@@ -208,12 +231,15 @@ function isValidCsvData(text) {
   // Check for CSV format: all non-empty lines must have the same number of commas, and at least one comma per line
   // Normalize line endings first to handle \r\n and \r properly
   const normalizedText = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
-  const lines = normalizedText.split('\n').map(line => line.trim()).filter(line => line.length > 0)
+  const lines = normalizedText
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
   if (lines.length === 0) return false
 
-  const commaCounts = lines.map(line => (line.match(/,/g) || []).length)
+  const commaCounts = lines.map((line) => (line.match(/,/g) || []).length)
   const firstCount = commaCounts[0]
-  return commaCounts.every(count => count === firstCount && count > 0)
+  return commaCounts.every((count) => count === firstCount && count > 0)
 }
 
 const viewFile = async (f) => {
@@ -237,6 +263,7 @@ const viewFile = async (f) => {
 
     if (res && res.success) {
       const text = res.text
+      fileDataSize.value = text.length // Use the raw text length for size
 
       if (isValidJson(text)) {
         fileData.value = colorizeJson(JSON.parse(text))
@@ -279,7 +306,7 @@ const listFilesView = async () => {
       const data = { command: 'dir' }
       res = await sendSecureDiskRequest(data)
     } else {
-      const data = { 
+      const data = {
         command: 'dir',
         timeoutMs: HTTP_TIMEOUT_MS
       }
