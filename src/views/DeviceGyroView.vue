@@ -217,6 +217,8 @@ const calibrate = async () => {
           return false
         }
 
+        logInfo('DeviceHardwareView.calibrate()', statusRes)
+
         // statusRes.status == true means still running
         if (statusRes.status) {
           await new Promise((r) => setTimeout(r, 2000))
