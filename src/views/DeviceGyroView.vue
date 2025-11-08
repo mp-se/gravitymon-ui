@@ -226,7 +226,7 @@ const calibrate = async () => {
         // Calibration completed, check success flag
         if (!statusRes.success) {
           global.messageError =
-            'Calibration failed with code (' + (statusRes.calibrate_return_code || 'unknown') + ')'
+            'Calibration failed with code (' + (statusRes.message || 'unknown') + ')'
           return false
         }
 
