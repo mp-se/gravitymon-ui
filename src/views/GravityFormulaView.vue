@@ -228,9 +228,9 @@ async function refresh() {
       angle.value.last = Math.round((parseFloat(result.data.angle) * 100) / 100).toFixed(2)
       angle.value.sum += parseFloat(result.data.angle)
       angle.value.count++
-      angle.value.average = (
-        Math.round((angle.value.sum / angle.value.count) * 100) / 100
-      ).toFixed(2)
+      angle.value.average = (Math.round((angle.value.sum / angle.value.count) * 100) / 100).toFixed(
+        2
+      )
     }
   }
 }

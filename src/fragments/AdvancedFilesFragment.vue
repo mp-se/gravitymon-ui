@@ -64,8 +64,8 @@
           aria-hidden="true"
           v-show="global.disabled"
         ></span>
-        &nbsp;{{ listButtonText }}</button
-      >
+        &nbsp;{{ listButtonText }}
+      </button>
     </div>
     <div class="col-md-6">
       <div class="button-group">
