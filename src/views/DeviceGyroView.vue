@@ -196,6 +196,7 @@ const ispindel = () => {
 }
 
 const calibrate = async () => {
+  global.clearMessages()
   global.disabled = true
 
   try {
