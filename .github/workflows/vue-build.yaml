@@ -9,6 +9,9 @@ on:
 jobs:
   vue-build:
     runs-on: ubuntu-latest
+    env:
+      VITE_APP_REGISTER_APIKEY: ${{ secrets.REGISTER_APIKEY }}
+      VITE_APP_REGISTER_BASEURL: ${{ secrets.REGISTER_BASEURL }}
 
     steps:
       - uses: actions/checkout@v4
