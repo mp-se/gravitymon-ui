@@ -155,7 +155,7 @@ gravity_unit: 'G',
     gy: 0,
     gz: 0
   },
-  dark_mode: false
+  dark_mode: false,
 }
 
 export var formatData = {
@@ -207,12 +207,18 @@ export var statusData = {
 }
 
 export var featureData = {
+  chip_id: "68e3e17554dc",
+  // chip_id: "registered", // Used for testing the already registered scenario
+  // chip_id: "test_401", // Used for testing wrong api key scenario
+  // chip_id: "test_429", // Used for testing too many requests scenario
+  // chip_id: "test_500", // Used for testing internal server error scenario
   board: 'D1_MINI',
   platform: 'esp32c3',
   app_ver: '2.0.0',
   app_build: 'gitrev',
   hardware: 'ispindel',
   firmware_file: 'firmware.bin',
+  registered: false,
 
   // Feature flags
   ble: true,

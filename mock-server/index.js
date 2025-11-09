@@ -14,8 +14,14 @@ var cors = require('cors')
 const app = express()
 const port = 3000
 
-app.use(cors())
-app.use(express.json())
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
+}))
+app.use(express.json({ limit: '10mb' }))
+app.use(express.urlencoded({ extended: true }))
 
 registerEspFwk(app)
 
@@ -231,6 +237,70 @@ app.post('/api/sleepmode', (req, res) => {
   }
   res.type('application/json')
   res.send(data)
+})
+
+// Registration endpoints for testing
+app.get('/api/v1/device/check', (req, res) => {
+  console.log('GET: /api/v1/device/check', req.query)
+  /* 
+   * Description:    Check if device is already registered
+   * Authentication: Bearer token required
+   * Limitation:     - 
+   * Note:           Used to determine if registration modal should be shown
+   * Return:         200 OK with { exists: true|false, software?: string }
+   * Query params:   chipid
+   */
+  const chipid = req.query.chipid
+  // Simulate different scenarios based on chipid
+  let response = { exists: false }
+  
+  if (chipid === 'b1a9e561106ea030330ac272e9f446130d42887aa4596fbf9a1dc4bd2144ed4a') { // anonymized 'registered' version
+    response = { exists: true, software: 'Gravitymon' }
+  } else {
+    response = { exists: false }
+  }
+  
+  console.log('GET: /api/device/check', response)
+  res.type('application/json')
+  res.send(response)
+})
+
+app.post('/api/v1/software/add', (req, res) => {
+  console.log('POST: /api/v1/software/add', req.body)
+  /* 
+   * Description:    Register a new device
+   * Authentication: Bearer token required
+   * Limitation:     - 
+   * Note:           Test different error scenarios using request body
+   * Return:         200 OK, 401 Unauthorized, 429 Too Many Requests, 500 Internal Server Error
+   * Request body:   { software, chipid, version, platform, board }
+   */
+  const body = req.body
+  
+  // Simulate different error scenarios based on chipid
+  if (body.chipid === 'b0d6dd8a42dbadd0a1ada3b250c999cc9b1051c715e9e9ad4375f2779c077a6e') { // anonymized 'test_401' version
+    console.log('Returning 401 error')
+    res.status(401)
+    return res.json({ error: 'API key revoked' })
+  } else if (body.chipid === '20f9647ad4bebb51fe1758953a452af985c6352f52a494c3abf585d39996c7c6') { // anonymized 'test_429' version
+    console.log('Returning 429 error')
+    res.status(429)
+    return res.json({ error: 'Too many requests' })
+  } else if (body.chipid === '1eac306cebbc9ddf0654033e3fed489688f8c288236b344b5fa960469b970f8c') { // anonymized 'test_500' version
+    console.log('Returning 500 error')
+    res.status(500)
+    return res.json({ error: 'Internal server error' })
+  }
+  
+  // Success case
+  const response = {
+    success: true,
+    message: 'Data stored successfully',
+    id: 1
+  }
+  
+  res.type('application/json')
+  res.send(response)
 })
 
 app.listen(port, () => {

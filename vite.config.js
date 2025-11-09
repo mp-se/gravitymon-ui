@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url'
 import viteCompression from 'vite-plugin-compression'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { readFileSync } from 'node:fs'
 
@@ -8,7 +8,15 @@ import { readFileSync } from 'node:fs'
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  // eslint-disable-next-line no-undef
+  const env = loadEnv(mode, process.cwd())
+  const apiKey = env.VITE_APP_REGISTER_APIKEY || ''
+  const encodedApiKey = btoa(apiKey)
+  const baseUrl = env.VITE_APP_REGISTER_BASEURL || ''
+  const encodedBaseUrl = btoa(baseUrl)
+
+  return {
   plugins: [
     vue({
       template: {
@@ -35,7 +43,10 @@ export default defineConfig({
     __VUE_PROD_DEVTOOLS__: false,
     // Environment-specific settings
     __APP_VERSION__: JSON.stringify(pkg.version),
-    __BUILD_TIME__: JSON.stringify(new Date().toISOString())
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+    // Base64-encoded API key for security
+    __REGISTER_API_KEY__: JSON.stringify(encodedApiKey),
+    __REGISTER_BASE_URL__: JSON.stringify(encodedBaseUrl)
   },
   build: {
     minify: 'terser',
@@ -90,4 +101,5 @@ export default defineConfig({
       }
     }
   }
+}
 })

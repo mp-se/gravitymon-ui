@@ -27,7 +27,7 @@
           <hr />
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <BsInputRadio
             v-model="config.temp_unit"
             :options="tempOptions"
@@ -36,11 +36,21 @@
             :disabled="global.disabled"
           ></BsInputRadio>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <BsInputRadio
             v-model="config.gravity_unit"
             :options="gravityOptions"
             label="Gravity Format"
+            width=""
+            :disabled="global.disabled"
+          ></BsInputRadio>
+        </div>
+
+        <div class="col-md-4">
+          <BsInputRadio
+            v-model="config.dark_mode"
+            :options="uiOptions"
+            label="User Interface"
             width=""
             :disabled="global.disabled"
           ></BsInputRadio>
@@ -72,19 +82,33 @@
           />
         </div>
 
-        <div class="col-md-12">
-          <hr />
-        </div>
+        <template v-if="global.ui.enableRegistration">
+          <div class="col-md-12">
+            <hr />
+          </div>
 
-        <div class="col-md-6">
-          <BsInputRadio
-            v-model="config.dark_mode"
-            :options="uiOptions"
-            label="User Interface"
-            width=""
-            :disabled="global.disabled"
-          ></BsInputRadio>
-        </div>
+          <div class="col-md-12">
+            <BsInputReadonly v-model="registrationStatus" label="Device usage reporting">
+            </BsInputReadonly>
+          </div>
+
+          <div class="col-md-12">
+            <button
+              @click.prevent="checkReported"
+              type="button"
+              class="btn btn-secondary"
+              :disabled="global.disabled"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+                v-show="global.disabled"
+              ></span>
+              &nbsp;Check status
+            </button>
+          </div>
+        </template>
       </div>
 
       <div class="row gy-2">
@@ -135,15 +159,39 @@
             ></span>
             &nbsp;Restore factory defaults
           </button>
+
+          <template v-if="global.ui.enableRegistration">
+            &nbsp;
+            <button
+              @click.prevent="reportUsage"
+              type="button"
+              class="btn btn-secondary"
+              :disabled="global.disabled"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+                v-show="global.disabled"
+              ></span>
+              &nbsp;Report Usage
+            </button>
+          </template>
         </div>
       </div>
     </form>
   </div>
+
+  <RegisterDeviceFragment
+    v-if="showRegisterModal"
+    software="Gravitymon"
+    @close="closeRegisterModal"
+  />
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { validateCurrentForm } from '@mp-se/espframework-ui-components'
+import { BsInputReadonly, validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logError, logInfo } from '@mp-se/espframework-ui-components'
@@ -169,8 +217,40 @@ const uiOptions = ref([
   { label: 'Dark mode', value: true }
 ])
 
+const registrationStatus = ref('Unknown')
+const showRegisterModal = ref(false)
+
 const otaCallback = (opt) => {
   config.ota_url = opt
+}
+
+const checkReported = async () => {
+  global.clearMessages()
+  logInfo('DeviceSettingsView.checkReported()', 'Checking device registration status')
+  global.disabled = true
+
+  try {
+    const anonymizedChipId = await global.anonymizeChipId()
+    const checkUrl = `${global.registerBaseUrl}api/v1/device/check?chipid=${anonymizedChipId}`
+    const checkResponse = await http.getJson(checkUrl, {
+      headers: { 'X-API-Key': `${global.registerApiKey}` }
+    })
+    if (checkResponse && checkResponse.exists) {
+      registrationStatus.value = `This device has been reported using ${checkResponse.software}.`
+    } else {
+      registrationStatus.value = 'This device has not been reported'
+    }
+  } catch (error) {
+    logError('DeviceSettingsView.checkReported()', 'Failed to check registration status:', error)
+    registrationStatus.value = 'Error checking registration status'
+  } finally {
+    global.disabled = false
+  }
+}
+
+const reportUsage = async () => {
+  // Show the registration modal for manual usage reporting
+  showRegisterModal.value = true
 }
 
 const factory = async () => {
@@ -219,5 +299,10 @@ const saveSettings = async () => {
   if (!validateCurrentForm()) return
 
   await config.saveAll()
+}
+
+const closeRegisterModal = () => {
+  checkReported()
+  showRegisterModal.value = false
 }
 </script>

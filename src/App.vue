@@ -88,6 +88,12 @@
     </BsMessage>
   </div>
 
+  <RegisterDeviceFragment
+    v-if="showRegisterModal"
+    software="Gravitymon"
+    @close="closeRegisterModal"
+  />
+
   <router-view v-if="global.initialized" />
   <BsFooter v-if="global.initialized" text="(c) 2021-2025 Magnus Persson" />
 </template>
@@ -103,6 +109,7 @@ import { items } from './modules/router'
 
 const { createInterval } = useTimers()
 const polling = ref(null)
+const showRegisterModal = ref(false)
 
 const { disabled } = storeToRefs(global)
 
@@ -179,16 +186,44 @@ async function initializeApp() {
       return
     }
 
+    // Step 6: Check device registration status
+    if (!global.registered && global.ui.enableRegistration) {
+      try {
+        const anonymizedChipId = await global.anonymizeChipId()
+        const checkUrl = `${global.registerBaseUrl}api/v1/device/check?chipid=${anonymizedChipId}`
+        const checkResponse = await http.getJson(checkUrl, {
+          headers: { 'X-API-Key': `${global.registerApiKey}` }
+        })
+        if (checkResponse && checkResponse.exists) {
+          // Update device config to reflect registered status
+          await http.postJson('api/config', { registered: true })
+          global.registered = true
+        }
+      } catch (error) {
+        logError('App.initializeApp()', 'Registration check failed:', error)
+        // Continue without blocking
+      }
+    }
+
     // Success! Initialize the app
     saveConfigState()
     handleDarkModeUpdate(config.dark_mode)
     global.initialized = true
+
+    // Trigger register modal if device is not registered
+    if (!global.registered && global.ui.enableRegistration) {
+      showRegisterModal.value = true
+    }
   } catch (error) {
     logError('App.initializeApp()', error)
     global.messageError = `Initialization failed: ${error.message}`
   } finally {
     hideSpinner()
   }
+}
+
+function closeRegisterModal() {
+  showRegisterModal.value = false
 }
 
 // Watch for changes to config.dark_mode and call handleDarkModeUpdate
