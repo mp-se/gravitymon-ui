@@ -97,7 +97,7 @@ const send = async () => {
   global.disabled = true
 
   try {
-    const addUrl = `${global.registerBaseUrl}api/v1/software/add`
+    const addUrl = `${global.registerBaseUrl}api/v1/device/add`
     const response = await http.postJson(addUrl, JSON.parse(registrationDataJson.value), {
       headers: {
         'X-API-Key': `${global.registerApiKey}`,

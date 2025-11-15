@@ -240,17 +240,17 @@ app.post('/api/sleepmode', (req, res) => {
 })
 
 // Registration endpoints for testing
-app.get('/api/v1/device/check', (req, res) => {
-  console.log('GET: /api/v1/device/check', req.query)
+app.get('/api/v1/device/check/:chipid', (req, res) => {
+  console.log('GET: /api/v1/device/check/:chipid', req.params)
   /* 
    * Description:    Check if device is already registered
    * Authentication: Bearer token required
    * Limitation:     - 
    * Note:           Used to determine if registration modal should be shown
    * Return:         200 OK with { exists: true|false, software?: string }
-   * Query params:   chipid
+   * Path param:     chipid
    */
-  const chipid = req.query.chipid
+  const chipid = req.params.chipid
   // Simulate different scenarios based on chipid
   let response = { exists: false }
   
@@ -265,8 +265,8 @@ app.get('/api/v1/device/check', (req, res) => {
   res.send(response)
 })
 
-app.post('/api/v1/software/add', (req, res) => {
-  console.log('POST: /api/v1/software/add', req.body)
+app.post('/api/v1/device/add', (req, res) => {
+  console.log('POST: /api/v1/device/add', req.body)
   /* 
    * Description:    Register a new device
    * Authentication: Bearer token required

@@ -190,7 +190,7 @@ async function initializeApp() {
     if (!global.registered && global.ui.enableRegistration) {
       try {
         const anonymizedChipId = await global.anonymizeChipId()
-        const checkUrl = `${global.registerBaseUrl}api/v1/device/check?chipid=${anonymizedChipId}`
+        const checkUrl = `${global.registerBaseUrl}api/v1/device/check/${anonymizedChipId}`
         const checkResponse = await http.getJson(checkUrl, {
           headers: { 'X-API-Key': `${global.registerApiKey}` }
         })
