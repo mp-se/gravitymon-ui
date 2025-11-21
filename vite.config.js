@@ -13,8 +13,6 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   const apiKey = env.VITE_APP_REGISTER_APIKEY || ''
   const encodedApiKey = btoa(apiKey)
-  const baseUrl = env.VITE_APP_REGISTER_BASEURL || ''
-  const encodedBaseUrl = btoa(baseUrl)
 
   return {
   plugins: [
@@ -45,8 +43,7 @@ export default defineConfig(({ mode }) => {
     __APP_VERSION__: JSON.stringify(pkg.version),
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
     // Base64-encoded API key for security
-    __REGISTER_API_KEY__: JSON.stringify(encodedApiKey),
-    __REGISTER_BASE_URL__: JSON.stringify(encodedBaseUrl)
+    __REGISTER_API_KEY__: JSON.stringify(encodedApiKey)
   },
   build: {
     minify: 'terser',

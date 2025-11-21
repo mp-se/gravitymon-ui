@@ -6,7 +6,6 @@ export const useGlobalStore = defineStore('global', {
   state: () => {
     // Check if registration secrets are available
     const hasRegisterApiKey = typeof __REGISTER_API_KEY__ !== 'undefined' && __REGISTER_API_KEY__
-    const hasRegisterBaseUrl = typeof __REGISTER_BASE_URL__ !== 'undefined' && __REGISTER_BASE_URL__
 
     return {
       platform: '',
@@ -23,7 +22,7 @@ export const useGlobalStore = defineStore('global', {
         enableVoltageFragment: true,
         enableManualWifiEntry: true,
         enableScanForStrongestAp: true,
-        enableRegistration: hasRegisterApiKey && hasRegisterBaseUrl
+        enableRegistration: true,
       },
 
       feature: {
@@ -76,15 +75,7 @@ export const useGlobalStore = defineStore('global', {
       return key
     },
     registerBaseUrl() {
-      // eslint-disable-next-line no-undef
-      const encodedUrl = __REGISTER_BASE_URL__
-      if (!encodedUrl) {
-        logError('globalStore.registerBaseUrl()', 'Encoded base URL not defined')
-        return null
-      }
-      const url = atob(encodedUrl)
-      logDebug('globalStore.registerBaseUrl()', 'URL decoded (length: ' + url.length + ')')
-      return url
+      return 'https://api.gravitymon.com/'
     },
     isEsp8266() {
       return this.platform === 'ESP8266'
