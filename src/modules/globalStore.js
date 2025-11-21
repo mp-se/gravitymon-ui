@@ -4,9 +4,6 @@ import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
-    // Check if registration secrets are available
-    const hasRegisterApiKey = typeof __REGISTER_API_KEY__ !== 'undefined' && __REGISTER_API_KEY__
-
     return {
       platform: '',
 
@@ -22,7 +19,7 @@ export const useGlobalStore = defineStore('global', {
         enableVoltageFragment: true,
         enableManualWifiEntry: true,
         enableScanForStrongestAp: true,
-        enableRegistration: true,
+        enableRegistration: false,
       },
 
       feature: {
