@@ -12,9 +12,6 @@
   </div>
 
   <div class="row">
-    <BsMessage v-if="!chart" dismissable="false" message="" alert="danger">
-      Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection
-    </BsMessage>
     <canvas id="gravityChart"></canvas>
   </div>
 </template>
@@ -24,6 +21,8 @@ import { ref, onMounted } from 'vue'
 import { config } from '@/modules/pinia'
 import { logError } from '@mp-se/espframework-ui-components'
 import { evaluateFormula } from '@/modules/formula'
+import { Chart } from 'chart.js'
+import 'chart.js/auto'
 
 const chart = ref(null)
 
@@ -101,7 +100,7 @@ onMounted(() => {
   try {
     chart.value = new Chart(document.getElementById('gravityChart'), configChart.value)
   } catch (err) {
-    logError('GravityAnalysisView.onMounted()', err)
+    logError('GravityGraphFragment.onMounted()', err)
   }
 })
 </script>

@@ -19,7 +19,8 @@ export const useGlobalStore = defineStore('global', {
         enableVoltageFragment: true,
         enableManualWifiEntry: true,
         enableScanForStrongestAp: true,
-        enableRegistration: false,
+        enableDeviceRegistration: true,
+        enableCalibrationRegistration: true        
       },
 
       feature: {

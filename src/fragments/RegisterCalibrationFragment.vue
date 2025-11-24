@@ -8,29 +8,23 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="registrationModalLabel">Report usage</h1>
+          <h1 class="modal-title fs-5" id="registrationModalLabel">Report calibration data</h1>
         </div>
         <div class="modal-body">
           <p>
-            Do you want to help me determine what boards and configurations are used for this
-            project so I can better focus on those going forward. This is the data that will be sent
-            and its anonymized. The chipid is a hash (SHA256) of the actual chip ID to ensure
-            privacy.
+            Do you want to help to identify improvements connected to device calibration please report your data points. 
+            Its possible to report data multiple times if you improve your data points. This is the data that will be sent
+            and its anonymized. The chipid is a hash (SHA256) of the actual chip ID to ensure privacy.
           </p>
           <div class="mb-3">
             <label for="registrationData" class="form-label">Anonymous data:</label>
             <pre id="registrationData" class="border p-2 bg-light">{{ registrationDataJson }}</pre>
           </div>
           <p><b>Cancel</b> will close the dialog without action.</p>
-          <p>
-            <b>Ignore</b> will not prompt you again on this device, but you want this can be
-            triggered from the device settings page.
-          </p>
           <p><b>Send</b> will send the data above to the collection service.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" @click="cancel">Cancel</button>
-          <button type="button" class="btn btn-secondary" @click="ignore">Ignore</button>
           <button type="button" class="btn btn-primary" @click="send">Send</button>
         </div>
       </div>
@@ -41,15 +35,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { global } from '@/modules/pinia'
+import { global, config } from '@/modules/pinia'
 import { sharedHttpClient as http, logError, logInfo } from '@mp-se/espframework-ui-components'
-
-const props = defineProps({
-  software: {
-    type: String,
-    required: true
-  }
-})
 
 const emit = defineEmits(['close'])
 
@@ -59,45 +46,32 @@ onMounted(async () => {
   // Generate sample JSON data for registration
   const anonymizedChipId = await global.anonymizeChipId()
   const data = {
-    software: (props.software || '').toLowerCase(),
     chipid: anonymizedChipId,
-    version: (global.app_ver || 'unknown').toLowerCase(),
-    platform: (global.platform || 'unknown').toLowerCase(),
-    board: (global.board || 'unknown').toLowerCase()
+    formula: config.gravity_formula,
+    gravity_unit: config.gravity_unit,
+    formula_calculation_data: []
   }
   registrationDataJson.value = JSON.stringify(data, null, 2)
+  console.log('Calibration data:', registrationDataJson.value)
+
+  registrationDataJson.value = registrationDataJson.value.replace('[]', JSON.stringify(config.formula_calculation_data, null, 0))
+  console.log('Calibration data:', registrationDataJson.value)
+
+  data.formula_calculation_data = config.formula_calculation_data
+  console.log('Calibration data:', JSON.stringify(data, null, 2))
 })
 
 const cancel = () => {
   emit('close') // Just close the dialog
 }
 
-const ignore = async () => {
-  global.clearMessages()
-  logInfo('RegisterDeviceFragment.ignore()', 'Marking device as registered without sending data')
-  global.disabled = true
-
-  try {
-    // Mark as registered and close modal
-    await http.postJson('api/config', { registered: true })
-    global.registered = true
-  } catch (error) {
-    logError('RegisterDeviceFragment.ignore()', 'Failed to mark as registered:', error)
-    global.messageError = 'Failed to update registration status'
-  } finally {
-    global.disabled = false
-  }
-
-  emit('close')
-}
-
 const send = async () => {
   global.clearMessages()
-  logInfo('RegisterDeviceFragment.send()', 'Sending device registration')
+  logInfo('RegisterCalibrationFragment.send()', 'Sending calibration data')
   global.disabled = true
 
   try {
-    const addUrl = `${global.registerBaseUrl}api/v1/device/add`
+    const addUrl = `${global.registerBaseUrl}api/v1/calibration/add`
     const response = await http.postJson(addUrl, JSON.parse(registrationDataJson.value), {
       headers: {
         'X-API-Key': `${global.registerApiKey}`,
@@ -106,9 +80,7 @@ const send = async () => {
     })
 
     if (response) {
-      await http.postJson('api/config', { registered: true })
-      global.registered = true
-      global.messageSuccess = 'Device registered successfully!'
+      global.messageSuccess = 'Calibration data reported successfully!'
     } else {
       global.messageError = 'Registration failed. Please try again.'
     }
@@ -119,15 +91,15 @@ const send = async () => {
 
     if (status === 401) {
       global.messageError =
-        'Registration failed: API key has been revoked. Please update to a newer software version to register.'
+        'Reporting failed: API key has been revoked. Please update to a newer software version to report data.'
     } else if (status === 429) {
       global.messageError =
-        'Registration failed: Registration API is currently unavailable, please try again later.'
+        'Reporting failed: Registration API is currently unavailable, please try again later.'
     } else if (status === 500) {
-      global.messageError = 'Registration failed: Internal server error, please try again later.'
+      global.messageError = 'Reporting failed: Internal server error, please try again later.'
     } else {
-      logError('RegisterDeviceFragment.send()', 'Registration error:', error)
-      global.messageError = 'An error occurred during registration.'
+      logError('RegisterCalibrationFragment.send()', 'Reporting error:', error)
+      global.messageError = 'An error occurred during reporting.'
     }
   } finally {
     global.disabled = false
@@ -144,5 +116,12 @@ const send = async () => {
 }
 .modal-backdrop {
   z-index: 1040;
+}
+
+#registrationData {
+  overflow: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 300px; /* Optional: limit height if needed */
 }
 </style>

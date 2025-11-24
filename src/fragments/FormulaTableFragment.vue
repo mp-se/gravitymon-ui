@@ -59,12 +59,18 @@ const data = ref([])
 const maxDeviation = ref({ o1: 0, o2: 0, o3: 0, o4: 0 })
 
 onMounted(() => {
+  // Ensure expressions is an array with at least 4 elements
+  if (!expressions.value || !Array.isArray(expressions.value) || expressions.value.length < 4) {
+    console.error('FormulaTableFragment.onMounted()', 'Invalid expressions data')
+    return
+  }
+
   config.formula_calculation_data.forEach((d) => {
     if (d.a > 0) {
-      const o1 = calculate(expressions.value['1'], d.a)
-      const o2 = calculate(expressions.value['2'], d.a)
-      const o3 = calculate(expressions.value['3'], d.a)
-      const o4 = calculate(expressions.value['4'], d.a)
+      const o1 = calculate(expressions.value[0] || '', d.a)
+      const o2 = calculate(expressions.value[1] || '', d.a)
+      const o3 = calculate(expressions.value[2] || '', d.a)
+      const o4 = calculate(expressions.value[3] || '', d.a)
 
       const o1d = Math.abs(o1 - d.g)
       const o2d = Math.abs(o2 - d.g)

@@ -13,11 +13,6 @@
   </div>
 
   <div class="row">
-    <p></p>
-
-    <BsMessage v-if="!chart" dismissable="false" message="" alert="danger">
-      Unable to load chart.js from https://cdn.jsdelivr.net, check your internet connection
-    </BsMessage>
     <canvas id="formulaChart"></canvas>
   </div>
 </template>
@@ -27,6 +22,8 @@ import { ref, onMounted } from 'vue'
 import { config } from '@/modules/pinia'
 import { logError } from '@mp-se/espframework-ui-components'
 import { evaluateFormula } from '@/modules/formula'
+import { Chart } from 'chart.js'
+import 'chart.js/auto'
 
 const chart = ref(null)
 
@@ -120,32 +117,38 @@ const configChart = ref({
 onMounted(() => {
   // TODO: ChartJS does not render if i just copy the result, figure out why...
 
-  if (expressions.value['1'] != '') {
-    evaluateFormula(expressions.value['1']).forEach((p) => {
+  // Ensure expressions is an array with at least 4 elements
+  if (!expressions.value || !Array.isArray(expressions.value) || expressions.value.length < 4) {
+    logError('FormulaGraphFragment.onMounted()', 'Invalid expressions data')
+    return
+  }
+
+  if (expressions.value[0] && expressions.value[0] != '') {
+    evaluateFormula(expressions.value[0]).forEach((p) => {
       chartDataOrder1.value.push(p)
     })
   } else {
     dataSetChart.value.datasets[1].hidden = true
   }
 
-  if (expressions.value['2'] != '') {
-    evaluateFormula(expressions.value['2']).forEach((p) => {
+  if (expressions.value[1] && expressions.value[1] != '') {
+    evaluateFormula(expressions.value[1]).forEach((p) => {
       chartDataOrder2.value.push(p)
     })
   } else {
     dataSetChart.value.datasets[2].hidden = true
   }
 
-  if (expressions.value['3'] != '') {
-    evaluateFormula(expressions.value['3']).forEach((p) => {
+  if (expressions.value[2] && expressions.value[2] != '') {
+    evaluateFormula(expressions.value[2]).forEach((p) => {
       chartDataOrder3.value.push(p)
     })
   } else {
     dataSetChart.value.datasets[3].hidden = true
   }
 
-  if (expressions.value['4'] != '') {
-    evaluateFormula(expressions.value['4']).forEach((p) => {
+  if (expressions.value[3] && expressions.value[3] != '') {
+    evaluateFormula(expressions.value[3]).forEach((p) => {
       chartDataOrder4.value.push(p)
     })
   } else {

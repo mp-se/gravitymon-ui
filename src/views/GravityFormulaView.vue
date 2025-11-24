@@ -154,6 +154,14 @@
           >
             Create formula</button
           >&nbsp;
+          <button v-if="global.ui.enableCalibrationRegistration"
+            @click.prevent="openRegisterModal"
+            type="button"
+            class="btn btn-secondary w-2"
+            :disabled="global.disabled"
+          >
+            Report calibration data</button
+          >&nbsp;
         </div>
       </div>
 
@@ -180,6 +188,12 @@
       v-if="renderComponent && expressions != null && formulaOutput == 3"
       :expressions="expressions"
     ></FormulaGraphFragment>
+
+    <RegisterCalibrationFragment
+      v-if="showRegisterModal"
+      @close="closeRegisterModal"
+    />
+
   </div>
 </template>
 
@@ -198,6 +212,8 @@ import { validateFormula } from '@/modules/formula'
 import { gravityToSG } from '@mp-se/espframework-ui-components'
 import { useTimers } from '@mp-se/espframework-ui-components'
 
+const showRegisterModal = ref(true)
+
 const { createInterval } = useTimers()
 const polling = ref(null)
 const angle = ref({ last: 0, average: 0, sum: 0, count: 0 })
@@ -213,6 +229,14 @@ const formulaOutputOptions = ref([
   { label: 'Table', value: 2 },
   { label: 'Graph', value: 3 }
 ])
+
+function openRegisterModal() {
+  showRegisterModal.value = true
+}
+
+function closeRegisterModal() {
+  showRegisterModal.value = false
+}
 
 function clearAverage() {
   angle.value.last = 0
@@ -282,7 +306,7 @@ const createFormula = () => {
     }
   }
 
-  expressions.value = res
+  expressions.value = Object.values(res)
   forceRerender()
 }
 

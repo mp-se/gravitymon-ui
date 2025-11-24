@@ -187,7 +187,7 @@ async function initializeApp() {
     }
 
     // Step 6: Check device registration status
-    if (!global.registered && global.ui.enableRegistration) {
+    if (!global.registered && global.ui.enableDeviceRegistration) {
       try {
         const anonymizedChipId = await global.anonymizeChipId()
         const checkUrl = `${global.registerBaseUrl}api/v1/device/check/${anonymizedChipId}`
@@ -211,7 +211,7 @@ async function initializeApp() {
     global.initialized = true
 
     // Trigger register modal if device is not registered
-    if (!global.registered && global.ui.enableRegistration) {
+    if (!global.registered && global.ui.enableDeviceRegistration) {
       showRegisterModal.value = true
     }
   } catch (error) {

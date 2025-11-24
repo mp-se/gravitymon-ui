@@ -82,7 +82,7 @@
           />
         </div>
 
-        <template v-if="global.ui.enableRegistration">
+        <template v-if="global.ui.enableDeviceRegistration">
           <div class="col-md-12">
             <hr />
           </div>
@@ -160,7 +160,7 @@
             &nbsp;Restore factory defaults
           </button>
 
-          <template v-if="global.ui.enableRegistration">
+          <template v-if="global.ui.enableDeviceRegistration">
             &nbsp;
             <button
               @click.prevent="reportUsage"
