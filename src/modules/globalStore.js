@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { logInfo, logDebug, logError } from '@mp-se/espframework-ui-components'
 import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
+import SHA256 from 'crypto-js/sha256'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
@@ -95,25 +96,15 @@ export const useGlobalStore = defineStore('global', {
     },
     // Helper function to anonymize chip_id using SHA-256 hash
     async anonymizeChipId() {
+      logInfo('globalStore.anonymizeChipId()', this.chip_id)
       if (!this.chip_id || this.chip_id === 'unknown') return 'unknown'
-
-      try {
-        const encoder = new TextEncoder()
-        const data = encoder.encode(this.chip_id)
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-        const hashArray = Array.from(new Uint8Array(hashBuffer))
-        const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
-        return hashHex
-      } catch (error) {
-        logError('globalStore.anonymizeChipId()', 'Failed to anonymize chip_id:', error)
-        return 'unknown'
-      }
+      return SHA256(this.chip_id).toString()
     },
     async load() {
       try {
         logInfo('globalStore.load()', 'Fetching /api/feature')
         const json = await http.getJson('api/feature')
-        logDebug('globalStore.load()', json)
+        logInfo('globalStore.load()', json)
 
         this.chip_id = json.chip_id.toLowerCase()
         this.board = json.board.toUpperCase()

@@ -212,7 +212,7 @@ import { validateFormula } from '@/modules/formula'
 import { gravityToSG } from '@mp-se/espframework-ui-components'
 import { useTimers } from '@mp-se/espframework-ui-components'
 
-const showRegisterModal = ref(true)
+const showRegisterModal = ref(false)
 
 const { createInterval } = useTimers()
 const polling = ref(null)
