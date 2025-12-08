@@ -211,7 +211,7 @@ async function initializeApp() {
     global.initialized = true
 
     // Trigger register modal if device is not registered
-    if (!global.registered && global.ui.enableDeviceRegistration) {
+    if (!global.registered && global.ui.enableDeviceRegistration && status.wifi_setup == false) {
       showRegisterModal.value = true
     }
   } catch (error) {

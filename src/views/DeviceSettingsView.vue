@@ -97,7 +97,7 @@
               @click.prevent="checkReported"
               type="button"
               class="btn btn-secondary"
-              :disabled="global.disabled"
+              :disabled="global.disabled || status.wifi_setup == true"
             >
               <span
                 class="spinner-border spinner-border-sm"
@@ -166,7 +166,7 @@
               @click.prevent="reportUsage"
               type="button"
               class="btn btn-secondary"
-              :disabled="global.disabled"
+              :disabled="global.disabled || status.wifi_setup == true"
             >
               <span
                 class="spinner-border spinner-border-sm"
@@ -192,7 +192,7 @@
 <script setup>
 import { ref } from 'vue'
 import { BsInputReadonly, validateCurrentForm } from '@mp-se/espframework-ui-components'
-import { global, config } from '@/modules/pinia'
+import { global, status, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logError, logInfo } from '@mp-se/espframework-ui-components'
 import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'

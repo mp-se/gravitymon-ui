@@ -158,7 +158,7 @@
             @click.prevent="openRegisterModal"
             type="button"
             class="btn btn-secondary w-2"
-            :disabled="global.disabled"
+            :disabled="global.disabled || status.wifi_setup == true"
           >
             Report calibration data</button
           >&nbsp;
