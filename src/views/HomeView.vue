@@ -26,7 +26,7 @@
       <div class="row gy-4">
         <div
           class="col-md-4"
-          v-if="status.self_check.gravity_formula && status.wifi_setup == false"
+          v-if="status.self_check.gravity_formula && status.wifi_setup == false && status.gravity !== undefined"
         >
           <BsCard header="Measurement" color="info" title="Gravity">
             <p class="text-center">
@@ -57,7 +57,8 @@
           v-if="
             status.self_check.gyro_calibration &&
             status.self_check.gyro_connected &&
-            status.wifi_setup == false
+            status.wifi_setup == false && 
+            status.angle !== undefined
           "
         >
           <BsCard header="Measurement" color="info" title="Angle">
@@ -74,7 +75,7 @@
           v-if="
             status.self_check.gyro_calibration &&
             status.self_check.gyro_connected &&
-            status.wifi_setup == false
+            status.wifi_setup == false && status.angle !== undefined
           "
         >
           <BsCard header="Measurement" color="info" title="Average Angle">
@@ -108,7 +109,7 @@
           </BsCard>
         </div>
 
-        <div class="col-md-4" v-if="status.self_check.temp_connected && status.wifi_setup == false">
+        <div class="col-md-4" v-if="status.self_check.temp_connected && status.wifi_setup == false && status.temp !== undefined">
           <BsCard header="Measurement" color="info" title="Temperature">
             <p class="text-center">{{ status.temp }} °{{ status.temp_unit }}</p>
           </BsCard>
@@ -123,7 +124,7 @@
           </BsCard>
         </div>
 
-        <div class="col-md-4" v-if="status.self_check.battery_level">
+        <div class="col-md-4" v-if="status.self_check.battery_level && status.battery !== undefined">
           <BsCard header="Measurement" color="info" title="Battery">
             <p class="text-center">{{ status.battery }} V</p>
           </BsCard>

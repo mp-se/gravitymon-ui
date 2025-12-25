@@ -218,7 +218,7 @@ export var featureData = {
   app_build: 'gitrev',
   hardware: 'ispindel',
   firmware_file: 'firmware.bin',
-  registered: false,
+  registered: true,
 
   // Feature flags
   ble: true,
