@@ -95,7 +95,7 @@
   />
 
   <router-view v-if="global.initialized" />
-  <BsFooter v-if="global.initialized" text="(c) 2021-2025 Magnus Persson" />
+  <BsFooter v-if="global.initialized" text="(c) 2021-2026 Magnus Persson" />
 </template>
 
 <script setup>
