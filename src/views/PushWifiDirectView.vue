@@ -73,9 +73,9 @@ import { global, config } from '@/modules/pinia'
 const save = async () => {
   if (!validateCurrentForm()) return
 
-  if(config.use_wifi_direct) {
-    if(config.wifi_direct_ssid === '' || config.wifi_direct_pass === '') {
-      global.messageError = "SSID and Password are required when using wifi direct"
+  if (config.use_wifi_direct) {
+    if (config.wifi_direct_ssid === '' || config.wifi_direct_pass === '') {
+      global.messageError = 'SSID and Password are required when using wifi direct'
       return
     }
   }

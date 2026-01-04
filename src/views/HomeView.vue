@@ -258,7 +258,7 @@ const polling = ref(null)
 const flag = ref(false)
 const angle = ref({ average: 0, sum: 0, count: 0 })
 const newVersion = ref({ new: false, ver: '' })
-const { sleep_mode } = storeToRefs(status)  
+const { sleep_mode } = storeToRefs(status)
 
 watch(flag, async () => {
   try {
@@ -269,8 +269,11 @@ watch(flag, async () => {
 })
 
 watch(sleep_mode, () => {
-  logDebug('HomeView.watch(sleep_mode)', `sleep_mode changed to ${sleep_mode.value}, flag: ${flag.value}`)
-  if(flag.value !== sleep_mode.value){
+  logDebug(
+    'HomeView.watch(sleep_mode)',
+    `sleep_mode changed to ${sleep_mode.value}, flag: ${flag.value}`
+  )
+  if (flag.value !== sleep_mode.value) {
     flag.value = sleep_mode.value
   }
 })
