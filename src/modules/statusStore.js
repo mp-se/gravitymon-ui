@@ -73,19 +73,19 @@ export const useStatusStore = defineStore('status', {
       this.total_heap = Math.round(this.total_heap / 1024).toFixed(0)
       this.free_heap = Math.round(this.free_heap / 1024).toFixed(0)
 
-      if(this.battery !== undefined) {
+      if (this.battery !== undefined) {
         this.battery = (Math.round(this.battery * 100) / 100).toFixed(2)
       }
 
-      if(this.angle !== undefined) {
+      if (this.angle !== undefined) {
         this.angle = (Math.round(this.angle * 100) / 100).toFixed(2)
       }
 
-      if(this.temp !== undefined) {
+      if (this.temp !== undefined) {
         this.temp = (Math.round(this.temp * 100) / 100).toFixed(2)
       }
 
-      if(this.gravity !== undefined) {
+      if (this.gravity !== undefined) {
         if (this.gravity_unit === 'G')
           this.gravity = (Math.round(this.gravity * 10000) / 10000).toFixed(4)
         else this.gravity = (Math.round(this.gravity * 100) / 100).toFixed(2)

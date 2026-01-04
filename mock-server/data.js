@@ -29,6 +29,9 @@ export var configData = {
   wifi_ssid2: '',
   wifi_pass: 'password',
   wifi_pass2: 'mypass',
+  wifi_direct_ssid: '',
+  wifi_direct_pass: '',
+  use_wifi_direct: false,
   // Push - Generic
   token: 'mytoken1',
   token2: 'mytoken2',

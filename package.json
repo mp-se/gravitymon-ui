@@ -1,6 +1,6 @@
 {
   "name": "gravitymon-ui",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -27,6 +27,7 @@
     "@fullhuman/postcss-purgecss": "^7.0.2",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/eslint-config-prettier": "^10.2.0",
+    "baseline-browser-mapping": "^2.9.11",
     "cors": "^2.8.5",
     "cssnano": "^7.1.1",
     "eslint": "^9.21.0",

@@ -14,6 +14,7 @@ import DeviceWifi2View from '@/views/DeviceWifi2View.vue'
 import GravitySettingsView from '@/views/GravitySettingsView.vue'
 import GravityFormulaView from '@/views/GravityFormulaView.vue'
 import PushSettingsView from '@/views/PushSettingsView.vue'
+import PushWifiDirectView from '@/views/PushWifiDirectView.vue'
 import PushHttpPost1View from '@/views/PushHttpPost1View.vue'
 import PushHttpPost2View from '@/views/PushHttpPost2View.vue'
 import PushHttpGetView from '@/views/PushHttpGetView.vue'
@@ -82,6 +83,11 @@ const routes = [
     path: '/push/settings',
     name: 'push-settings',
     component: PushSettingsView
+  },
+  {
+    path: '/push/wifi-direct',
+    name: 'push-wifi-direct',
+    component: PushWifiDirectView
   },
   {
     path: '/push/http-post1',
@@ -219,6 +225,11 @@ const items = ref([
         label: 'Settings',
         badge: badge.pushSettingBadge,
         path: '/push/settings'
+      },
+      {
+        label: 'WiFi Direct',
+        badge: badge.pushWifiDirectBadge,
+        path: '/push/wifi-direct'
       },
       {
         label: 'HTTP Post 1',

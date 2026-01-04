@@ -101,6 +101,10 @@ export function pushSettingBadge() {
   return 0
 }
 
+export function pushWifiDirectBadge() {
+  return pushTargetCount() === 0 ? 1 : 0
+}
+
 export function pushHttpPost1Badge() {
   return pushTargetCount() === 0 ? 1 : 0
 }

@@ -12,9 +12,10 @@
         </div>
         <div class="modal-body">
           <p>
-            Do you want to help to identify improvements connected to device calibration please report your data points. 
-            Its possible to report data multiple times if you improve your data points. This is the data that will be sent
-            and its anonymized. The chipid is a hash (SHA256) of the actual chip ID to ensure privacy.
+            Do you want to help to identify improvements connected to device calibration please
+            report your data points. Its possible to report data multiple times if you improve your
+            data points. This is the data that will be sent and its anonymized. The chipid is a hash
+            (SHA256) of the actual chip ID to ensure privacy.
           </p>
           <div class="mb-3">
             <label for="registrationData" class="form-label">Anonymous data:</label>
@@ -54,7 +55,10 @@ onMounted(async () => {
   registrationDataJson.value = JSON.stringify(data, null, 2)
   console.log('Calibration data:', registrationDataJson.value)
 
-  registrationDataJson.value = registrationDataJson.value.replace('[]', JSON.stringify(config.formula_calculation_data, null, 0))
+  registrationDataJson.value = registrationDataJson.value.replace(
+    '[]',
+    JSON.stringify(config.formula_calculation_data, null, 0)
+  )
   console.log('Calibration data:', registrationDataJson.value)
 
   data.formula_calculation_data = config.formula_calculation_data

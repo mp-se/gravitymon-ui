@@ -154,7 +154,8 @@
           >
             Create formula</button
           >&nbsp;
-          <button v-if="global.ui.enableCalibrationRegistration"
+          <button
+            v-if="global.ui.enableCalibrationRegistration"
             @click.prevent="openRegisterModal"
             type="button"
             class="btn btn-secondary w-2"
@@ -189,11 +190,7 @@
       :expressions="expressions"
     ></FormulaGraphFragment>
 
-    <RegisterCalibrationFragment
-      v-if="showRegisterModal"
-      @close="closeRegisterModal"
-    />
-
+    <RegisterCalibrationFragment v-if="showRegisterModal" @close="closeRegisterModal" />
   </div>
 </template>
 
