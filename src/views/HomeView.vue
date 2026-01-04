@@ -249,6 +249,7 @@ import { ref, watch, onMounted, onBeforeMount } from 'vue'
 import { status, global, config } from '@/modules/pinia'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 import { useTimers, useFetch } from '@mp-se/espframework-ui-components'
+import { storeToRefs } from 'pinia'
 
 const { createInterval, createTimeout } = useTimers()
 const { managedFetch } = useFetch()
@@ -257,12 +258,20 @@ const polling = ref(null)
 const flag = ref(false)
 const angle = ref({ average: 0, sum: 0, count: 0 })
 const newVersion = ref({ new: false, ver: '' })
+const { sleep_mode } = storeToRefs(status)  
 
 watch(flag, async () => {
   try {
     await config.setSleepMode(flag.value)
   } catch (err) {
     logError('HomeView.setSleepMode()', err)
+  }
+})
+
+watch(sleep_mode, () => {
+  logDebug('HomeView.watch(sleep_mode)', `sleep_mode changed to ${sleep_mode.value}, flag: ${flag.value}`)
+  if(flag.value !== sleep_mode.value){
+    flag.value = sleep_mode.value
   }
 })
 
