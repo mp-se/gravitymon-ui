@@ -74,7 +74,7 @@ export const useGlobalStore = defineStore('global', {
       return key
     },
     registerBaseUrl() {
-      return 'https://api.gravitymon.com/'
+      return import.meta.env.VITE_APP_REGISTER_BASEURL || 'https://api.gravitymon.com/'
     },
     isEsp8266() {
       return this.platform === 'ESP8266'

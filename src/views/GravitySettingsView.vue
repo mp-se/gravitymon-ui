@@ -49,7 +49,7 @@
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.gyro_moving_threashold"
-            label="Gyro moving threashold"
+            label="Gyro moving threshold"
             min="50"
             max="1000"
             width="4"
