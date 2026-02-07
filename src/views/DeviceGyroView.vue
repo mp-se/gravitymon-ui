@@ -87,6 +87,23 @@
             &nbsp;Restart device</button
           >&nbsp;
 
+          <template v-if="config.gyro_type == 1">
+            <button
+              @click.prevent="clearCalibration()"
+              type="button"
+              class="btn btn-secondary"
+              :disabled="global.disabled || !isGyroCalibrated()"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+                v-show="global.disabled"
+              ></span>
+              &nbsp;Clear calibration</button
+            >&nbsp;
+          </template>
+
           <button
             @click="calibrate"
             type="button"
@@ -193,6 +210,16 @@ const ispindel = () => {
     }
     global.disabled = false
   })()
+}
+
+const clearCalibration = async () => {
+  config.gyro_calibration_data.ax = 0
+  config.gyro_calibration_data.ay = 0
+  config.gyro_calibration_data.az = 0
+  config.gyro_calibration_data.gx = 0
+  config.gyro_calibration_data.gy = 0
+  config.gyro_calibration_data.gz = 0
+  await config.saveAll()
 }
 
 const calibrate = async () => {
