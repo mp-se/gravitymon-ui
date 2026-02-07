@@ -117,21 +117,7 @@ export const useConfigStore = defineStore('config', {
 
       for (const key in this.$state) {
         if (!key.startsWith('$')) {
-          if (key === 'gyro_calibration_data') {
-            dest[key] = []
-            for (var i in this.$state[key]) {
-              dest[key][i] = this.$state[key][i]
-            }
-          } else if (key === 'formula_calculation_data') {
-            dest[key] = []
-            for (i in this.$state[key]) {
-              dest[key][i] = {}
-              dest[key][i].a = this.$state[key][i].a
-              dest[key][i].g = this.$state[key][i].g
-            }
-          } else {
-            dest[key] = this[key]
-          }
+          dest[key] = this[key]
         }
       }
 
