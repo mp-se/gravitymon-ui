@@ -80,6 +80,19 @@
           ></BsInputRadio>
         </div>
         <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.temp_adjustment_value"
+            :unit="config.temp_unit"
+            label="Temperature adjustment"
+            min="-20"
+            max="20"
+            step=".01"
+            width="4"
+            help="Adjustment value for the temperature reading"
+            :disabled="global.disabled"
+          ></BsInputNumber>
+        </div>
+        <div class="col-md-6">
           <BsInputSwitch
             v-model="config.gyro_temp"
             label="Gyro temperature"
@@ -128,9 +141,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config, status } from '@/modules/pinia'
+import { storeToRefs } from 'pinia'
 
 const tempsensorResolutionOptions = ref([
   { label: '0.5°C (93 ms)', value: 9 },
@@ -145,6 +159,25 @@ const disableDs18b20 = computed(() => {
 
 const voltage = computed(() => {
   return status.battery + ' V'
+})
+
+const { charging_pin_enabled, storage_sleep } = storeToRefs(config)
+
+onMounted(() => {
+  if (config.storage_sleep && config.charging_pin_enabled) {
+    global.messageWarning(
+      'Storage sleep and charging pin mode are both enabled, if you want to use the charging pin mode it is recommended to disable storage sleep to avoid conflicts'
+    )
+    config.storage_sleep = false
+  }
+})
+
+watch(storage_sleep, () => {
+  if (storage_sleep.value) charging_pin_enabled.value = false
+})
+
+watch(charging_pin_enabled, () => {
+  if (charging_pin_enabled.value) storage_sleep.value = false
 })
 
 const save = async () => {
