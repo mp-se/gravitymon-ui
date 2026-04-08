@@ -1,3 +1,10 @@
+<!--
+  Copyright (c) 2021-2026 Magnus Persson
+  https://github.com/mp-se/gravitymon | https://github.com/mp-se/gravitymon-ui
+
+  Licensed under the GNU General Public License v3.0 (GPL v3) for open source use,
+  or a Commercial License for proprietary use. See LICENSE and LICENSE_COMMERCIAL.
+-->
 <template>
   <div class="container">
     <p></p>
@@ -9,21 +16,70 @@
       of this software is copied from the iSpindle project.
     </p>
 
-    <p class="h4">MIT License</p>
+    <p class="fw-normal">
+      Copyright &copy; 2021&ndash;2026 Magnus &mdash;
+      <a href="https://github.com/mp-se/gravitymon" target="_blank">github.com/mp-se/gravitymon</a> and
+      <a href="https://github.com/mp-se/gravitymon-ui" target="_blank">github.com/mp-se/gravitymon-ui</a>
+    </p>
+
+    <hr />
+    <p class="h4">Dual License</p>
 
     <p class="fw-normal">
-      Permission is hereby granted, free of charge, to any person obtaining a copy of this software
-      and associated documentation files (the "Software"), to deal in the Software without
-      restriction, including without limitation the rights to use, copy, modify, merge, publish,
-      distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
-      Software is furnished to do so, subject to the following conditions: The copyright notice and
-      this permission notice shall be included in all copies or substantial portions of the
-      Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-      INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-      PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
-      ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-      ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-      SOFTWARE.
+      This software is available under two licenses. You must choose the one that applies to your
+      use case:
+    </p>
+
+    <div class="card mb-3">
+      <div class="card-header fw-bold">License A &mdash; GPL v3 (Open Source)</div>
+      <div class="card-body">
+        <p class="card-text">Use this license if you:</p>
+        <ul>
+          <li>Use, study, or modify the software for personal or non-commercial purposes</li>
+          <li>Distribute the software and <strong>all your modifications as open source</strong> under GPL v3</li>
+          <li>
+            Are an individual hobbyist selling <strong>&le;&nbsp;100&nbsp;units per calendar year</strong>
+            and publish your full source code under GPL v3
+          </li>
+        </ul>
+        <p class="card-text">
+          <strong>Obligation:</strong> You must publish your full source code under GPL v3.<br />
+          Full license text:
+          <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">gnu.org/licenses/gpl-3.0</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header fw-bold">License B &mdash; Commercial License</div>
+      <div class="card-body">
+        <p class="card-text">You must obtain a Commercial License if you:</p>
+        <ul>
+          <li>Distribute this software in a product <strong>without</strong> releasing your source code under GPL v3</li>
+          <li>Are a company or business entity distributing any quantity</li>
+          <li>Are an individual distributing <strong>&gt;&nbsp;100&nbsp;units per calendar year</strong></li>
+          <li>Sell on marketplaces (AliExpress, Amazon, eBay, etc.)</li>
+        </ul>
+        <p class="card-text">
+          For licensing inquiries, contact the author via
+          <a href="https://github.com/mp-se" target="_blank">github.com/mp-se</a>.
+        </p>
+      </div>
+    </div>
+
+    <hr />
+    <p class="h5">Attribution</p>
+    <p class="fw-normal">
+      Under both licenses, all &ldquo;Copyright &copy; Magnus&rdquo; notices must remain intact in
+      source code, documentation, and this About screen.
+    </p>
+
+    <p class="h5">No Warranty</p>
+    <p class="fw-normal">
+      THIS SOFTWARE IS PROVIDED &ldquo;AS IS&rdquo;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+      PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+      LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
     </p>
   </div>
 </template>
