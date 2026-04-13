@@ -359,12 +359,26 @@ describe('GravityFormulaView (interaction tests)', () => {
 
 describe('GravityFormulaView (action tests)', () => {
   beforeEach(() => vi.clearAllMocks())
-  const stubs = { BsMessage: true, BsInputText: true, BsInputNumber: true, BsInputRadio: true, BsDropdown: true, BsProgress: true, GravityGraphFragment: true, FormulaFragment: true, FormulaGraphFragment: true, FormulaTableFragment: true, RegisterCalibrationFragment: true }
+  const stubs = {
+    BsMessage: true,
+    BsInputText: true,
+    BsInputNumber: true,
+    BsInputRadio: true,
+    BsDropdown: true,
+    BsProgress: true,
+    GravityGraphFragment: true,
+    FormulaFragment: true,
+    FormulaGraphFragment: true,
+    FormulaTableFragment: true,
+    RegisterCalibrationFragment: true
+  }
   it('save calls config.saveAll when form is valid', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     await wrapper.vm.save()
     const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
@@ -373,15 +387,20 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     expect(() => wrapper.vm.clearAverage()).not.toThrow()
   })
   it('clearAverage resets angle values to zero', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
-    wrapper.vm.angle.sum = 50; wrapper.vm.angle.count = 5
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
+    wrapper.vm.angle.sum = 50
+    wrapper.vm.angle.count = 5
     wrapper.vm.clearAverage()
     expect(wrapper.vm.angle.sum).toBe(0)
     expect(wrapper.vm.angle.count).toBe(0)
@@ -390,7 +409,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     wrapper.vm.openRegisterModal()
     expect(wrapper.vm.showRegisterModal).toBe(true)
   })
@@ -398,7 +419,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     wrapper.vm.openRegisterModal()
     wrapper.vm.closeRegisterModal()
     expect(wrapper.vm.showRegisterModal).toBe(false)
@@ -408,7 +431,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     wrapper.vm.formulaSelectCallback('tilt*0.02')
     expect(config.gravity_formula).toBe('tilt*0.02')
   })
@@ -417,7 +442,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
     const { status } = await import('@/modules/pinia')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     await wrapper.vm.refresh()
     expect(status.getGyro).toHaveBeenCalled()
   })
@@ -426,7 +453,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     wrapper.vm.angle.last = 45
     wrapper.vm.angle.sum = 100
     wrapper.vm.angle.count = 5
@@ -442,7 +471,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     wrapper.vm.openRegisterModal()
     expect(wrapper.vm.showRegisterModal).toBe(true)
   })
@@ -451,7 +482,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     wrapper.vm.showRegisterModal = true
     wrapper.vm.closeRegisterModal()
     expect(wrapper.vm.showRegisterModal).toBe(false)
@@ -461,7 +494,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     const initialValue = wrapper.vm.renderComponent
     // forceRerender sets to false, then to true, so check it was toggled
     expect(initialValue).toBe(true) // Default is true
@@ -472,7 +507,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     await wrapper.vm.save()
     expect(validateCurrentForm).toHaveBeenCalled()
   })
@@ -481,7 +518,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     wrapper.vm.angle.last = 45.5
     wrapper.vm.angle.sum = 100.0
     wrapper.vm.angle.count = 5
@@ -498,7 +537,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     const testFormula = 'y=1+2*x'
     wrapper.vm.formulaSelectCallback(testFormula)
     expect(config.gravity_formula).toBe(testFormula)
@@ -508,20 +549,22 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const { config, status } = await import('@/modules/pinia')
+    const { config } = await import('@/modules/pinia')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(true)
     config.formula_calculation_data = [
-      { a: 20, g: 1.000 },
-      { a: 30, g: 1.050 },
-      { a: 40, g: 1.100 }
+      { a: 20, g: 1.0 },
+      { a: 30, g: 1.05 },
+      { a: 40, g: 1.1 }
     ]
     config.gravity_unit = 'G'
-    
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     await wrapper.vm.createFormula()
-    
+
     expect(wrapper.vm.formulaOptions.length).toBeGreaterThan(0)
     expect(wrapper.vm.expressions).not.toBeNull()
   })
@@ -531,13 +574,15 @@ describe('GravityFormulaView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(false)
-    
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     const initialExpressions = wrapper.vm.expressions
     await wrapper.vm.createFormula()
-    
+
     expect(wrapper.vm.expressions).toBe(initialExpressions)
   })
 
@@ -546,15 +591,17 @@ describe('GravityFormulaView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
     const { status } = await import('@/modules/pinia')
-    
+
     status.getGyro = vi.fn(async () => ({
       success: true,
       data: { angle: 45.0 }
     }))
-    
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     await wrapper.vm.refresh()
-    
+
     expect(wrapper.vm.angle.last).toBe('45.00')
     expect(wrapper.vm.angle.count).toBeGreaterThan(0)
   })
@@ -564,15 +611,17 @@ describe('GravityFormulaView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
     const { status } = await import('@/modules/pinia')
-    
+
     status.getGyro = vi.fn(async () => ({
       success: false
     }))
-    
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     const initialCount = wrapper.vm.angle.count
     await wrapper.vm.refresh()
-    
+
     expect(wrapper.vm.angle.count).toBe(initialCount)
   })
 
@@ -581,16 +630,18 @@ describe('GravityFormulaView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
     const { status } = await import('@/modules/pinia')
-    
+
     status.getGyro = vi.fn(async () => ({
       success: true,
       data: { angle: 0 }
     }))
-    
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     const initialCount = wrapper.vm.angle.count
     await wrapper.vm.refresh()
-    
+
     expect(wrapper.vm.angle.count).toBe(initialCount)
   })
 
@@ -624,7 +675,9 @@ describe('GravityFormulaView (action tests)', () => {
     const { config } = await import('@/modules/pinia')
 
     vi.mocked(validateCurrentForm).mockReturnValueOnce(false)
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     await wrapper.vm.save()
     expect(config.saveAll).not.toHaveBeenCalled()
   })
@@ -638,13 +691,15 @@ describe('GravityFormulaView (action tests)', () => {
 
     vi.mocked(validateCurrentForm).mockReturnValue(true)
     config.formula_calculation_data = [
-      { a: 20, g: 1.000 },
-      { a: 30, g: 1.050 },
-      { a: 40, g: 1.100 }
+      { a: 20, g: 1.0 },
+      { a: 30, g: 1.05 },
+      { a: 40, g: 1.1 }
     ]
     config.gravity_unit = 'P'
 
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
     await wrapper.vm.createFormula()
 
     expect(wrapper.vm.expressions).not.toBeNull()
@@ -660,8 +715,22 @@ describe('GravityFormulaView (action tests)', () => {
     config.gravity_unit = 'P'
 
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-      props: ['modelValue', 'label', 'disabled', 'maxlength', 'badge', 'help', 'pattern', 'min', 'max', 'step', 'width', 'options'],
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      props: [
+        'modelValue',
+        'label',
+        'disabled',
+        'maxlength',
+        'badge',
+        'help',
+        'pattern',
+        'min',
+        'max',
+        'step',
+        'width',
+        'options'
+      ],
       emits: ['update:modelValue']
     }
     const wrapper = mount(GravityFormulaView, {
@@ -680,8 +749,10 @@ describe('GravityFormulaView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
-    const wrapper = mount(GravityFormulaView, { global: { plugins: [createTestingPinia()], stubs } })
-    
+    const wrapper = mount(GravityFormulaView, {
+      global: { plugins: [createTestingPinia()], stubs }
+    })
+
     expect(wrapper.vm.formulaOutputOptions.length).toBe(4)
     expect(wrapper.vm.formulaOutputOptions[0].label).toBe('Current')
     expect(wrapper.vm.formulaOutputOptions[1].label).toBe('Formula')
@@ -697,12 +768,14 @@ describe('GravityFormulaView (action tests)', () => {
     global.disabled = false
 
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
       props: ['modelValue', 'disabled', 'label', 'help', 'min', 'max', 'step', 'width', 'unit'],
       emits: ['update:modelValue']
     }
     const radioStub = {
-      template: '<input type="radio" :value="modelValue" @change="$emit(\'update:modelValue\', \'0\')" />',
+      template:
+        '<input type="radio" :value="modelValue" @change="$emit(\'update:modelValue\', \'0\')" />',
       props: ['modelValue', 'options', 'disabled', 'label', 'help'],
       emits: ['update:modelValue']
     }
@@ -724,8 +797,12 @@ describe('GravityFormulaView (action tests)', () => {
         }
       }
     })
-    for (const el of wrapper.findAll('input:not([type="radio"])')) { await el.trigger('input') }
-    for (const el of wrapper.findAll('input[type="radio"]')) { await el.trigger('change') }
+    for (const el of wrapper.findAll('input:not([type="radio"])')) {
+      await el.trigger('input')
+    }
+    for (const el of wrapper.findAll('input[type="radio"]')) {
+      await el.trigger('change')
+    }
     expect(wrapper.find('form').exists()).toBe(true)
   })
 
@@ -734,13 +811,28 @@ describe('GravityFormulaView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: GravityFormulaView } = await import('../GravityFormulaView.vue')
     const radioStub = {
-      template: '<input type="radio" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)" />',
+      template:
+        '<input type="radio" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)" />',
       props: ['modelValue', 'options', 'label', 'disabled'],
       emits: ['update:modelValue']
     }
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-      props: ['modelValue', 'label', 'disabled', 'maxlength', 'badge', 'help', 'pattern', 'min', 'max', 'step', 'width', 'options'],
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      props: [
+        'modelValue',
+        'label',
+        'disabled',
+        'maxlength',
+        'badge',
+        'help',
+        'pattern',
+        'min',
+        'max',
+        'step',
+        'width',
+        'options'
+      ],
       emits: ['update:modelValue']
     }
     const wrapper = mount(GravityFormulaView, {

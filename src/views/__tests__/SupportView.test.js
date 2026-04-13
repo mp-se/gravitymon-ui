@@ -12,8 +12,8 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
   sharedHttpClient: {
     get: vi.fn(),
     post: vi.fn(),
-    filesystemRequest: vi.fn(),
-  },
+    filesystemRequest: vi.fn()
+  }
 }))
 
 describe('SupportView (interaction tests)', () => {
@@ -24,8 +24,8 @@ describe('SupportView (interaction tests)', () => {
   it('mounts without error', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.exists()).toBe(true)
   })
@@ -33,8 +33,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays support section header', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Links and device logs')
   })
@@ -42,8 +42,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays support message text', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('support')
   })
@@ -51,8 +51,8 @@ describe('SupportView (interaction tests)', () => {
   it('has link to github', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const links = wrapper.findAll('a')
     const githubLink = links.find((l) => l.attributes('href').includes('github.com'))
@@ -62,8 +62,8 @@ describe('SupportView (interaction tests)', () => {
   it('has link to homebrewtalk', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const links = wrapper.findAll('a')
     const homebrewLink = links.find((l) => l.attributes('href').includes('homebrewtalk'))
@@ -73,8 +73,8 @@ describe('SupportView (interaction tests)', () => {
   it('has link to gravitymon.com', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const links = wrapper.findAll('a')
     const gravitymonLink = links.find((l) => l.attributes('href').includes('gravitymon.com'))
@@ -84,8 +84,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays platform information', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Platform')
   })
@@ -93,8 +93,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays gyro information', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Gyro')
   })
@@ -102,8 +102,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays firmware version information', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Firmware')
   })
@@ -111,8 +111,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays hardware information', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Hardware')
   })
@@ -120,8 +120,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays user interface version information', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('User interface')
   })
@@ -129,8 +129,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays bluetooth feature status', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Bluetooth')
   })
@@ -138,8 +138,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays filter feature status', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Filter')
   })
@@ -147,8 +147,8 @@ describe('SupportView (interaction tests)', () => {
   it('all external links open in new tab', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const links = wrapper.findAll('a[target="_blank"]')
     expect(links.length).toBeGreaterThan(0)
@@ -157,8 +157,8 @@ describe('SupportView (interaction tests)', () => {
   it('has proper styling classes on links', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const links = wrapper.findAll('a')
     const styledLinks = links.filter((l) => l.classes().includes('link-primary'))
@@ -168,8 +168,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays device information section', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const badges = wrapper.findAll('.badge')
     expect(badges.length).toBeGreaterThan(0)
@@ -178,8 +178,8 @@ describe('SupportView (interaction tests)', () => {
   it('displays velocity feature status', () => {
     const wrapper = mount(SupportView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Velocity')
   })
@@ -191,8 +191,7 @@ describe('SupportView (action tests)', () => {
     vi.clearAllMocks()
   })
 
-  const mountView = () =>
-    mount(SupportView, { global: { stubs: {} } })
+  const mountView = () => mount(SupportView, { global: { stubs: {} } })
 
   it('viewLogs fetches log files and displays content', async () => {
     http.filesystemRequest
@@ -200,7 +199,7 @@ describe('SupportView (action tests)', () => {
       .mockResolvedValueOnce({ success: true, text: 'entry1\nentry2' })
 
     const wrapper = mountView()
-    const btn = wrapper.findAll('button').find(b => b.text().includes('View device logs'))
+    const btn = wrapper.findAll('button').find((b) => b.text().includes('View device logs'))
     await btn.trigger('click')
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
@@ -216,7 +215,7 @@ describe('SupportView (action tests)', () => {
       .mockResolvedValueOnce({ success: false })
 
     const wrapper = mountView()
-    const btn = wrapper.findAll('button').find(b => b.text().includes('View device logs'))
+    const btn = wrapper.findAll('button').find((b) => b.text().includes('View device logs'))
     await btn.trigger('click')
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
@@ -230,7 +229,7 @@ describe('SupportView (action tests)', () => {
       .mockResolvedValueOnce({ success: true })
 
     const wrapper = mountView()
-    const btn = wrapper.findAll('button').find(b => b.text().includes('Erase device logs'))
+    const btn = wrapper.findAll('button').find((b) => b.text().includes('Erase device logs'))
     await btn.trigger('click')
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
@@ -245,7 +244,7 @@ describe('SupportView (action tests)', () => {
       .mockResolvedValueOnce({ success: false })
 
     const wrapper = mountView()
-    const btn = wrapper.findAll('button').find(b => b.text().includes('Erase device logs'))
+    const btn = wrapper.findAll('button').find((b) => b.text().includes('Erase device logs'))
     await btn.trigger('click')
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
@@ -255,7 +254,7 @@ describe('SupportView (action tests)', () => {
 
   it('hardwareScan button exists and is clickable', () => {
     const wrapper = mountView()
-    const btn = wrapper.findAll('button').find(b => b.text().includes('Hardware scan'))
+    const btn = wrapper.findAll('button').find((b) => b.text().includes('Hardware scan'))
     expect(btn).toBeDefined()
     expect(btn.exists()).toBe(true)
   })
@@ -263,7 +262,7 @@ describe('SupportView (action tests)', () => {
   it('toggle error help button shows error help section', async () => {
     const wrapper = mountView()
     expect(wrapper.text()).not.toContain('400 - Bad request')
-    const btn = wrapper.findAll('button').find(b => b.text().includes('Toggle error help'))
+    const btn = wrapper.findAll('button').find((b) => b.text().includes('Toggle error help'))
     await btn.trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.text()).toContain('400 - Bad request')
@@ -271,7 +270,7 @@ describe('SupportView (action tests)', () => {
 
   it('toggle error help button hides section on second click', async () => {
     const wrapper = mountView()
-    const btn = wrapper.findAll('button').find(b => b.text().includes('Toggle error help'))
+    const btn = wrapper.findAll('button').find((b) => b.text().includes('Toggle error help'))
     await btn.trigger('click')
     await wrapper.vm.$nextTick()
     await btn.trigger('click')
@@ -373,7 +372,10 @@ describe('SupportView (action tests)', () => {
     http.filesystemRequest.mockResolvedValueOnce({ success: true })
     await wrapper.vm.removeLegacy()
     expect(http.filesystemRequest).toHaveBeenCalledWith({ command: 'del', file: '/config.json' })
-    expect(http.filesystemRequest).toHaveBeenCalledWith({ command: 'del', file: '/gravitymon.json' })
+    expect(http.filesystemRequest).toHaveBeenCalledWith({
+      command: 'del',
+      file: '/gravitymon.json'
+    })
   })
 
   it('removeLegacy shows success message when both files deleted', async () => {
@@ -393,7 +395,7 @@ describe('SupportView (action tests)', () => {
       data: 'Gyro: MPU6050\nTemp: BME280'
     }))
     await wrapper.vm.hardwareScan()
-    await new Promise(resolve => setTimeout(resolve, 10))
+    await new Promise((resolve) => setTimeout(resolve, 10))
     expect(wrapper.vm.logData).toContain('Gyro')
   })
 
@@ -403,7 +405,7 @@ describe('SupportView (action tests)', () => {
     wrapper.vm.logData = 'Old data'
     config.runHardwareScan = vi.fn(async () => ({ success: true, data: 'New' }))
     await wrapper.vm.hardwareScan()
-    await new Promise(resolve => setTimeout(resolve, 10))
+    await new Promise((resolve) => setTimeout(resolve, 10))
     // logData is cleared first
     expect(wrapper.vm.logData).not.toContain('Old data')
   })
@@ -411,10 +413,12 @@ describe('SupportView (action tests)', () => {
   it('hardwareScan disables UI during scan', async () => {
     const wrapper = mountView()
     const { global, config } = await import('@/modules/pinia')
-    config.runHardwareScan = vi.fn(async () => (global.disabled = false, { success: true, data: '' }))
+    config.runHardwareScan = vi.fn(
+      async () => ((global.disabled = false), { success: true, data: '' })
+    )
     global.disabled = false
     await wrapper.vm.hardwareScan()
-    await new Promise(resolve => setTimeout(resolve, 10))
+    await new Promise((resolve) => setTimeout(resolve, 10))
     expect(global.disabled).toBe(false) // Re-enabled after scan
   })
 
@@ -423,7 +427,7 @@ describe('SupportView (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     config.runHardwareScan = vi.fn(async () => ({ success: false }))
     await wrapper.vm.hardwareScan()
-    await new Promise(resolve => setTimeout(resolve, 10))
+    await new Promise((resolve) => setTimeout(resolve, 10))
     expect(wrapper.vm.logData).toBe('')
   })
 

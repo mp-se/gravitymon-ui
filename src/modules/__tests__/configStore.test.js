@@ -18,8 +18,8 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
     postJson: vi.fn(),
     request: vi.fn(),
     restart: vi.fn(),
-    getErrorString: vi.fn(c => `Error ${c}`)
-  },
+    getErrorString: vi.fn((c) => `Error ${c}`)
+  }
 }))
 
 // Mock pinia module with minimal implementation to avoid circular dependencies
@@ -36,7 +36,7 @@ vi.mock('@/modules/pinia', () => {
       messageWarning: ''
     },
     saveConfigState: vi.fn(),
-    getConfigChanges: vi.fn(() => ({})),
+    getConfigChanges: vi.fn(() => ({}))
     // We don't need the exports that use useConfigStore here
   }
 })
@@ -55,7 +55,7 @@ describe('configStore', () => {
     useConfigStore = module.useConfigStore
     store = useConfigStore()
     vi.clearAllMocks()
-    
+
     // Reset global mock state
     global.messageSuccess = ''
     global.messageError = ''
@@ -81,9 +81,9 @@ describe('configStore', () => {
     store.temp_unit = 'F'
     store.formula_calibration_temp = 20
     store.temp_adjustment_value = 1
-    
+
     store.convertTemp()
-    
+
     expect(store.internal_temp_unit).toBe('F')
     expect(store.formula_calibration_temp).toBe(68)
     expect(store.temp_adjustment_value).toBe(1.8)
@@ -93,9 +93,9 @@ describe('configStore', () => {
     store.internal_temp_unit = 'F'
     store.formula_calibration_temp = 68
     store.temp_adjustment_value = 1.8
-    
+
     store.convertTempToC()
-    
+
     expect(store.internal_temp_unit).toBe('C')
     expect(store.formula_calibration_temp).toBe(20)
     expect(store.temp_adjustment_value).toBe(1)
@@ -150,15 +150,18 @@ describe('configStore', () => {
 
   it('sendFormat handles format changes', async () => {
     getConfigChanges.mockReturnValue({
-      http_post_format_gravity: 'format1',
+      http_post_format_gravity: 'format1'
     })
     http.postJson.mockResolvedValue({ ok: true })
-    
+
     const result = await store.sendFormat()
     expect(result).toBe(true)
-    expect(http.postJson).toHaveBeenCalledWith('api/format', expect.objectContaining({
-      http_post_format_gravity: 'format1'
-    }))
+    expect(http.postJson).toHaveBeenCalledWith(
+      'api/format',
+      expect.objectContaining({
+        http_post_format_gravity: 'format1'
+      })
+    )
   })
 
   it('sendPushTest calls API', async () => {
@@ -190,9 +193,9 @@ describe('configStore', () => {
 
   it('restart handles success', async () => {
     store.mdns = 'gravitymon'
-    http.restart.mockResolvedValueOnce({ 
-      success: true, 
-      json: { status: true, message: 'Restarting' } 
+    http.restart.mockResolvedValueOnce({
+      success: true,
+      json: { status: true, message: 'Restarting' }
     })
     await store.restart()
     expect(global.messageSuccess).toContain('Restarting')
@@ -207,7 +210,10 @@ describe('configStore', () => {
 
   it('restart handles json error message', async () => {
     store.mdns = 'gravitymon'
-    http.restart.mockResolvedValueOnce({ success: true, json: { status: false, message: 'Bad state' } })
+    http.restart.mockResolvedValueOnce({
+      success: true,
+      json: { status: false, message: 'Bad state' }
+    })
     await store.restart()
     expect(global.messageError).toBe('Bad state')
   })
@@ -221,7 +227,7 @@ describe('configStore', () => {
   it('saveAll handles success', async () => {
     getConfigChanges.mockReturnValue({})
     http.postJson.mockResolvedValue({ ok: true })
-    
+
     await store.saveAll()
     expect(global.messageSuccess).toBe('Configuration has been saved to device')
     expect(saveConfigState).toHaveBeenCalled()
@@ -486,7 +492,10 @@ describe('configStore', () => {
     vi.spyOn(store, 'sendWifiScan').mockResolvedValueOnce(true)
     vi.spyOn(store, 'getWifiScanStatus')
       .mockResolvedValueOnce({ success: true, data: { status: true } })
-      .mockResolvedValueOnce({ success: true, data: { status: false, success: true, networks: ['X'] } })
+      .mockResolvedValueOnce({
+        success: true,
+        data: { status: false, success: true, networks: ['X'] }
+      })
     vi.useFakeTimers()
     const resultPromise = store.runWifiScan()
     await vi.runAllTimersAsync()
@@ -534,4 +543,3 @@ describe('configStore', () => {
     expect(result.success).toBe(true)
   })
 })
-

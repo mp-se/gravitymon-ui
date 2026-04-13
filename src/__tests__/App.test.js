@@ -202,7 +202,7 @@ describe('App.vue (function tests)', () => {
     const wrapper = shallowMount(AppComponent, { global: { plugins: [createTestingPinia()] } })
     wrapper.vm.ping()
     await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 10))
+    await new Promise((r) => setTimeout(r, 10))
 
     expect(httpMock.ping).toHaveBeenCalled()
     expect(status.connected).toBe(true)
@@ -236,7 +236,10 @@ describe('App.vue (initializeApp tests)', () => {
     // Mock the spinner dialog
     mockShowModal = vi.fn()
     mockClose = vi.fn()
-    vi.spyOn(document, 'querySelector').mockReturnValue({ showModal: mockShowModal, close: mockClose })
+    vi.spyOn(document, 'querySelector').mockReturnValue({
+      showModal: mockShowModal,
+      close: mockClose
+    })
 
     const pinia = await import('@/modules/pinia')
     globalStore = pinia.global
@@ -261,13 +264,6 @@ describe('App.vue (initializeApp tests)', () => {
   afterEach(() => {
     vi.restoreAllMocks()
   })
-
-  const mountApp = () => {
-    const { createTestingPinia } = require('../tests/testUtils')
-    const { shallowMount } = require('@vue/test-utils')
-    const AppComponent = require('../App.vue').default
-    return shallowMount(AppComponent, { global: { plugins: [createTestingPinia()] } })
-  }
 
   it('initializeApp succeeds and sets global.initialized to true', async () => {
     const { shallowMount } = await import('@vue/test-utils')
@@ -382,7 +378,9 @@ describe('App.vue (initializeApp tests)', () => {
   it('initializeApp handles registration check exception and continues', async () => {
     globalStore.registered = false
     globalStore.ui = { ...globalStore.ui, enableDeviceRegistration: true }
-    http.getJson = vi.fn(async () => { throw new Error('network') })
+    http.getJson = vi.fn(async () => {
+      throw new Error('network')
+    })
     const { shallowMount } = await import('@vue/test-utils')
     const { default: AppComponent } = await import('../App.vue')
     const wrapper = shallowMount(AppComponent, { global: { plugins: [createTestingPinia()] } })
@@ -392,7 +390,9 @@ describe('App.vue (initializeApp tests)', () => {
   })
 
   it('initializeApp sets messageError on unexpected exception', async () => {
-    globalStore.load = vi.fn(async () => { throw new Error('unexpected') })
+    globalStore.load = vi.fn(async () => {
+      throw new Error('unexpected')
+    })
     const { shallowMount } = await import('@vue/test-utils')
     const { default: AppComponent } = await import('../App.vue')
     const wrapper = shallowMount(AppComponent, { global: { plugins: [createTestingPinia()] } })
@@ -406,7 +406,7 @@ describe('App.vue (initializeApp tests)', () => {
     const { default: AppComponent } = await import('../App.vue')
     const wrapper = shallowMount(AppComponent, { global: { plugins: [createTestingPinia()] } })
     await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 10))
+    await new Promise((r) => setTimeout(r, 10))
     // initializeApp should have been called — initialized should now be true
     expect(globalStore.initialized).toBe(true)
   })
@@ -416,7 +416,7 @@ describe('App.vue (initializeApp tests)', () => {
     const { shallowMount } = await import('@vue/test-utils')
     const { default: AppComponent } = await import('../App.vue')
     shallowMount(AppComponent, { global: { plugins: [createTestingPinia()] } })
-    await new Promise(r => setTimeout(r, 10))
+    await new Promise((r) => setTimeout(r, 10))
     // auth should NOT have been called since we skip initializeApp
     expect(http.auth).not.toHaveBeenCalled()
   })

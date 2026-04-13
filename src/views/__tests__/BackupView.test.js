@@ -12,8 +12,8 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
   sharedHttpClient: {
     get: vi.fn(),
     post: vi.fn(),
-    postJson: vi.fn(() => Promise.resolve({ success: true })),
-  },
+    postJson: vi.fn(() => Promise.resolve({ success: true }))
+  }
 }))
 
 vi.unmock('@/modules/pinia')
@@ -23,7 +23,7 @@ describe('BackupView (comprehensive tests)', () => {
 
   beforeEach(() => {
     setActivePinia(createPinia())
-    
+
     // Mock URL and Blob for download test
     if (!window.URL) {
       window.URL = { createObjectURL: vi.fn(), revokeObjectURL: vi.fn() }
@@ -31,7 +31,7 @@ describe('BackupView (comprehensive tests)', () => {
       window.URL.createObjectURL = vi.fn(() => 'mock-url')
       window.URL.revokeObjectURL = vi.fn()
     }
-    
+
     wrapper = mount(BackupView, {
       global: {
         stubs: {
@@ -39,9 +39,9 @@ describe('BackupView (comprehensive tests)', () => {
             template: '<input type="file" @change="$emit(\'change\', $event)" />'
           },
           BsProgress: true,
-          BsMessage: true,
-        },
-      },
+          BsMessage: true
+        }
+      }
     })
   })
 
@@ -56,23 +56,25 @@ describe('BackupView (comprehensive tests)', () => {
 
   it('handles file selection change', async () => {
     const input = wrapper.find('input[type="file"]')
-    
+
     // In VTU, for file inputs, we should set the element's files property directly
     // and then trigger the change event.
     Object.defineProperty(input.element, 'files', {
       value: [new File([''], 'test.txt')],
       writable: false
     })
-    
+
     await input.trigger('change')
-    
+
     expect(wrapper.vm.fileSelected).toBe(true)
   })
 
   it('triggers backup download with correct data', async () => {
     config.mdns = 'test-device'
-    config.toJson = vi.fn(() => JSON.stringify({ mdns: 'test-device', http_post_format_gravity: '' }))
-    
+    config.toJson = vi.fn(() =>
+      JSON.stringify({ mdns: 'test-device', http_post_format_gravity: '' })
+    )
+
     const documentSpy = vi.spyOn(document, 'createElement')
     const clickSpy = vi.fn()
     const mockElement = {
@@ -81,7 +83,7 @@ describe('BackupView (comprehensive tests)', () => {
     }
     documentSpy.mockReturnValue(mockElement)
 
-    const backupButton = wrapper.findAll('button').find(b => b.text().includes('Create backup'))
+    const backupButton = wrapper.findAll('button').find((b) => b.text().includes('Create backup'))
     await backupButton.trigger('click')
 
     expect(config.toJson).toHaveBeenCalled()
@@ -92,16 +94,19 @@ describe('BackupView (comprehensive tests)', () => {
 
   it('handles restore with invalid format', async () => {
     const mockFileData = JSON.stringify({ meta: { software: 'Wrong' } })
-    
+
     const mockReader = {
-      readAsText: vi.fn(function() {
+      readAsText: vi.fn(function () {
         this.onload({ target: { result: mockFileData } })
       }),
-      addEventListener: vi.fn(function(event, cb) {
+      addEventListener: vi.fn(function (event, cb) {
         if (event === 'load') this.onload = cb
       })
     }
-    vi.stubGlobal('FileReader', vi.fn(() => mockReader))
+    vi.stubGlobal(
+      'FileReader',
+      vi.fn(() => mockReader)
+    )
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'test.txt')],
@@ -109,7 +114,7 @@ describe('BackupView (comprehensive tests)', () => {
     })
 
     await wrapper.find('form').trigger('submit')
-    
+
     expect(global.messageError).toBe('Unknown format, unable to process')
     getElementSpy.mockRestore()
   })
@@ -119,17 +124,20 @@ describe('BackupView (comprehensive tests)', () => {
       meta: { software: 'GravityMon', version: '2.2.0' },
       config: { mdns: 'restored-device', http_post_format_gravity: '' }
     }
-    
+
     const mockReader = {
-      readAsText: vi.fn(function() {
+      readAsText: vi.fn(function () {
         this.onload({ target: { result: JSON.stringify(validData) } })
       }),
-      addEventListener: vi.fn(function(event, cb) {
+      addEventListener: vi.fn(function (event, cb) {
         if (event === 'load') this.onload = cb
         if (event === 'error') this.onerror = cb
       })
     }
-    vi.stubGlobal('FileReader', vi.fn(() => mockReader))
+    vi.stubGlobal(
+      'FileReader',
+      vi.fn(() => mockReader)
+    )
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'test.txt')],
@@ -138,22 +146,25 @@ describe('BackupView (comprehensive tests)', () => {
 
     await wrapper.find('form').trigger('submit')
     await flushPromises()
-    
+
     expect(global.disabled).toBe(false)
     getElementSpy.mockRestore()
   })
 
   it('handles FileReader error', async () => {
     const mockReader = {
-      readAsText: vi.fn(function() {
+      readAsText: vi.fn(function () {
         this.onerror()
       }),
-      addEventListener: vi.fn(function(event, cb) {
+      addEventListener: vi.fn(function (event, cb) {
         if (event === 'error') this.onerror = cb
         if (event === 'load') this.onload = cb
       })
     }
-    vi.stubGlobal('FileReader', vi.fn(() => mockReader))
+    vi.stubGlobal(
+      'FileReader',
+      vi.fn(() => mockReader)
+    )
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'test.txt')],
@@ -161,7 +172,7 @@ describe('BackupView (comprehensive tests)', () => {
     })
 
     await wrapper.find('form').trigger('submit')
-    
+
     expect(global.messageError).toBe('Failed to read the backup file')
     getElementSpy.mockRestore()
   })
@@ -185,15 +196,18 @@ describe('BackupView (comprehensive tests)', () => {
 
   it('handles restore with invalid JSON', async () => {
     const mockReader = {
-      readAsText: vi.fn(function() {
+      readAsText: vi.fn(function () {
         this.onload({ target: { result: 'not valid json {{{' } })
       }),
-      addEventListener: vi.fn(function(event, cb) {
+      addEventListener: vi.fn(function (event, cb) {
         if (event === 'load') this.onload = cb
         if (event === 'error') this.onerror = cb
       })
     }
-    vi.stubGlobal('FileReader', vi.fn(() => mockReader))
+    vi.stubGlobal(
+      'FileReader',
+      vi.fn(() => mockReader)
+    )
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'backup.txt')],
@@ -210,18 +224,25 @@ describe('BackupView (comprehensive tests)', () => {
   it('handles restore with v2.0.0 format', async () => {
     const validData = {
       meta: { software: 'GravityMon', version: '2.0.0' },
-      config: { mdns: 'restored-v2', http_post_format_gravity: encodeURIComponent('{gravity}'), test_format: encodeURIComponent('{test}') }
+      config: {
+        mdns: 'restored-v2',
+        http_post_format_gravity: encodeURIComponent('{gravity}'),
+        test_format: encodeURIComponent('{test}')
+      }
     }
     const mockReader = {
-      readAsText: vi.fn(function() {
+      readAsText: vi.fn(function () {
         this.onload({ target: { result: JSON.stringify(validData) } })
       }),
-      addEventListener: vi.fn(function(event, cb) {
+      addEventListener: vi.fn(function (event, cb) {
         if (event === 'load') this.onload = cb
         if (event === 'error') this.onerror = cb
       })
     }
-    vi.stubGlobal('FileReader', vi.fn(() => mockReader))
+    vi.stubGlobal(
+      'FileReader',
+      vi.fn(() => mockReader)
+    )
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'backup.txt')],
@@ -271,10 +292,26 @@ describe('BackupView (comprehensive tests)', () => {
         'influxdb2-push': '',
         'mqtt-push': '',
         'formula-calculation-data': {
-          a1: 1, g1: 1.0, a2: 20, g2: 1.01, a3: 30, g3: 1.02,
-          a4: 40, g4: 1.03, a5: 50, g5: 1.04, a6: 60, g6: 1.05,
-          a7: 70, g7: 1.06, a8: 80, g8: 1.07, a9: 90, g9: 1.08,
-          a10: 100, g10: 1.09
+          a1: 1,
+          g1: 1.0,
+          a2: 20,
+          g2: 1.01,
+          a3: 30,
+          g3: 1.02,
+          a4: 40,
+          g4: 1.03,
+          a5: 50,
+          g5: 1.04,
+          a6: 60,
+          g6: 1.05,
+          a7: 70,
+          g7: 1.06,
+          a8: 80,
+          g8: 1.07,
+          a9: 90,
+          g9: 1.08,
+          a10: 100,
+          g10: 1.09
         },
         mdns: 'legacy-device'
       },
@@ -288,15 +325,18 @@ describe('BackupView (comprehensive tests)', () => {
     }
 
     const mockReader = {
-      readAsText: vi.fn(function() {
+      readAsText: vi.fn(function () {
         this.onload({ target: { result: JSON.stringify(v1Data) } })
       }),
-      addEventListener: vi.fn(function(event, cb) {
+      addEventListener: vi.fn(function (event, cb) {
         if (event === 'load') this.onload = cb
         if (event === 'error') this.onerror = cb
       })
     }
-    vi.stubGlobal('FileReader', vi.fn(() => mockReader))
+    vi.stubGlobal(
+      'FileReader',
+      vi.fn(() => mockReader)
+    )
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'backup.txt')],

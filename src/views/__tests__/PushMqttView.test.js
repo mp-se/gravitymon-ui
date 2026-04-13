@@ -125,7 +125,9 @@ describe('PushMqttView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     await wrapper.vm.save()
     const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
@@ -134,7 +136,9 @@ describe('PushMqttView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     await wrapper.vm.runTest()
     const { config } = await import('@/modules/pinia')
     expect(config.runPushTest).toHaveBeenCalled()
@@ -145,7 +149,9 @@ describe('PushMqttView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     wrapper.vm.mqttFormatCallback(encodeURIComponent('key|value'))
     expect(config.mqtt_format_gravity).not.toBeUndefined()
   })
@@ -154,7 +160,9 @@ describe('PushMqttView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     expect(() => wrapper.vm.renderFormat()).not.toThrow()
   })
 
@@ -164,7 +172,9 @@ describe('PushMqttView (action tests)', () => {
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const { global } = await import('@/modules/pinia')
     global.disabled = true
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     expect(wrapper.vm.pushDisabled).toBe(true)
   })
 
@@ -174,7 +184,9 @@ describe('PushMqttView (action tests)', () => {
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const { config } = await import('@/modules/pinia')
     config.use_wifi_direct = true
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     expect(wrapper.vm.pushDisabled).toBe(true)
   })
 
@@ -183,7 +195,9 @@ describe('PushMqttView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     wrapper.vm.mqttFormatCallback(encodeURIComponent('key|value'))
     expect(config.mqtt_format_gravity).toContain('|\n')
   })
@@ -194,7 +208,9 @@ describe('PushMqttView (action tests)', () => {
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const { config, global } = await import('@/modules/pinia')
     global.clearMessages()
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     await wrapper.vm.runTest()
     expect(config.runPushTest).toHaveBeenCalledWith({ push_format: 'mqtt_format_gravity' })
   })
@@ -207,7 +223,9 @@ describe('PushMqttView (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     vi.mocked(validateCurrentForm).mockReturnValue(false)
     config.saveAll = vi.fn()
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     await wrapper.vm.save()
     expect(config.saveAll).not.toHaveBeenCalled()
   })
@@ -219,7 +237,9 @@ describe('PushMqttView (action tests)', () => {
     const { global, config } = await import('@/modules/pinia')
     global.disabled = false
     config.use_wifi_direct = false
-    const wrapper = mount(PushMqttView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     expect(wrapper.vm.pushDisabled).toBe(false)
   })
 
@@ -235,17 +255,20 @@ describe('PushMqttView (action tests)', () => {
         plugins: [createTestingPinia()],
         stubs: {
           BsInputText: {
-            template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+            template:
+              '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
             props: ['modelValue', 'type', 'disabled'],
             emits: ['update:modelValue']
           },
           BsInputNumber: {
-            template: '<input type="number" :value="modelValue" @input="$emit(\'update:modelValue\', Number($event.target.value))" />',
+            template:
+              '<input type="number" :value="modelValue" @input="$emit(\'update:modelValue\', Number($event.target.value))" />',
             props: ['modelValue', 'disabled'],
             emits: ['update:modelValue']
           },
           BsInputTextAreaFormat: {
-            template: '<textarea :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)"></textarea>',
+            template:
+              '<textarea :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)"></textarea>',
             props: ['modelValue', 'disabled'],
             emits: ['update:modelValue']
           },
@@ -282,7 +305,8 @@ describe('PushMqttView (action tests)', () => {
           BsInputTextAreaFormat: true,
           BsDropdown: true,
           BsModal: {
-            template: '<button class="modal-emit" @click="$emit(\'update:modelValue\', \'test-render\')" />',
+            template:
+              '<button class="modal-emit" @click="$emit(\'update:modelValue\', \'test-render\')" />',
             props: ['modelValue', 'code', 'json', 'mqtt'],
             emits: ['update:modelValue']
           }
@@ -313,7 +337,16 @@ describe('PushMqttView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const wrapper = mount(PushMqttView, {
-      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true } }
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
+      }
     })
 
     mqttFormatRef.value = 'large'
@@ -346,7 +379,16 @@ describe('PushMqttView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const wrapper = mount(PushMqttView, {
-      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true } }
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
+      }
     })
 
     mqttFormatRef.value = 'small format'
@@ -378,7 +420,16 @@ describe('PushMqttView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const wrapper = mount(PushMqttView, {
-      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true } }
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
+      }
     })
 
     mqttFormatRef.value = 'x'.repeat(600)

@@ -185,9 +185,7 @@ describe('RegisterDeviceFragment (interaction tests)', () => {
 
 describe('RegisterDeviceFragment (action tests)', () => {
   beforeEach(() => vi.clearAllMocks())
-  const mountFrag = () => {
-    const { createTestingPinia } = require('../../tests/testUtils')
-  }
+
   it('ignore calls http.postJson and emits close', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
@@ -195,7 +193,10 @@ describe('RegisterDeviceFragment (action tests)', () => {
     const { sharedHttpClient: http } = await import('@mp-se/espframework-ui-components')
     http.postJson.mockResolvedValue({ success: true })
     const pinia = createTestingPinia()
-    const wrapper = mount(RegisterDeviceFragment, { props: { software: 'test' }, global: { plugins: [pinia] } })
+    const wrapper = mount(RegisterDeviceFragment, {
+      props: { software: 'test' },
+      global: { plugins: [pinia] }
+    })
     await wrapper.vm.ignore()
     expect(http.postJson).toHaveBeenCalledWith('api/config', { registered: true })
     expect(wrapper.emitted('close')).toBeTruthy()
@@ -208,7 +209,10 @@ describe('RegisterDeviceFragment (action tests)', () => {
     const { sharedHttpClient: http } = await import('@mp-se/espframework-ui-components')
     http.postJson.mockResolvedValue({ id: '123' })
     const pinia = createTestingPinia()
-    const wrapper = mount(RegisterDeviceFragment, { props: { software: 'test' }, global: { plugins: [pinia] } })
+    const wrapper = mount(RegisterDeviceFragment, {
+      props: { software: 'test' },
+      global: { plugins: [pinia] }
+    })
     await wrapper.vm.send()
     expect(wrapper.emitted('close')).toBeTruthy()
   })
@@ -220,7 +224,10 @@ describe('RegisterDeviceFragment (action tests)', () => {
     const { sharedHttpClient: http } = await import('@mp-se/espframework-ui-components')
     http.postJson.mockResolvedValue(null)
     const pinia = createTestingPinia()
-    const wrapper = mount(RegisterDeviceFragment, { props: { software: 'test' }, global: { plugins: [pinia] } })
+    const wrapper = mount(RegisterDeviceFragment, {
+      props: { software: 'test' },
+      global: { plugins: [pinia] }
+    })
     wrapper.vm.registrationDataJson = JSON.stringify({ software: 'test', chipid: 'anon' })
     await wrapper.vm.send()
     const { global: globalStore } = await import('@/modules/pinia')
@@ -234,7 +241,10 @@ describe('RegisterDeviceFragment (action tests)', () => {
     const { sharedHttpClient: http } = await import('@mp-se/espframework-ui-components')
     http.postJson.mockRejectedValue(new Error('HTTP 429: Too Many Requests'))
     const pinia = createTestingPinia()
-    const wrapper = mount(RegisterDeviceFragment, { props: { software: 'test' }, global: { plugins: [pinia] } })
+    const wrapper = mount(RegisterDeviceFragment, {
+      props: { software: 'test' },
+      global: { plugins: [pinia] }
+    })
     wrapper.vm.registrationDataJson = JSON.stringify({ software: 'test', chipid: 'anon' })
     await wrapper.vm.send()
     const { global: globalStore } = await import('@/modules/pinia')
@@ -248,7 +258,10 @@ describe('RegisterDeviceFragment (action tests)', () => {
     const { sharedHttpClient: http } = await import('@mp-se/espframework-ui-components')
     http.postJson.mockRejectedValue(new Error('HTTP 500: Internal Server Error'))
     const pinia = createTestingPinia()
-    const wrapper = mount(RegisterDeviceFragment, { props: { software: 'test' }, global: { plugins: [pinia] } })
+    const wrapper = mount(RegisterDeviceFragment, {
+      props: { software: 'test' },
+      global: { plugins: [pinia] }
+    })
     wrapper.vm.registrationDataJson = JSON.stringify({ software: 'test', chipid: 'anon' })
     await wrapper.vm.send()
     const { global: globalStore } = await import('@/modules/pinia')
@@ -262,7 +275,10 @@ describe('RegisterDeviceFragment (action tests)', () => {
     const { sharedHttpClient: http } = await import('@mp-se/espframework-ui-components')
     http.postJson.mockRejectedValue(new Error('unknown error'))
     const pinia = createTestingPinia()
-    const wrapper = mount(RegisterDeviceFragment, { props: { software: 'test' }, global: { plugins: [pinia] } })
+    const wrapper = mount(RegisterDeviceFragment, {
+      props: { software: 'test' },
+      global: { plugins: [pinia] }
+    })
     wrapper.vm.registrationDataJson = JSON.stringify({ software: 'test', chipid: 'anon' })
     await wrapper.vm.send()
     const { global: globalStore } = await import('@/modules/pinia')
@@ -276,7 +292,10 @@ describe('RegisterDeviceFragment (action tests)', () => {
     const { sharedHttpClient: http } = await import('@mp-se/espframework-ui-components')
     http.postJson.mockRejectedValue(new Error('network fail'))
     const pinia = createTestingPinia()
-    const wrapper = mount(RegisterDeviceFragment, { props: { software: 'test' }, global: { plugins: [pinia] } })
+    const wrapper = mount(RegisterDeviceFragment, {
+      props: { software: 'test' },
+      global: { plugins: [pinia] }
+    })
     await wrapper.vm.ignore()
     const { global: globalStore } = await import('@/modules/pinia')
     expect(globalStore.messageError).toBeTruthy()

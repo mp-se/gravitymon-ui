@@ -133,10 +133,9 @@ describe('PushSettingsView (interaction tests)', () => {
   })
 })
 
-
 describe('PushSettingsView (action tests)', () => {
   beforeEach(() => vi.clearAllMocks())
-  
+
   it('save calls config.saveAll when form is valid', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { shallowMount } = await import('@vue/test-utils')
@@ -436,7 +435,8 @@ describe('PushSettingsView (calculateBatteryLife tests)', () => {
     const { global } = await import('@/modules/pinia')
     global.platform = 'esp8266'
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
       props: ['modelValue', 'label', 'disabled', 'help', 'min', 'max', 'step', 'width', 'unit'],
       emits: ['update:modelValue']
     }
@@ -464,7 +464,8 @@ describe('PushSettingsView (calculateBatteryLife tests)', () => {
     const { default: View } = await import('../PushSettingsView.vue')
     const { createTestingPinia } = await import('../../tests/testUtils')
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
       props: ['modelValue', 'label', 'disabled', 'help'],
       emits: ['update:modelValue']
     }

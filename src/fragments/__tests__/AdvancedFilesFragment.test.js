@@ -149,27 +149,25 @@ describe('AdvancedFilesFragment (action tests)', () => {
       props,
       global: {
         plugins: [pinia],
-        stubs: { BsFileUpload: true, BsProgress: true, BsModalConfirm: true },
-      },
+        stubs: { BsFileUpload: true, BsProgress: true, BsModalConfirm: true }
+      }
     })
   }
 
   it('listFilesDelete calls filesystemRequest', async () => {
     http.filesystemRequest.mockResolvedValue({
       success: true,
-      text: JSON.stringify({ files: [{ file: '/config.json' }] }),
+      text: JSON.stringify({ files: [{ file: '/config.json' }] })
     })
     const wrapper = createWrapper({ type: 'fs' })
     await wrapper.vm.listFilesDelete()
-    expect(http.filesystemRequest).toHaveBeenCalledWith(
-      expect.objectContaining({ command: 'dir' })
-    )
+    expect(http.filesystemRequest).toHaveBeenCalledWith(expect.objectContaining({ command: 'dir' }))
   })
 
   it('listFilesDelete populates filesDelete from response', async () => {
     http.filesystemRequest.mockResolvedValue({
       success: true,
-      text: JSON.stringify({ files: [{ file: '/log.txt' }, { file: '/cfg.json' }] }),
+      text: JSON.stringify({ files: [{ file: '/log.txt' }, { file: '/cfg.json' }] })
     })
     const wrapper = createWrapper({ type: 'fs' })
     await wrapper.vm.listFilesDelete()
@@ -233,23 +231,27 @@ describe('AdvancedFilesFragment (SD type)', () => {
       props,
       global: {
         plugins: [pinia],
-        stubs: { BsFileUpload: true, BsProgress: true, BsModalConfirm: true },
-      },
+        stubs: { BsFileUpload: true, BsProgress: true, BsModalConfirm: true }
+      }
     })
   }
 
   it('listFilesDelete for SD type calls postJson', async () => {
     http.postJson.mockResolvedValue({
-      text: vi.fn().mockResolvedValue(JSON.stringify({ files: [{ file: '/sd/log.txt' }] })),
+      text: vi.fn().mockResolvedValue(JSON.stringify({ files: [{ file: '/sd/log.txt' }] }))
     })
     const wrapper = createWrapper({ type: 'sd' })
     await wrapper.vm.listFilesDelete()
-    expect(http.postJson).toHaveBeenCalledWith('api/sd', expect.objectContaining({ command: 'dir' }), expect.any(Object))
+    expect(http.postJson).toHaveBeenCalledWith(
+      'api/sd',
+      expect.objectContaining({ command: 'dir' }),
+      expect.any(Object)
+    )
   })
 
   it('listFilesDelete for SD type populates filesDelete', async () => {
     http.postJson.mockResolvedValue({
-      text: vi.fn().mockResolvedValue(JSON.stringify({ files: [{ file: '/sd/config.json' }] })),
+      text: vi.fn().mockResolvedValue(JSON.stringify({ files: [{ file: '/sd/config.json' }] }))
     })
     const wrapper = createWrapper({ type: 'sd' })
     await wrapper.vm.listFilesDelete()
@@ -258,12 +260,16 @@ describe('AdvancedFilesFragment (SD type)', () => {
 
   it('confirmDeleteCallback(true) for SD type calls postJson with del', async () => {
     http.postJson.mockResolvedValue({
-      text: vi.fn().mockResolvedValue(JSON.stringify({})),
+      text: vi.fn().mockResolvedValue(JSON.stringify({}))
     })
     const wrapper = createWrapper({ type: 'sd' })
     wrapper.vm.confirmDeleteFile = '/sd/to-delete.txt'
     await wrapper.vm.confirmDeleteCallback(true)
-    expect(http.postJson).toHaveBeenCalledWith('api/sd', expect.objectContaining({ command: 'del', file: '/sd/to-delete.txt' }), expect.any(Object))
+    expect(http.postJson).toHaveBeenCalledWith(
+      'api/sd',
+      expect.objectContaining({ command: 'del', file: '/sd/to-delete.txt' }),
+      expect.any(Object)
+    )
   })
 
   it('sendSecureDiskRequest handles postJson failure gracefully', async () => {
@@ -285,8 +291,8 @@ describe('AdvancedFilesFragment (upload edge cases)', () => {
       props,
       global: {
         plugins: [pinia],
-        stubs: { BsFileUpload: true, BsProgress: true, BsModalConfirm: true },
-      },
+        stubs: { BsFileUpload: true, BsProgress: true, BsModalConfirm: true }
+      }
     })
   }
 

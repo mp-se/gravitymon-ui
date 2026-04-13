@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { mount, shallowMount } from '@vue/test-utils'
 import HomeView from '../HomeView.vue'
 import { createTestingPinia } from '../../tests/testUtils'
-import { ref } from 'vue'
 
 describe('HomeView (smoke)', () => {
   it('mounts without error', () => {
@@ -24,7 +23,7 @@ describe('HomeView (action tests)', () => {
 
   it('covers various template branches including wifi_setup=true', async () => {
     const pinia = createTestingPinia()
-    const { status, global } = await import('@/modules/pinia')
+    const { status } = await import('@/modules/pinia')
 
     // Mock status with all features enabled/disabled combinations
     status.self_check = {
@@ -36,7 +35,7 @@ describe('HomeView (action tests)', () => {
       battery_level: true
     }
     status.wifi_setup = true // Trigger various wifi_setup false branches
-    status.gravity = 1.050
+    status.gravity = 1.05
     status.angle = 45.0
     status.temp = 20.0
     status.battery = 4.0
@@ -79,9 +78,9 @@ describe('HomeView (action tests)', () => {
     const { status } = await import('@/modules/pinia')
     status.wifi_setup = false
     status.self_check = {
-       gravity_formula: false, // Trigger line 130
-       push_targets: true,
-       gyro_connected: true
+      gravity_formula: false, // Trigger line 130
+      push_targets: true,
+      gyro_connected: true
     }
 
     const wrapper = mount(HomeView, {
@@ -176,14 +175,14 @@ describe('HomeView (action tests)', () => {
     const pinia = createTestingPinia()
     const wrapper = shallowMount(HomeView, { global: { plugins: [pinia] } })
     const { status } = await import('@/modules/pinia')
-    
+
     status.self_check = { gyro_moving: false }
     status.angle = 45.5
     status.load = vi.fn(async () => true)
-    
+
     wrapper.vm.angle = { average: 0, sum: 0, count: 0 }
     await wrapper.vm.refresh()
-    
+
     expect(wrapper.vm.angle.sum).toBe(45.5)
     expect(wrapper.vm.angle.count).toBe(1)
   })
@@ -192,14 +191,14 @@ describe('HomeView (action tests)', () => {
     const pinia = createTestingPinia()
     const wrapper = shallowMount(HomeView, { global: { plugins: [pinia] } })
     const { status } = await import('@/modules/pinia')
-    
+
     status.self_check = { gyro_moving: true }
     status.angle = 45.5
     status.load = vi.fn(async () => true)
-    
+
     wrapper.vm.angle = { average: 0, sum: 0, count: 0 }
     await wrapper.vm.refresh()
-    
+
     expect(wrapper.vm.angle.sum).toBe(0)
     expect(wrapper.vm.angle.count).toBe(0)
   })
@@ -347,7 +346,7 @@ describe('HomeView (action tests)', () => {
   it('refresh does not accumulate angle when status.load returns false', async () => {
     const pinia = createTestingPinia()
     const { status } = await import('@/modules/pinia')
-    status.sleep_mode = false  // ensure sleep_mode is defined before mount (prevents storeToRefs error)
+    status.sleep_mode = false // ensure sleep_mode is defined before mount (prevents storeToRefs error)
 
     const wrapper = shallowMount(HomeView, { global: { plugins: [pinia] } })
     status.load = vi.fn(async () => false)
@@ -368,7 +367,7 @@ describe('HomeView (action tests)', () => {
     const pinia = createTestingPinia()
     const { global: globalStore, status } = await import('@/modules/pinia')
     globalStore.app_ver = '99.0.0'
-    status.sleep_mode = false  // ensure sleep_mode is defined before mount
+    status.sleep_mode = false // ensure sleep_mode is defined before mount
 
     const wrapper = shallowMount(HomeView, { global: { plugins: [pinia] } })
     await vi.advanceTimersByTimeAsync(600)
@@ -383,7 +382,7 @@ describe('HomeView (action tests)', () => {
     const pinia = createTestingPinia()
     const { status } = await import('@/modules/pinia')
     status.wifi_setup = true
-    status.sleep_mode = false  // ensure sleep_mode is defined before mount
+    status.sleep_mode = false // ensure sleep_mode is defined before mount
 
     const wrapper = shallowMount(HomeView, { global: { plugins: [pinia] } })
     await wrapper.vm.$nextTick()

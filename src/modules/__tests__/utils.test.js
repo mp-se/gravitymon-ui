@@ -1,5 +1,15 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { applyTemplate, isGyroCalibrated, httpHeaderOptions, httpPostUrlOptions, httpPostFormatOptions, httpGetFormatOptions, influxdb2FormatOptions, mqttFormatOptions, httpGetUrlOptions } from '@/modules/utils'
+import {
+  applyTemplate,
+  isGyroCalibrated,
+  httpHeaderOptions,
+  httpPostUrlOptions,
+  httpPostFormatOptions,
+  httpGetFormatOptions,
+  influxdb2FormatOptions,
+  mqttFormatOptions,
+  httpGetUrlOptions
+} from '@/modules/utils'
 import { config, global } from '@/modules/pinia'
 
 describe('utils.applyTemplate', () => {
@@ -45,7 +55,7 @@ describe('utils.applyTemplate', () => {
   })
 
   it('handles gravity unit G (SG)', () => {
-    const status = { temp: 20, angle: 0, rssi: 0, gravity: 1.050, battery: 0 }
+    const status = { temp: 20, angle: 0, rssi: 0, gravity: 1.05, battery: 0 }
     const cfg = {
       mdns: 'test',
       id: '1',

@@ -292,7 +292,12 @@ describe('DeviceWifiView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: DeviceWifiView } = await import('../DeviceWifiView.vue')
-    const wrapper = mount(DeviceWifiView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsSelect: true, BsProgress: true } } })
+    const wrapper = mount(DeviceWifiView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsSelect: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
@@ -301,7 +306,12 @@ describe('DeviceWifiView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: DeviceWifiView } = await import('../DeviceWifiView.vue')
-    const wrapper = mount(DeviceWifiView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsSelect: true, BsProgress: true } } })
+    const wrapper = mount(DeviceWifiView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsSelect: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.restart()
     const { config } = await import('@/modules/pinia')
     expect(config.restart).toHaveBeenCalled()
@@ -368,16 +378,19 @@ describe('DeviceWifiView (action tests)', () => {
     const { default: DeviceWifiView } = await import('../DeviceWifiView.vue')
     const { global, config } = await import('@/modules/pinia')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(true)
     config.saveAll = vi.fn(async () => {})
     global.messageInfo = ''
-    
-    const wrapper = mount(DeviceWifiView, { 
-      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsSelect: true, BsProgress: true } } 
+
+    const wrapper = mount(DeviceWifiView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsSelect: true, BsProgress: true }
+      }
     })
     await wrapper.vm.save()
-    
+
     expect(global.messageInfo).toContain('WIFI')
     expect(global.messageInfo).toContain('restart')
   })
@@ -388,15 +401,18 @@ describe('DeviceWifiView (action tests)', () => {
     const { default: DeviceWifiView } = await import('../DeviceWifiView.vue')
     const { config } = await import('@/modules/pinia')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(false)
     config.saveAll = vi.fn()
-    
-    const wrapper = mount(DeviceWifiView, { 
-      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsSelect: true, BsProgress: true } } 
+
+    const wrapper = mount(DeviceWifiView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsSelect: true, BsProgress: true }
+      }
     })
     await wrapper.vm.save()
-    
+
     expect(config.saveAll).not.toHaveBeenCalled()
   })
 
@@ -405,7 +421,7 @@ describe('DeviceWifiView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: DeviceWifiView } = await import('../DeviceWifiView.vue')
     const { config } = await import('@/modules/pinia')
-    
+
     config.runWifiScan = vi.fn(async () => ({
       success: true,
       data: {
@@ -415,13 +431,16 @@ describe('DeviceWifiView (action tests)', () => {
         ]
       }
     }))
-    
-    const wrapper = mount(DeviceWifiView, { 
-      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsSelect: true, BsProgress: true } } 
+
+    const wrapper = mount(DeviceWifiView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsSelect: true, BsProgress: true }
+      }
     })
     await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 50))
-    
+    await new Promise((r) => setTimeout(r, 50))
+
     expect(config.runWifiScan).toHaveBeenCalled()
   })
 
@@ -430,16 +449,19 @@ describe('DeviceWifiView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: DeviceWifiView } = await import('../DeviceWifiView.vue')
     const { config } = await import('@/modules/pinia')
-    
+
     config.runWifiScan = vi.fn(async () => ({
       success: false
     }))
-    
-    const wrapper = mount(DeviceWifiView, { 
-      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsSelect: true, BsProgress: true } } 
+
+    mount(DeviceWifiView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsSelect: true, BsProgress: true }
+      }
     })
-    await new Promise(r => setTimeout(r, 50))
-    
+    await new Promise((r) => setTimeout(r, 50))
+
     expect(config.runWifiScan).toHaveBeenCalled()
   })
 
@@ -448,7 +470,7 @@ describe('DeviceWifiView (action tests)', () => {
     const { shallowMount } = await import('@vue/test-utils')
     const { default: DeviceWifiView } = await import('../DeviceWifiView.vue')
     const wrapper = shallowMount(DeviceWifiView, { global: { plugins: [createTestingPinia()] } })
-    
+
     // scanning should start true via onMounted
     expect(typeof wrapper.vm.scanning).toBeDefined()
   })
@@ -462,17 +484,32 @@ describe('DeviceWifiView (action tests)', () => {
     global.ui = { enableScanForStrongestAp: true }
 
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-      props: ['modelValue', 'type', 'disabled', 'maxlength', 'label', 'help', 'min', 'max', 'step', 'width', 'unit'],
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      props: [
+        'modelValue',
+        'type',
+        'disabled',
+        'maxlength',
+        'label',
+        'help',
+        'min',
+        'max',
+        'step',
+        'width',
+        'unit'
+      ],
       emits: ['update:modelValue']
     }
     const switchStub = {
-      template: '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
+      template:
+        '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
       props: ['modelValue', 'disabled', 'label', 'help'],
       emits: ['update:modelValue']
     }
     const selectStub = {
-      template: '<select :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option value="">opt</option></select>',
+      template:
+        '<select :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option value="">opt</option></select>',
       props: ['modelValue', 'disabled', 'options', 'label', 'help'],
       emits: ['update:modelValue']
     }
@@ -489,9 +526,15 @@ describe('DeviceWifiView (action tests)', () => {
       }
     })
     await wrapper.vm.$nextTick()
-    for (const el of wrapper.findAll('input:not([type="checkbox"])')) { await el.trigger('input') }
-    for (const el of wrapper.findAll('input[type="checkbox"]')) { await el.trigger('change') }
-    for (const el of wrapper.findAll('select')) { await el.trigger('change') }
+    for (const el of wrapper.findAll('input:not([type="checkbox"])')) {
+      await el.trigger('input')
+    }
+    for (const el of wrapper.findAll('input[type="checkbox"]')) {
+      await el.trigger('change')
+    }
+    for (const el of wrapper.findAll('select')) {
+      await el.trigger('change')
+    }
     expect(wrapper.find('form').exists()).toBe(true)
   })
 })

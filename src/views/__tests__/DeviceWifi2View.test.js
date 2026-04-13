@@ -24,7 +24,6 @@ describe('DeviceWifi2View (action tests)', () => {
   it('save sets messageInfo when form is valid', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { global, config } = await import('@/modules/pinia')
-    const { mockGlobalState } = await import('../../tests/testUtils')
     const { shallowMount } = await import('@vue/test-utils')
     const { default: View } = await import('../DeviceWifi2View.vue')
     global.messageInfo = ''
@@ -71,11 +70,16 @@ describe('DeviceWifi2View (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     config.wifi_ssid = ''
     config.wifi_ssid2 = ''
-    const wrapper = mount(View, { 
-      global: { 
+    const wrapper = mount(View, {
+      global: {
         plugins: [createTestingPinia()],
-        stubs: { BsMessage: { template: '<div><slot /></div>' }, BsInputText: true, BsInputNumber: true, BsInputSwitch: true }
-      } 
+        stubs: {
+          BsMessage: { template: '<div><slot /></div>' },
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('define at least one wifi network')
   })
@@ -87,11 +91,16 @@ describe('DeviceWifi2View (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     config.wifi_ssid = 'TestNetwork'
     config.wifi_ssid2 = ''
-    const wrapper = mount(View, { 
-      global: { 
+    const wrapper = mount(View, {
+      global: {
         plugins: [createTestingPinia()],
-        stubs: { BsMessage: { template: '<div><slot /></div>' }, BsInputText: true, BsInputNumber: true, BsInputSwitch: true }
-      } 
+        stubs: {
+          BsMessage: { template: '<div><slot /></div>' },
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true
+        }
+      }
     })
     expect(wrapper.text()).not.toContain('define at least one wifi network')
   })
@@ -103,11 +112,16 @@ describe('DeviceWifi2View (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     config.wifi_ssid = ''
     config.wifi_ssid2 = 'BackupNetwork'
-    const wrapper = mount(View, { 
-      global: { 
+    const wrapper = mount(View, {
+      global: {
         plugins: [createTestingPinia()],
-        stubs: { BsMessage: { template: '<div><slot /></div>' }, BsInputText: true, BsInputNumber: true, BsInputSwitch: true }
-      } 
+        stubs: {
+          BsMessage: { template: '<div><slot /></div>' },
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true
+        }
+      }
     })
     expect(wrapper.text()).not.toContain('define at least one wifi network')
   })
@@ -180,17 +194,20 @@ describe('DeviceWifi2View (action tests)', () => {
         stubs: {
           BsMessage: { template: '<div><slot /></div>' },
           BsInputText: {
-            template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+            template:
+              '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
             props: ['modelValue', 'type', 'badge', 'disabled'],
             emits: ['update:modelValue']
           },
           BsInputNumber: {
-            template: '<input type="number" :value="modelValue" @input="$emit(\'update:modelValue\', Number($event.target.value))" />',
+            template:
+              '<input type="number" :value="modelValue" @input="$emit(\'update:modelValue\', Number($event.target.value))" />',
             props: ['modelValue', 'disabled'],
             emits: ['update:modelValue']
           },
           BsInputSwitch: {
-            template: '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
+            template:
+              '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
             props: ['modelValue', 'disabled'],
             emits: ['update:modelValue']
           }

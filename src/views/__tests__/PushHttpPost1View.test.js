@@ -137,7 +137,9 @@ describe('PushHttpPost1View (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     wrapper.vm.httpUrlCallback('http://example.com')
     expect(config.http_post_target).toBe('http://example.com')
   })
@@ -147,7 +149,9 @@ describe('PushHttpPost1View (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     wrapper.vm.httpHeaderH1Callback('Accept: */*')
     expect(config.http_post_header1).toBe('Accept: */*')
   })
@@ -157,7 +161,9 @@ describe('PushHttpPost1View (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     wrapper.vm.httpHeaderH2Callback('X-Token: abc123')
     expect(config.http_post_header2).toBe('X-Token: abc123')
   })
@@ -167,7 +173,9 @@ describe('PushHttpPost1View (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     wrapper.vm.httpFormatCallback(encodeURIComponent('{gravity}'))
     expect(config.http_post_format_gravity).toBe('{gravity}')
   })
@@ -178,7 +186,9 @@ describe('PushHttpPost1View (action tests)', () => {
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
     const { config } = await import('@/modules/pinia')
     config.use_wifi_direct = true
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     expect(wrapper.vm.pushDisabled).toBe(true)
   })
 
@@ -188,7 +198,9 @@ describe('PushHttpPost1View (action tests)', () => {
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
     const { global } = await import('@/modules/pinia')
     global.disabled = true
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     expect(wrapper.vm.pushDisabled).toBe(true)
   })
 
@@ -199,7 +211,9 @@ describe('PushHttpPost1View (action tests)', () => {
     const { config, global } = await import('@/modules/pinia')
     vi.spyOn(config, 'runPushTest').mockRejectedValueOnce(new Error('Network error'))
     global.messageError = ''
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     await wrapper.vm.runTest()
     expect(global.messageError).toBe('Failed to start push test')
   })
@@ -209,7 +223,9 @@ describe('PushHttpPost1View (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     wrapper.vm.httpUrlCallback('http://example.com:8080')
     expect(config.http_post_target).toBe('http://example.com:8080')
   })
@@ -220,8 +236,10 @@ describe('PushHttpPost1View (action tests)', () => {
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
     const { config, status } = await import('@/modules/pinia')
     config.http_post_format_gravity = '{gravity}'
-    status.gravity = 1.050
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    status.gravity = 1.05
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     wrapper.vm.renderFormat()
     expect(wrapper.vm.render).toBeDefined()
   })
@@ -237,7 +255,9 @@ describe('PushHttpPost1View (action tests)', () => {
     config.http_post_target = 'invalid-no-port'
     global.messageError = ''
     config.saveAll = vi.fn()
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     await wrapper.vm.save()
     expect(global.messageError).toContain('hostname:port')
     expect(config.saveAll).not.toHaveBeenCalled()
@@ -255,7 +275,9 @@ describe('PushHttpPost1View (action tests)', () => {
     config.http_post_target = 'server.example.com:8080'
     global.messageError = ''
     config.saveAll = vi.fn(async () => {})
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     await wrapper.vm.save()
     expect(config.saveAll).toHaveBeenCalled()
     config.http_post_tcp = false
@@ -271,7 +293,9 @@ describe('PushHttpPost1View (action tests)', () => {
     config.http_post_tcp = false
     config.http_post_target = 'http://example.com'
     config.saveAll = vi.fn(async () => {})
-    const wrapper = mount(PushHttpPost1View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } } })
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
     await wrapper.vm.save()
     expect(config.saveAll).toHaveBeenCalled()
   })
@@ -306,8 +330,22 @@ describe('PushHttpPost1View (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     config.http_post_tcp = false
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-      props: ['modelValue', 'label', 'disabled', 'maxlength', 'pattern', 'min', 'max', 'width', 'step', 'rows', 'help', 'badge'],
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      props: [
+        'modelValue',
+        'label',
+        'disabled',
+        'maxlength',
+        'pattern',
+        'min',
+        'max',
+        'width',
+        'step',
+        'rows',
+        'help',
+        'badge'
+      ],
       emits: ['update:modelValue']
     }
     const wrapper = mount(PushHttpPost1View, {
@@ -345,7 +383,8 @@ describe('PushHttpPost1View (action tests)', () => {
           BsInputSwitch: true,
           BsDropdown: true,
           BsModal: {
-            template: '<button class="modal-emit" @click="$emit(\'update:modelValue\', \'test\')" />',
+            template:
+              '<button class="modal-emit" @click="$emit(\'update:modelValue\', \'test\')" />',
             props: ['modelValue', 'code', 'json'],
             emits: ['update:modelValue']
           }
@@ -364,8 +403,23 @@ describe('PushHttpPost1View (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     config.http_post_tcp = true
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-      props: ['modelValue', 'label', 'disabled', 'maxlength', 'type', 'pattern', 'min', 'max', 'width', 'step', 'rows', 'help', 'badge'],
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      props: [
+        'modelValue',
+        'label',
+        'disabled',
+        'maxlength',
+        'type',
+        'pattern',
+        'min',
+        'max',
+        'width',
+        'step',
+        'rows',
+        'help',
+        'badge'
+      ],
       emits: ['update:modelValue']
     }
     const wrapper = mount(PushHttpPost1View, {

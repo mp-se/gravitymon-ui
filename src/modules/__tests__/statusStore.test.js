@@ -1,14 +1,6 @@
-// Mock useConfigStore to avoid dependencies
-const mockUseConfigStore = vi.fn(() => ({
-  gyro_type: 1
-}))
-
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
 import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
-
-// Import to ensure mock is applied
-import { useConfigStore } from '@/modules/configStore'
 
 // Ensure statusStore is not auto-mocked due to circular imports
 vi.doUnmock('../statusStore')
@@ -19,8 +11,8 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
   logError: vi.fn(),
   logInfo: vi.fn(),
   sharedHttpClient: {
-    getJson: vi.fn(),
-  },
+    getJson: vi.fn()
+  }
 }))
 
 // Mock useConfigStore to avoid dependencies
@@ -83,9 +75,9 @@ describe('statusStore', () => {
       free_heap: 51200,
       wifi_setup: true
     }
-    
+
     store.updateFromJson(mockJson)
-    
+
     expect(store.id).toBe('test-id')
     expect(store.angle).toBe('12.35')
     expect(store.gravity).toBe('1.0557')
@@ -116,9 +108,9 @@ describe('statusStore', () => {
         push_targets: true
       }
     }
-    
+
     store.updateFromJson(mockJson)
-    
+
     expect(store.gravity).toBe('1.06') // Rounded to 2 decimals for P
   })
 
@@ -206,4 +198,3 @@ describe('statusStore', () => {
     expect(store.gravity).toBeUndefined()
   })
 })
-

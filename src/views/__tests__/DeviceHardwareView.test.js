@@ -84,14 +84,14 @@ describe('DeviceHardwareView (action tests)', () => {
     const { default: View } = await import('../DeviceHardwareView.vue')
     const { global, config } = await import('@/modules/pinia')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(true)
     config.saveAll = vi.fn(async () => {})
     global.clearMessages = vi.fn()
-    
+
     const wrapper = shallowMount(View, { global: { plugins: [createTestingPinia()] } })
     await wrapper.vm.save()
-    
+
     expect(global.clearMessages).toHaveBeenCalled()
   })
 
@@ -101,13 +101,13 @@ describe('DeviceHardwareView (action tests)', () => {
     const { default: View } = await import('../DeviceHardwareView.vue')
     const { config } = await import('@/modules/pinia')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(true)
     config.saveAll = vi.fn(async () => {})
-    
+
     const wrapper = shallowMount(View, { global: { plugins: [createTestingPinia()] } })
     await wrapper.vm.save()
-    
+
     expect(config.saveAll).toHaveBeenCalled()
   })
 
@@ -117,14 +117,14 @@ describe('DeviceHardwareView (action tests)', () => {
     const { default: View } = await import('../DeviceHardwareView.vue')
     const { config, global } = await import('@/modules/pinia')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(false)
     config.saveAll = vi.fn()
     global.clearMessages = vi.fn()
-    
+
     const wrapper = shallowMount(View, { global: { plugins: [createTestingPinia()] } })
     await wrapper.vm.save()
-    
+
     expect(config.saveAll).not.toHaveBeenCalled()
     expect(global.clearMessages).not.toHaveBeenCalled()
   })
@@ -134,7 +134,7 @@ describe('DeviceHardwareView (action tests)', () => {
     const { shallowMount } = await import('@vue/test-utils')
     const { default: View } = await import('../DeviceHardwareView.vue')
     const wrapper = shallowMount(View, { global: { plugins: [createTestingPinia()] } })
-    
+
     expect(wrapper.vm.tempsensorResolutionOptions).toHaveLength(4)
     expect(wrapper.vm.tempsensorResolutionOptions[0].value).toBe(9)
     expect(wrapper.vm.tempsensorResolutionOptions[3].value).toBe(12)
@@ -178,17 +178,20 @@ describe('DeviceHardwareView (action tests)', () => {
     global.disabled = false
 
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
       props: ['modelValue', 'disabled', 'unit', 'min', 'max', 'step', 'width', 'label', 'help'],
       emits: ['update:modelValue']
     }
     const switchStub = {
-      template: '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
+      template:
+        '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
       props: ['modelValue', 'disabled', 'label', 'help'],
       emits: ['update:modelValue']
     }
     const radioStub = {
-      template: '<input type="radio" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)" />',
+      template:
+        '<input type="radio" :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)" />',
       props: ['modelValue', 'disabled', 'label', 'help', 'options'],
       emits: ['update:modelValue']
     }

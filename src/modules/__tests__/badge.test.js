@@ -30,7 +30,7 @@ describe('badge.js', () => {
     config.mqtt_target = ''
     config.ble_format = 0
     config.use_wifi_direct = false
-    
+
     status.ispindel_config = false
     status.needsCalibration = false
   })
@@ -175,7 +175,7 @@ describe('badge.js', () => {
       config.gravity_formula = '' // +1
       expect(badge.gravityBadge()).toBe(1)
     })
-    
+
     it('pushBadge sums up push child badges', () => {
       // 7 child functions, each is 1 if targetCount is 0
       // 1. pushSettingBadge: 0

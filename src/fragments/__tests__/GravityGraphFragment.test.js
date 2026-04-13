@@ -38,7 +38,10 @@ describe('GravityGraphFragment (smoke)', () => {
   it('processes formula_calculation_data where all angles are zero', async () => {
     const pinia = createTestingPinia()
     const { config } = await import('@/modules/pinia')
-    config.formula_calculation_data = [{ a: 0, g: 1.0 }, { a: 0, g: 1.01 }]
+    config.formula_calculation_data = [
+      { a: 0, g: 1.0 },
+      { a: 0, g: 1.01 }
+    ]
     config.gravity_formula = '1.0'
     const wrapper = mount(GravityGraphFragment, { global: { plugins: [pinia] } })
     await flushPromises()
@@ -48,7 +51,10 @@ describe('GravityGraphFragment (smoke)', () => {
   it('handles evaluateFormula data and pushes to chart data on mount', async () => {
     const pinia = createTestingPinia()
     const { config } = await import('@/modules/pinia')
-    config.formula_calculation_data = [{ a: 30, g: 1.02 }, { a: 60, g: 1.08 }]
+    config.formula_calculation_data = [
+      { a: 30, g: 1.02 },
+      { a: 60, g: 1.08 }
+    ]
     config.gravity_formula = '0.0001*tilt+1.0'
     const wrapper = mount(GravityGraphFragment, { global: { plugins: [pinia] } })
     await flushPromises()

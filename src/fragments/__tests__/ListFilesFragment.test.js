@@ -14,11 +14,11 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
     post: vi.fn(),
     postJson: vi.fn(),
     request: vi.fn(),
-    filesystemRequest: vi.fn(),
+    filesystemRequest: vi.fn()
   },
   isValidJson: vi.fn(() => true),
   isValidFormData: vi.fn(() => false),
-  isValidMqttData: vi.fn(() => false),
+  isValidMqttData: vi.fn(() => false)
 }))
 
 describe('ListFilesFragment (interaction tests)', () => {
@@ -29,13 +29,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('mounts without error', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.exists()).toBe(true)
   })
@@ -43,13 +43,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('mounts with sd type', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'sd',
+        type: 'sd'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.exists()).toBe(true)
   })
@@ -57,13 +57,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('displays title for filesystem when type is fs', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('Explore the file system')
   })
@@ -71,13 +71,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('displays title for SD filesystem when type is sd', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'sd',
+        type: 'sd'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('Explore the SD file system')
   })
@@ -85,13 +85,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('has list button with filesystem text', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('List files')
   })
@@ -99,13 +99,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('has list button with SD text when type is sd', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'sd',
+        type: 'sd'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('List SD files')
   })
@@ -113,13 +113,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('has list button element', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     const buttons = wrapper.findAll('button')
     const listButton = buttons.find((b) => b.text().includes('List files'))
@@ -130,13 +130,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('initializes filesystemUsage as null', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.vm.filesystemUsage).toBeNull()
   })
@@ -144,13 +144,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('initializes fileData as null', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.vm.fileData).toBeNull()
   })
@@ -158,13 +158,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('initializes filesView as empty array', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.vm.filesView).toEqual([])
   })
@@ -172,13 +172,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('initializes fileDataSize as zero', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.vm.fileDataSize).toBe(0)
   })
@@ -186,13 +186,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('initializes dataType as empty string', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.vm.dataType).toBe('')
   })
@@ -200,13 +200,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('has listFilesView function defined', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(typeof wrapper.vm.listFilesView).toBe('function')
   })
@@ -214,13 +214,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('has viewFile function defined', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(typeof wrapper.vm.viewFile).toBe('function')
   })
@@ -228,13 +228,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('has formatFileSize function defined', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(typeof wrapper.vm.formatFileSize).toBe('function')
   })
@@ -242,13 +242,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('list button is initially not disabled', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     const buttons = wrapper.findAll('button')
     const listButton = buttons.find((b) => b.text().includes('List files'))
@@ -258,13 +258,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('displays button group for file list', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     const buttonGroup = wrapper.find('.button-group')
     expect(buttonGroup.exists()).toBe(true)
@@ -273,13 +273,13 @@ describe('ListFilesFragment (interaction tests)', () => {
   it('has HTTP timeout constant defined', () => {
     const wrapper = mount(ListFilesFragment, {
       props: {
-        type: 'fs',
+        type: 'fs'
       },
       global: {
         stubs: {
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     // HTTP_TIMEOUT_MS should be 20000
     expect(wrapper.vm.HTTP_TIMEOUT_MS).toBe(20000)
@@ -295,19 +295,17 @@ describe('ListFilesFragment (action tests)', () => {
   const mountView = (type = 'fs') =>
     mount(ListFilesFragment, {
       props: { type },
-      global: { stubs: { BsProgress: true } },
+      global: { stubs: { BsProgress: true } }
     })
 
   it('listFilesView calls filesystemRequest for fs type', async () => {
     http.filesystemRequest.mockResolvedValue({
       success: true,
-      text: JSON.stringify({ files: [], used: 0, total: 0, free: 0 }),
+      text: JSON.stringify({ files: [], used: 0, total: 0, free: 0 })
     })
     const wrapper = mountView('fs')
     await wrapper.vm.listFilesView()
-    expect(http.filesystemRequest).toHaveBeenCalledWith(
-      expect.objectContaining({ command: 'dir' })
-    )
+    expect(http.filesystemRequest).toHaveBeenCalledWith(expect.objectContaining({ command: 'dir' }))
   })
 
   it('listFilesView populates filesView from response', async () => {
@@ -317,8 +315,8 @@ describe('ListFilesFragment (action tests)', () => {
         files: [{ file: '/config.json' }, { file: '/log.txt' }],
         used: 100,
         total: 1000,
-        free: 900,
-      }),
+        free: 900
+      })
     })
     const wrapper = mountView('fs')
     await wrapper.vm.listFilesView()
@@ -328,7 +326,7 @@ describe('ListFilesFragment (action tests)', () => {
   it('listFilesView computes filesystemUsage when used/total present', async () => {
     http.filesystemRequest.mockResolvedValue({
       success: true,
-      text: JSON.stringify({ files: [], used: 500, total: 1000, free: 500 }),
+      text: JSON.stringify({ files: [], used: 500, total: 1000, free: 500 })
     })
     const wrapper = mountView('fs')
     await wrapper.vm.listFilesView()
@@ -338,7 +336,7 @@ describe('ListFilesFragment (action tests)', () => {
   it('viewFile calls filesystemRequest with get command', async () => {
     http.filesystemRequest.mockResolvedValue({
       success: true,
-      text: '{"key":"value"}',
+      text: '{"key":"value"}'
     })
     const wrapper = mountView('fs')
     await wrapper.vm.viewFile('/config.json')
@@ -350,7 +348,7 @@ describe('ListFilesFragment (action tests)', () => {
   it('viewFile sets fileData on success', async () => {
     http.filesystemRequest.mockResolvedValue({
       success: true,
-      text: '{"key":"value"}',
+      text: '{"key":"value"}'
     })
     const wrapper = mountView('fs')
     await wrapper.vm.viewFile('/config.json')
@@ -370,7 +368,7 @@ describe('ListFilesFragment (utility functions)', () => {
   const mountView = (type = 'fs') =>
     mount(ListFilesFragment, {
       props: { type },
-      global: { stubs: { BsProgress: true } },
+      global: { stubs: { BsProgress: true } }
     })
 
   let wrapper
@@ -490,7 +488,7 @@ describe('ListFilesFragment (viewFile data types)', () => {
   const mountView = () =>
     mount(ListFilesFragment, {
       props: { type: 'fs' },
-      global: { stubs: { BsProgress: true } },
+      global: { stubs: { BsProgress: true } }
     })
 
   it('viewFile sets dataType to formdata when isValidFormData returns true', async () => {
@@ -570,21 +568,25 @@ describe('ListFilesFragment (SD type)', () => {
   const mountSd = () =>
     mount(ListFilesFragment, {
       props: { type: 'sd' },
-      global: { stubs: { BsProgress: true } },
+      global: { stubs: { BsProgress: true } }
     })
 
   it('listFilesView uses postJson for SD type', async () => {
     http.postJson.mockResolvedValue({
-      text: vi.fn().mockResolvedValue(JSON.stringify({ files: [{ file: '/sd/test.csv' }] })),
+      text: vi.fn().mockResolvedValue(JSON.stringify({ files: [{ file: '/sd/test.csv' }] }))
     })
     const wrapper = mountSd()
     await wrapper.vm.listFilesView()
-    expect(http.postJson).toHaveBeenCalledWith('api/sd', expect.objectContaining({ command: 'dir' }), expect.any(Object))
+    expect(http.postJson).toHaveBeenCalledWith(
+      'api/sd',
+      expect.objectContaining({ command: 'dir' }),
+      expect.any(Object)
+    )
   })
 
   it('listFilesView populates filesView from SD response', async () => {
     http.postJson.mockResolvedValue({
-      text: vi.fn().mockResolvedValue(JSON.stringify({ files: [{ file: '/sd/log.txt' }] })),
+      text: vi.fn().mockResolvedValue(JSON.stringify({ files: [{ file: '/sd/log.txt' }] }))
     })
     const wrapper = mountSd()
     await wrapper.vm.listFilesView()
@@ -592,9 +594,8 @@ describe('ListFilesFragment (SD type)', () => {
   })
 
   it('viewFile uses request for SD type', async () => {
-    const { isValidJson } = await import('@mp-se/espframework-ui-components')
     http.request.mockResolvedValue({
-      text: vi.fn().mockResolvedValue('{"key":"value"}'),
+      text: vi.fn().mockResolvedValue('{"key":"value"}')
     })
     const wrapper = mountSd()
     await wrapper.vm.viewFile('/sd/config.json')

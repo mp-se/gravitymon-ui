@@ -16,7 +16,9 @@ describe('GravitySettingsView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { shallowMount } = await import('@vue/test-utils')
     const { default: GravitySettingsView } = await import('../GravitySettingsView.vue')
-    const wrapper = shallowMount(GravitySettingsView, { global: { plugins: [createTestingPinia()] } })
+    const wrapper = shallowMount(GravitySettingsView, {
+      global: { plugins: [createTestingPinia()] }
+    })
     await wrapper.vm.save()
     const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
@@ -28,7 +30,9 @@ describe('GravitySettingsView (action tests)', () => {
     const { default: GravitySettingsView } = await import('../GravitySettingsView.vue')
     const { config } = await import('@/modules/pinia')
     config.gravity_temp_adjustment = false
-    const wrapper = shallowMount(GravitySettingsView, { global: { plugins: [createTestingPinia()] } })
+    const wrapper = shallowMount(GravitySettingsView, {
+      global: { plugins: [createTestingPinia()] }
+    })
     expect(wrapper.vm.calTempAdj).toBe(true)
   })
 
@@ -36,7 +40,9 @@ describe('GravitySettingsView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { shallowMount } = await import('@vue/test-utils')
     const { default: GravitySettingsView } = await import('../GravitySettingsView.vue')
-    const wrapper = shallowMount(GravitySettingsView, { global: { plugins: [createTestingPinia()] } })
+    const wrapper = shallowMount(GravitySettingsView, {
+      global: { plugins: [createTestingPinia()] }
+    })
     await wrapper.vm.save()
     const { config } = await import('@/modules/pinia')
     // If form validation passes, saveAll is called
@@ -50,7 +56,9 @@ describe('GravitySettingsView (action tests)', () => {
     const { config, global } = await import('@/modules/pinia')
     config.gravity_temp_adjustment = true
     global.disabled = true
-    const wrapper = shallowMount(GravitySettingsView, { global: { plugins: [createTestingPinia()] } })
+    const wrapper = shallowMount(GravitySettingsView, {
+      global: { plugins: [createTestingPinia()] }
+    })
     expect(wrapper.vm.calTempAdj).toBe(true)
   })
 
@@ -61,7 +69,9 @@ describe('GravitySettingsView (action tests)', () => {
     const { config, global } = await import('@/modules/pinia')
     config.gravity_temp_adjustment = true
     global.disabled = false
-    const wrapper = shallowMount(GravitySettingsView, { global: { plugins: [createTestingPinia()] } })
+    const wrapper = shallowMount(GravitySettingsView, {
+      global: { plugins: [createTestingPinia()] }
+    })
     expect(wrapper.vm.calTempAdj).toBe(false)
   })
 
@@ -71,13 +81,15 @@ describe('GravitySettingsView (action tests)', () => {
     const { default: GravitySettingsView } = await import('../GravitySettingsView.vue')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
     const { config } = await import('@/modules/pinia')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(true)
     config.saveAll = vi.fn(async () => {})
-    
-    const wrapper = shallowMount(GravitySettingsView, { global: { plugins: [createTestingPinia()] } })
+
+    const wrapper = shallowMount(GravitySettingsView, {
+      global: { plugins: [createTestingPinia()] }
+    })
     await wrapper.vm.save()
-    
+
     expect(validateCurrentForm).toHaveBeenCalled()
     expect(config.saveAll).toHaveBeenCalled()
   })
@@ -88,13 +100,15 @@ describe('GravitySettingsView (action tests)', () => {
     const { default: GravitySettingsView } = await import('../GravitySettingsView.vue')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
     const { config } = await import('@/modules/pinia')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(false)
     config.saveAll = vi.fn(async () => {})
-    
-    const wrapper = shallowMount(GravitySettingsView, { global: { plugins: [createTestingPinia()] } })
+
+    const wrapper = shallowMount(GravitySettingsView, {
+      global: { plugins: [createTestingPinia()] }
+    })
     await wrapper.vm.save()
-    
+
     expect(config.saveAll).not.toHaveBeenCalled()
   })
 
@@ -152,20 +166,20 @@ describe('GravitySettingsView (action tests)', () => {
     const { default: GravitySettingsView } = await import('../GravitySettingsView.vue')
     const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
     const { config } = await import('@/modules/pinia')
-    
+
     vi.mocked(validateCurrentForm).mockReturnValue(true)
     config.saveAll = vi.fn(async () => {})
-    
+
     const wrapper = mount(GravitySettingsView, {
       global: {
         plugins: [createTestingPinia()],
         stubs: { BsInputSwitch: true, BsInputNumber: true }
       }
     })
-    
+
     const form = wrapper.find('form')
     await form.trigger('submit')
-    
+
     expect(config.saveAll).toHaveBeenCalled()
   })
 
@@ -181,12 +195,14 @@ describe('GravitySettingsView (action tests)', () => {
         plugins: [createTestingPinia()],
         stubs: {
           BsInputSwitch: {
-            template: '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
+            template:
+              '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
             props: ['modelValue'],
             emits: ['update:modelValue']
           },
           BsInputNumber: {
-            template: '<input type="number" :value="modelValue" @input="$emit(\'update:modelValue\', Number($event.target.value))" />',
+            template:
+              '<input type="number" :value="modelValue" @input="$emit(\'update:modelValue\', Number($event.target.value))" />',
             props: ['modelValue'],
             emits: ['update:modelValue']
           }
@@ -209,7 +225,8 @@ describe('GravitySettingsView (action tests)', () => {
     const { default: View } = await import('../GravitySettingsView.vue')
     const { createTestingPinia } = await import('../../tests/testUtils')
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
       props: ['modelValue', 'label', 'disabled', 'help', 'min', 'max', 'step', 'width', 'unit'],
       emits: ['update:modelValue']
     }

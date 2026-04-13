@@ -11,8 +11,8 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
   sharedHttpClient: {
     get: vi.fn(),
     post: vi.fn(),
-    postJson: vi.fn(),
-  },
+    postJson: vi.fn()
+  }
 }))
 
 describe('EnableCorsFragment (interaction tests)', () => {
@@ -23,8 +23,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('mounts without error', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.exists()).toBe(true)
   })
@@ -32,8 +32,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('displays developer settings heading', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Developer settings')
   })
@@ -41,8 +41,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('has enable CORS button', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const corsButton = buttons.find((b) => b.text().includes('Enable CORS'))
@@ -52,8 +52,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('enable CORS button is clickable', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const corsButton = buttons.find((b) => b.text().includes('Enable CORS'))
@@ -63,8 +63,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('has enableCors function defined', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(typeof wrapper.vm.enableCors).toBe('function')
   })
@@ -72,8 +72,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('button is initially not disabled', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const corsButton = buttons.find((b) => b.text().includes('Enable CORS'))
@@ -83,8 +83,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('button has secondary styling', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const corsButton = buttons.find((b) => b.text().includes('Enable CORS'))
@@ -94,8 +94,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('has spinner element for loading state', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const spinners = wrapper.findAll('.spinner-border')
     expect(spinners.length).toBeGreaterThan(0)
@@ -104,8 +104,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('has proper heading hierarchy (h5)', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const heading = wrapper.find('h5')
     expect(heading.exists()).toBe(true)
@@ -115,8 +115,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('heading has correct text content', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const heading = wrapper.find('h5')
     expect(heading.text()).toBe('Developer settings')
@@ -125,8 +125,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('button has correct row and column grid structure', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const row = wrapper.find('.row')
     expect(row.exists()).toBe(true)
@@ -137,8 +137,8 @@ describe('EnableCorsFragment (interaction tests)', () => {
   it('has correct spacing classes', () => {
     const wrapper = mount(EnableCorsFragment, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const row = wrapper.find('.row')
     expect(row.element.className).toContain('gy-4')
@@ -153,7 +153,7 @@ describe('EnableCorsFragment (action tests)', () => {
 
   const mountView = () =>
     mount(EnableCorsFragment, {
-      global: { stubs: {} },
+      global: { stubs: {} }
     })
 
   it('enableCors calls http.postJson', async () => {

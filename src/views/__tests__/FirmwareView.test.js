@@ -13,8 +13,8 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
     get: vi.fn(),
     post: vi.fn(),
     postJson: vi.fn(),
-    uploadFile: vi.fn(),
-  },
+    uploadFile: vi.fn()
+  }
 }))
 
 describe('FirmwareView (interaction tests)', () => {
@@ -27,9 +27,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.exists()).toBe(true)
   })
@@ -39,9 +39,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('Firmware Upload')
   })
@@ -51,9 +51,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('Platform')
   })
@@ -64,11 +64,11 @@ describe('FirmwareView (interaction tests)', () => {
         stubs: {
           BsFileUpload: {
             template:
-              '<input type="file" accept=".bin" id="upload" name="upload" class="firmware-upload" />',
+              '<input type="file" accept=".bin" id="upload" name="upload" class="firmware-upload" />'
           },
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     const fileInput = wrapper.find('input[type="file"]')
     expect(fileInput.exists()).toBe(true)
@@ -80,9 +80,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     const buttons = wrapper.findAll('button')
     const uploadButton = buttons.find((b) => b.text().includes('Flash firmware'))
@@ -94,9 +94,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.vm.hasFileSelected).toBe(false)
   })
@@ -106,9 +106,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.vm.hasFileSelected).toBe(false)
   })
@@ -118,9 +118,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.vm.progress).toBe(0)
   })
@@ -130,9 +130,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(typeof wrapper.vm.onFileChange).toBe('function')
   })
@@ -142,9 +142,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(typeof wrapper.vm.upload).toBe('function')
   })
@@ -154,9 +154,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('firmware')
   })
@@ -166,9 +166,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     const form = wrapper.find('form')
     expect(form.exists()).toBe(true)
@@ -179,9 +179,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     const uploadBtn = wrapper.find('#upload-btn')
     expect(uploadBtn.exists()).toBe(true)
@@ -192,9 +192,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     // Version section should be in template
     expect(wrapper.html()).toContain('Version')
@@ -205,9 +205,9 @@ describe('FirmwareView (interaction tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
     // Component displays device info including platform badge
     expect(wrapper.html()).toContain('badge')
@@ -226,9 +226,9 @@ describe('FirmwareView (action tests)', () => {
       global: {
         stubs: {
           BsFileUpload: true,
-          BsProgress: true,
-        },
-      },
+          BsProgress: true
+        }
+      }
     })
 
   it('onFileChange sets hasFileSelected true when file is present', async () => {
@@ -359,7 +359,10 @@ describe('FirmwareView (action tests)', () => {
     const fakeElement = { files: [fakeFile] }
     vi.spyOn(document, 'getElementById').mockReturnValue(fakeElement)
     http.uploadFile.mockResolvedValue({ success: true })
-    Object.defineProperty(window, 'location', { value: { ...window.location, href: '/other/firmware', reload: vi.fn() }, writable: true })
+    Object.defineProperty(window, 'location', {
+      value: { ...window.location, href: '/other/firmware', reload: vi.fn() },
+      writable: true
+    })
 
     await wrapper.vm.upload()
     // Advance past the 10000ms timeout

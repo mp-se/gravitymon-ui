@@ -112,7 +112,7 @@ export const mockConfigState = {
 export const mockStatusState = {
   id: 'test-id',
   angle: 25.5,
-  gravity: 1.050,
+  gravity: 1.05,
   gravity_unit: 'G',
   temp: 20,
   temp_unit: 'C',

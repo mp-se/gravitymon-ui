@@ -165,8 +165,7 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
     createInterval: () => ({
       start: () => {},
       stop: () => {}
-    })
-  ,
+    }),
     createTimeout: vi.fn((cb, t) => setTimeout(cb, t))
   }),
   useFetch: () => ({
@@ -238,8 +237,7 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
   IconCheckCircle: {},
   IconXCircle: {},
   IconExclamationTriangle: {},
-  IconInfoCircle: {}
-  ,
+  IconInfoCircle: {},
   // export a version string used by App.onMounted()
   version: 'test-1.0.0',
   // convenience helpers used by views

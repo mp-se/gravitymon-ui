@@ -95,11 +95,9 @@ describe('PushWifiDirectView (interaction tests)', () => {
   })
 })
 
-
 describe('PushWifiDirectView (action tests)', () => {
   beforeEach(async () => {
     vi.clearAllMocks()
-    const { vi: vii } = await import('vitest')
     const module = await import('@mp-se/espframework-ui-components')
     vi.spyOn(module, 'validateCurrentForm').mockReturnValue(true)
   })
@@ -108,7 +106,12 @@ describe('PushWifiDirectView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: View } = await import('../PushWifiDirectView.vue')
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
@@ -122,7 +125,12 @@ describe('PushWifiDirectView (action tests)', () => {
     vi.spyOn(module, 'validateCurrentForm').mockReturnValue(false)
     const { config } = await import('@/modules/pinia')
     const saveSpy = vi.spyOn(config, 'saveAll')
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     expect(saveSpy).not.toHaveBeenCalled()
   })
@@ -135,7 +143,12 @@ describe('PushWifiDirectView (action tests)', () => {
     config.use_wifi_direct = true
     config.wifi_direct_ssid = ''
     config.wifi_direct_pass = 'password'
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     expect(globalStore.messageError).toBeTruthy()
     config.use_wifi_direct = false
@@ -149,7 +162,12 @@ describe('PushWifiDirectView (action tests)', () => {
     config.use_wifi_direct = true
     config.wifi_direct_ssid = 'TestSSID'
     config.wifi_direct_pass = ''
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     expect(globalStore.messageError).toBeTruthy()
     config.use_wifi_direct = false
@@ -163,7 +181,12 @@ describe('PushWifiDirectView (action tests)', () => {
     config.use_wifi_direct = false
     config.wifi_direct_ssid = ''
     config.wifi_direct_pass = ''
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     expect(config.saveAll).toHaveBeenCalled()
   })
@@ -176,7 +199,12 @@ describe('PushWifiDirectView (action tests)', () => {
     config.use_wifi_direct = true
     config.wifi_direct_ssid = 'TestSSID'
     config.wifi_direct_pass = 'TestPassword'
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     expect(config.saveAll).toHaveBeenCalled()
     config.use_wifi_direct = false
@@ -186,7 +214,12 @@ describe('PushWifiDirectView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: View } = await import('../PushWifiDirectView.vue')
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true }
+      }
+    })
     expect(wrapper.vm.save).toBeDefined()
     expect(typeof wrapper.vm.save).toBe('function')
   })
@@ -199,12 +232,14 @@ describe('PushWifiDirectView (action tests)', () => {
     global.disabled = false
 
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
       props: ['modelValue', 'type', 'disabled', 'maxlength', 'label', 'help'],
       emits: ['update:modelValue']
     }
     const switchStub = {
-      template: '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
+      template:
+        '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
       props: ['modelValue', 'disabled', 'label', 'help'],
       emits: ['update:modelValue']
     }
@@ -217,8 +252,12 @@ describe('PushWifiDirectView (action tests)', () => {
         }
       }
     })
-    for (const el of wrapper.findAll('input:not([type="checkbox"])')) { await el.trigger('input') }
-    for (const el of wrapper.findAll('input[type="checkbox"]')) { await el.trigger('change') }
+    for (const el of wrapper.findAll('input:not([type="checkbox"])')) {
+      await el.trigger('input')
+    }
+    for (const el of wrapper.findAll('input[type="checkbox"]')) {
+      await el.trigger('change')
+    }
     expect(wrapper.find('form').exists()).toBe(true)
   })
 })

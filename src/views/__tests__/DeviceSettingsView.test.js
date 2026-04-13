@@ -17,8 +17,8 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
   sharedHttpClient: {
     get: vi.fn(),
     post: vi.fn(),
-    getJson: vi.fn(),
-  },
+    getJson: vi.fn()
+  }
 }))
 
 describe('DeviceSettingsView (interaction tests)', () => {
@@ -42,12 +42,14 @@ describe('DeviceSettingsView (interaction tests)', () => {
           BsInputText: {
             name: 'BsInputText',
             props: ['modelValue'],
-            template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />'
+            template:
+              '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />'
           },
           BsInputRadio: {
             name: 'BsInputRadio',
             props: ['modelValue', 'options'],
-            template: '<div><input v-for="o in options" :key="o.value" type="radio" :checked="modelValue === o.value" @change="$emit(\'update:modelValue\', o.value)" /></div>'
+            template:
+              '<div><input v-for="o in options" :key="o.value" type="radio" :checked="modelValue === o.value" @change="$emit(\'update:modelValue\', o.value)" /></div>'
           },
           BsDropdown: {
             name: 'BsDropdown',
@@ -80,12 +82,14 @@ describe('DeviceSettingsView (interaction tests)', () => {
           BsInputText: {
             name: 'BsInputText',
             props: ['modelValue'],
-            template: '<input class="mdns-input" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />'
+            template:
+              '<input class="mdns-input" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />'
           },
           BsInputRadio: {
             name: 'BsInputRadio',
             props: ['modelValue', 'options', 'label'],
-            template: '<div :class="\'radio-\' + label.replace(/ /g, \'-\').toLowerCase()"><input v-for="o in options" :key="o.value" type="radio" :checked="modelValue === o.value" @change="$emit(\'update:modelValue\', o.value)" /></div>'
+            template:
+              '<div :class="\'radio-\' + label.replace(/ /g, \'-\').toLowerCase()"><input v-for="o in options" :key="o.value" type="radio" :checked="modelValue === o.value" @change="$emit(\'update:modelValue\', o.value)" /></div>'
           },
           BsDropdown: true,
           BsSwitch: true,
@@ -127,7 +131,8 @@ describe('DeviceSettingsView (interaction tests)', () => {
           BsDropdown: {
             name: 'BsDropdown',
             props: ['options', 'callback'],
-            template: '<div class="ota-trigger" @click="callback(\'http://new-ota.com\')">Dropdown</div>'
+            template:
+              '<div class="ota-trigger" @click="callback(\'http://new-ota.com\')">Dropdown</div>'
           },
           BsSwitch: true,
           BsProgress: true
@@ -168,7 +173,7 @@ describe('DeviceSettingsView (interaction tests)', () => {
       }
     })
 
-    const checkButton = wrapper.findAll('button').find(b => b.text().includes('Check status'))
+    const checkButton = wrapper.findAll('button').find((b) => b.text().includes('Check status'))
     await checkButton.trigger('click')
 
     expect(global.anonymizeChipId).toHaveBeenCalled()
@@ -250,7 +255,7 @@ describe('DeviceSettingsView (interaction tests)', () => {
       }
     })
 
-    const reportButton = wrapper.findAll('button').find(b => b.text().includes('Report Usage'))
+    const reportButton = wrapper.findAll('button').find((b) => b.text().includes('Report Usage'))
     await reportButton.trigger('click')
 
     expect(wrapper.find('.modal').exists()).toBe(true)
@@ -272,7 +277,7 @@ describe('DeviceSettingsView (interaction tests)', () => {
     vi.stubGlobal('location', { reload: reloadMock })
 
     const wrapper = mount(DeviceSettingsView, {
-        global: { plugins: [pinia] }
+      global: { plugins: [pinia] }
     })
 
     await wrapper.vm.factory()
@@ -286,14 +291,17 @@ describe('DeviceSettingsView (interaction tests)', () => {
     const pinia = createTestingPinia()
     http.getJson.mockResolvedValueOnce({ success: true, message: 'OK' })
 
-    const reloadMock = vi.fn()
     // Simulate error in location.reload(true) by making it throw
-    vi.stubGlobal('location', { reload: vi.fn(() => { throw new Error('reload fail') }) })
+    vi.stubGlobal('location', {
+      reload: vi.fn(() => {
+        throw new Error('reload fail')
+      })
+    })
     const windowReloadMock = vi.fn()
     vi.stubGlobal('window', { location: { reload: windowReloadMock }, addEventListener: vi.fn() })
 
     const wrapper = mount(DeviceSettingsView, {
-        global: { plugins: [pinia] }
+      global: { plugins: [pinia] }
     })
 
     await wrapper.vm.factory()
@@ -312,7 +320,7 @@ describe('DeviceSettingsView (interaction tests)', () => {
     })
 
     const wrapper = mount(DeviceSettingsView, {
-        global: { plugins: [pinia] }
+      global: { plugins: [pinia] }
     })
 
     await wrapper.vm.factory()
@@ -328,7 +336,7 @@ describe('DeviceSettingsView (interaction tests)', () => {
     http.getJson.mockRejectedValueOnce(new Error('API Error'))
 
     const wrapper = mount(DeviceSettingsView, {
-        global: { plugins: [pinia] }
+      global: { plugins: [pinia] }
     })
 
     await wrapper.vm.factory()
@@ -341,7 +349,7 @@ describe('DeviceSettingsView (interaction tests)', () => {
     http.getJson.mockResolvedValueOnce({ success: false, message: 'Could not reset' })
 
     const wrapper = mount(DeviceSettingsView, {
-        global: { plugins: [pinia] }
+      global: { plugins: [pinia] }
     })
 
     await wrapper.vm.factory()
@@ -354,7 +362,7 @@ describe('DeviceSettingsView (interaction tests)', () => {
     config.restart = vi.fn()
 
     const wrapper = mount(DeviceSettingsView, {
-        global: { plugins: [pinia] }
+      global: { plugins: [pinia] }
     })
 
     await wrapper.vm.restart()
@@ -368,7 +376,7 @@ describe('DeviceSettingsView (interaction tests)', () => {
     validateCurrentForm.mockReturnValueOnce(false)
 
     const wrapper = mount(DeviceSettingsView, {
-        global: { plugins: [pinia] }
+      global: { plugins: [pinia] }
     })
 
     await wrapper.vm.saveSettings()
@@ -382,7 +390,7 @@ describe('DeviceSettingsView (interaction tests)', () => {
     validateCurrentForm.mockReturnValueOnce(true)
 
     const wrapper = mount(DeviceSettingsView, {
-        global: { plugins: [pinia] }
+      global: { plugins: [pinia] }
     })
 
     await wrapper.vm.saveSettings()
@@ -694,9 +702,9 @@ describe('DeviceSettingsView (action tests)', () => {
           BsSwitch: true,
           BsProgress: true,
           BsDropdown: true,
-          RegisterDeviceFragment: true,
-        },
-      },
+          RegisterDeviceFragment: true
+        }
+      }
     })
   }
 
@@ -771,7 +779,7 @@ describe('DeviceSettingsView (action tests)', () => {
     http.getJson.mockResolvedValue({ exists: false })
     const wrapper = mountView()
     wrapper.vm.closeRegisterModal()
-    await new Promise(resolve => setTimeout(resolve, 10))
+    await new Promise((resolve) => setTimeout(resolve, 10))
     expect(http.getJson).toHaveBeenCalled()
   })
 
@@ -833,7 +841,7 @@ describe('DeviceSettingsView (action tests)', () => {
     const wrapper = mountView()
     wrapper.vm.showRegisterModal = true
     wrapper.vm.closeRegisterModal()
-    await new Promise(resolve => setTimeout(resolve, 10))
+    await new Promise((resolve) => setTimeout(resolve, 10))
     expect(wrapper.vm.showRegisterModal).toBe(false)
   })
 
@@ -851,7 +859,10 @@ describe('DeviceSettingsView (action tests)', () => {
     http.getJson.mockResolvedValue({ success: true, message: 'Done' })
     // Mock location.reload to prevent jsdom error
     const reloadSpy = vi.fn()
-    Object.defineProperty(window, 'location', { value: { ...window.location, reload: reloadSpy, href: '/other/firmware' }, writable: true })
+    Object.defineProperty(window, 'location', {
+      value: { ...window.location, reload: reloadSpy, href: '/other/firmware' },
+      writable: true
+    })
     const wrapper = mountView()
     await wrapper.vm.factory()
     // Advance timer to trigger the setTimeout callback
@@ -905,7 +916,11 @@ describe('DeviceSettingsView (action tests)', () => {
     expect(() => vi.advanceTimersByTime(2001)).not.toThrow()
     vi.useRealTimers()
 
-    Object.defineProperty(window, 'location', { value: origLocation, writable: true, configurable: true })
+    Object.defineProperty(window, 'location', {
+      value: origLocation,
+      writable: true,
+      configurable: true
+    })
     // The catch block was reached (callCount = 2: try threw, catch called reload again)
     expect(callCount).toBe(2)
   })
@@ -931,7 +946,11 @@ describe('DeviceSettingsView (action tests)', () => {
     beforeUnloadHandler()
 
     vi.useRealTimers()
-    Object.defineProperty(window, 'location', { value: origLocation, writable: true, configurable: true })
+    Object.defineProperty(window, 'location', {
+      value: origLocation,
+      writable: true,
+      configurable: true
+    })
     expect(wrapper.exists()).toBe(true)
   })
 })

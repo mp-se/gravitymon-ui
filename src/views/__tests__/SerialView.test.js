@@ -19,7 +19,7 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
         onopen: null,
         onclose: null,
         send: vi.fn(),
-        close: vi.fn(),
+        close: vi.fn()
       }
       return {
         onmessage: null,
@@ -28,10 +28,10 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
         onclose: null,
         send: vi.fn(),
         close: vi.fn(),
-        socketGetter: vi.fn(() => mockSocket),
+        socketGetter: vi.fn(() => mockSocket)
       }
-    }),
-  },
+    })
+  }
 }))
 
 describe('SerialView (interaction tests)', () => {
@@ -42,8 +42,8 @@ describe('SerialView (interaction tests)', () => {
   it('mounts without error', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.exists()).toBe(true)
   })
@@ -51,8 +51,8 @@ describe('SerialView (interaction tests)', () => {
   it('displays serial console header', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Serial console')
   })
@@ -60,8 +60,8 @@ describe('SerialView (interaction tests)', () => {
   it('displays connection status', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.text()).toContain('Not connected')
   })
@@ -69,8 +69,8 @@ describe('SerialView (interaction tests)', () => {
   it('has serial output area with pre element', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const pre = wrapper.find('pre')
     expect(pre.exists()).toBe(true)
@@ -79,8 +79,8 @@ describe('SerialView (interaction tests)', () => {
   it('has clear button', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const clearButton = buttons.find((b) => b.text().includes('Clear'))
@@ -90,8 +90,8 @@ describe('SerialView (interaction tests)', () => {
   it('has connect button', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const connectButton = buttons.find((b) => b.text().includes('Connect'))
@@ -101,8 +101,8 @@ describe('SerialView (interaction tests)', () => {
   it('clear button is initially disabled', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const clearButton = buttons.find((b) => b.text().includes('Clear'))
@@ -113,8 +113,8 @@ describe('SerialView (interaction tests)', () => {
   it('connect button is initially not disabled', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const connectButton = buttons.find((b) => b.text().includes('Connect'))
@@ -124,8 +124,8 @@ describe('SerialView (interaction tests)', () => {
   it('has clear function defined', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(typeof wrapper.vm.clear).toBe('function')
   })
@@ -133,8 +133,8 @@ describe('SerialView (interaction tests)', () => {
   it('has connect function defined', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(typeof wrapper.vm.connect).toBe('function')
   })
@@ -142,8 +142,8 @@ describe('SerialView (interaction tests)', () => {
   it('has serial output property', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.vm.serial).toBeDefined()
     expect(typeof wrapper.vm.serial).toBe('string')
@@ -152,8 +152,8 @@ describe('SerialView (interaction tests)', () => {
   it('has isConnected computed property', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.vm.isConnected).toBeDefined()
     expect(typeof wrapper.vm.isConnected).toBe('boolean')
@@ -162,8 +162,8 @@ describe('SerialView (interaction tests)', () => {
   it('has connected computed property', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     expect(wrapper.vm.connected).toBeDefined()
   })
@@ -171,8 +171,8 @@ describe('SerialView (interaction tests)', () => {
   it('clear button has primary styling', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const clearButton = buttons.find((b) => b.text().includes('Clear'))
@@ -182,8 +182,8 @@ describe('SerialView (interaction tests)', () => {
   it('connect button has secondary styling', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const connectButton = buttons.find((b) => b.text().includes('Connect'))
@@ -193,8 +193,8 @@ describe('SerialView (interaction tests)', () => {
   it('has proper grid layout', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const rows = wrapper.findAll('.row')
     expect(rows.length).toBeGreaterThan(0)
@@ -203,8 +203,8 @@ describe('SerialView (interaction tests)', () => {
   it('buttons have wide width class', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const buttons = wrapper.findAll('button')
     const wideButtons = buttons.filter((b) => b.element.className.includes('w-2'))
@@ -214,8 +214,8 @@ describe('SerialView (interaction tests)', () => {
   it('displays scroll output in pre block', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const pre = wrapper.find('pre')
     expect(pre.exists()).toBe(true)
@@ -226,14 +226,13 @@ describe('SerialView (interaction tests)', () => {
   it('has container layout element', () => {
     const wrapper = mount(SerialView, {
       global: {
-        stubs: {},
-      },
+        stubs: {}
+      }
     })
     const container = wrapper.find('.container')
     expect(container.exists()).toBe(true)
   })
 })
-
 
 describe('SerialView (action tests)', () => {
   beforeEach(() => {
@@ -258,112 +257,115 @@ describe('SerialView (action tests)', () => {
     const { sharedHttpClient } = await import('@mp-se/espframework-ui-components')
     const wrapper = mountView()
     wrapper.vm.connect()
-    expect(sharedHttpClient.createWebSocket).toHaveBeenCalledWith('serialws', expect.objectContaining({
-      onOpen: expect.any(Function),
-      onMessage: expect.any(Function),
-      onClose: expect.any(Function),
-      onError: expect.any(Function),
-      autoReconnect: true
-    }))
+    expect(sharedHttpClient.createWebSocket).toHaveBeenCalledWith(
+      'serialws',
+      expect.objectContaining({
+        onOpen: expect.any(Function),
+        onMessage: expect.any(Function),
+        onClose: expect.any(Function),
+        onError: expect.any(Function),
+        autoReconnect: true
+      })
+    )
   })
 
   it('websocket onMessage appends data and trims to maxLines', async () => {
     const { sharedHttpClient } = await import('@mp-se/espframework-ui-components')
     let messageHandler = null
-    
+
     vi.mocked(sharedHttpClient).createWebSocket = vi.fn((url, handlers) => {
       messageHandler = handlers.onMessage
       return {
         close: vi.fn(),
-        socketGetter: vi.fn(() => ({ close: vi.fn() })),
+        socketGetter: vi.fn(() => ({ close: vi.fn() }))
       }
     })
-    
+
     const wrapper = mountView()
     wrapper.vm.connect()
-    
+
     // Populate with many lines to test trimming
     for (let i = 0; i < 40; i++) {
       messageHandler({ data: 'Line ' + i })
     }
-    
-    const lineCount = wrapper.vm.serial.split('\n').filter(l => l).length
+
+    const lineCount = wrapper.vm.serial.split('\n').filter((l) => l).length
     expect(lineCount).toBeLessThanOrEqual(50)
   })
 
   it('websocket onOpen appends connection message', async () => {
     const { sharedHttpClient } = await import('@mp-se/espframework-ui-components')
     let openHandler = null
-    
+
     vi.mocked(sharedHttpClient).createWebSocket = vi.fn((url, handlers) => {
       openHandler = handlers.onOpen
       return {
         close: vi.fn(),
-        socketGetter: vi.fn(() => ({ close: vi.fn() })),
+        socketGetter: vi.fn(() => ({ close: vi.fn() }))
       }
     })
-    
+
     const wrapper = mountView()
     wrapper.vm.connect()
     openHandler()
-    
+
     expect(wrapper.vm.serial).toContain('Websocket established')
   })
 
   it('websocket onError appends error message with err.message', async () => {
     const { sharedHttpClient } = await import('@mp-se/espframework-ui-components')
     let errorHandler = null
-    
+
     vi.mocked(sharedHttpClient).createWebSocket = vi.fn((url, handlers) => {
       errorHandler = handlers.onError
       return {
         close: vi.fn(),
-        socketGetter: vi.fn(() => ({ close: vi.fn() })),
+        socketGetter: vi.fn(() => ({ close: vi.fn() }))
       }
     })
-    
+
     const wrapper = mountView()
     wrapper.vm.connect()
     errorHandler({ message: 'Connection error' })
-    
+
     expect(wrapper.vm.serial).toContain('Websocket error: Connection error')
   })
 
   it('websocket onError handles error without message property', async () => {
     const { sharedHttpClient } = await import('@mp-se/espframework-ui-components')
     let errorHandler = null
-    
+
     vi.mocked(sharedHttpClient).createWebSocket = vi.fn((url, handlers) => {
       errorHandler = handlers.onError
       return {
         close: vi.fn(),
-        socketGetter: vi.fn(() => ({ close: vi.fn() })),
+        socketGetter: vi.fn(() => ({ close: vi.fn() }))
       }
     })
-    
+
     const wrapper = mountView()
     wrapper.vm.connect()
     errorHandler('Raw error string')
-    
+
     expect(wrapper.vm.serial).toContain('Websocket error: Raw error string')
   })
 
   it('websocket onClose appends close message', async () => {
     const { sharedHttpClient } = await import('@mp-se/espframework-ui-components')
     let closeHandler = null
-    
+
     vi.mocked(sharedHttpClient).createWebSocket = vi.fn((url, handlers) => {
       closeHandler = handlers.onClose
       return {
         close: vi.fn(),
-        socketGetter: vi.fn(() => ({ close: vi.fn() })),
+        socketGetter: vi.fn(() => ({ close: vi.fn() }))
       }
     })
-    
+
     const wrapper = mountView()
     wrapper.vm.connect()
     closeHandler()
-    
+
     expect(wrapper.vm.serial).toContain('Socket closed')
   })
 
@@ -376,7 +378,7 @@ describe('SerialView (action tests)', () => {
       const mockSock = { close: vi.fn() }
       return {
         close: vi.fn(),
-        socketGetter: vi.fn(() => mockSock),
+        socketGetter: vi.fn(() => mockSock)
       }
     })
 
@@ -398,7 +400,7 @@ describe('SerialView (action tests)', () => {
       errorHandler = handlers.onError
       return {
         close: vi.fn(),
-        socketGetter: vi.fn(() => ({ close: vi.fn() })),
+        socketGetter: vi.fn(() => ({ close: vi.fn() }))
       }
     })
 
@@ -418,7 +420,7 @@ describe('SerialView (action tests)', () => {
       errorHandler = handlers.onError
       return {
         close: vi.fn(),
-        socketGetter: vi.fn(() => ({ close: vi.fn() })),
+        socketGetter: vi.fn(() => ({ close: vi.fn() }))
       }
     })
 
@@ -437,7 +439,7 @@ describe('SerialView (action tests)', () => {
       if (handlers.onOpen) handlers.onOpen()
       return {
         close: closeFn,
-        socketGetter: vi.fn(() => ({ close: vi.fn() })),
+        socketGetter: vi.fn(() => ({ close: vi.fn() }))
       }
     })
 
@@ -455,7 +457,7 @@ describe('SerialView (action tests)', () => {
       if (handlers.onOpen) handlers.onOpen()
       return {
         close: null, // not a function, so socketCloser remains null-like
-        socketGetter: vi.fn(() => ({ close: socketCloseFn })),
+        socketGetter: vi.fn(() => ({ close: socketCloseFn }))
       }
     })
 

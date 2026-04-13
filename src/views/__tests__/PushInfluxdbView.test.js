@@ -113,7 +113,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
@@ -122,7 +127,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.runTest()
     const { config } = await import('@/modules/pinia')
     expect(config.runPushTest).toHaveBeenCalled()
@@ -133,7 +143,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     wrapper.vm.influxdb2FormatCallback(encodeURIComponent('measurement,tag=val field=1.0'))
     expect(config.influxdb2_format_gravity).not.toBeUndefined()
   })
@@ -142,7 +157,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     expect(() => wrapper.vm.renderFormat()).not.toThrow()
   })
 
@@ -152,7 +172,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
     const { global } = await import('@/modules/pinia')
     global.disabled = true
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     expect(wrapper.vm.pushDisabled).toBe(true)
   })
 
@@ -161,7 +186,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
     const { config } = await import('@/modules/pinia')
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     wrapper.vm.influxdb2FormatCallback(encodeURIComponent('measurement,tag=val field=1.0'))
     expect(config.influxdb2_format_gravity).toBeDefined()
   })
@@ -173,7 +203,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { config, global } = await import('@/modules/pinia')
     vi.spyOn(config, 'runPushTest').mockRejectedValueOnce(new Error('Connection refused'))
     global.messageError = ''
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.runTest()
     expect(global.messageError).toBe('Failed to start push test')
   })
@@ -186,7 +221,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     vi.mocked(validateCurrentForm).mockReturnValue(false)
     config.saveAll = vi.fn()
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     expect(config.saveAll).not.toHaveBeenCalled()
   })
@@ -198,7 +238,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { global, config } = await import('@/modules/pinia')
     global.disabled = false
     config.use_wifi_direct = false
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     expect(wrapper.vm.pushDisabled).toBe(false)
   })
 
@@ -208,7 +253,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
     const { config } = await import('@/modules/pinia')
     config.use_wifi_direct = true
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     expect(wrapper.vm.pushDisabled).toBe(true)
     config.use_wifi_direct = false
   })
@@ -218,7 +268,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
     const { global } = await import('@/modules/pinia')
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.runTest()
     expect(global.clearMessages).toHaveBeenCalled()
   })
@@ -229,7 +284,12 @@ describe('PushInfluxdbView (action tests)', () => {
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
     const { config } = await import('@/modules/pinia')
     config.influxdb2_format_gravity = 'gravity,unit=SG value={gravity}'
-    const wrapper = mount(PushInfluxdbView, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true } } })
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
     wrapper.vm.renderFormat()
     expect(typeof wrapper.vm.render).toBe('string')
   })
@@ -246,7 +306,8 @@ describe('PushInfluxdbView (action tests)', () => {
         plugins: [createTestingPinia()],
         stubs: {
           BsInputText: {
-            template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+            template:
+              '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
             props: ['modelValue'],
             emits: ['update:modelValue']
           },
@@ -273,12 +334,27 @@ describe('PushInfluxdbView (action tests)', () => {
     global.disabled = false
 
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-      props: ['modelValue', 'type', 'disabled', 'maxlength', 'label', 'help', 'min', 'max', 'step', 'width', 'unit', 'rows'],
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      props: [
+        'modelValue',
+        'type',
+        'disabled',
+        'maxlength',
+        'label',
+        'help',
+        'min',
+        'max',
+        'step',
+        'width',
+        'unit',
+        'rows'
+      ],
       emits: ['update:modelValue']
     }
     const textareaStub = {
-      template: '<textarea :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)"></textarea>',
+      template:
+        '<textarea :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)"></textarea>',
       props: ['modelValue', 'disabled', 'rows', 'label', 'help'],
       emits: ['update:modelValue']
     }
@@ -294,8 +370,12 @@ describe('PushInfluxdbView (action tests)', () => {
         }
       }
     })
-    for (const el of wrapper.findAll('input')) { await el.trigger('input') }
-    for (const el of wrapper.findAll('textarea')) { await el.trigger('input') }
+    for (const el of wrapper.findAll('input')) {
+      await el.trigger('input')
+    }
+    for (const el of wrapper.findAll('textarea')) {
+      await el.trigger('input')
+    }
     expect(wrapper.find('form').exists()).toBe(true)
   })
 
@@ -313,7 +393,8 @@ describe('PushInfluxdbView (action tests)', () => {
           BsInputSwitch: true,
           BsDropdown: true,
           BsModal: {
-            template: '<button class="modal-emit" @click="$emit(\'update:modelValue\', \'test\')" />',
+            template:
+              '<button class="modal-emit" @click="$emit(\'update:modelValue\', \'test\')" />',
             props: ['modelValue', 'code', 'title', 'button'],
             emits: ['update:modelValue']
           }

@@ -83,14 +83,18 @@ describe('PushBluetoothView (interaction tests)', () => {
   })
 })
 
-
 describe('PushBluetoothView (action tests)', () => {
   beforeEach(() => vi.clearAllMocks())
   it('save calls config.saveAll when form is valid', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: View } = await import('../PushBluetoothView.vue')
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputSwitch: true, BsProgress: true }
+      }
+    })
     await wrapper.vm.save()
     const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
@@ -101,7 +105,12 @@ describe('PushBluetoothView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: View } = await import('../PushBluetoothView.vue')
     const { global } = await import('@/modules/pinia')
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true, BsInputSwitch: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputRadio: true, BsInputSwitch: true }
+      }
+    })
     await wrapper.vm.save()
     expect(global.clearMessages).toHaveBeenCalled()
   })
@@ -114,7 +123,12 @@ describe('PushBluetoothView (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     vi.mocked(validateCurrentForm).mockReturnValue(false)
     config.saveAll = vi.fn()
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true, BsInputSwitch: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputRadio: true, BsInputSwitch: true }
+      }
+    })
     await wrapper.vm.save()
     expect(config.saveAll).not.toHaveBeenCalled()
   })
@@ -126,7 +140,12 @@ describe('PushBluetoothView (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     config.ble_format = 1
     config.ble_tilt_color = ''
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true, BsInputSwitch: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputRadio: true, BsInputSwitch: true }
+      }
+    })
     await wrapper.vm.save()
     expect(config.ble_tilt_color).toBe('red')
     config.ble_format = 0
@@ -140,7 +159,12 @@ describe('PushBluetoothView (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     config.ble_format = 2
     config.ble_tilt_color = ''
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true, BsInputSwitch: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputRadio: true, BsInputSwitch: true }
+      }
+    })
     await wrapper.vm.save()
     expect(config.ble_tilt_color).toBe('red')
     config.ble_format = 0
@@ -154,7 +178,12 @@ describe('PushBluetoothView (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     config.ble_format = 0
     config.ble_tilt_color = ''
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true, BsInputSwitch: true } } })
+    const wrapper = mount(View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputRadio: true, BsInputSwitch: true }
+      }
+    })
     await wrapper.vm.save()
     expect(config.ble_tilt_color).toBe('')
   })
@@ -166,7 +195,9 @@ describe('PushBluetoothView (action tests)', () => {
     const { config, global } = await import('@/modules/pinia')
     config.ble_format = 1
     global.disabled32 = false
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } } })
+    const wrapper = mount(View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } }
+    })
     expect(wrapper.vm.tilt).toBe(false)
     config.ble_format = 0
   })
@@ -178,7 +209,9 @@ describe('PushBluetoothView (action tests)', () => {
     const { config, global } = await import('@/modules/pinia')
     config.ble_format = 2
     global.disabled32 = false
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } } })
+    const wrapper = mount(View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } }
+    })
     expect(wrapper.vm.tilt).toBe(false)
     config.ble_format = 0
   })
@@ -190,7 +223,9 @@ describe('PushBluetoothView (action tests)', () => {
     const { config, global } = await import('@/modules/pinia')
     config.ble_format = 5
     global.disabled32 = false
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } } })
+    const wrapper = mount(View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } }
+    })
     expect(wrapper.vm.tilt).toBe(true)
     config.ble_format = 0
   })
@@ -202,7 +237,9 @@ describe('PushBluetoothView (action tests)', () => {
     const { config, global } = await import('@/modules/pinia')
     config.ble_format = 1
     global.disabled32 = true
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } } })
+    const wrapper = mount(View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } }
+    })
     expect(wrapper.vm.tilt).toBe(true)
     global.disabled32 = false
     config.ble_format = 0
@@ -214,7 +251,9 @@ describe('PushBluetoothView (action tests)', () => {
     const { default: View } = await import('../PushBluetoothView.vue')
     const { global } = await import('@/modules/pinia')
     global.feature.ble = false
-    const wrapper = mount(View, { global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } } })
+    const wrapper = mount(View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputRadio: true } }
+    })
     expect(wrapper.text()).toContain('not available')
     global.feature.ble = true
   })
@@ -228,7 +267,8 @@ describe('PushBluetoothView (action tests)', () => {
     global.disabled = false
     global.disabled32 = false
     const radioStub = {
-      template: '<input type="radio" :value="modelValue" @change="$emit(\'update:modelValue\', \'changed\')">',
+      template:
+        '<input type="radio" :value="modelValue" @change="$emit(\'update:modelValue\', \'changed\')">',
       props: ['modelValue', 'options', 'disabled', 'label', 'help'],
       emits: ['update:modelValue']
     }

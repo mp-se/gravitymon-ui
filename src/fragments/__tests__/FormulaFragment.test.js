@@ -1,4 +1,4 @@
-import { describe, it, expect, defineComponent, ref } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import FormulaFragment from '../FormulaFragment.vue'
 import { createTestingPinia } from '../../tests/testUtils'
@@ -6,7 +6,8 @@ import { createTestingPinia } from '../../tests/testUtils'
 const emittingBsInputReadonly = {
   props: ['modelValue', 'label'],
   emits: ['update:modelValue'],
-  template: '<button class="bs-emitting" @click="$emit(\'update:modelValue\', \'updated\')">{{modelValue}}</button>'
+  template:
+    '<button class="bs-emitting" @click="$emit(\'update:modelValue\', \'updated\')">{{modelValue}}</button>'
 }
 
 describe('FormulaFragment (smoke)', () => {

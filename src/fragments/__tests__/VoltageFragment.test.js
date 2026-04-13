@@ -10,8 +10,8 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
   logInfo: vi.fn(),
   sharedHttpClient: {
     get: vi.fn(),
-    post: vi.fn(),
-  },
+    post: vi.fn()
+  }
 }))
 
 describe('VoltageFragment (interaction tests)', () => {
@@ -24,9 +24,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     expect(wrapper.exists()).toBe(true)
   })
@@ -36,9 +36,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('Calculate a new voltage factor')
   })
@@ -48,9 +48,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: { template: '<div class="bs-input-number"></div>' },
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     const input = wrapper.find('.bs-input-number')
     expect(input.exists()).toBe(true)
@@ -63,10 +63,10 @@ describe('VoltageFragment (interaction tests)', () => {
           BsInputNumber: true,
           BsInputReadonly: {
             template: '<div class="bs-readonly">{{ modelValue }}</div>',
-            props: ['modelValue'],
-          },
-        },
-      },
+            props: ['modelValue']
+          }
+        }
+      }
     })
     const readonly = wrapper.findAll('.bs-readonly')
     expect(readonly.length).toBeGreaterThan(0)
@@ -78,10 +78,10 @@ describe('VoltageFragment (interaction tests)', () => {
         stubs: {
           BsInputNumber: true,
           BsInputReadonly: {
-            template: '<div class="bs-readonly"></div>',
-          },
-        },
-      },
+            template: '<div class="bs-readonly"></div>'
+          }
+        }
+      }
     })
     const readonlyFields = wrapper.findAll('.bs-readonly')
     expect(readonlyFields.length).toBeGreaterThanOrEqual(2)
@@ -92,9 +92,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     const buttons = wrapper.findAll('button')
     const calcButton = buttons.find((b) => b.text().includes('Calculate factor'))
@@ -106,9 +106,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     expect(typeof wrapper.vm.calculateFactor).toBe('function')
   })
@@ -118,9 +118,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     expect(wrapper.vm.measuredVoltage).toBeDefined()
   })
@@ -130,9 +130,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     const buttons = wrapper.findAll('button')
     const calcButton = buttons.find((b) => b.text().includes('Calculate factor'))
@@ -144,9 +144,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     const buttons = wrapper.findAll('button')
     const calcButton = buttons.find((b) => b.text().includes('Calculate factor'))
@@ -158,9 +158,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     const rows = wrapper.findAll('.row')
     expect(rows.length).toBeGreaterThan(0)
@@ -173,9 +173,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     const rows = wrapper.findAll('.row')
     const spacedRow = rows.find((r) => r.element.className.includes('gy-4'))
@@ -187,9 +187,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     const spinner = wrapper.find('.spinner-border')
     expect(spinner.exists()).toBe(true)
@@ -200,9 +200,9 @@ describe('VoltageFragment (interaction tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
     const heading = wrapper.find('h5')
     expect(heading.exists()).toBe(true)
@@ -221,9 +221,9 @@ describe('VoltageFragment (action tests)', () => {
       global: {
         stubs: {
           BsInputNumber: true,
-          BsInputReadonly: true,
-        },
-      },
+          BsInputReadonly: true
+        }
+      }
     })
 
   it('calculateFactor sets messageError when measuredVoltage is NaN', async () => {
@@ -260,7 +260,7 @@ describe('VoltageFragment (action tests)', () => {
 
   it('calculateFactor executes setTimeout callback after delay', async () => {
     vi.useFakeTimers()
-    const { config, status, global: globalStore } = await import('@/modules/pinia')
+    const { config, status } = await import('@/modules/pinia')
     config.voltage_factor = 1.0
     status.battery = 4.0
     status.load = vi.fn().mockResolvedValue(true)

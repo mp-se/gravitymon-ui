@@ -16,8 +16,8 @@ vi.mock('@mp-se/espframework-ui-components', () => ({
     postJson: vi.fn(),
     request: vi.fn(),
     getJson: vi.fn(),
-    filesystemRequest: vi.fn(),
-  },
+    filesystemRequest: vi.fn()
+  }
 }))
 
 describe('DeviceGyroView (interaction tests)', () => {
@@ -34,9 +34,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     expect(wrapper.exists()).toBe(true)
   })
@@ -50,9 +50,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('Device - Gyro')
   })
@@ -66,9 +66,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     const form = wrapper.find('form')
     expect(form.exists()).toBe(true)
@@ -81,14 +81,14 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsMessage: true,
           BsInputRadio: {
             template: '<div class="bs-input-radio">{{ label }}</div>',
-            props: ['label'],
+            props: ['label']
           },
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     expect(wrapper.text()).toContain('Gyro options')
   })
@@ -102,9 +102,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     const radioInput = wrapper.find('.bs-input-radio')
     expect(radioInput.exists()).toBe(true)
@@ -119,9 +119,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     const buttons = wrapper.findAll('button')
     const saveButton = buttons.find((b) => b.text().includes('Save'))
@@ -137,9 +137,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     expect(typeof wrapper.vm.isGyroCalibrated).toBe('function')
   })
@@ -153,9 +153,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     expect(typeof wrapper.vm.save).toBe('function')
   })
@@ -169,9 +169,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     expect(typeof wrapper.vm.calibrate).toBe('function')
   })
@@ -185,9 +185,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     expect(typeof wrapper.vm.clearCalibration).toBe('function')
   })
@@ -201,9 +201,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     expect(wrapper.vm.calibrationValues).toBeDefined()
   })
@@ -217,9 +217,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     expect(Array.isArray(wrapper.vm.gyroOptions)).toBe(true)
   })
@@ -233,9 +233,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     const form = wrapper.find('form')
     expect(form.attributes('novalidate')).toBeDefined()
@@ -250,9 +250,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     const form = wrapper.find('form')
     expect(form.element.className).toContain('needs-validation')
@@ -267,9 +267,9 @@ describe('DeviceGyroView (interaction tests)', () => {
           BsInputSwitch: true,
           BsInputReadonly: true,
           BsInputText: true,
-          BsInputNumber: true,
-        },
-      },
+          BsInputNumber: true
+        }
+      }
     })
     // Message component exists in template (rendered as stub)
     const messageStub = wrapper.find('.bs-message-stub')
@@ -284,7 +284,7 @@ describe('DeviceGyroView (action tests)', () => {
     BsInputSwitch: true,
     BsInputReadonly: true,
     BsInputText: true,
-    BsInputNumber: true,
+    BsInputNumber: true
   }
 
   const mountView = () => mount(DeviceGyroView, { global: { stubs } })
@@ -307,8 +307,7 @@ describe('DeviceGyroView (action tests)', () => {
 
   it('calibrate starts calibration and polls for status', async () => {
     http.request.mockResolvedValueOnce({ ok: true })
-    http.getJson
-      .mockResolvedValueOnce({ status: false, success: true }) // immediate completion
+    http.getJson.mockResolvedValueOnce({ status: false, success: true }) // immediate completion
     const { useConfigStore } = await import('@/modules/configStore')
     const configStore = useConfigStore()
     configStore.load = vi.fn(async () => true)
@@ -396,7 +395,7 @@ describe('DeviceGyroView (action tests)', () => {
   it('calibrate polls while statusRes.status is true then succeeds', async () => {
     http.request.mockResolvedValueOnce({ ok: true })
     http.getJson
-      .mockResolvedValueOnce({ status: true })  // first poll: still running
+      .mockResolvedValueOnce({ status: true }) // first poll: still running
       .mockResolvedValueOnce({ status: false, success: true }) // second poll: done
 
     const { useConfigStore } = await import('@/modules/configStore')
@@ -487,8 +486,20 @@ describe('DeviceGyroView (action tests)', () => {
     const { default: DeviceGyroView } = await import('../DeviceGyroView.vue')
     const { createTestingPinia } = await import('../../tests/testUtils')
     const inputStub = {
-      template: '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-      props: ['modelValue', 'label', 'disabled', 'help', 'badge', 'options', 'min', 'max', 'step', 'width'],
+      template:
+        '<input :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      props: [
+        'modelValue',
+        'label',
+        'disabled',
+        'help',
+        'badge',
+        'options',
+        'min',
+        'max',
+        'step',
+        'width'
+      ],
       emits: ['update:modelValue']
     }
     const wrapper = mount(DeviceGyroView, {
@@ -520,12 +531,16 @@ describe('DeviceGyroView (action tests)', () => {
     const wrapper = mount(DeviceGyroView, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: { BsInputSwitch: true, BsInputReadonly: true, BsInputRadio: true, BsInputNumber: true, BsCard: true }
+        stubs: {
+          BsInputSwitch: true,
+          BsInputReadonly: true,
+          BsInputRadio: true,
+          BsInputNumber: true,
+          BsCard: true
+        }
       }
     })
     // Click the clearCalibration button if it exists in the DOM
-    const buttons = wrapper.findAll('button')
-    const clearBtn = buttons.find((b) => b.attributes('onclick') !== '' || true)
     // Trigger first secondary button (clearCalibration button)
     const secBtn = wrapper.findAll('.btn-secondary')
     if (secBtn.length > 0) await secBtn[0].trigger('click')
