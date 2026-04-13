@@ -1,0 +1,67 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { useStatusStore } from '../statusStore'
+import { createPinia, setActivePinia } from 'pinia'
+
+// Mock the UI components library
+vi.mock('@mp-se/espframework-ui-components', () => ({
+  logDebug: vi.fn(),
+  logError: vi.fn(),
+  logInfo: vi.fn(),
+  sharedHttpClient: {
+    get: vi.fn(),
+    post: vi.fn(),
+  },
+}))
+
+describe('statusStore', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  it('can create store instance', () => {
+    const store = useStatusStore()
+    expect(store).toBeDefined()
+  })
+
+  it('has updateFromJson method', () => {
+    const store = useStatusStore()
+    expect(typeof store.updateFromJson).toBe('function')
+  })
+
+  it('initializes with default state', () => {
+    const store = useStatusStore()
+    expect(store).toBeDefined()
+    expect(typeof store.angle).toBeDefined()
+    expect(typeof store.gravity).toBeDefined()
+  })
+
+  it('initializes angle with default value', () => {
+    const store = useStatusStore()
+    expect(store.angle).toBeDefined()
+    expect(typeof store.angle).toBe('number')
+  })
+
+  it('initializes gravity with default value', () => {
+    const store = useStatusStore()
+    expect(store.gravity).toBeDefined()
+    expect(typeof store.gravity).toBe('number')
+  })
+
+  it('initializes temperature with default value', () => {
+    const store = useStatusStore()
+    expect(store.temp).toBeDefined()
+    expect(typeof store.temp).toBe('number')
+  })
+
+  it('initializes battery with default value', () => {
+    const store = useStatusStore()
+    expect(store.battery).toBeDefined()
+    expect(typeof store.battery).toBe('number')
+  })
+
+  it('initializes rssi with default value', () => {
+    const store = useStatusStore()
+    expect(store.rssi).toBeDefined()
+    expect(typeof store.rssi).toBe('number')
+  })
+})

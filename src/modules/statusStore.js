@@ -20,7 +20,7 @@
  *
  */
 import { defineStore } from 'pinia'
-import { config } from '@/modules/pinia'
+import { useConfigStore } from '@/modules/configStore'
 import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 
@@ -59,7 +59,7 @@ export const useStatusStore = defineStore('status', {
   getters: {
     needsCalibration() {
       // Calibration is needed for MPU6050/6500 (gyro_type 1), not for ICM42670-p (gyro_type 2)
-      return config.gyro_type === 1
+      return useConfigStore().gyro_type === 1
     }
   },
   actions: {
