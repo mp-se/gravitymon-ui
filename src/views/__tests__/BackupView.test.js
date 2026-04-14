@@ -103,10 +103,14 @@ describe('BackupView (comprehensive tests)', () => {
         if (event === 'load') this.onload = cb
       })
     }
-    vi.stubGlobal(
-      'FileReader',
-      vi.fn(() => mockReader)
-    )
+
+    class MockFileReader {
+      constructor() {
+        return mockReader
+      }
+    }
+
+    vi.stubGlobal('FileReader', MockFileReader)
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'test.txt')],
@@ -134,10 +138,14 @@ describe('BackupView (comprehensive tests)', () => {
         if (event === 'error') this.onerror = cb
       })
     }
-    vi.stubGlobal(
-      'FileReader',
-      vi.fn(() => mockReader)
-    )
+
+    class MockFileReader {
+      constructor() {
+        return mockReader
+      }
+    }
+
+    vi.stubGlobal('FileReader', MockFileReader)
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'test.txt')],
@@ -161,10 +169,14 @@ describe('BackupView (comprehensive tests)', () => {
         if (event === 'load') this.onload = cb
       })
     }
-    vi.stubGlobal(
-      'FileReader',
-      vi.fn(() => mockReader)
-    )
+
+    class MockFileReader {
+      constructor() {
+        return mockReader
+      }
+    }
+
+    vi.stubGlobal('FileReader', MockFileReader)
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'test.txt')],
@@ -204,10 +216,14 @@ describe('BackupView (comprehensive tests)', () => {
         if (event === 'error') this.onerror = cb
       })
     }
-    vi.stubGlobal(
-      'FileReader',
-      vi.fn(() => mockReader)
-    )
+
+    class MockFileReader {
+      constructor() {
+        return mockReader
+      }
+    }
+
+    vi.stubGlobal('FileReader', MockFileReader)
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'backup.txt')],
@@ -239,10 +255,14 @@ describe('BackupView (comprehensive tests)', () => {
         if (event === 'error') this.onerror = cb
       })
     }
-    vi.stubGlobal(
-      'FileReader',
-      vi.fn(() => mockReader)
-    )
+
+    class MockFileReader {
+      constructor() {
+        return mockReader
+      }
+    }
+
+    vi.stubGlobal('FileReader', MockFileReader)
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'backup.txt')],
@@ -333,10 +353,14 @@ describe('BackupView (comprehensive tests)', () => {
         if (event === 'error') this.onerror = cb
       })
     }
-    vi.stubGlobal(
-      'FileReader',
-      vi.fn(() => mockReader)
-    )
+
+    class MockFileReader {
+      constructor() {
+        return mockReader
+      }
+    }
+
+    vi.stubGlobal('FileReader', MockFileReader)
 
     const getElementSpy = vi.spyOn(document, 'getElementById').mockReturnValue({
       files: [new File([], 'backup.txt')],

@@ -158,21 +158,21 @@ import { ref, computed, watch } from 'vue'
 import { applyTemplate, mqttFormatOptions } from '@/modules/utils'
 import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, status, config } from '@/modules/pinia'
-import { storeToRefs } from 'pinia'
 
 const render = ref('')
 
-const { mqtt_format_gravity } = storeToRefs(config)
-
-watch(mqtt_format_gravity, () => {
-  if (global.isEsp8266) {
-    const s = applyTemplate(status, config, config.mqtt_format_gravity)
-    if (s.length > 500)
-      global.messageWarning =
-        'On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template.'
-    else global.messageWarning = ''
+watch(
+  () => config.mqtt_format_gravity,
+  () => {
+    if (global.isEsp8266) {
+      const s = applyTemplate(status, config, config.mqtt_format_gravity)
+      if (s.length > 500)
+        global.messageWarning =
+          'On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template.'
+      else global.messageWarning = ''
+    }
   }
-})
+)
 
 const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct
