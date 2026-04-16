@@ -99,7 +99,10 @@ vi.mock('@/modules/globalStore', () => ({
       enableManualWifiEntry: true,
       enableScanForStrongestAp: true,
       enableDeviceRegistration: true,
-      enableCalibrationRegistration: true
+      enableCalibrationRegistration: true,
+      enableGravity: true,
+      enablePressure: false,
+      enableHttpPostTcpMode: false
     },
     feature: {
       ble: true,

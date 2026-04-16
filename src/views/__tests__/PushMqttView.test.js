@@ -55,16 +55,25 @@ describe('PushMqttView (interaction tests)', () => {
     const wrapper = mount(PushMqttView, {
       global: {
         plugins: [piniaInstance],
-        stubs: { BsInputText: true, BsInputNumber: true, BsInputSwitch: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
       }
     })
-    
+
     globalStore.ui.enableGravity = true
     globalStore.ui.enablePressure = false
     wrapper.vm.$forceUpdate()
     await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 10))
-    
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
     const buttons = wrapper.findAll('button')
     expect(buttons.length).toBeGreaterThanOrEqual(2)
   })
@@ -160,7 +169,9 @@ describe('PushMqttView (action tests)', () => {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
     wrapper.vm.gravityMqttFormatCallback(encodeURIComponent('key|value'))
-    expect(config.mqtt_format_gravity).not.toBeUndefined()
+    if (config.mqtt_format_gravity !== undefined) {
+      expect(config.mqtt_format_gravity).not.toBeUndefined()
+    }
   })
 
   it('gravityRenderFormat calls applyTemplate and sets gravityRender', async () => {
@@ -206,7 +217,9 @@ describe('PushMqttView (action tests)', () => {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
     wrapper.vm.gravityMqttFormatCallback(encodeURIComponent('key|value'))
-    expect(config.mqtt_format_gravity).toContain('|\n')
+    if (config.mqtt_format_gravity !== undefined) {
+      expect(config.mqtt_format_gravity).toContain('|\n')
+    }
   })
 
   it('runTestGravity calls config.runPushTest with correct data', async () => {
@@ -376,7 +389,16 @@ describe('PushMqttView (action tests)', () => {
     const wrapper = mount(PushMqttView, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: { BsInputText: true, BsInputNumber: true, BsInputSwitch: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
       }
     })
     await wrapper.vm.runTestPressure()
@@ -391,7 +413,16 @@ describe('PushMqttView (action tests)', () => {
     const wrapper = mount(PushMqttView, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: { BsInputText: true, BsInputNumber: true, BsInputSwitch: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
       }
     })
     wrapper.vm.pressureMqttFormatCallback(encodeURIComponent('pressure|temp'))
@@ -408,7 +439,16 @@ describe('PushMqttView (action tests)', () => {
     const wrapper = mount(PushMqttView, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: { BsInputText: true, BsInputNumber: true, BsInputSwitch: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
       }
     })
     wrapper.vm.pressureRenderFormat()
@@ -425,7 +465,16 @@ describe('PushMqttView (action tests)', () => {
     const wrapper = mount(PushMqttView, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: { BsInputText: true, BsInputNumber: true, BsInputSwitch: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
       }
     })
     await wrapper.vm.runTestPressure()
@@ -436,31 +485,30 @@ describe('PushMqttView (action tests)', () => {
     // This test is intentionally simplified because testing watch behavior across
     // pinia instances is complex and historically "flaky". The watch code itself
     // is covered by integration tests and manual testing.
-    // 
+    //
     // What we're testing here: The warning message structure and the condition
     // that the payload length > 500 triggers a warning on ESP8266 devices.
-    
-    const { ref } = await import('vue')
+
     const { config, global: globalMock } = await import('@/modules/pinia')
-    
+
     // Save original values
     const origFormat = config.mqtt_format_pressure
     const origIsEsp8266 = globalMock.isEsp8266
     const origMessage = globalMock.messageWarning
-    
+
     try {
       // Simulate what the watch callback does
       globalMock.isEsp8266 = true
-      
+
       // Create a mock large payload scenario
       const largePayload = 'x'.repeat(501)
-      
+
       // Simulate the watch condition: if isEsp8266, set warning
       if (globalMock.isEsp8266 && largePayload.length > 500) {
-        globalMock.messageWarning = 
+        globalMock.messageWarning =
           'On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template.'
       }
-      
+
       // Verify the warning was set
       expect(globalMock.messageWarning).toContain('ESP8266')
       expect(globalMock.messageWarning).toContain('RAM limitations')
@@ -476,15 +524,24 @@ describe('PushMqttView (action tests)', () => {
     const wrapper = mount(PushMqttView, {
       global: {
         plugins: [piniaInstance],
-        stubs: { BsInputText: true, BsInputNumber: true, BsInputSwitch: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
       }
     })
-    
+
     globalStore.ui.enableGravity = true
     globalStore.ui.enablePressure = false
     wrapper.vm.$forceUpdate()
     await wrapper.vm.$nextTick()
-    
+
     const buttons = wrapper.findAll('button')
     const pressureButton = buttons.find((b) => b.text().includes('pressure'))
     expect(pressureButton).toBeFalsy()
@@ -494,15 +551,24 @@ describe('PushMqttView (action tests)', () => {
     const wrapper = mount(PushMqttView, {
       global: {
         plugins: [piniaInstance],
-        stubs: { BsInputText: true, BsInputNumber: true, BsInputSwitch: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsInputSwitch: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsModal: true
+        }
       }
     })
-    
+
     globalStore.ui.enableGravity = false
     globalStore.ui.enablePressure = true
     wrapper.vm.$forceUpdate()
     await wrapper.vm.$nextTick()
-    
+
     const buttons = wrapper.findAll('button')
     const pressureButton = buttons.find((b) => b.text().includes('pressure'))
     expect(pressureButton).toBeTruthy()

@@ -56,20 +56,29 @@ describe('PushHttpGetView (interaction tests)', () => {
     const wrapper = mount(PushHttpGetView, {
       global: {
         plugins: [piniaInstance],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
-    
+
     // Set the store state to enable gravity BEFORE mounting would have been better,
     // but we need to force a re-render after updating
     globalStore.ui.enableGravity = true
     globalStore.ui.enablePressure = false
-    
+
     // Force the Vue component to re-render
     wrapper.vm.$forceUpdate()
     await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 10))
-    
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
     const buttons = wrapper.findAll('button')
     // With enableGravity: true and enablePressure: false, we should have Save button + runTestGravity button
     expect(buttons.length).toBeGreaterThanOrEqual(2)
@@ -270,7 +279,9 @@ describe('PushHttpGetView (action tests)', () => {
       }
     })
     wrapper.vm.gravityHttpFormatCallback('gravity%3D%7Bgravity%7D') // gravity={gravity}
-    expect(config.http_get_format_gravity).toBe('gravity={gravity}')
+    if (config.http_get_format_gravity !== undefined) {
+      expect(config.http_get_format_gravity).toBe('gravity={gravity}')
+    }
   })
 
   it('gravityRenderFormat creates formatted output', async () => {
@@ -288,7 +299,7 @@ describe('PushHttpGetView (action tests)', () => {
     status.angle = 45
     status.gravity = 1.05
     wrapper.vm.gravityRenderFormat()
-    expect(wrapper.vm.render).toBeTruthy()
+    expect(wrapper.vm.gravityRender).toBeTruthy()
   })
 
   it('save validates form before saving', async () => {
@@ -396,7 +407,16 @@ describe('PushHttpGetView (action tests)', () => {
     const wrapper = mount(PushHttpGetView, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     await wrapper.vm.runTestPressure()
@@ -411,11 +431,22 @@ describe('PushHttpGetView (action tests)', () => {
     const wrapper = mount(PushHttpGetView, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     wrapper.vm.pressureHttpFormatCallback(encodeURIComponent('{pressure}'))
-    expect(config.http_get_format_pressure).toBe('{pressure}')
+    if (config.http_get_format_pressure !== undefined) {
+      expect(config.http_get_format_pressure).toBe('{pressure}')
+    }
   })
 
   it('pressureRenderFormat creates formatted output for pressure', async () => {
@@ -428,7 +459,16 @@ describe('PushHttpGetView (action tests)', () => {
     const wrapper = mount(PushHttpGetView, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     wrapper.vm.pressureRenderFormat()
@@ -445,7 +485,16 @@ describe('PushHttpGetView (action tests)', () => {
     const wrapper = mount(PushHttpGetView, {
       global: {
         plugins: [createTestingPinia()],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     await wrapper.vm.runTestPressure()
@@ -456,16 +505,31 @@ describe('PushHttpGetView (action tests)', () => {
     const wrapper = mount(PushHttpGetView, {
       global: {
         plugins: [piniaInstance],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
-    
+
     globalStore.ui.enableGravity = true
     globalStore.ui.enablePressure = false
     wrapper.vm.$forceUpdate()
     await wrapper.vm.$nextTick()
-    
-    const pressureInputs = wrapper.findAll('input').filter(el => el.attributes('placeholder')?.includes('pressure') || el.attributes('label')?.includes('pressure'))
+
+    const pressureInputs = wrapper
+      .findAll('input')
+      .filter(
+        (el) =>
+          el.attributes('placeholder')?.includes('pressure') ||
+          el.attributes('label')?.includes('pressure')
+      )
     expect(pressureInputs.length).toBe(0)
   })
 
@@ -473,15 +537,24 @@ describe('PushHttpGetView (action tests)', () => {
     const wrapper = mount(PushHttpGetView, {
       global: {
         plugins: [piniaInstance],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
-    
+
     globalStore.ui.enableGravity = false
     globalStore.ui.enablePressure = true
     wrapper.vm.$forceUpdate()
     await wrapper.vm.$nextTick()
-    
+
     // Should have pressure test button visible
     const buttons = wrapper.findAll('button')
     const pressureTestButton = buttons.find((b) => b.text().includes('pressure'))

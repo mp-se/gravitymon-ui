@@ -39,7 +39,7 @@
             label="HTTP URL"
             help="URL to push target, use format http://servername.com/resource (Supports http and https)"
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false"
+            v-if="config.http_post_tcp === false || global.ui.enableHttpPostTcpMode === false"
           />
 
           <BsInputText
@@ -53,7 +53,11 @@
           />
         </div>
         <div class="col-md-1">
-          <BsInputSwitch v-model="config.http_post_tcp" label="Use tcp" />
+          <BsInputSwitch
+            v-model="config.http_post_tcp"
+            label="Use tcp"
+            v-if="global.ui.enableHttpPostTcpMode"
+          />
         </div>
         <div class="col-md-3">
           <BsDropdown
@@ -62,7 +66,7 @@
             :options="httpPostUrlOptions"
             :callback="httpUrlCallback"
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false"
+            v-if="config.http_post_tcp === false || global.ui.enableHttpPostTcpMode === false"
           />
         </div>
         <div class="col-md-9">
@@ -73,7 +77,7 @@
             label="HTTP Header #1"
             help=""
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false"
+            v-if="config.http_post_tcp === false || global.ui.enableHttpPostTcpMode === false"
           />
         </div>
         <div class="col-md-3">
@@ -83,7 +87,7 @@
             :options="httpHeaderOptions"
             :callback="httpHeaderH1Callback"
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false"
+            v-if="config.http_post_tcp === false || global.ui.enableHttpPostTcpMode === false"
           />
         </div>
         <div class="col-md-9">
@@ -94,7 +98,7 @@
             label="HTTP Header #2"
             help="Set a http headers, empty string is skipped, example: Content-Type: application/json"
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false"
+            v-if="config.http_post_tcp === false || global.ui.enableHttpPostTcpMode === false"
           />
         </div>
         <div class="col-md-3">
@@ -104,7 +108,7 @@
             :options="httpHeaderOptions"
             :callback="httpHeaderH2Callback"
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false"
+            v-if="config.http_post_tcp === false || global.ui.enableHttpPostTcpMode === false"
           />
         </div>
         <div class="col-md-6">
@@ -116,7 +120,7 @@
             width="4"
             help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
             :disabled="pushDisabled"
-            v-if="config.http_post_tcp === false"
+            v-if="config.http_post_tcp === false || global.ui.enableHttpPostTcpMode === false"
           />
         </div>
         <div class="col-md-9">
@@ -129,14 +133,18 @@
             v-if="global.ui.enableGravity"
           />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" v-if="global.ui.enableGravity && global.ui.enablePressure">
+          <BsInputSwitch
+            v-model="config.http_post_gravity"
+            label="Enable gravity"
+            :disabled="global.disabled"
+          />
           <BsDropdown
             label="Predefined formats"
             button="Formats"
             :options="gravityHttpPostFormatOptions"
             :callback="gravityHttpFormatCallback"
             :disabled="pushDisabled"
-            v-if="global.ui.enableGravity"
           />
           <BsModal
             @click="gravityRenderFormat"
@@ -146,7 +154,24 @@
             title="Format preview"
             button="Preview format"
             :disabled="pushDisabled"
-            v-if="global.ui.enableGravity"
+          />
+        </div>
+        <div class="col-md-3" v-if="global.ui.enableGravity && !global.ui.enablePressure">
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="gravityHttpPostFormatOptions"
+            :callback="gravityHttpFormatCallback"
+            :disabled="pushDisabled"
+          />
+          <BsModal
+            @click="gravityRenderFormat"
+            v-model="gravityRender"
+            :code="true"
+            :json="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled"
           />
         </div>
         <div class="col-md-9">
@@ -159,14 +184,18 @@
             v-if="global.ui.enablePressure"
           />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" v-if="global.ui.enablePressure && global.ui.enableGravity">
+          <BsInputSwitch
+            v-model="config.http_post_pressure"
+            label="Enable pressure"
+            :disabled="global.disabled"
+          />
           <BsDropdown
             label="Predefined formats"
             button="Formats"
             :options="pressureHttpPostFormatOptions"
             :callback="pressureHttpFormatCallback"
             :disabled="pushDisabled"
-            v-if="global.ui.enablePressure"
           />
           <BsModal
             @click="pressureRenderFormat"
@@ -176,7 +205,24 @@
             title="Format preview"
             button="Preview format"
             :disabled="pushDisabled"
-            v-if="global.ui.enablePressure"
+          />
+        </div>
+        <div class="col-md-3" v-if="global.ui.enablePressure && !global.ui.enableGravity">
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="pressureHttpPostFormatOptions"
+            :callback="pressureHttpFormatCallback"
+            :disabled="pushDisabled"
+          />
+          <BsModal
+            @click="pressureRenderFormat"
+            v-model="pressureRender"
+            :code="true"
+            :json="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled"
           />
         </div>
       </div>

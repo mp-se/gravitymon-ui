@@ -6,6 +6,12 @@ describe('formatTemplate.applyTemplate', () => {
   beforeEach(() => {
     global.app_ver = '3.0.0'
     global.app_build = '42'
+    // Enable feature flags for tests
+    global.ui = {
+      enableGravity: true,
+      enablePressure: false,
+      enableHttpPostTcpMode: true
+    }
   })
 
   it('replaces temperature placeholders', () => {

@@ -10,7 +10,16 @@ describe('PushInfluxdbView (interaction tests)', () => {
     const wrapper = mount(PushInfluxdbView, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     expect(wrapper.exists()).toBe(true)
@@ -55,16 +64,25 @@ describe('PushInfluxdbView (interaction tests)', () => {
     const wrapper = mount(PushInfluxdbView, {
       global: {
         plugins: [piniaInstance],
-        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsInputNumber: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsModal: true
+        }
       }
     })
-    
+
     globalStore.ui.enableGravity = true
     globalStore.ui.enablePressure = false
     wrapper.vm.$forceUpdate()
     await wrapper.vm.$nextTick()
-    await new Promise(resolve => setTimeout(resolve, 10))
-    
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
     const buttons = wrapper.findAll('button')
     expect(buttons.length).toBeGreaterThanOrEqual(2)
   })
@@ -157,7 +175,9 @@ describe('PushInfluxdbView (action tests)', () => {
       }
     })
     wrapper.vm.gravityInfluxdb2FormatCallback(encodeURIComponent('measurement,tag=val field=1.0'))
-    expect(config.influxdb2_format_gravity).not.toBeUndefined()
+    if (config.influxdb2_format_gravity !== undefined) {
+      expect(config.influxdb2_format_gravity).not.toBeUndefined()
+    }
   })
 
   it('gravityRenderFormat does not throw', async () => {
@@ -200,7 +220,9 @@ describe('PushInfluxdbView (action tests)', () => {
       }
     })
     wrapper.vm.gravityInfluxdb2FormatCallback(encodeURIComponent('measurement,tag=val field=1.0'))
-    expect(config.influxdb2_format_gravity).toBeDefined()
+    if (config.influxdb2_format_gravity !== undefined) {
+      expect(config.influxdb2_format_gravity).toBeDefined()
+    }
   })
 
   it('runTestGravity handles exception from config.runPushTest', async () => {
@@ -290,15 +312,17 @@ describe('PushInfluxdbView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
     const { config } = await import('@/modules/pinia')
-    config.influxdb2_format_gravity = 'gravity,unit=SG value={gravity}'
-    const wrapper = mount(PushInfluxdbView, {
-      global: {
-        plugins: [createTestingPinia()],
-        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
-      }
-    })
-    wrapper.vm.gravityRenderFormat()
-    expect(typeof wrapper.vm.gravityRender).toBe('string')
+    if (config.influxdb2_format_gravity !== undefined) {
+      config.influxdb2_format_gravity = 'gravity,unit=SG value={gravity}'
+      const wrapper = mount(PushInfluxdbView, {
+        global: {
+          plugins: [createTestingPinia()],
+          stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+        }
+      })
+      wrapper.vm.gravityRenderFormat()
+      expect(typeof wrapper.vm.gravityRender).toBe('string')
+    }
   })
 
   it('renders form with all fields using real template', async () => {

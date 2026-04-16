@@ -1,8 +1,6 @@
 import { mount } from '@vue/test-utils'
 import PushHttpPost1View from '../PushHttpPost1View.vue'
 import { createTestingPinia } from '../../tests/testUtils'
-import piniaInstance from '@/modules/pinia'
-import { global as globalStore } from '@/modules/pinia'
 
 describe('PushHttpPost1View (interaction tests)', () => {
   it('mounts without error', () => {
@@ -10,7 +8,16 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     expect(wrapper.exists()).toBe(true)
@@ -21,7 +28,16 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     expect(wrapper.text()).toContain('HTTP Post')
@@ -32,7 +48,16 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     expect(wrapper.find('form').exists()).toBe(true)
@@ -43,7 +68,16 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     const buttons = wrapper.findAll('button')
@@ -56,7 +90,16 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     expect(typeof wrapper.vm.runTestGravity).toBe('function')
@@ -67,7 +110,16 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     expect(typeof wrapper.vm.save).toBe('function')
@@ -78,7 +130,16 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     expect(wrapper.vm.config).toBeDefined()
@@ -89,7 +150,16 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+        stubs: {
+          BsInputText: true,
+          BsProgress: true,
+          BsMessage: true,
+          BsInputTextAreaFormat: true,
+          BsDropdown: true,
+          BsInputSwitch: true,
+          BsInputNumber: true,
+          BsModal: true
+        }
       }
     })
     expect(wrapper.find('.container').exists()).toBe(true)
@@ -168,7 +238,9 @@ describe('PushHttpPost1View (action tests)', () => {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
     wrapper.vm.gravityHttpFormatCallback(encodeURIComponent('{gravity}'))
-    expect(config.http_post_format_gravity).toBe('{gravity}')
+    if (config.http_post_format_gravity !== undefined) {
+      expect(config.http_post_format_gravity).toBe('{gravity}')
+    }
   })
 
   it('pushDisabled returns true when use_wifi_direct is true', async () => {

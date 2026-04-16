@@ -131,6 +131,13 @@
             v-if="global.ui.enableGravity"
           />
         </div>
+        <div class="col-md-3" v-if="global.ui.enableGravity && global.ui.enablePressure">
+          <BsInputSwitch
+            v-model="config.http_post2_gravity"
+            label="Enable gravity"
+            :disabled="global.disabled"
+          />
+        </div>
         <div class="col-md-9">
           <BsInputTextAreaFormat
             v-model="config.http_post2_format_pressure"
@@ -141,14 +148,18 @@
             v-if="global.ui.enablePressure"
           />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" v-if="global.ui.enablePressure && global.ui.enableGravity">
+          <BsInputSwitch
+            v-model="config.http_post2_pressure"
+            label="Enable pressure"
+            :disabled="global.disabled"
+          />
           <BsDropdown
             label="Predefined formats"
             button="Formats"
             :options="pressureHttpPostFormatOptions"
             :callback="pressureHttpFormatCallback"
             :disabled="pushDisabled"
-            v-if="global.ui.enablePressure"
           />
           <BsModal
             @click="pressureRenderFormat"
@@ -158,7 +169,24 @@
             title="Format preview"
             button="Preview format"
             :disabled="pushDisabled"
-            v-if="global.ui.enablePressure"
+          />
+        </div>
+        <div class="col-md-3" v-if="global.ui.enablePressure && !global.ui.enableGravity">
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="pressureHttpPostFormatOptions"
+            :callback="pressureHttpFormatCallback"
+            :disabled="pushDisabled"
+          />
+          <BsModal
+            @click="pressureRenderFormat"
+            v-model="pressureRender"
+            :code="true"
+            :json="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled"
           />
         </div>
       </div>

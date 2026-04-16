@@ -83,6 +83,17 @@
             :disabled="pushDisabled"
           />
         </div>
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.http_get_int"
+            label="Skip interval"
+            min="0"
+            max="5"
+            width="4"
+            help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
+            :disabled="pushDisabled"
+          />
+        </div>
 
         <!-- GRAVITY SECTION -->
         <div v-if="global.ui.enableGravity" class="col-md-9">
@@ -91,10 +102,10 @@
             rows="6"
             label="Gravity Data format"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled || !config.http_get_gravity"
+            :disabled="pushDisabled"
           />
         </div>
-        <div v-if="global.ui.enableGravity" class="col-md-3">
+        <div v-if="global.ui.enableGravity && global.ui.enablePressure" class="col-md-3">
           <BsInputSwitch
             v-model="config.http_get_gravity"
             label="Enable gravity"
@@ -105,7 +116,7 @@
             button="Formats"
             :options="gravityHttpGetFormatOptions"
             :callback="gravityHttpFormatCallback"
-            :disabled="pushDisabled || !config.http_get_gravity"
+            :disabled="pushDisabled"
           />
           <BsModal
             @click="gravityRenderFormat"
@@ -113,7 +124,24 @@
             :code="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled || !config.http_get_gravity"
+            :disabled="pushDisabled"
+          />
+        </div>
+        <div v-if="global.ui.enableGravity && !global.ui.enablePressure" class="col-md-3">
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="gravityHttpGetFormatOptions"
+            :callback="gravityHttpFormatCallback"
+            :disabled="pushDisabled"
+          />
+          <BsModal
+            @click="gravityRenderFormat"
+            v-model="gravityRender"
+            :code="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled"
           />
         </div>
 
@@ -124,10 +152,10 @@
             rows="6"
             label="Pressure Data format"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled || !config.http_get_pressure"
+            :disabled="pushDisabled"
           />
         </div>
-        <div v-if="global.ui.enablePressure" class="col-md-3">
+        <div v-if="global.ui.enablePressure && global.ui.enableGravity" class="col-md-3">
           <BsInputSwitch
             v-model="config.http_get_pressure"
             label="Enable pressure"
@@ -138,7 +166,7 @@
             button="Formats"
             :options="pressureHttpGetFormatOptions"
             :callback="pressureHttpFormatCallback"
-            :disabled="pushDisabled || !config.http_get_pressure"
+            :disabled="pushDisabled"
           />
           <BsModal
             @click="pressureRenderFormat"
@@ -146,7 +174,24 @@
             :code="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled || !config.http_get_pressure"
+            :disabled="pushDisabled"
+          />
+        </div>
+        <div v-if="global.ui.enablePressure && !global.ui.enableGravity" class="col-md-3">
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="pressureHttpGetFormatOptions"
+            :callback="pressureHttpFormatCallback"
+            :disabled="pushDisabled"
+          />
+          <BsModal
+            @click="pressureRenderFormat"
+            v-model="pressureRender"
+            :code="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled"
           />
         </div>
       </div>
@@ -208,23 +253,14 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { validateCurrentForm, logError } from '@mp-se/espframework-ui-components'
-import {
-  httpGetUrlOptions,
-  httpHeaderOptions
-} from '@/modules/utils'
-import {
-  gravityHttpGetFormatOptions
-} from '@/modules/gravityFormatOptions'
-import {
-  pressureHttpGetFormatOptions
-} from '@/modules/pressureFormatOptions'
+import { httpGetUrlOptions, httpHeaderOptions } from '@/modules/utils'
+import { gravityHttpGetFormatOptions } from '@/modules/gravityFormatOptions'
+import { pressureHttpGetFormatOptions } from '@/modules/pressureFormatOptions'
 import { applyTemplate } from '@/modules/formatTemplate'
 import { global, status, config } from '@/modules/pinia'
 
 const gravityRender = ref('')
 const pressureRender = ref('')
-// Backwards-compatibility: some tests and templates expect `render`
-const render = gravityRender
 
 const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct
