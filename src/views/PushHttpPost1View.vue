@@ -126,24 +126,57 @@
             label="Data format"
             help="Format template used to create the data sent to the remote service"
             :disabled="pushDisabled"
+            v-if="global.ui.enableGravity"
           />
         </div>
         <div class="col-md-3">
           <BsDropdown
             label="Predefined formats"
             button="Formats"
-            :options="httpPostFormatOptions"
-            :callback="httpFormatCallback"
+            :options="gravityHttpPostFormatOptions"
+            :callback="gravityHttpFormatCallback"
             :disabled="pushDisabled"
+            v-if="global.ui.enableGravity"
           />
           <BsModal
-            @click="renderFormat"
-            v-model="render"
+            @click="gravityRenderFormat"
+            v-model="gravityRender"
             :code="true"
             :json="true"
             title="Format preview"
             button="Preview format"
             :disabled="pushDisabled"
+            v-if="global.ui.enableGravity"
+          />
+        </div>
+        <div class="col-md-9">
+          <BsInputTextAreaFormat
+            v-model="config.http_post_format_pressure"
+            rows="6"
+            label="Data format (Pressure)"
+            help="Format template used to create the data sent to the remote service"
+            :disabled="pushDisabled"
+            v-if="global.ui.enablePressure"
+          />
+        </div>
+        <div class="col-md-3">
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="pressureHttpPostFormatOptions"
+            :callback="pressureHttpFormatCallback"
+            :disabled="pushDisabled"
+            v-if="global.ui.enablePressure"
+          />
+          <BsModal
+            @click="pressureRenderFormat"
+            v-model="pressureRender"
+            :code="true"
+            :json="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled"
+            v-if="global.ui.enablePressure"
           />
         </div>
       </div>
@@ -161,19 +194,40 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              v-show="global.disabled"
+              :hidden="!global.disabled"
             ></span>
             &nbsp;Save</button
           >&nbsp;
 
-          <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
+          <button
+            v-if="global.ui.enableGravity"
+            @click="runTestGravity"
+            type="button"
+            class="btn btn-secondary"
+            :disabled="pushDisabled"
+          >
             <span
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              v-show="global.disabled"
+              :hidden="!global.disabled"
             ></span>
-            &nbsp;Run push test
+            &nbsp;Run push gravity test</button
+          >&nbsp;
+          <button
+            v-if="global.ui.enablePressure"
+            @click="runTestPressure"
+            type="button"
+            class="btn btn-secondary"
+            :disabled="pushDisabled"
+          >
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+              :hidden="!global.disabled"
+            ></span>
+            &nbsp;Run push pressure test
           </button>
         </div>
       </div>
@@ -183,24 +237,23 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import {
-  httpHeaderOptions,
-  httpPostUrlOptions,
-  httpPostFormatOptions,
-  applyTemplate
-} from '@/modules/utils'
+import { httpHeaderOptions, httpPostUrlOptions } from '@/modules/utils'
+import { gravityHttpPostFormatOptions } from '@/modules/gravityFormatOptions'
+import { pressureHttpPostFormatOptions } from '@/modules/pressureFormatOptions'
+import { applyTemplate } from '@/modules/formatTemplate'
 import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, status, config } from '@/modules/pinia'
 import { logError } from '@mp-se/espframework-ui-components'
 // BsInputSwitch is now globally registered from ESP Framework UI Components library
 
-const render = ref('')
+const gravityRender = ref('')
+const pressureRender = ref('')
 
 const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct
 })
 
-const runTest = async () => {
+const runTestGravity = async () => {
   try {
     const data = {
       push_format: 'http_post_format_gravity'
@@ -209,7 +262,21 @@ const runTest = async () => {
     global.clearMessages()
     await config.runPushTest(data)
   } catch (error) {
-    logError('PushHttpPost1View.runTest()', error)
+    logError('PushHttpPost1View.runTestGravity()', error)
+    global.messageError = 'Failed to start push test'
+  }
+}
+
+const runTestPressure = async () => {
+  try {
+    const data = {
+      push_format: 'http_post_format_pressure'
+    }
+
+    global.clearMessages()
+    await config.runPushTest(data)
+  } catch (error) {
+    logError('PushHttpPost1View.runTestPressure()', error)
     global.messageError = 'Failed to start push test'
   }
 }
@@ -226,12 +293,20 @@ const httpHeaderH2Callback = (opt) => {
   config.http_post_header2 = opt
 }
 
-const httpFormatCallback = (opt) => {
+const gravityHttpFormatCallback = (opt) => {
   config.http_post_format_gravity = decodeURIComponent(opt)
 }
 
-const renderFormat = () => {
-  render.value = applyTemplate(status, config, config.http_post_format_gravity)
+const pressureHttpFormatCallback = (opt) => {
+  config.http_post_format_pressure = decodeURIComponent(opt)
+}
+
+const gravityRenderFormat = () => {
+  gravityRender.value = applyTemplate(status, config, config.http_post_format_gravity)
+}
+
+const pressureRenderFormat = () => {
+  pressureRender.value = applyTemplate(status, config, config.http_post_format_pressure)
 }
 
 const serverPortPattern = /^([a-zA-Z0-9.-]+|\d{1,3}(?:\.\d{1,3}){3}):\d{1,5}$/

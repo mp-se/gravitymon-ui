@@ -83,41 +83,70 @@
             :disabled="pushDisabled"
           />
         </div>
-        <div class="col-md-6">
-          <BsInputNumber
-            v-model="config.http_get_int"
-            label="Skip interval"
-            min="0"
-            max="5"
-            width="4"
-            help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
-            :disabled="pushDisabled"
-          />
-        </div>
-        <div class="col-md-9">
+
+        <!-- GRAVITY SECTION -->
+        <div v-if="global.ui.enableGravity" class="col-md-9">
           <BsInputTextAreaFormat
             v-model="config.http_get_format_gravity"
             rows="6"
-            label="Data format"
+            label="Gravity Data format"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_get_gravity"
           />
         </div>
-        <div class="col-md-3">
+        <div v-if="global.ui.enableGravity" class="col-md-3">
+          <BsInputSwitch
+            v-model="config.http_get_gravity"
+            label="Enable gravity"
+            :disabled="global.disabled"
+          />
           <BsDropdown
             label="Predefined formats"
             button="Formats"
-            :options="httpGetFormatOptions"
-            :callback="httpFormatCallback"
-            :disabled="pushDisabled"
+            :options="gravityHttpGetFormatOptions"
+            :callback="gravityHttpFormatCallback"
+            :disabled="pushDisabled || !config.http_get_gravity"
           />
           <BsModal
-            @click="renderFormat"
-            v-model="render"
+            @click="gravityRenderFormat"
+            v-model="gravityRender"
             :code="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_get_gravity"
+          />
+        </div>
+
+        <!-- PRESSURE SECTION -->
+        <div v-if="global.ui.enablePressure" class="col-md-9">
+          <BsInputTextAreaFormat
+            v-model="config.http_get_format_pressure"
+            rows="6"
+            label="Pressure Data format"
+            help="Format template used to create the data sent to the remote service"
+            :disabled="pushDisabled || !config.http_get_pressure"
+          />
+        </div>
+        <div v-if="global.ui.enablePressure" class="col-md-3">
+          <BsInputSwitch
+            v-model="config.http_get_pressure"
+            label="Enable pressure"
+            :disabled="global.disabled"
+          />
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="pressureHttpGetFormatOptions"
+            :callback="pressureHttpFormatCallback"
+            :disabled="pushDisabled || !config.http_get_pressure"
+          />
+          <BsModal
+            @click="pressureRenderFormat"
+            v-model="pressureRender"
+            :code="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled || !config.http_get_pressure"
           />
         </div>
       </div>
@@ -135,19 +164,40 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              v-show="global.disabled"
+              :hidden="!global.disabled"
             ></span>
             &nbsp;Save</button
           >&nbsp;
 
-          <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
+          <button
+            v-if="global.ui.enableGravity"
+            @click="runTestGravity"
+            type="button"
+            class="btn btn-secondary"
+            :disabled="pushDisabled"
+          >
             <span
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              v-show="global.disabled"
+              :hidden="!global.disabled"
             ></span>
-            &nbsp;Run push test
+            &nbsp;Run push gravity test</button
+          >&nbsp;
+          <button
+            v-if="global.ui.enablePressure"
+            @click="runTestPressure"
+            type="button"
+            class="btn btn-secondary"
+            :disabled="pushDisabled"
+          >
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+              :hidden="!global.disabled"
+            ></span>
+            &nbsp;Run push pressure test
           </button>
         </div>
       </div>
@@ -157,32 +207,47 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { validateCurrentForm, logError } from '@mp-se/espframework-ui-components'
 import {
-  httpHeaderOptions,
   httpGetUrlOptions,
-  httpGetFormatOptions,
-  applyTemplate
+  httpHeaderOptions
 } from '@/modules/utils'
-import { validateCurrentForm } from '@mp-se/espframework-ui-components'
+import {
+  gravityHttpGetFormatOptions
+} from '@/modules/gravityFormatOptions'
+import {
+  pressureHttpGetFormatOptions
+} from '@/modules/pressureFormatOptions'
+import { applyTemplate } from '@/modules/formatTemplate'
 import { global, status, config } from '@/modules/pinia'
-import { logError } from '@mp-se/espframework-ui-components'
 
-const render = ref('')
+const gravityRender = ref('')
+const pressureRender = ref('')
+// Backwards-compatibility: some tests and templates expect `render`
+const render = gravityRender
 
 const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct
 })
 
-const runTest = async () => {
+const runTestGravity = async () => {
   try {
-    const data = {
-      push_format: 'http_get_format_gravity'
-    }
-
+    const data = { push_format: 'http_get_format_gravity' }
     global.clearMessages()
     await config.runPushTest(data)
   } catch (error) {
-    logError('PushHttpGetView.runTest()', error)
+    logError('PushHttpGetView.runTestGravity()', error)
+    global.messageError = 'Failed to start push test'
+  }
+}
+
+const runTestPressure = async () => {
+  try {
+    const data = { push_format: 'http_get_format_pressure' }
+    global.clearMessages()
+    await config.runPushTest(data)
+  } catch (error) {
+    logError('PushHttpGetView.runTestPressure()', error)
     global.messageError = 'Failed to start push test'
   }
 }
@@ -199,13 +264,22 @@ const httpHeaderH2Callback = (opt) => {
   config.http_get_header2 = opt
 }
 
-const httpFormatCallback = (opt) => {
+const gravityHttpFormatCallback = (opt) => {
   config.http_get_format_gravity = decodeURIComponent(opt)
 }
 
-const renderFormat = () => {
-  const s = applyTemplate(status, config, config.http_get_format_gravity)
-  render.value = s.replaceAll('&', '&')
+const pressureHttpFormatCallback = (opt) => {
+  config.http_get_format_pressure = decodeURIComponent(opt)
+}
+
+const gravityRenderFormat = () => {
+  var s = applyTemplate(status, config, config.http_get_format_gravity)
+  gravityRender.value = s
+}
+
+const pressureRenderFormat = () => {
+  var s = applyTemplate(status, config, config.http_get_format_pressure)
+  pressureRender.value = s
 }
 
 const save = async () => {

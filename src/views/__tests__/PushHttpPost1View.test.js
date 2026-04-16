@@ -1,6 +1,8 @@
 import { mount } from '@vue/test-utils'
 import PushHttpPost1View from '../PushHttpPost1View.vue'
 import { createTestingPinia } from '../../tests/testUtils'
+import piniaInstance from '@/modules/pinia'
+import { global as globalStore } from '@/modules/pinia'
 
 describe('PushHttpPost1View (interaction tests)', () => {
   it('mounts without error', () => {
@@ -8,7 +10,7 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true }
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
       }
     })
     expect(wrapper.exists()).toBe(true)
@@ -19,7 +21,7 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true }
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
       }
     })
     expect(wrapper.text()).toContain('HTTP Post')
@@ -30,7 +32,7 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true }
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
       }
     })
     expect(wrapper.find('form').exists()).toBe(true)
@@ -41,7 +43,7 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true }
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
       }
     })
     const buttons = wrapper.findAll('button')
@@ -49,15 +51,15 @@ describe('PushHttpPost1View (interaction tests)', () => {
     expect(saveButton).toBeDefined()
   })
 
-  it('has runTest function defined', () => {
+  it('has runTestGravity function defined', () => {
     const pinia = createTestingPinia()
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true }
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
       }
     })
-    expect(typeof wrapper.vm.runTest).toBe('function')
+    expect(typeof wrapper.vm.runTestGravity).toBe('function')
   })
 
   it('has save function defined', () => {
@@ -65,21 +67,10 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true }
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
       }
     })
     expect(typeof wrapper.vm.save).toBe('function')
-  })
-
-  it('has runTest function defined', () => {
-    const pinia = createTestingPinia()
-    const wrapper = mount(PushHttpPost1View, {
-      global: {
-        plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true }
-      }
-    })
-    expect(typeof wrapper.vm.runTest).toBe('function')
   })
 
   it('has config state defined', () => {
@@ -87,7 +78,7 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true }
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
       }
     })
     expect(wrapper.vm.config).toBeDefined()
@@ -98,7 +89,7 @@ describe('PushHttpPost1View (interaction tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsProgress: true }
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
       }
     })
     expect(wrapper.find('.container').exists()).toBe(true)
@@ -119,7 +110,7 @@ describe('PushHttpPost1View (action tests)', () => {
     expect(config.saveAll).toHaveBeenCalled()
   })
 
-  it('runTest calls config.runPushTest', async () => {
+  it('runTestGravity calls config.runPushTest', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const pinia = createTestingPinia()
     const { mount } = await import('@vue/test-utils')
@@ -127,7 +118,7 @@ describe('PushHttpPost1View (action tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: { plugins: [pinia], stubs: { BsInputText: true, BsProgress: true } }
     })
-    await wrapper.vm.runTest()
+    await wrapper.vm.runTestGravity()
     const { config } = await import('@/modules/pinia')
     expect(config.runPushTest).toHaveBeenCalled()
   })
@@ -168,7 +159,7 @@ describe('PushHttpPost1View (action tests)', () => {
     expect(config.http_post_header2).toBe('X-Token: abc123')
   })
 
-  it('httpFormatCallback decodes and updates format', async () => {
+  it('gravityHttpFormatCallback decodes and updates format', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
@@ -176,7 +167,7 @@ describe('PushHttpPost1View (action tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
-    wrapper.vm.httpFormatCallback(encodeURIComponent('{gravity}'))
+    wrapper.vm.gravityHttpFormatCallback(encodeURIComponent('{gravity}'))
     expect(config.http_post_format_gravity).toBe('{gravity}')
   })
 
@@ -204,7 +195,7 @@ describe('PushHttpPost1View (action tests)', () => {
     expect(wrapper.vm.pushDisabled).toBe(true)
   })
 
-  it('runTest handles exception from config.runPushTest', async () => {
+  it('runTestGravity handles exception from config.runPushTest', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
@@ -214,7 +205,7 @@ describe('PushHttpPost1View (action tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
-    await wrapper.vm.runTest()
+    await wrapper.vm.runTestGravity()
     expect(global.messageError).toBe('Failed to start push test')
   })
 
@@ -230,7 +221,7 @@ describe('PushHttpPost1View (action tests)', () => {
     expect(config.http_post_target).toBe('http://example.com:8080')
   })
 
-  it('renderFormat returns formatted gravity data', async () => {
+  it('gravityRenderFormat returns formatted gravity data', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
@@ -240,8 +231,8 @@ describe('PushHttpPost1View (action tests)', () => {
     const wrapper = mount(PushHttpPost1View, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
-    wrapper.vm.renderFormat()
-    expect(wrapper.vm.render).toBeDefined()
+    wrapper.vm.gravityRenderFormat()
+    expect(wrapper.vm.gravityRender).toBeDefined()
   })
 
   it('save sets messageError when http_post_tcp is true and target has invalid format', async () => {

@@ -87,23 +87,55 @@
             label="Data format"
             help="Format template used to create the data sent to the remote service"
             :disabled="pushDisabled"
+            v-if="global.ui.enableGravity"
           />
         </div>
         <div class="col-md-3 gy-2">
           <BsDropdown
             label="Predefined formats"
             button="Formats"
-            :options="influxdb2FormatOptions"
-            :callback="influxdb2FormatCallback"
+            :options="gravityInfluxdb2FormatOptions"
+            :callback="gravityInfluxdb2FormatCallback"
             :disabled="pushDisabled"
+            v-if="global.ui.enableGravity"
           />
           <BsModal
-            @click="renderFormat"
-            v-model="render"
+            @click="gravityRenderFormat"
+            v-model="gravityRender"
             :code="true"
             title="Format preview"
             button="Preview format"
             :disabled="pushDisabled"
+            v-if="global.ui.enableGravity"
+          />
+        </div>
+        <div class="col-md-9">
+          <BsInputTextAreaFormat
+            v-model="config.influxdb2_format_pressure"
+            rows="6"
+            label="Data format (Pressure)"
+            help="Format template used to create the data sent to the remote service"
+            :disabled="pushDisabled"
+            v-if="global.ui.enablePressure"
+          />
+        </div>
+        <div class="col-md-3 gy-2">
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="pressureInfluxdb2FormatOptions"
+            :callback="pressureInfluxdb2FormatCallback"
+            :disabled="pushDisabled"
+            v-if="global.ui.enablePressure"
+          />
+          <BsModal
+            @click="pressureRenderFormat"
+            v-model="pressureRender"
+            :code="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled"
+            v-if="global.ui.enablePressure"
           />
         </div>
       </div>
@@ -126,14 +158,35 @@
             &nbsp;Save</button
           >&nbsp;
 
-          <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
+          <button
+            v-if="global.ui.enableGravity"
+            @click="runTestGravity"
+            type="button"
+            class="btn btn-secondary"
+            :disabled="pushDisabled"
+          >
             <span
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              v-show="global.disabled"
+              :hidden="!global.disabled"
             ></span>
-            &nbsp;Run push test
+            &nbsp;Run push gravity test</button
+          >&nbsp;
+          <button
+            v-if="global.ui.enablePressure"
+            @click="runTestPressure"
+            type="button"
+            class="btn btn-secondary"
+            :disabled="pushDisabled"
+          >
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+              :hidden="!global.disabled"
+            ></span>
+            &nbsp;Run push pressure test
           </button>
         </div>
       </div>
@@ -143,18 +196,21 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { applyTemplate, influxdb2FormatOptions } from '@/modules/utils'
+import { gravityInfluxdb2FormatOptions } from '@/modules/gravityFormatOptions'
+import { pressureInfluxdb2FormatOptions } from '@/modules/pressureFormatOptions'
+import { applyTemplate } from '@/modules/formatTemplate'
 import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, status, config } from '@/modules/pinia'
 import { logError } from '@mp-se/espframework-ui-components'
 
-const render = ref('')
+const gravityRender = ref('')
+const pressureRender = ref('')
 
 const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct
 })
 
-const runTest = async () => {
+const runTestGravity = async () => {
   try {
     const data = {
       push_format: 'influxdb2_format_gravity'
@@ -163,17 +219,39 @@ const runTest = async () => {
     global.clearMessages()
     await config.runPushTest(data)
   } catch (error) {
-    logError('PushInfluxdbView.runTest()', error)
+    logError('PushInfluxdbView.runTestGravity()', error)
     global.messageError = 'Failed to start push test'
   }
 }
 
-const influxdb2FormatCallback = (opt) => {
+const runTestPressure = async () => {
+  try {
+    const data = {
+      push_format: 'influxdb2_format_pressure'
+    }
+
+    global.clearMessages()
+    await config.runPushTest(data)
+  } catch (error) {
+    logError('PushInfluxdbView.runTestPressure()', error)
+    global.messageError = 'Failed to start push test'
+  }
+}
+
+const gravityInfluxdb2FormatCallback = (opt) => {
   config.influxdb2_format_gravity = decodeURIComponent(opt)
 }
 
-const renderFormat = () => {
-  render.value = applyTemplate(status, config, config.influxdb2_format_gravity)
+const pressureInfluxdb2FormatCallback = (opt) => {
+  config.influxdb2_format_pressure = decodeURIComponent(opt)
+}
+
+const gravityRenderFormat = () => {
+  gravityRender.value = applyTemplate(status, config, config.influxdb2_format_gravity)
+}
+
+const pressureRenderFormat = () => {
+  pressureRender.value = applyTemplate(status, config, config.influxdb2_format_pressure)
 }
 
 const save = async () => {

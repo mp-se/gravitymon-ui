@@ -1,6 +1,8 @@
 import { mount } from '@vue/test-utils'
 import PushHttpPost2View from '../PushHttpPost2View.vue'
 import { createTestingPinia } from '../../tests/testUtils'
+import piniaInstance from '@/modules/pinia'
+import { global as globalStore } from '@/modules/pinia'
 
 describe('PushHttpPost2View (interaction tests)', () => {
   it('mounts without error', () => {
@@ -49,7 +51,7 @@ describe('PushHttpPost2View (interaction tests)', () => {
     expect(saveButton).toBeDefined()
   })
 
-  it('has runTest function defined', () => {
+  it('has runTestGravity function defined', () => {
     const pinia = createTestingPinia()
     const wrapper = mount(PushHttpPost2View, {
       global: {
@@ -57,7 +59,7 @@ describe('PushHttpPost2View (interaction tests)', () => {
         stubs: { BsInputText: true, BsProgress: true }
       }
     })
-    expect(typeof wrapper.vm.runTest).toBe('function')
+    expect(typeof wrapper.vm.runTestGravity).toBe('function')
   })
 
   it('has save function defined', () => {
@@ -71,7 +73,7 @@ describe('PushHttpPost2View (interaction tests)', () => {
     expect(typeof wrapper.vm.save).toBe('function')
   })
 
-  it('has runTest function defined', () => {
+  it('has runTestGravity function defined', () => {
     const pinia = createTestingPinia()
     const wrapper = mount(PushHttpPost2View, {
       global: {
@@ -79,7 +81,7 @@ describe('PushHttpPost2View (interaction tests)', () => {
         stubs: { BsInputText: true, BsProgress: true }
       }
     })
-    expect(typeof wrapper.vm.runTest).toBe('function')
+    expect(typeof wrapper.vm.runTestGravity).toBe('function')
   })
 
   it('has config state defined', () => {
@@ -118,14 +120,14 @@ describe('PushHttpPost2View (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
   })
-  it('runTest calls config.runPushTest', async () => {
+  it('runTestGravity calls config.runPushTest', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost2View } = await import('../PushHttpPost2View.vue')
     const wrapper = mount(PushHttpPost2View, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
-    await wrapper.vm.runTest()
+    await wrapper.vm.runTestGravity()
     const { config } = await import('@/modules/pinia')
     expect(config.runPushTest).toHaveBeenCalled()
   })
@@ -178,7 +180,7 @@ describe('PushHttpPost2View (action tests)', () => {
     expect(config.http_post2_header2).toBe('Content-Type: application/json')
   })
 
-  it('httpFormatCallback decodes and updates format', async () => {
+  it('gravityHttpFormatCallback decodes and updates format', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost2View } = await import('../PushHttpPost2View.vue')
@@ -186,7 +188,7 @@ describe('PushHttpPost2View (action tests)', () => {
     const wrapper = mount(PushHttpPost2View, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
-    wrapper.vm.httpFormatCallback(encodeURIComponent('{gravity},{temp}'))
+    wrapper.vm.gravityHttpFormatCallback(encodeURIComponent('{gravity},{temp}'))
     expect(config.http_post2_format_gravity).toBe('{gravity},{temp}')
   })
 
@@ -202,7 +204,7 @@ describe('PushHttpPost2View (action tests)', () => {
     expect(wrapper.vm.pushDisabled).toBe(true)
   })
 
-  it('runTest handles exception from config.runPushTest', async () => {
+  it('runTestGravity handles exception from config.runPushTest', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost2View } = await import('../PushHttpPost2View.vue')
@@ -212,11 +214,11 @@ describe('PushHttpPost2View (action tests)', () => {
     const wrapper = mount(PushHttpPost2View, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
-    await wrapper.vm.runTest()
+    await wrapper.vm.runTestGravity()
     expect(global.messageError).toBe('Failed to start push test')
   })
 
-  it('renderFormat sets render value from template', async () => {
+  it('gravityRenderFormat sets gravityRender value from template', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: View } = await import('../PushHttpPost2View.vue')
@@ -226,8 +228,8 @@ describe('PushHttpPost2View (action tests)', () => {
     const wrapper = mount(View, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
-    wrapper.vm.renderFormat()
-    expect(wrapper.vm.render).toBeTruthy()
+    wrapper.vm.gravityRenderFormat()
+    expect(wrapper.vm.gravityRender).toBeTruthy()
   })
 
   it('v-model bindings trigger config updates via emitting stubs', async () => {
@@ -284,7 +286,7 @@ describe('PushHttpPost2View (action tests)', () => {
     expect(wrapper.find('form').exists()).toBe(true)
   })
 
-  it('triggers BsModal v-model update for render ref', async () => {
+  it('triggers BsModal v-model update for gravityRender ref', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushHttpPost2View } = await import('../PushHttpPost2View.vue')
@@ -309,5 +311,97 @@ describe('PushHttpPost2View (action tests)', () => {
     const btn = wrapper.find('.modal-emit')
     if (btn.exists()) await btn.trigger('click')
     expect(wrapper.exists()).toBe(true)
+  })
+
+  it('runTestPressure calls config.runPushTest with pressure format', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushHttpPost2View } = await import('../PushHttpPost2View.vue')
+    const { config } = await import('@/modules/pinia')
+    config.runPushTest = vi.fn(async () => {})
+    const wrapper = mount(PushHttpPost2View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+      }
+    })
+    await wrapper.vm.runTestPressure()
+    expect(config.runPushTest).toHaveBeenCalledWith({ push_format: 'http_post2_format_pressure' })
+  })
+
+  it('pressureHttpFormatCallback decodes and updates pressure format', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushHttpPost2View } = await import('../PushHttpPost2View.vue')
+    const { config } = await import('@/modules/pinia')
+    const wrapper = mount(PushHttpPost2View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+      }
+    })
+    wrapper.vm.pressureHttpFormatCallback(encodeURIComponent('{pressure}'))
+    expect(config.http_post2_format_pressure).toBe('{pressure}')
+  })
+
+  it('pressureRenderFormat creates formatted output for pressure', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushHttpPost2View } = await import('../PushHttpPost2View.vue')
+    const { config, status } = await import('@/modules/pinia')
+    config.http_post2_format_pressure = '{pressure}'
+    status.pressure = 85
+    const wrapper = mount(PushHttpPost2View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+      }
+    })
+    wrapper.vm.pressureRenderFormat()
+    expect(wrapper.vm.pressureRender).toBeTruthy()
+  })
+
+  it('runTestPressure handles exception from config.runPushTest', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushHttpPost2View } = await import('../PushHttpPost2View.vue')
+    const { config, global } = await import('@/modules/pinia')
+    vi.spyOn(config, 'runPushTest').mockRejectedValueOnce(new Error('Network error'))
+    global.messageError = ''
+    const wrapper = mount(PushHttpPost2View, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+      }
+    })
+    await wrapper.vm.runTestPressure()
+    expect(global.messageError).toBe('Failed to start push test')
+  })
+
+  it('pressure section visibility is controlled by global.ui.enablePressure', async () => {
+    const { import: dynamicImport } = await import('@vue/test-utils')
+    const wrapper = mount(PushHttpPost2View, {
+      global: {
+        plugins: [piniaInstance],
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
+      }
+    })
+    
+    globalStore.ui.enableGravity = true
+    globalStore.ui.enablePressure = false
+    wrapper.vm.$forceUpdate()
+    await wrapper.vm.$nextTick()
+    
+    let buttons = wrapper.findAll('button')
+    let pressureButton = buttons.find((b) => b.text().includes('pressure'))
+    expect(pressureButton).toBeFalsy()
+    
+    globalStore.ui.enablePressure = true
+    wrapper.vm.$forceUpdate()
+    await wrapper.vm.$nextTick()
+    
+    buttons = wrapper.findAll('button')
+    pressureButton = buttons.find((b) => b.text().includes('pressure'))
+    expect(pressureButton).toBeTruthy()
   })
 })

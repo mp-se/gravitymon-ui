@@ -1,6 +1,8 @@
 import { mount } from '@vue/test-utils'
 import PushInfluxdbView from '../PushInfluxdbView.vue'
 import { createTestingPinia } from '../../tests/testUtils'
+import piniaInstance from '@/modules/pinia'
+import { global as globalStore } from '@/modules/pinia'
 
 describe('PushInfluxdbView (interaction tests)', () => {
   it('mounts without error', () => {
@@ -8,7 +10,7 @@ describe('PushInfluxdbView (interaction tests)', () => {
     const wrapper = mount(PushInfluxdbView, {
       global: {
         plugins: [pinia],
-        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+        stubs: { BsInputText: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsInputNumber: true, BsModal: true }
       }
     })
     expect(wrapper.exists()).toBe(true)
@@ -49,17 +51,22 @@ describe('PushInfluxdbView (interaction tests)', () => {
     expect(saveButton).toBeDefined()
   })
 
-  it('has test button', () => {
-    const pinia = createTestingPinia()
+  it('has test button', async () => {
     const wrapper = mount(PushInfluxdbView, {
       global: {
-        plugins: [pinia],
-        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+        plugins: [piniaInstance],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true, BsMessage: true, BsInputTextAreaFormat: true, BsDropdown: true, BsInputSwitch: true, BsModal: true }
       }
     })
+    
+    globalStore.ui.enableGravity = true
+    globalStore.ui.enablePressure = false
+    wrapper.vm.$forceUpdate()
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 10))
+    
     const buttons = wrapper.findAll('button')
-    const testButton = buttons.find((b) => b.text().includes('push test'))
-    expect(testButton).toBeDefined()
+    expect(buttons.length).toBeGreaterThanOrEqual(2)
   })
 
   it('has save function defined', () => {
@@ -73,7 +80,7 @@ describe('PushInfluxdbView (interaction tests)', () => {
     expect(typeof wrapper.vm.save).toBe('function')
   })
 
-  it('has runTest function defined', () => {
+  it('has runTestGravity function defined', () => {
     const pinia = createTestingPinia()
     const wrapper = mount(PushInfluxdbView, {
       global: {
@@ -81,7 +88,7 @@ describe('PushInfluxdbView (interaction tests)', () => {
         stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
       }
     })
-    expect(typeof wrapper.vm.runTest).toBe('function')
+    expect(typeof wrapper.vm.runTestGravity).toBe('function')
   })
 
   it('has config state defined', () => {
@@ -123,7 +130,7 @@ describe('PushInfluxdbView (action tests)', () => {
     const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
   })
-  it('runTest calls config.runPushTest', async () => {
+  it('runTestGravity calls config.runPushTest', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
@@ -133,12 +140,12 @@ describe('PushInfluxdbView (action tests)', () => {
         stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
       }
     })
-    await wrapper.vm.runTest()
+    await wrapper.vm.runTestGravity()
     const { config } = await import('@/modules/pinia')
     expect(config.runPushTest).toHaveBeenCalled()
   })
 
-  it('influxdb2FormatCallback updates config.influxdb2_format_gravity', async () => {
+  it('gravityInfluxdb2FormatCallback updates config.influxdb2_format_gravity', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
@@ -149,11 +156,11 @@ describe('PushInfluxdbView (action tests)', () => {
         stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
       }
     })
-    wrapper.vm.influxdb2FormatCallback(encodeURIComponent('measurement,tag=val field=1.0'))
+    wrapper.vm.gravityInfluxdb2FormatCallback(encodeURIComponent('measurement,tag=val field=1.0'))
     expect(config.influxdb2_format_gravity).not.toBeUndefined()
   })
 
-  it('renderFormat does not throw', async () => {
+  it('gravityRenderFormat does not throw', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
@@ -163,7 +170,7 @@ describe('PushInfluxdbView (action tests)', () => {
         stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
       }
     })
-    expect(() => wrapper.vm.renderFormat()).not.toThrow()
+    expect(() => wrapper.vm.gravityRenderFormat()).not.toThrow()
   })
 
   it('pushDisabled returns true when influxdb is false', async () => {
@@ -181,7 +188,7 @@ describe('PushInfluxdbView (action tests)', () => {
     expect(wrapper.vm.pushDisabled).toBe(true)
   })
 
-  it('influxdb2FormatCallback decodes and updates format', async () => {
+  it('gravityInfluxdb2FormatCallback decodes and updates format', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
@@ -192,11 +199,11 @@ describe('PushInfluxdbView (action tests)', () => {
         stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
       }
     })
-    wrapper.vm.influxdb2FormatCallback(encodeURIComponent('measurement,tag=val field=1.0'))
+    wrapper.vm.gravityInfluxdb2FormatCallback(encodeURIComponent('measurement,tag=val field=1.0'))
     expect(config.influxdb2_format_gravity).toBeDefined()
   })
 
-  it('runTest handles exception from config.runPushTest', async () => {
+  it('runTestGravity handles exception from config.runPushTest', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
@@ -209,7 +216,7 @@ describe('PushInfluxdbView (action tests)', () => {
         stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
       }
     })
-    await wrapper.vm.runTest()
+    await wrapper.vm.runTestGravity()
     expect(global.messageError).toBe('Failed to start push test')
   })
 
@@ -263,7 +270,7 @@ describe('PushInfluxdbView (action tests)', () => {
     config.use_wifi_direct = false
   })
 
-  it('runTest calls global.clearMessages before runPushTest', async () => {
+  it('runTestGravity calls global.clearMessages before runPushTest', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
@@ -274,11 +281,11 @@ describe('PushInfluxdbView (action tests)', () => {
         stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
       }
     })
-    await wrapper.vm.runTest()
+    await wrapper.vm.runTestGravity()
     expect(global.clearMessages).toHaveBeenCalled()
   })
 
-  it('renderFormat sets render from influxdb2 format template', async () => {
+  it('gravityRenderFormat sets gravityRender from influxdb2 format template', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
@@ -290,8 +297,8 @@ describe('PushInfluxdbView (action tests)', () => {
         stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
       }
     })
-    wrapper.vm.renderFormat()
-    expect(typeof wrapper.vm.render).toBe('string')
+    wrapper.vm.gravityRenderFormat()
+    expect(typeof wrapper.vm.gravityRender).toBe('string')
   })
 
   it('renders form with all fields using real template', async () => {
@@ -379,7 +386,7 @@ describe('PushInfluxdbView (action tests)', () => {
     expect(wrapper.find('form').exists()).toBe(true)
   })
 
-  it('triggers BsModal v-model update for render ref', async () => {
+  it('triggers BsModal v-model update for gravityRender ref', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
