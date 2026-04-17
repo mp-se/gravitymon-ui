@@ -265,8 +265,6 @@ import { logError } from '@mp-se/espframework-ui-components'
 const ESP8266_PAYLOAD_LIMIT = 500
 const ESP8266_WARNING_MSG =
   'On an ESP8266 a large payload will likely cause a crash due to RAM limitations on device. Reduce your template.'
-const MQTT_STANDARD_PORT = 1883
-const MQTT_SSL_PORT_MIN = 8000
 
 const gravityRender = ref('')
 const pressureRender = ref('')
@@ -335,18 +333,6 @@ const validateMqttServer = (server) => {
     return { valid: false, message: 'Invalid server name or IP format' }
   }
   return { valid: true }
-}
-
-/**
- * Get MQTT port description based on port number
- * @param {number} port - Port number
- * @returns {string} Port description
- */
-const getPortDescription = (port) => {
-  if (!port) return 'Standard port (1883) will be used'
-  if (port === MQTT_STANDARD_PORT) return 'Standard MQTT port'
-  if (port >= MQTT_SSL_PORT_MIN) return 'SSL/TLS encrypted port'
-  return 'Custom MQTT port'
 }
 
 /**
