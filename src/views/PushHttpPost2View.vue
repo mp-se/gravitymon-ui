@@ -105,29 +105,9 @@
           <BsInputTextAreaFormat
             v-model="config.http_post2_format_gravity"
             rows="6"
-            label="Data format"
+            label="Data format (gravity)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled"
-            v-if="global.ui.enableGravity"
-          />
-        </div>
-        <div class="col-md-3">
-          <BsDropdown
-            label="Predefined formats"
-            button="Formats"
-            :options="gravityHttpPostFormatOptions"
-            :callback="gravityHttpFormatCallback"
-            :disabled="pushDisabled"
-            v-if="global.ui.enableGravity"
-          />
-          <BsModal
-            @click="gravityRenderFormat"
-            v-model="gravityRender"
-            :code="true"
-            :json="true"
-            title="Format preview"
-            button="Preview format"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post2_gravity"
             v-if="global.ui.enableGravity"
           />
         </div>
@@ -137,14 +117,48 @@
             label="Enable gravity"
             :disabled="global.disabled"
           />
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="gravityHttpPostFormatOptions"
+            :callback="gravityHttpFormatCallback"
+            :disabled="pushDisabled || !config.http_post2_gravity"
+          />
+          <BsModal
+            @click="gravityRenderFormat"
+            v-model="gravityRender"
+            :code="true"
+            :json="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled || !config.http_post2_gravity"
+          />
+        </div>
+        <div class="col-md-3" v-if="global.ui.enableGravity && !global.ui.enablePressure">
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="gravityHttpPostFormatOptions"
+            :callback="gravityHttpFormatCallback"
+            :disabled="pushDisabled"
+          />
+          <BsModal
+            @click="gravityRenderFormat"
+            v-model="gravityRender"
+            :code="true"
+            :json="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled"
+          />
         </div>
         <div class="col-md-9">
           <BsInputTextAreaFormat
             v-model="config.http_post2_format_pressure"
             rows="6"
-            label="Data format (Pressure)"
+            label="Data format (pressure)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post2_pressure"
             v-if="global.ui.enablePressure"
           />
         </div>
@@ -159,7 +173,7 @@
             button="Formats"
             :options="pressureHttpPostFormatOptions"
             :callback="pressureHttpFormatCallback"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post2_pressure"
           />
           <BsModal
             @click="pressureRenderFormat"
@@ -168,7 +182,7 @@
             :json="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post2_pressure"
           />
         </div>
         <div class="col-md-3" v-if="global.ui.enablePressure && !global.ui.enableGravity">

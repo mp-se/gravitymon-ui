@@ -127,9 +127,9 @@
           <BsInputTextAreaFormat
             v-model="config.http_post_format_gravity"
             rows="6"
-            label="Data format"
+            label="Data format (gravity)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post_gravity"
             v-if="global.ui.enableGravity"
           />
         </div>
@@ -144,7 +144,7 @@
             button="Formats"
             :options="gravityHttpPostFormatOptions"
             :callback="gravityHttpFormatCallback"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post_gravity"
           />
           <BsModal
             @click="gravityRenderFormat"
@@ -153,7 +153,7 @@
             :json="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post_gravity"
           />
         </div>
         <div class="col-md-3" v-if="global.ui.enableGravity && !global.ui.enablePressure">
@@ -178,9 +178,9 @@
           <BsInputTextAreaFormat
             v-model="config.http_post_format_pressure"
             rows="6"
-            label="Data format (Pressure)"
+            label="Data format (pressure)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post_pressure"
             v-if="global.ui.enablePressure"
           />
         </div>
@@ -195,7 +195,7 @@
             button="Formats"
             :options="pressureHttpPostFormatOptions"
             :callback="pressureHttpFormatCallback"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post_pressure"
           />
           <BsModal
             @click="pressureRenderFormat"
@@ -204,7 +204,7 @@
             :json="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_post_pressure"
           />
         </div>
         <div class="col-md-3" v-if="global.ui.enablePressure && !global.ui.enableGravity">

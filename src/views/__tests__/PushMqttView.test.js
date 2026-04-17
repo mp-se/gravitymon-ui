@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import PushMqttView from '../PushMqttView.vue'
 import { createTestingPinia } from '../../tests/testUtils'
@@ -141,22 +142,26 @@ describe('PushMqttView (action tests)', () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { config } = await import('@/modules/pinia')
+    config.mqtt_target = 'mqtt.example.com'
+    config.mqtt_port = 1883
     const wrapper = mount(PushMqttView, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
     await wrapper.vm.save()
-    const { config } = await import('@/modules/pinia')
     expect(config.saveAll).toHaveBeenCalled()
   })
   it('runTestGravity calls config.runPushTest', async () => {
     const { createTestingPinia } = await import('../../tests/testUtils')
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { config } = await import('@/modules/pinia')
+    config.mqtt_target = 'test.example.com'
+    config.mqtt_port = 1883
     const wrapper = mount(PushMqttView, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
     })
     await wrapper.vm.runTestGravity()
-    const { config } = await import('@/modules/pinia')
     expect(config.runPushTest).toHaveBeenCalled()
   })
 
@@ -227,6 +232,8 @@ describe('PushMqttView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const { config, global } = await import('@/modules/pinia')
+    config.mqtt_target = 'test.example.com'
+    config.mqtt_port = 1883
     global.clearMessages()
     const wrapper = mount(PushMqttView, {
       global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
@@ -385,6 +392,8 @@ describe('PushMqttView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const { config } = await import('@/modules/pinia')
+    config.mqtt_target = 'test.example.com'
+    config.mqtt_port = 1883
     config.runPushTest = vi.fn(async () => {})
     const wrapper = mount(PushMqttView, {
       global: {
@@ -460,6 +469,8 @@ describe('PushMqttView (action tests)', () => {
     const { mount } = await import('@vue/test-utils')
     const { default: PushMqttView } = await import('../PushMqttView.vue')
     const { config, global } = await import('@/modules/pinia')
+    config.mqtt_target = 'test.example.com'
+    config.mqtt_port = 1883
     vi.spyOn(config, 'runPushTest').mockRejectedValueOnce(new Error('Network error'))
     global.messageError = ''
     const wrapper = mount(PushMqttView, {
@@ -478,7 +489,7 @@ describe('PushMqttView (action tests)', () => {
       }
     })
     await wrapper.vm.runTestPressure()
-    expect(global.messageError).toBe('Failed to start push test')
+    expect(global.messageError).toBe('Failed to start push test for pressure data')
   })
 
   it('watch(mqtt_format_pressure) warns on ESP8266 with large payload', async () => {
@@ -572,5 +583,127 @@ describe('PushMqttView (action tests)', () => {
     const buttons = wrapper.findAll('button')
     const pressureButton = buttons.find((b) => b.text().includes('pressure'))
     expect(pressureButton).toBeTruthy()
+  })
+
+  it('save validates MQTT server before saving', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { config, global } = await import('@/modules/pinia')
+    const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
+    vi.mocked(validateCurrentForm).mockReturnValue(true)
+    config.mqtt_target = ''
+    global.messageError = ''
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    await wrapper.vm.save()
+    expect(global.messageError).toContain('Server name or IP is required')
+  })
+
+  it('save validates port number before saving', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { config, global } = await import('@/modules/pinia')
+    const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
+    vi.mocked(validateCurrentForm).mockReturnValue(true)
+    config.mqtt_target = 'test.example.com'
+    config.mqtt_port = 99999 // Invalid port
+    global.messageError = ''
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    await wrapper.vm.save()
+    expect(global.messageError).toContain('between 0 and 65535')
+  })
+
+  it('save succeeds with valid MQTT configuration', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { config, global } = await import('@/modules/pinia')
+    const { validateCurrentForm } = await import('@mp-se/espframework-ui-components')
+    vi.mocked(validateCurrentForm).mockReturnValue(true)
+    config.mqtt_target = 'mqtt.example.com'
+    config.mqtt_port = 1883
+    config.saveAll = vi.fn(async () => {})
+    global.messageError = ''
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    await wrapper.vm.save()
+    expect(config.saveAll).toHaveBeenCalled()
+  })
+
+  it('runTestGravity validates server before test', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { config, global } = await import('@/modules/pinia')
+    config.mqtt_target = '' // No server set
+    global.messageError = ''
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    await wrapper.vm.runTestGravity()
+    expect(global.messageError).toContain('Cannot run test')
+  })
+
+  it('runTestPressure validates server before test', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { config, global } = await import('@/modules/pinia')
+    config.mqtt_target = '' // No server set
+    global.messageError = ''
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    await wrapper.vm.runTestPressure()
+    expect(global.messageError).toContain('Cannot run test')
+  })
+
+  it('runTestGravity handles invalid port', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { config, global } = await import('@/modules/pinia')
+    config.mqtt_target = 'test.example.com'
+    config.mqtt_port = 99999 // Invalid port
+    global.messageError = ''
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    await wrapper.vm.runTestGravity()
+    expect(global.messageError).toContain('Cannot run test')
+  })
+
+  it('gravityMqttFormatCallback handles decoding errors', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { global } = await import('@/modules/pinia')
+    global.messageError = ''
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    // Pass invalid encoded string to trigger error
+    wrapper.vm.gravityMqttFormatCallback('%')
+    expect(global.messageError).toBe('Failed to apply gravity format')
+  })
+
+  it('pressureMqttFormatCallback handles decoding errors', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushMqttView } = await import('../PushMqttView.vue')
+    const { global } = await import('@/modules/pinia')
+    global.messageError = ''
+    const wrapper = mount(PushMqttView, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    // Pass invalid encoded string to trigger error
+    wrapper.vm.pressureMqttFormatCallback('%')
+    expect(global.messageError).toBe('Failed to apply pressure format')
   })
 })

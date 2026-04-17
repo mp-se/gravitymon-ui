@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import PushHttpPost1View from '../PushHttpPost1View.vue'
 import { createTestingPinia } from '../../tests/testUtils'
@@ -384,6 +385,58 @@ describe('PushHttpPost1View (action tests)', () => {
     })
     expect(wrapper.find('form').exists()).toBe(true)
     config.http_post_tcp = false
+  })
+
+  it('runTestPressure calls config.runPushTest with pressure format', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
+    const { config } = await import('@/modules/pinia')
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    await wrapper.vm.runTestPressure()
+    expect(config.runPushTest).toHaveBeenCalledWith({ push_format: 'http_post_format_pressure' })
+  })
+
+  it('runTestPressure handles exception from config.runPushTest', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
+    const { config, global } = await import('@/modules/pinia')
+    vi.spyOn(config, 'runPushTest').mockRejectedValueOnce(new Error('Network error'))
+    global.messageError = ''
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    await wrapper.vm.runTestPressure()
+    expect(global.messageError).toBe('Failed to start push test')
+  })
+
+  it('pressureHttpFormatCallback decodes and updates format', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
+    const { config } = await import('@/modules/pinia')
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    const encoded = encodeURIComponent('{pressure}')
+    wrapper.vm.pressureHttpFormatCallback(encoded)
+    expect(config.http_post_format_pressure).toBe('{pressure}')
+  })
+
+  it('pressureRenderFormat returns formatted pressure data', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushHttpPost1View } = await import('../PushHttpPost1View.vue')
+    const { config } = await import('@/modules/pinia')
+    config.http_post_format_pressure = '{pressure}'
+    const wrapper = mount(PushHttpPost1View, {
+      global: { plugins: [createTestingPinia()], stubs: { BsInputText: true, BsProgress: true } }
+    })
+    wrapper.vm.pressureRenderFormat()
+    expect(wrapper.vm.pressureRender).toBeDefined()
   })
 
   it('triggers v-model handlers for http_post_tcp=false fields', async () => {

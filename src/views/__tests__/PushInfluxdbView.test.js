@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import PushInfluxdbView from '../PushInfluxdbView.vue'
 import { createTestingPinia } from '../../tests/testUtils'
@@ -435,5 +436,101 @@ describe('PushInfluxdbView (action tests)', () => {
     const btn = wrapper.find('.modal-emit')
     if (btn.exists()) await btn.trigger('click')
     expect(wrapper.exists()).toBe(true)
+  })
+
+  it('runTestPressure calls config.runPushTest with pressure format', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
+    const { config } = await import('@/modules/pinia')
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
+    await wrapper.vm.runTestPressure()
+    expect(config.runPushTest).toHaveBeenCalledWith({ push_format: 'influxdb2_format_pressure' })
+  })
+
+  it('runTestPressure handles exception from config.runPushTest', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
+    const { config, global } = await import('@/modules/pinia')
+    vi.spyOn(config, 'runPushTest').mockRejectedValueOnce(new Error('Connection error'))
+    global.messageError = ''
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
+    await wrapper.vm.runTestPressure()
+    expect(global.messageError).toBe('Failed to start push test')
+  })
+
+  it('pressureInfluxdb2FormatCallback decodes and updates format', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
+    const { config } = await import('@/modules/pinia')
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
+    const encoded = encodeURIComponent('measurement,tag=val field=2.0')
+    wrapper.vm.pressureInfluxdb2FormatCallback(encoded)
+    expect(config.influxdb2_format_pressure).toBe('measurement,tag=val field=2.0')
+  })
+
+  it('pressureRenderFormat returns formatted pressure data', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
+    const { config } = await import('@/modules/pinia')
+    config.influxdb2_format_pressure = 'pressure={pressure}'
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
+    wrapper.vm.pressureRenderFormat()
+    expect(wrapper.vm.pressureRender).toBeDefined()
+  })
+
+  it('runTestGravity clears messages before executing test', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
+    const { global } = await import('@/modules/pinia')
+    const clearSpy = vi.spyOn(global, 'clearMessages')
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
+    await wrapper.vm.runTestGravity()
+    expect(clearSpy).toHaveBeenCalled()
+  })
+
+  it('runTestPressure clears messages before executing test', async () => {
+    const { createTestingPinia } = await import('../../tests/testUtils')
+    const { mount } = await import('@vue/test-utils')
+    const { default: PushInfluxdbView } = await import('../PushInfluxdbView.vue')
+    const { global } = await import('@/modules/pinia')
+    const clearSpy = vi.spyOn(global, 'clearMessages')
+    const wrapper = mount(PushInfluxdbView, {
+      global: {
+        plugins: [createTestingPinia()],
+        stubs: { BsInputText: true, BsInputNumber: true, BsProgress: true }
+      }
+    })
+    await wrapper.vm.runTestPressure()
+    expect(clearSpy).toHaveBeenCalled()
   })
 })

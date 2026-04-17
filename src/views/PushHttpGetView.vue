@@ -100,9 +100,9 @@
           <BsInputTextAreaFormat
             v-model="config.http_get_format_gravity"
             rows="6"
-            label="Gravity Data format"
+            label="Data format (gravity)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_get_gravity"
           />
         </div>
         <div v-if="global.ui.enableGravity && global.ui.enablePressure" class="col-md-3">
@@ -116,7 +116,7 @@
             button="Formats"
             :options="gravityHttpGetFormatOptions"
             :callback="gravityHttpFormatCallback"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_get_gravity"
           />
           <BsModal
             @click="gravityRenderFormat"
@@ -124,7 +124,7 @@
             :code="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_get_gravity"
           />
         </div>
         <div v-if="global.ui.enableGravity && !global.ui.enablePressure" class="col-md-3">
@@ -150,9 +150,9 @@
           <BsInputTextAreaFormat
             v-model="config.http_get_format_pressure"
             rows="6"
-            label="Pressure Data format"
+            label="Data format (pressure)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_get_pressure"
           />
         </div>
         <div v-if="global.ui.enablePressure && global.ui.enableGravity" class="col-md-3">
@@ -166,7 +166,7 @@
             button="Formats"
             :options="pressureHttpGetFormatOptions"
             :callback="pressureHttpFormatCallback"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_get_pressure"
           />
           <BsModal
             @click="pressureRenderFormat"
@@ -174,7 +174,7 @@
             :code="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled"
+            :disabled="pushDisabled || !config.http_get_pressure"
           />
         </div>
         <div v-if="global.ui.enablePressure && !global.ui.enableGravity" class="col-md-3">
