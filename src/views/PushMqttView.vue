@@ -292,13 +292,19 @@ const handleFormatValidation = (format) => {
   }
 }
 
-watch(() => config.mqtt_format_gravity, () => {
-  handleFormatValidation(config.mqtt_format_gravity)
-})
+watch(
+  () => config.mqtt_format_gravity,
+  () => {
+    handleFormatValidation(config.mqtt_format_gravity)
+  }
+)
 
-watch(() => config.mqtt_format_pressure, () => {
-  handleFormatValidation(config.mqtt_format_pressure)
-})
+watch(
+  () => config.mqtt_format_pressure,
+  () => {
+    handleFormatValidation(config.mqtt_format_pressure)
+  }
+)
 
 const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct

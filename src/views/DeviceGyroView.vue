@@ -35,19 +35,21 @@
 
     <form @submit.prevent="save" class="needs-validation" novalidate>
       <div class="row">
-        <div class="col-md-12">
-          <BsInputRadio
-            v-model="config.gyro_type"
-            :options="gyroOptions"
-            label="Gyro options"
-            help="Select the gyro type used for this board."
-            :disabled="global.disabled"
-          ></BsInputRadio>
-        </div>
+        <template v-if="!global.isCuckoo">
+          <div class="col-md-12">
+            <BsInputRadio
+              v-model="config.gyro_type"
+              :options="gyroOptions"
+              label="Gyro options"
+              help="Select the gyro type used for this board."
+              :disabled="global.disabled"
+            ></BsInputRadio>
+          </div>
 
-        <div class="col-md-12">
-          <hr />
-        </div>
+          <div class="col-md-12">
+            <hr />
+          </div>
+        </template>
 
         <div class="col-md-6">
           <BsInputSwitch
@@ -57,7 +59,7 @@
             :disabled="global.disabled || !global.feature.filter"
           ></BsInputSwitch>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" v-if="!global.isCuckoo">
           <BsInputSwitch
             v-model="config.gyro_swap_xy"
             label="Swap X and Y axis"

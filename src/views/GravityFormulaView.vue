@@ -183,6 +183,15 @@
           >
             Report calibration data</button
           >&nbsp;
+          <button
+            v-if="!hasFormulaCalculationData"
+            @click.prevent="generateFormulaCalculationData"
+            type="button"
+            class="btn btn-secondary w-2"
+            :disabled="global.disabled || status.wifi_setup == true"
+          >
+            Generate datapoints based on formula</button
+          >&nbsp;
         </div>
       </div>
 
@@ -215,8 +224,8 @@
 </template>
 
 <script setup>
-import { nextTick, ref, onBeforeMount } from 'vue'
-import { validateCurrentForm } from '@mp-se/espframework-ui-components'
+import { nextTick, ref, onBeforeMount, computed } from 'vue'
+import { validateCurrentForm, roundVal } from '@mp-se/espframework-ui-components'
 import { global, status, config } from '@/modules/pinia'
 import GravityGraphFragment from '@/fragments/GravityGraphFragment.vue'
 import { logDebug } from '@mp-se/espframework-ui-components'
@@ -225,7 +234,7 @@ import FormulaFragment from '@/fragments/FormulaFragment.vue'
 import FormulaGraphFragment from '@/fragments/FormulaGraphFragment.vue'
 import FormulaTableFragment from '@/fragments/FormulaTableFragment.vue'
 import { PolynomialRegression } from 'ml-regression-polynomial'
-import { validateFormula } from '@/modules/formula'
+import { validateFormula, calculate } from '@/modules/formula'
 import { gravityToSG } from '@mp-se/espframework-ui-components'
 import { useTimers } from '@mp-se/espframework-ui-components'
 
@@ -246,6 +255,10 @@ const formulaOutputOptions = ref([
   { label: 'Table', value: 2 },
   { label: 'Graph', value: 3 }
 ])
+
+const hasFormulaCalculationData = computed(() => {
+  return config.formula_calculation_data.some((d) => d.a !== 0)
+})
 
 function openRegisterModal() {
   showRegisterModal.value = true
@@ -331,6 +344,27 @@ const forceRerender = async () => {
   renderComponent.value = false
   await nextTick()
   renderComponent.value = true
+}
+
+const generateFormulaCalculationData = () => {
+  if (!config.gravity_formula) {
+    global.messageWarning = 'No formula defined. Please enter a formula first.'
+    return
+  }
+
+  const startAngle = 20
+  const angleIncrement = 5
+  const numberOfPositions = 14
+
+  for (let i = 0; i < numberOfPositions; i++) {
+    const angle = startAngle + i * angleIncrement
+    const gravityValue = calculate(config.gravity_formula, angle)
+
+    config.formula_calculation_data[i].a = angle
+    config.formula_calculation_data[i].g = roundVal(gravityValue, 4)
+  }
+
+  global.messageSuccess = `Generated ${numberOfPositions} data points for formula validation`
 }
 
 const save = async () => {

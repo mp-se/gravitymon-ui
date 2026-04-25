@@ -71,7 +71,7 @@
             :disabled="global.disabled"
           ></BsInputSwitch>
         </div>
-        <div class="col-md-6" v-if="!global.isEsp8266">
+        <div class="col-md-6" v-if="!global.isEsp8266 && !global.isCuckoo">
           <BsInputSwitch
             v-model="config.charging_pin_enabled"
             label="Charging Pin Mode"
@@ -112,7 +112,7 @@
             :disabled="global.disabled"
           ></BsInputNumber>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" v-if="!global.isCuckoo">
           <BsInputSwitch
             v-model="config.gyro_temp"
             label="Gyro temperature"

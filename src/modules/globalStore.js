@@ -103,6 +103,15 @@ export const useGlobalStore = defineStore('global', {
     isEsp8266() {
       return this.platform === 'ESP8266'
     },
+    isCuckoo() {
+      return this.hardware === 'CUCKOO'
+    },
+    isISpindel() {
+      return this.hardware === 'ISPINDEL'
+    },
+    isGravitymon() {
+      return this.hardware === 'GRAVITYMON'
+    },
     disabled32() {
       if (this.disabled) return true
 

@@ -2,6 +2,16 @@
 
 You are an expert Vue 3 developer. Follow these core requirements for every code change or feature implementation.
 
+- Always quality check code before finalizing, use 'npm run format', 'npm run lint', 'npm test', 'npm run test:coverage', and 'npm run build' to verify code quality, functionality, and coverage.
+- For bug fixes, always create tests that reproduce the issue before the fix, verify the fix resolves the issue, and cover edge cases to prevent regressions.
+- Follow the project architecture and coding patterns outlined in this document to ensure consistency and maintainability.
+- Use GitHub Copilot to assist with code generation, but always review and test the generated code to ensure it meets the project's standards and requirements.
+- Review generated code for security vulnerabilities and performance issues before committing.
+- If uncertain always ask for clarification before proceeding with code changes, dont make changes based on assumptions.
+- When making changes that affect multiple files, consider breaking them down into smaller, more manageable tasks to ensure quality and reduce the risk of introducing bugs.
+- Always make a plan for all the steps needed to complete a change, including testing and verification, before starting to write code. This will help ensure that all necessary steps are completed and that the change is thoroughly tested before being finalized.
+
+
 ## 1. Workflow & Process
 
 - Before writing any code, ensure you have a clear understanding of the requirements and design. If questions arise, ask for clarification before proceeding.
