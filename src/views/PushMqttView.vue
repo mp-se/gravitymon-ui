@@ -96,7 +96,7 @@
             rows="6"
             label="Data format (gravity)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled || !config.mqtt_gravity"
+            :disabled="pushDisabled || config.mqtt_gravity === false"
             v-if="global.ui.enableGravity"
           />
         </div>
@@ -111,7 +111,7 @@
             button="Formats"
             :options="gravityMqttFormatOptions"
             :callback="gravityMqttFormatCallback"
-            :disabled="pushDisabled || !config.mqtt_gravity"
+            :disabled="pushDisabled || config.mqtt_gravity === false"
           />
           <BsModal
             @click="gravityRenderFormat"
@@ -121,7 +121,7 @@
             :mqtt="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled || !config.mqtt_gravity"
+            :disabled="pushDisabled || config.mqtt_gravity === false"
           />
         </div>
         <div class="col-md-3 gy-2" v-if="global.ui.enableGravity && !global.ui.enablePressure">
@@ -149,7 +149,7 @@
             rows="6"
             label="Data format (pressure)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled || !config.mqtt_pressure"
+            :disabled="pushDisabled || config.mqtt_pressure === false"
             v-if="global.ui.enablePressure"
           />
         </div>
@@ -164,7 +164,7 @@
             button="Formats"
             :options="pressureMqttFormatOptions"
             :callback="pressureMqttFormatCallback"
-            :disabled="pushDisabled || !config.mqtt_pressure"
+            :disabled="pushDisabled || config.mqtt_pressure === false"
           />
           <BsModal
             @click="pressureRenderFormat"
@@ -174,7 +174,7 @@
             :mqtt="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled || !config.mqtt_pressure"
+            :disabled="pushDisabled || config.mqtt_pressure === false"
           />
         </div>
         <div class="col-md-3 gy-2" v-if="global.ui.enablePressure && !global.ui.enableGravity">

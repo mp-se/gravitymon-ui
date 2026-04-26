@@ -86,7 +86,7 @@
             rows="6"
             label="Data format (gravity)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled || !config.influxdb2_gravity"
+            :disabled="pushDisabled || config.influxdb2_gravity === false"
             v-if="global.ui.enableGravity"
           />
         </div>
@@ -101,7 +101,7 @@
             button="Formats"
             :options="gravityInfluxdb2FormatOptions"
             :callback="gravityInfluxdb2FormatCallback"
-            :disabled="pushDisabled || !config.influxdb2_gravity"
+            :disabled="pushDisabled || config.influxdb2_gravity === false"
           />
           <BsModal
             @click="gravityRenderFormat"
@@ -109,7 +109,7 @@
             :code="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled || !config.influxdb2_gravity"
+            :disabled="pushDisabled || config.influxdb2_gravity === false"
           />
         </div>
         <div class="col-md-3 gy-2" v-if="global.ui.enableGravity && !global.ui.enablePressure">
@@ -135,7 +135,7 @@
             rows="6"
             label="Data format (pressure)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled || !config.influxdb2_pressure"
+            :disabled="pushDisabled || config.influxdb2_pressure === false"
             v-if="global.ui.enablePressure"
           />
         </div>
@@ -150,7 +150,7 @@
             button="Formats"
             :options="pressureInfluxdb2FormatOptions"
             :callback="pressureInfluxdb2FormatCallback"
-            :disabled="pushDisabled || !config.influxdb2_pressure"
+            :disabled="pushDisabled || config.influxdb2_pressure === false"
           />
           <BsModal
             @click="pressureRenderFormat"
@@ -158,7 +158,7 @@
             :code="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled || !config.influxdb2_pressure"
+            :disabled="pushDisabled || config.influxdb2_pressure === false"
           />
         </div>
         <div class="col-md-3 gy-2" v-if="global.ui.enablePressure && !global.ui.enableGravity">

@@ -107,7 +107,7 @@
             rows="6"
             label="Data format (gravity)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled || !config.http_post2_gravity"
+            :disabled="pushDisabled || config.http_post2_gravity === false"
             v-if="global.ui.enableGravity"
           />
         </div>
@@ -122,7 +122,7 @@
             button="Formats"
             :options="gravityHttpPostFormatOptions"
             :callback="gravityHttpFormatCallback"
-            :disabled="pushDisabled || !config.http_post2_gravity"
+            :disabled="pushDisabled || config.http_post2_gravity === false"
           />
           <BsModal
             @click="gravityRenderFormat"
@@ -131,7 +131,7 @@
             :json="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled || !config.http_post2_gravity"
+            :disabled="pushDisabled || config.http_post2_gravity === false"
           />
         </div>
         <div class="col-md-3" v-if="global.ui.enableGravity && !global.ui.enablePressure">
@@ -158,7 +158,7 @@
             rows="6"
             label="Data format (pressure)"
             help="Format template used to create the data sent to the remote service"
-            :disabled="pushDisabled || !config.http_post2_pressure"
+            :disabled="pushDisabled || config.http_post2_pressure === false"
             v-if="global.ui.enablePressure"
           />
         </div>
@@ -173,7 +173,7 @@
             button="Formats"
             :options="pressureHttpPostFormatOptions"
             :callback="pressureHttpFormatCallback"
-            :disabled="pushDisabled || !config.http_post2_pressure"
+            :disabled="pushDisabled || config.http_post2_pressure === false"
           />
           <BsModal
             @click="pressureRenderFormat"
@@ -182,7 +182,7 @@
             :json="true"
             title="Format preview"
             button="Preview format"
-            :disabled="pushDisabled || !config.http_post2_pressure"
+            :disabled="pushDisabled || config.http_post2_pressure === false"
           />
         </div>
         <div class="col-md-3" v-if="global.ui.enablePressure && !global.ui.enableGravity">
