@@ -161,7 +161,7 @@
           v-if="status.self_check.battery_level && status.battery !== undefined"
         >
           <BsCard header="Measurement" color="info" title="Battery">
-            <p class="text-center">{{ status.battery }} V</p>
+            <p class="text-center">{{ status.battery }} V ({{ batteryPercentage }})</p>
           </BsCard>
         </div>
         <div class="col-md-4" v-if="!status.self_check.battery_level">
@@ -265,7 +265,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeMount } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeMount } from 'vue'
 import { status, global, config } from '@/modules/pinia'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 import { useTimers, useFetch } from '@mp-se/espframework-ui-components'
@@ -279,6 +279,55 @@ const flag = ref(false)
 const angle = ref({ average: 0, sum: 0, count: 0 })
 const newVersion = ref({ new: false, ver: '' })
 const { sleep_mode } = storeToRefs(status)
+
+const batteryPercentage = computed(() => {
+  if (!status.battery) return '0%'
+  
+  // 18650 battery voltage to percentage mapping based on actual non-linear discharge curve
+  // Voltages are non-uniform to reflect real capacity distribution (flat plateau ~3.6-3.7V)
+  const batteryDataPoints = [
+    { voltage: 4.2, percentage: 100 },
+    { voltage: 4.1, percentage: 95 },
+    { voltage: 4.0, percentage: 90 },
+    { voltage: 3.93, percentage: 85 },
+    { voltage: 3.87, percentage: 80 },
+    { voltage: 3.83, percentage: 75 },
+    { voltage: 3.79, percentage: 70 },
+    { voltage: 3.75, percentage: 65 },
+    { voltage: 3.71, percentage: 60 },
+    { voltage: 3.68, percentage: 55 },
+    { voltage: 3.65, percentage: 50 },
+    { voltage: 3.62, percentage: 45 },
+    { voltage: 3.58, percentage: 40 },
+    { voltage: 3.55, percentage: 35 },
+    { voltage: 3.52, percentage: 30 },
+    { voltage: 3.48, percentage: 25 },
+    { voltage: 3.43, percentage: 20 },
+    { voltage: 3.37, percentage: 15 },
+    { voltage: 3.30, percentage: 10 },
+    { voltage: 3.24, percentage: 5 },
+    { voltage: 3.2, percentage: 0 }
+  ]
+  
+  const voltage = status.battery
+  
+  // Find surrounding datapoints for interpolation
+  for (let i = 0; i < batteryDataPoints.length - 1; i++) {
+    if (voltage >= batteryDataPoints[i + 1].voltage && voltage <= batteryDataPoints[i].voltage) {
+      const upper = batteryDataPoints[i]
+      const lower = batteryDataPoints[i + 1]
+      const ratio = (voltage - lower.voltage) / (upper.voltage - lower.voltage)
+      const percentage = lower.percentage + ratio * (upper.percentage - lower.percentage)
+      return `${Math.round(percentage)}%`
+    }
+  }
+  
+  // If voltage is above max or below min
+  if (voltage > batteryDataPoints[0].voltage) return '100%'
+  if (voltage < batteryDataPoints[batteryDataPoints.length - 1].voltage) return '0%'
+  
+  return '0%'
+})
 
 watch(flag, async () => {
   try {
