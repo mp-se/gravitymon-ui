@@ -391,3 +391,79 @@ describe('HomeView (action tests)', () => {
     expect(wrapper.exists()).toBe(true)
   })
 })
+
+describe('HomeView batteryPercentage computed', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  async function mountAndGetBatteryPercentage(batteryVoltage) {
+    const pinia = createTestingPinia()
+    const { status } = await import('@/modules/pinia')
+    status.battery = batteryVoltage
+    status.sleep_mode = false
+    const wrapper = shallowMount(HomeView, { global: { plugins: [pinia] } })
+    return wrapper.vm.batteryPercentage
+  }
+
+  it('returns 0% when battery is falsy', async () => {
+    const pinia = createTestingPinia()
+    const { status } = await import('@/modules/pinia')
+    status.battery = 0
+    status.sleep_mode = false
+    const wrapper = shallowMount(HomeView, { global: { plugins: [pinia] } })
+    expect(wrapper.vm.batteryPercentage).toBe('0%')
+  })
+
+  it('returns 100% at full charge voltage (4.2V)', async () => {
+    expect(await mountAndGetBatteryPercentage(4.2)).toBe('100%')
+  })
+
+  it('returns 100% above max voltage', async () => {
+    expect(await mountAndGetBatteryPercentage(4.5)).toBe('100%')
+  })
+
+  it('returns 0% at minimum voltage (3.2V)', async () => {
+    expect(await mountAndGetBatteryPercentage(3.2)).toBe('0%')
+  })
+
+  it('returns 0% below minimum voltage', async () => {
+    expect(await mountAndGetBatteryPercentage(3.0)).toBe('0%')
+  })
+
+  it('returns 95% at 4.1V (exact datapoint)', async () => {
+    expect(await mountAndGetBatteryPercentage(4.1)).toBe('95%')
+  })
+
+  it('returns 90% at 4.0V (exact datapoint)', async () => {
+    expect(await mountAndGetBatteryPercentage(4.0)).toBe('90%')
+  })
+
+  it('returns 50% at 3.65V (exact datapoint - flat plateau)', async () => {
+    expect(await mountAndGetBatteryPercentage(3.65)).toBe('50%')
+  })
+
+  it('returns 10% at 3.30V (exact datapoint)', async () => {
+    expect(await mountAndGetBatteryPercentage(3.3)).toBe('10%')
+  })
+
+  it('returns 5% at 3.24V (exact datapoint)', async () => {
+    expect(await mountAndGetBatteryPercentage(3.24)).toBe('5%')
+  })
+
+  it('interpolates between datapoints (4.15V between 4.2V and 4.1V)', async () => {
+    // 4.15 is midpoint between 4.2 (100%) and 4.1 (95%) → ~97-98%
+    const result = await mountAndGetBatteryPercentage(4.15)
+    const numeric = parseInt(result)
+    expect(numeric).toBeGreaterThan(95)
+    expect(numeric).toBeLessThan(100)
+  })
+
+  it('interpolates in the flat plateau region (3.67V between 3.68V and 3.65V)', async () => {
+    // 3.67 is between 3.68 (55%) and 3.65 (50%)
+    const result = await mountAndGetBatteryPercentage(3.67)
+    const numeric = parseInt(result)
+    expect(numeric).toBeGreaterThanOrEqual(50)
+    expect(numeric).toBeLessThanOrEqual(55)
+  })
+})
